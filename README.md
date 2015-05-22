@@ -1,1 +1,1 @@
-# kodi-video-organizer
+# Kodi Video Organizer
