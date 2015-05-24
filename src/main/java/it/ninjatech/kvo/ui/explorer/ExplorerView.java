@@ -1,6 +1,9 @@
 package it.ninjatech.kvo.ui.explorer;
 
-import it.ninjatech.kvo.ui.ImagesRetriever;
+import it.ninjatech.kvo.ui.IconRetriever;
+import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
+import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsModel;
+import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsView;
 
 import java.awt.Insets;
 
@@ -38,7 +41,7 @@ public class ExplorerView extends WebPanel {
 		setPreferredWidth(uiWidth / 5);
 		
 		add(this.container);
-		this.container.addTab("Roots", new ImageIcon(ImagesRetriever.retrieveImage(ImagesRetriever.Image.ExplorerRootIcon)), this.roots);
+		this.container.addTab("Roots", new ImageIcon(IconRetriever.retrieveIcon(IconRetriever.IconName.ExplorerRootIcon)), this.roots);
 	}
 	
 }

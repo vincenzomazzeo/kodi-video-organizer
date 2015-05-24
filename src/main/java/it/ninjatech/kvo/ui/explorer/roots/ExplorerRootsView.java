@@ -1,6 +1,6 @@
-package it.ninjatech.kvo.ui.explorer;
+package it.ninjatech.kvo.ui.explorer.roots;
 
-import it.ninjatech.kvo.ui.ImagesRetriever;
+import it.ninjatech.kvo.ui.IconRetriever;
 
 import java.awt.Insets;
 import java.awt.Point;
@@ -32,6 +32,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, A
 
 		result.setEditable(false);
 		result.setSelectionMode(WebTree.SINGLE_TREE_SELECTION);
+		result.setCellRenderer(new ExplorerRootsTreeCellRenderer());
 		TooltipManager.setTooltip(result, TOOLTIP, TooltipWay.up, 0);
 
 		return result;
@@ -42,7 +43,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, A
 	private final WebDynamicMenuItem addTvShowsRootMenuItem;
 	private final WebDynamicMenuItem addMoviesRootMenuItem;
 
-	protected ExplorerRootsView(ExplorerRootsModel model) {
+	public ExplorerRootsView(ExplorerRootsModel model) {
 		super(makeTree(model), true, false);
 
 		this.addRootMenu = new WebDynamicMenu();
@@ -100,20 +101,20 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, A
 
 		this.addTvShowsRootMenuItem.setMargin(new Insets(8, 8, 8, 8));
 		this.addTvShowsRootMenuItem.setDrawBorder(true);
-		this.addTvShowsRootMenuItem.setIcon(new ImageIcon(ImagesRetriever.retrieveImage(ImagesRetriever.Image.ExplorerRootIconTvShowMenu)));
+		this.addTvShowsRootMenuItem.setIcon(new ImageIcon(IconRetriever.retrieveIcon(IconRetriever.IconName.ExplorerRootIconTvShowMenu)));
 		this.addTvShowsRootMenuItem.setAction(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 				addRootMenu.hideMenu();
-				controller.notifyAddTvShowsRoot();
+				controller.notifyAddTvSeriesRoot();
 			}
 		});
 		this.addRootMenu.addItem(this.addTvShowsRootMenuItem);
 
 		this.addMoviesRootMenuItem.setMargin(new Insets(8, 8, 8, 8));
 		this.addMoviesRootMenuItem.setDrawBorder(true);
-		this.addMoviesRootMenuItem.setIcon(new ImageIcon(ImagesRetriever.retrieveImage(ImagesRetriever.Image.ExplorerRootIconMovieMenu)));
+		this.addMoviesRootMenuItem.setIcon(new ImageIcon(IconRetriever.retrieveIcon(IconRetriever.IconName.ExplorerRootIconMovieMenu)));
 		this.addMoviesRootMenuItem.setAction(new ActionListener() {
 
 			@Override

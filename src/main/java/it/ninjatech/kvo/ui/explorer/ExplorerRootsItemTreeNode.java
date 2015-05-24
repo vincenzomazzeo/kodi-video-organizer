@@ -1,7 +1,8 @@
 package it.ninjatech.kvo.ui.explorer;
 
+import it.ninjatech.kvo.model.Type;
+
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -11,34 +12,30 @@ import javax.swing.tree.TreeNode;
 
 public class ExplorerRootsItemTreeNode implements TreeNode, Comparable<ExplorerRootsItemTreeNode> {
 
-	private final ExplorerRootsItemTreeNode parent;
+	private ExplorerRootsItemTreeNode parent;
+	private Integer level;
+	private final Type type;
 	private final String label;
-	private final Path value;
+	private final File value;
 	private final List<ExplorerRootsItemTreeNode> children;
 
-	@SuppressWarnings("unchecked")
-	protected ExplorerRootsItemTreeNode(ExplorerRootsItemTreeNode parent, String label, Path value) {
-		this.parent = parent;
+	protected ExplorerRootsItemTreeNode(String label) {
+		this.parent = null;
+		this.level = 0;
+		this.type = null;
 		this.label = label;
+		this.value = null;
+		this.children = new ArrayList<>();
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected ExplorerRootsItemTreeNode(File value, Integer level, Type type) {
+		this.parent = null;
+		this.level = level;
+		this.type = type;
+		this.label = value.getName();
 		this.value = value;
-
-		if (this.value == null || this.value.toFile().isDirectory()) {
-			this.children = new ArrayList<>();
-
-			if (this.value != null) {
-				for (File file : value.toFile().listFiles()) {
-//					file = new File(Utils.normalizeUnicode(file.getAbsolutePath()));
-					if (!file.isHidden()) {
-						this.children.add(new ExplorerRootsItemTreeNode(this, file.getName(), file.toPath()));
-					}
-				}
-			}
-			
-			Collections.sort(this.children);
-		}
-		else {
-			this.children = Collections.EMPTY_LIST;
-		}
+		this.children = this.value.isDirectory() ? new ArrayList<>() : Collections.EMPTY_LIST;
 	}
 	
 	@Override
@@ -77,12 +74,12 @@ public class ExplorerRootsItemTreeNode implements TreeNode, Comparable<ExplorerR
 
 	@Override
 	public boolean getAllowsChildren() {
-		return this.value == null || this.value.toFile().isDirectory();
+		return this.value == null || this.value.isDirectory();
 	}
 
 	@Override
 	public boolean isLeaf() {
-		return this.value != null && this.value.toFile().isFile();
+		return this.value != null && this.value.isFile();
 	}
 
 	@Override
@@ -94,8 +91,8 @@ public class ExplorerRootsItemTreeNode implements TreeNode, Comparable<ExplorerR
 	public int compareTo(ExplorerRootsItemTreeNode other) {
 		int result = 0;
 		
-		boolean selfIsDirectory = this.value != null ? this.value.toFile().isDirectory() : true;
-		boolean otherIsDirectory = other.value != null ? other.value.toFile().isDirectory() : true;
+		boolean selfIsDirectory = this.value != null ? this.value.isDirectory() : true;
+		boolean otherIsDirectory = other.value != null ? other.value.isDirectory() : true;
 		
 		if (selfIsDirectory == otherIsDirectory) {
 			result = this.label.compareToIgnoreCase(other.label);
@@ -110,10 +107,25 @@ public class ExplorerRootsItemTreeNode implements TreeNode, Comparable<ExplorerR
 		return result;
 	}
 	
-	
 	protected void add(ExplorerRootsItemTreeNode node) {
+		node.parent = this;
 		this.children.add(node);
-		
+	}
+	
+	protected void sortChildren() {
 		Collections.sort(this.children);
 	}
+	
+	protected File getValue() {
+		return this.value;
+	}
+	
+	protected Integer getLevel() {
+		return this.level;
+	}
+	
+	protected Type getType() {
+		return this.type;
+	}
+	
 }

@@ -11,13 +11,37 @@
 		<maven-install-plugin.version>2.5.1</maven-install-plugin.version>
 		<maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Dependencies' versions -->
+		<h2.version>1.4.187</h2.version>
+		<jackson.version>2.5.3</jackson.version>
+		<weblaf.version>1.28</weblaf.version>
 	</properties>
 	<!---->
 	<dependencies>
 		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>de.sciss</groupId>
 			<artifactId>weblaf</artifactId>
-			<version>1.28</version>
+			<version>${weblaf.version}</version>
 			<type>pom</type>
 		</dependency>
 	</dependencies>
@@ -56,40 +80,4 @@
 		<finalName>${project.groupId}.${project.artifactId}</finalName>
 	</build>
 	<!---->
-	<repositories>
-		<repository>
-			<id>archiva.internal</id>
-			<name>Ninjatech Internal</name>
-			<url>http://rukia.ninjatech.local:8200/repository/internal/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>archiva.snapshots</id>
-			<name>Ninjatech Snapshots</name>
-			<url>http://rukia.ninjatech.local:8200/repository/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-    <!---->
-	<distributionManagement>
-		<repository>
-			<id>archiva.internal</id>
-			<url>http://rukia.ninjatech.local:8200/repository/internal/</url>
-		</repository>
-		<snapshotRepository>
-			<id>archiva.snapshots</id>
-			<url>http://rukia.ninjatech.local:8200/repository/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-    <!---->
 </project>

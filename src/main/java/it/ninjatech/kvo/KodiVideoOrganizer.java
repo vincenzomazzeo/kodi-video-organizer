@@ -1,5 +1,7 @@
 package it.ninjatech.kvo;
 
+import it.ninjatech.kvo.configuration.SettingsHandler;
+import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.UI;
 
 import javax.swing.SwingUtilities;
@@ -9,16 +11,33 @@ import com.alee.laf.WebLookAndFeel;
 public class KodiVideoOrganizer {
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
+		try {
+			SettingsHandler.init();
+			
+			ConnectionHandler.init();
 
-			@Override
-			public void run() {
-				WebLookAndFeel.install();
-				
-				UI.build().setVisible(true);
-			}});
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					WebLookAndFeel.install();
+
+					UI.build().setVisible(true);
+				}
+			});
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private KodiVideoOrganizer() {}
-	
+	public static void exit() {
+		ConnectionHandler.shutdown();
+		
+		System.exit(0);
+	}
+
+	private KodiVideoOrganizer() {
+	}
+
 }
