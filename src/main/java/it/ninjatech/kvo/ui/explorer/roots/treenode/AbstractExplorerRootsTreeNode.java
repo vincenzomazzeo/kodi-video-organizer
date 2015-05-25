@@ -15,10 +15,10 @@ public abstract class AbstractExplorerRootsTreeNode implements TreeNode, Compara
 	private AbstractExplorerRootsTreeNode parent;
 	
 	@SuppressWarnings("unchecked")
-	protected AbstractExplorerRootsTreeNode(boolean allowsChildren) {
+	protected AbstractExplorerRootsTreeNode(boolean allowsChildren, AbstractExplorerRootsTreeNode parent) {
 		this.allowsChildren = allowsChildren;
 		this.children = allowsChildren ? new ArrayList<>() : Collections.EMPTY_LIST;
-		this.parent = null;
+		this.parent = parent;
 	}
 	
 	@Override

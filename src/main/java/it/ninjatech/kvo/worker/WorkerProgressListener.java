@@ -6,8 +6,4 @@ public interface WorkerProgressListener {
 	
 	public void workerUpdate(String message, Integer value);
 	
-	public void workerCompletion();
-	
-	public void workerException(Exception exception);
-	
 }

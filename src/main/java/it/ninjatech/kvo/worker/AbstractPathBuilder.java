@@ -31,16 +31,4 @@ public abstract class AbstractPathBuilder {
 		}
 	}
 	
-	protected void notifyCompletion() {
-		for (WorkerProgressListener listener : this.listeners) {
-			listener.workerCompletion();
-		}
-	}
-	
-	protected void notifyException(Exception exception) {
-		for (WorkerProgressListener listener : this.listeners) {
-			listener.workerException(exception);
-		}
-	}
-	
 }

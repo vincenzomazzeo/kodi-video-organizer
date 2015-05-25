@@ -1,13 +1,17 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
+import it.ninjatech.kvo.model.AbstractPathEntity;
+import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.IconRetriever;
+
+import java.util.Collections;
 
 import javax.swing.Icon;
 
 public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 
 	public RootsExplorerRootsTreeNode() {
-		super(true);
+		super(true, null);
 	}
 	
 	@Override
@@ -38,6 +42,27 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 	@Override
 	public int compareTo(AbstractExplorerRootsTreeNode other) {
 		return 0;
+	}
+	
+	public void addRoot(AbstractPathEntity root) {
+		boolean add = true;
+		
+		for (AbstractExplorerRootsTreeNode child : this.children) {
+			if (((AbstractRootExplorerRootsTreeNode<?>)child).hasValueEquals(root)) {
+				add = false;
+				((AbstractRootExplorerRootsTreeNode<?>)child).merge(root);
+				break;
+			}
+		}
+		
+		if (add) {
+			AbstractRootExplorerRootsTreeNode<?> rootNode = null;
+			if (root instanceof TvSeriesPathEntity) {
+				rootNode = new TvSeriesExplorerRootsTreeNode((TvSeriesPathEntity)root, this);
+			}
+			this.children.add(rootNode);
+			Collections.sort(this.children);
+		}
 	}
 
 }

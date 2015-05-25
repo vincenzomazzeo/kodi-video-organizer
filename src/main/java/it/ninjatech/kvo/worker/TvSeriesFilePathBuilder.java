@@ -29,7 +29,6 @@ public class TvSeriesFilePathBuilder extends AbstractPathBuilder {
 			result.addTvSerie(directory);
 			notifyUpdate(null, i + 1);
 		}
-		notifyCompletion();
 		
 		return result;
 	}

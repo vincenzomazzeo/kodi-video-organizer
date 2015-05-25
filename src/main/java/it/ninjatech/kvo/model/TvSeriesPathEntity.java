@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.model;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +27,10 @@ public class TvSeriesPathEntity extends AbstractPathEntity {
 		this.tvSeries.add(result);
 		
 		return result;
+	}
+
+	public Set<TvSeriePathEntity> getTvSeries() {
+		return Collections.unmodifiableSet(this.tvSeries);
 	}
 
 }

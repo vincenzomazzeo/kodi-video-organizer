@@ -4,8 +4,8 @@ import javax.swing.Icon;
 
 public class ScanningExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 
-	public ScanningExplorerRootsTreeNode() {
-		super(false);
+	protected ScanningExplorerRootsTreeNode(AbstractExplorerRootsTreeNode parent) {
+		super(false, parent);
 	}
 	
 	@Override
@@ -38,11 +38,5 @@ public class ScanningExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode
 	public int compareTo(AbstractExplorerRootsTreeNode other) {
 		return 0;
 	}
-
-	
-
-	
-
-	
 
 }
