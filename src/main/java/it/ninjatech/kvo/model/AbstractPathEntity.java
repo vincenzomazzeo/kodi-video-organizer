@@ -3,19 +3,19 @@ package it.ninjatech.kvo.model;
 import java.io.File;
 import java.util.UUID;
 
-public abstract class Root {
+public abstract class AbstractPathEntity {
 
 	private final String id;
 	private final String path;
 	private final String label;
 	
-	protected Root(String id, String path, String label) {
+	protected AbstractPathEntity(String id, String path, String label) {
 		this.id = id;
 		this.path = path;
 		this.label = label;
 	}
 	
-	protected Root(File file) {
+	protected AbstractPathEntity(File file) {
 		this.id = UUID.randomUUID().toString();
 		this.path = file.getAbsolutePath();
 		this.label = file.getName();
@@ -37,7 +37,7 @@ public abstract class Root {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Root other = (Root)obj;
+		AbstractPathEntity other = (AbstractPathEntity)obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -48,15 +48,15 @@ public abstract class Root {
 	}
 
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	public String getPath() {
-		return path;
+		return this.path;
 	}
 
 	public String getLabel() {
-		return label;
+		return this.label;
 	}
 	
 }

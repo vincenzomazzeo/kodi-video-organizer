@@ -1,13 +1,13 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
-import it.ninjatech.kvo.model.TvSeriesRoot;
+import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.IconRetriever;
 
 import javax.swing.Icon;
 
-public class TvSeriesExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeNode<TvSeriesRoot> {
+public class TvSeriesExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeNode<TvSeriesPathEntity> {
 
-	protected TvSeriesExplorerRootsTreeNode(boolean allowsChildren, TvSeriesRoot value) {
+	protected TvSeriesExplorerRootsTreeNode(boolean allowsChildren, TvSeriesPathEntity value) {
 		super(true, value);
 	}
 	

@@ -1,8 +1,8 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
-import it.ninjatech.kvo.model.Root;
+import it.ninjatech.kvo.model.AbstractPathEntity;
 
-public abstract class AbstractRootExplorerRootsTreeNode<R extends Root> extends AbstractExplorerRootsTreeNode {
+public abstract class AbstractRootExplorerRootsTreeNode<R extends AbstractPathEntity> extends AbstractExplorerRootsTreeNode {
 
 	protected final R value;
 	

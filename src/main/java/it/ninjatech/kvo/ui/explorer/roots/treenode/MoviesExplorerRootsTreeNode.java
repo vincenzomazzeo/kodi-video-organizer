@@ -1,13 +1,13 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
-import it.ninjatech.kvo.model.MoviesRoot;
+import it.ninjatech.kvo.model.MoviesPathEntity;
 import it.ninjatech.kvo.ui.IconRetriever;
 
 import javax.swing.Icon;
 
-public class MoviesExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeNode<MoviesRoot> {
+public class MoviesExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeNode<MoviesPathEntity> {
 
-	protected MoviesExplorerRootsTreeNode(boolean allowsChildren, MoviesRoot value) {
+	protected MoviesExplorerRootsTreeNode(boolean allowsChildren, MoviesPathEntity value) {
 		super(true, value);
 	}
 	
