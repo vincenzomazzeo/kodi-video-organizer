@@ -9,6 +9,8 @@ import it.ninjatech.kvo.worker.WorkerProgressListener;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.swing.SwingUtilities;
+
 import com.alee.extended.window.WebProgressDialog;
 
 public class ExplorerRootsRootScanner implements Runnable, WorkerProgressListener {
@@ -38,7 +40,13 @@ public class ExplorerRootsRootScanner implements Runnable, WorkerProgressListene
 		this.progress.setProgress(this.progress.getMaximum());
 
 		this.showProgress.set(false);
-		this.progress.setVisible(false);
+//		this.progress.setVisible(false);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				progress.setVisible(false);
+			}});
 	}
 
 	@Override

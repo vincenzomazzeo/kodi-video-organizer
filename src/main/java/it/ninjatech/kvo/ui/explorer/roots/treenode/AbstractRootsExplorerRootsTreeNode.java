@@ -2,17 +2,15 @@ package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
 
-public abstract class AbstractRootExplorerRootsTreeNode<R extends AbstractPathEntity> extends AbstractExplorerRootsTreeNode {
+public abstract class AbstractRootsExplorerRootsTreeNode<R extends AbstractPathEntity> extends AbstractExplorerRootsTreeNode {
 
 	protected final R value;
 	
-	protected AbstractRootExplorerRootsTreeNode(boolean allowsChildren, R value, RootsExplorerRootsTreeNode parent) {
-		super(allowsChildren, parent);
+	protected AbstractRootsExplorerRootsTreeNode(R value, RootsExplorerRootsTreeNode parent) {
+		super(true, parent);
 		
 		this.value = value;
 	}
-	
-	public abstract void merge(AbstractPathEntity value);
 	
 	@Override
 	public String toString() {
@@ -31,7 +29,7 @@ public abstract class AbstractRootExplorerRootsTreeNode<R extends AbstractPathEn
 	
 	@Override
 	public int compareTo(AbstractExplorerRootsTreeNode other) {
-		AbstractRootExplorerRootsTreeNode<?> otherRoot = (AbstractRootExplorerRootsTreeNode<?>)other;
+		AbstractRootsExplorerRootsTreeNode<?> otherRoot = (AbstractRootsExplorerRootsTreeNode<?>)other;
 		
 		return this.value.getLabel().compareTo(otherRoot.value.getLabel());
 	}

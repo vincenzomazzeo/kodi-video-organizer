@@ -1,18 +1,17 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
-import java.util.Collections;
-
-import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.IconRetriever;
 
+import java.util.Collections;
+
 import javax.swing.Icon;
 
-public class TvSeriesExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeNode<TvSeriesPathEntity> {
+public class TvSeriesExplorerRootsTreeNode extends AbstractRootsExplorerRootsTreeNode<TvSeriesPathEntity> {
 
 	protected TvSeriesExplorerRootsTreeNode(TvSeriesPathEntity value, RootsExplorerRootsTreeNode parent) {
-		super(true, value, parent);
+		super(value, parent);
 		
 		for (TvSeriePathEntity tvSerie : value.getTvSeries()) {
 			this.children.add(new TvSerieExplorerRootsTreeNode(tvSerie, this));
@@ -32,13 +31,6 @@ public class TvSeriesExplorerRootsTreeNode extends AbstractRootExplorerRootsTree
 	@Override
 	public Icon getCustomIcon() {
 		return IconRetriever.retrieveExplorerTreeTvSeriesRootIcon();
-	}
-
-	@Override
-	public void merge(AbstractPathEntity value) {
-		TvSeriePathEntity tvSerie = (TvSeriePathEntity)value;
-		
-		// TODO ma è giusto il merge? non dovrebbe arrivare la pappa bella e pronta?
 	}
 
 }

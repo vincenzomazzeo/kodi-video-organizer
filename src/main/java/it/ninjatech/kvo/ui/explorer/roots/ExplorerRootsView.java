@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.alee.extended.menu.DynamicMenuType;
@@ -21,7 +23,7 @@ import com.alee.laf.tree.WebTree;
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
 
-public class ExplorerRootsView extends WebScrollPane implements MouseListener, ActionListener {
+public class ExplorerRootsView extends WebScrollPane implements MouseListener, TreeExpansionListener {
 
 	private static final long serialVersionUID = -4394641156105182581L;
 
@@ -52,37 +54,44 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, A
 
 		getVerticalScrollBar().setUnitIncrement(30);
 		
-		((WebTree<?>)this.getViewport().getView()).addMouseListener(this);
-
+		WebTree<?> tree = (WebTree<?>)this.getViewport().getView();
+		tree.addMouseListener(this);
+		tree.addTreeExpansionListener(this);
+		
 		initAddRootMenu();
 	}
 
 	@Override
-	public void mousePressed(MouseEvent mouseEvent) {
+	public void mousePressed(MouseEvent event) {
 		int mask = KeyEvent.BUTTON1_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK;
-		if (mouseEvent.getModifiersEx() == mask) {
-			this.controller.notifyAddRoot(mouseEvent.getX(), mouseEvent.getY());
+		if (event.getModifiersEx() == mask) {
+			this.controller.notifyAddRoot(event.getX(), event.getY());
 		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent mouseEvent) {
+	public void mouseClicked(MouseEvent event) {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent mouseEvent) {
+	public void mouseReleased(MouseEvent event) {
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent mouseEvent) {
+	public void mouseEntered(MouseEvent event) {
 	}
 
 	@Override
-	public void mouseExited(MouseEvent mouseEvent) {
+	public void mouseExited(MouseEvent event) {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent actionEvent) {
+	public void treeExpanded(TreeExpansionEvent event) {
+		this.controller.notifyPossibleFsScanning(event.getPath());
+	}
+
+	@Override
+	public void treeCollapsed(TreeExpansionEvent event) {
 	}
 
 	public void setController(ExplorerRootsController controller) {

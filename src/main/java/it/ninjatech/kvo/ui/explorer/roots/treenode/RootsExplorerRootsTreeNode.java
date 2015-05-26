@@ -33,7 +33,7 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 	public Icon getCustomIcon() {
 		return IconRetriever.retrieveExplorerTreeRootIcon();
 	}
-
+	
 	@Override
 	public boolean isLeaf() {
 		return false;
@@ -45,24 +45,12 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 	}
 	
 	public void addRoot(AbstractPathEntity root) {
-		boolean add = true;
-		
-		for (AbstractExplorerRootsTreeNode child : this.children) {
-			if (((AbstractRootExplorerRootsTreeNode<?>)child).hasValueEquals(root)) {
-				add = false;
-				((AbstractRootExplorerRootsTreeNode<?>)child).merge(root);
-				break;
-			}
+		AbstractRootsExplorerRootsTreeNode<?> rootNode = null;
+		if (root instanceof TvSeriesPathEntity) {
+			rootNode = new TvSeriesExplorerRootsTreeNode((TvSeriesPathEntity)root, this);
 		}
-		
-		if (add) {
-			AbstractRootExplorerRootsTreeNode<?> rootNode = null;
-			if (root instanceof TvSeriesPathEntity) {
-				rootNode = new TvSeriesExplorerRootsTreeNode((TvSeriesPathEntity)root, this);
-			}
-			this.children.add(rootNode);
-			Collections.sort(this.children);
-		}
+		this.children.add(rootNode);
+		Collections.sort(this.children);
 	}
 
 }

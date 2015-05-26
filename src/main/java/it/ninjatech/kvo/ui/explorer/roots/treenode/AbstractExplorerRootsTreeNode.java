@@ -10,7 +10,7 @@ import javax.swing.tree.TreeNode;
 
 public abstract class AbstractExplorerRootsTreeNode implements TreeNode, Comparable<AbstractExplorerRootsTreeNode> {
 
-	private final boolean allowsChildren;
+	protected final boolean allowsChildren;
 	protected final List<AbstractExplorerRootsTreeNode> children;
 	private AbstractExplorerRootsTreeNode parent;
 	
@@ -59,6 +59,14 @@ public abstract class AbstractExplorerRootsTreeNode implements TreeNode, Compara
 	@Override
 	public Enumeration<?> children() {
 		return this.children();
+	}
+	
+	public void addChild(AbstractExplorerRootsTreeNode child) {
+		this.children.add(child);
+	}
+	
+	public void sortChildren() {
+		Collections.sort(this.children);
 	}
 	
 }

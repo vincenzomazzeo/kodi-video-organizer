@@ -2,14 +2,17 @@ package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
+import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.Type;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
 import it.ninjatech.kvo.utils.LongTaskExecutor;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.WindowConstants;
+import javax.swing.tree.TreePath;
 
 import com.alee.extended.filechooser.WebDirectoryChooser;
 import com.alee.extended.window.WebProgressDialog;
@@ -58,7 +61,35 @@ public class ExplorerRootsController {
 				settings.setLastMoviesRootParent(root.getParentFile());
 				SettingsHandler.getInstance().store();
 			}
-//			addRoot(root, Type.Movie);
+			addRoot(root, Type.Movie);
+		}
+	}
+	
+	protected void notifyPossibleFsScanning(TreePath path) {
+		if (path.getLastPathComponent() instanceof AbstractRootExplorerRootsTreeNode) {
+			AbstractRootExplorerRootsTreeNode<?> node = (AbstractRootExplorerRootsTreeNode<?>)path.getLastPathComponent();
+			
+			if (node.isFsScanningRequired()) {
+				node.removeChildren();
+				
+				AbstractPathEntity value = (AbstractPathEntity)node.getValue();
+				
+				File root = new File(value.getPath());
+				
+				WebProgressDialog progress = new WebProgressDialog(String.format("Scanning %s", value.getLabel()));
+				progress.setIndeterminate(true);
+				progress.setModal(true);
+				progress.setAlwaysOnTop(true);
+				progress.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+				
+				ExplorerRootsFsScanner scanner = new ExplorerRootsFsScanner(root, node, progress);
+				LongTaskExecutor.getInstance().execute(scanner);
+				
+				progress.setVisible(true);
+				progress.dispose();
+				
+				this.model.reload(node);
+			}
 		}
 	}
 

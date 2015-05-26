@@ -32,6 +32,10 @@ public class SettingsHandler {
 		this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
 		if (!this.settingsFile.exists()) {
+			if (!this.settingsFile.createNewFile()) {
+				// TODO gestire?
+				throw new Exception("Failed to create settings file");
+			}
 			this.settings = new Settings();
 			this.settings.setLastMoviesRootParent(FileUtils.getUserHome());
 			this.settings.setLastTvSeriesRootParent(FileUtils.getUserHome());

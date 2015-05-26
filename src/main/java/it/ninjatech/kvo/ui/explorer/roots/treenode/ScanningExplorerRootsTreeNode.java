@@ -25,7 +25,6 @@ public class ScanningExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode
 
 	@Override
 	public Icon getCustomIcon() {
-		// TODO
 		return null;
 	}
 	
