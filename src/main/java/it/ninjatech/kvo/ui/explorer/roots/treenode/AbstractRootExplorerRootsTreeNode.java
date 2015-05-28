@@ -6,6 +6,8 @@ import it.ninjatech.kvo.model.AbstractPathEntity;
 
 public abstract class AbstractRootExplorerRootsTreeNode<R extends AbstractPathEntity> extends AbstractExplorerRootsTreeNode {
 
+	private static final long serialVersionUID = -867875031782703820L;
+	
 	protected final R value;
 	
 	protected AbstractRootExplorerRootsTreeNode(R value, AbstractRootsExplorerRootsTreeNode<?> parent) {
@@ -32,6 +34,11 @@ public abstract class AbstractRootExplorerRootsTreeNode<R extends AbstractPathEn
 	@Override
 	public Icon getCustomIcon() {
 		return null;
+	}
+	
+	@Override
+	public boolean hasContextMenu() {
+		return true;
 	}
 	
 	@Override

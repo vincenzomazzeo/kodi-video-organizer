@@ -4,6 +4,7 @@ import it.ninjatech.kvo.ui.IconRetriever;
 
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -35,37 +37,45 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 		result.setEditable(false);
 		result.setSelectionMode(WebTree.SINGLE_TREE_SELECTION);
 		result.setCellRenderer(new ExplorerRootsTreeCellRenderer());
-		TooltipManager.setTooltip(result, TOOLTIP, TooltipWay.up, 0);
 
 		return result;
 	}
 
 	private ExplorerRootsController controller;
+	private final WebTree<DefaultMutableTreeNode> tree;
 	private final WebDynamicMenu addRootMenu;
 	private final WebDynamicMenuItem addTvShowsRootMenuItem;
 	private final WebDynamicMenuItem addMoviesRootMenuItem;
 
+	@SuppressWarnings("unchecked")
 	public ExplorerRootsView(ExplorerRootsModel model) {
 		super(makeTree(model), true, false);
-
+		
+		this.tree = (WebTree<DefaultMutableTreeNode>)this.getViewport().getView();
 		this.addRootMenu = new WebDynamicMenu();
 		this.addTvShowsRootMenuItem = new WebDynamicMenuItem();
 		this.addMoviesRootMenuItem = new WebDynamicMenuItem();
 
 		getVerticalScrollBar().setUnitIncrement(30);
 		
-		WebTree<?> tree = (WebTree<?>)this.getViewport().getView();
-		tree.addMouseListener(this);
-		tree.addTreeExpansionListener(this);
+		this.tree.addMouseListener(this);
+		this.tree.addTreeExpansionListener(this);
 		
 		initAddRootMenu();
+		
+		setTooltip();
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent event) {
-		int mask = KeyEvent.BUTTON1_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK;
-		if (event.getModifiersEx() == mask) {
+		if (event.getModifiersEx() == (KeyEvent.BUTTON1_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK)) {
 			this.controller.notifyAddRoot(event.getX(), event.getY());
+		}
+		else if (SwingUtilities.isRightMouseButton(event) && event.getClickCount() == 1) {
+			Rectangle bounds = this.tree.getNodeBounds(this.tree.getNodeForLocation(event.getX(), event.getY()));
+			if (bounds != null) {
+				this.controller.notifyShowContextMenu(this.tree.getPathForLocation(event.getX(), event.getY()), bounds.x, bounds.y + bounds.height);
+			}
 		}
 	}
 
@@ -96,6 +106,18 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 
 	public void setController(ExplorerRootsController controller) {
 		this.controller = controller;
+	}
+
+	protected void setTooltip() {
+		TooltipManager.setTooltip(this.getViewport().getView(), TOOLTIP, TooltipWay.up, 0);
+	}
+	
+	protected void removeTooltip() {
+		TooltipManager.removeTooltips(this.getViewport().getView());
+	}
+	
+	protected WebTree<DefaultMutableTreeNode> getTree() {
+		return this.tree;
 	}
 
 	protected void showAddRootMenu(int x, int y) {

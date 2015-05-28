@@ -3,12 +3,16 @@ package it.ninjatech.kvo.ui.explorer.roots.treenode;
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.IconRetriever;
+import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 
 import java.util.Collections;
 
 import javax.swing.Icon;
 
 public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
+
+	private static final long serialVersionUID = 5537689264346672222L;
 
 	public RootsExplorerRootsTreeNode() {
 		super(true, null);
@@ -32,6 +36,16 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 	@Override
 	public Icon getCustomIcon() {
 		return IconRetriever.retrieveExplorerTreeRootIcon();
+	}
+	
+	@Override
+	public boolean hasContextMenu() {
+		return false;
+	}
+	
+	@Override
+	public AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller) {
+		return null;
 	}
 	
 	@Override

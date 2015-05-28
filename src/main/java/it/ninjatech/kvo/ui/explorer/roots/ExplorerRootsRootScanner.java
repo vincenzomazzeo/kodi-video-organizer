@@ -2,74 +2,47 @@ package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.Type;
+import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.worker.AbstractPathBuilder;
 import it.ninjatech.kvo.worker.TvSeriesFilePathBuilder;
-import it.ninjatech.kvo.worker.WorkerProgressListener;
 
 import java.io.File;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.SwingUtilities;
+public class ExplorerRootsRootScanner {
 
-import com.alee.extended.window.WebProgressDialog;
+	private final File root;
+	private final Type type;
 
-public class ExplorerRootsRootScanner implements Runnable, WorkerProgressListener {
+	protected ExplorerRootsRootScanner(File root, Type type) {
+		this.root = root;
+		this.type = type;
+	}
 
-	private final AtomicBoolean showProgress;
-	private final AbstractPathBuilder builder;
-	private final WebProgressDialog progress;
-	private AbstractPathEntity root;
-
-	protected ExplorerRootsRootScanner(File root, Type type, WebProgressDialog progress) {
-		this.showProgress = new AtomicBoolean(true);
-		switch (type) {
+	public AbstractPathEntity scan() {
+		AbstractPathEntity result = null;
+		
+		AbstractPathBuilder builder = null;
+		switch (this.type) {
 		case TvSerie:
-			this.builder = new TvSeriesFilePathBuilder(root);
+			builder = new TvSeriesFilePathBuilder(this.root);
 			break;
 		default:
-			this.builder = null;
+			builder = null;
 		}
-		this.builder.addWorkerProgressListener(this);
-		this.progress = progress;
-	}
 
-	@Override
-	public void run() {
-		this.root = this.builder.build();
+		String title = String.format("Scanning %s root %s", this.type.getPlural(), this.root.getName());
+				
+		DeterminateProgressDialogWorker<AbstractPathEntity> worker = new DeterminateProgressDialogWorker<>(builder, title);
 		
-		this.progress.setProgress(this.progress.getMaximum());
-
-		this.showProgress.set(false);
-//		this.progress.setVisible(false);
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				progress.setVisible(false);
-			}});
-	}
-
-	@Override
-	public void workerInit(String message, Integer value) {
-		this.progress.setMaximum(value == 0 ? 1 : value);
-	}
-
-	@Override
-	public void workerUpdate(String message, Integer value) {
-		if (message != null) {
-			this.progress.setText(message);
+		worker.start();
+		try {
+			result = worker.get();
 		}
-		if (value != null) {
-			this.progress.setProgress(value);
+		catch (Exception e) {
+			// TODO gestire
 		}
-	}
-	
-	protected AtomicBoolean getShowProgress() {
-		return this.showProgress;
-	}
-	
-	protected AbstractPathEntity getRoot() {
-		return this.root;
+		
+		return result;
 	}
 
 }

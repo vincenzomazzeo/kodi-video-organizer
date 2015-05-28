@@ -4,6 +4,8 @@ import javax.swing.Icon;
 
 public abstract class AbstractFsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 
+	private static final long serialVersionUID = 286038544551010962L;
+	
 	private final String label;
 	
 	protected AbstractFsExplorerRootsTreeNode(boolean allowsChildren, AbstractExplorerRootsTreeNode parent, String label) {

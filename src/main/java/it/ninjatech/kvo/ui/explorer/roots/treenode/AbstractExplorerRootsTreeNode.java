@@ -1,23 +1,27 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
-import java.util.ArrayList;
+import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
+
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.Vector;
 
 import javax.swing.Icon;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public abstract class AbstractExplorerRootsTreeNode implements TreeNode, Comparable<AbstractExplorerRootsTreeNode> {
+public abstract class AbstractExplorerRootsTreeNode extends DefaultMutableTreeNode implements Comparable<AbstractExplorerRootsTreeNode> {
 
+	private static final long serialVersionUID = -8612679603689487952L;
+	
 	protected final boolean allowsChildren;
-	protected final List<AbstractExplorerRootsTreeNode> children;
+	protected final Vector<AbstractExplorerRootsTreeNode> children;
 	private AbstractExplorerRootsTreeNode parent;
 	
-	@SuppressWarnings("unchecked")
 	protected AbstractExplorerRootsTreeNode(boolean allowsChildren, AbstractExplorerRootsTreeNode parent) {
 		this.allowsChildren = allowsChildren;
-		this.children = allowsChildren ? new ArrayList<>() : Collections.EMPTY_LIST;
+		this.children = allowsChildren ? new Vector<AbstractExplorerRootsTreeNode>() : new Vector<AbstractExplorerRootsTreeNode>(0);
 		this.parent = parent;
 	}
 	
@@ -30,6 +34,10 @@ public abstract class AbstractExplorerRootsTreeNode implements TreeNode, Compara
 	public abstract boolean hasCustomIcon();
 	
 	public abstract Icon getCustomIcon();
+	
+	public abstract boolean hasContextMenu();
+	
+	public abstract AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller);
 	
 	@Override
 	public TreeNode getChildAt(int childIndex) {
@@ -58,7 +66,7 @@ public abstract class AbstractExplorerRootsTreeNode implements TreeNode, Compara
 	
 	@Override
 	public Enumeration<?> children() {
-		return this.children();
+		return this.children.elements();
 	}
 	
 	public void addChild(AbstractExplorerRootsTreeNode child) {

@@ -4,6 +4,8 @@ import it.ninjatech.kvo.model.AbstractPathEntity;
 
 public abstract class AbstractRootsExplorerRootsTreeNode<R extends AbstractPathEntity> extends AbstractExplorerRootsTreeNode {
 
+	private static final long serialVersionUID = -1858157936167710262L;
+	
 	protected final R value;
 	
 	protected AbstractRootsExplorerRootsTreeNode(R value, RootsExplorerRootsTreeNode parent) {
@@ -23,6 +25,11 @@ public abstract class AbstractRootsExplorerRootsTreeNode<R extends AbstractPathE
 	}
 	
 	@Override
+	public boolean hasContextMenu() {
+		return true;
+	}
+	
+	@Override
 	public boolean isLeaf() {
 		return false;
 	}
@@ -32,6 +39,10 @@ public abstract class AbstractRootsExplorerRootsTreeNode<R extends AbstractPathE
 		AbstractRootsExplorerRootsTreeNode<?> otherRoot = (AbstractRootsExplorerRootsTreeNode<?>)other;
 		
 		return this.value.getLabel().compareTo(otherRoot.value.getLabel());
+	}
+	
+	public R getValue() {
+		return this.value;
 	}
 	
 	protected boolean hasValueEquals(AbstractPathEntity value) {

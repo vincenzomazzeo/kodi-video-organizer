@@ -1,8 +1,13 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
+import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
+
 import javax.swing.Icon;
 
 public class ScanningExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
+
+	private static final long serialVersionUID = -3385244472469046758L;
 
 	protected ScanningExplorerRootsTreeNode(AbstractExplorerRootsTreeNode parent) {
 		super(false, parent);
@@ -25,6 +30,16 @@ public class ScanningExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode
 
 	@Override
 	public Icon getCustomIcon() {
+		return null;
+	}
+	
+	@Override
+	public boolean hasContextMenu() {
+		return false;
+	}
+	
+	@Override
+	public AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller) {
 		return null;
 	}
 	
