@@ -35,12 +35,12 @@ public class TvSeriesExplorerRootsTreeNode extends AbstractRootsExplorerRootsTre
 	
 	@Override
 	public Icon getCustomIcon() {
-		return IconRetriever.retrieveExplorerTreeTvSeriesRootIcon();
+		return IconRetriever.retrieveExplorerTreeFolderTvSeries();
 	}
 	
 	@Override
-	public AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller) {
-		return new TvSeriesExplorerRootsContextMenu(controller);
+	public AbstractExplorerRootsContextMenu<TvSeriesExplorerRootsTreeNode> getContextMenu(ExplorerRootsController controller) {
+		return new TvSeriesExplorerRootsContextMenu(controller, this);
 	}
 
 }

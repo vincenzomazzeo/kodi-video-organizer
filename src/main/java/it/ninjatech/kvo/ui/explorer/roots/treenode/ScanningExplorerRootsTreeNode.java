@@ -39,7 +39,7 @@ public class ScanningExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode
 	}
 	
 	@Override
-	public AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller) {
+	public AbstractExplorerRootsContextMenu<ScanningExplorerRootsTreeNode> getContextMenu(ExplorerRootsController controller) {
 		return null;
 	}
 	

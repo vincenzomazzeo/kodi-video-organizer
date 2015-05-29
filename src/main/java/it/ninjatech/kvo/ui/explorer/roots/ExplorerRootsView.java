@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
@@ -132,7 +131,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 
 		this.addTvShowsRootMenuItem.setMargin(new Insets(8, 8, 8, 8));
 		this.addTvShowsRootMenuItem.setDrawBorder(true);
-		this.addTvShowsRootMenuItem.setIcon(new ImageIcon(IconRetriever.retrieveIcon(IconRetriever.IconName.ExplorerRootIconTvShowMenu)));
+		this.addTvShowsRootMenuItem.setIcon(IconRetriever.retrieveExplorerTreeFolderTvSeriesMenu());
 		this.addTvShowsRootMenuItem.setAction(new ActionListener() {
 
 			@Override
@@ -145,7 +144,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 
 		this.addMoviesRootMenuItem.setMargin(new Insets(8, 8, 8, 8));
 		this.addMoviesRootMenuItem.setDrawBorder(true);
-		this.addMoviesRootMenuItem.setIcon(new ImageIcon(IconRetriever.retrieveIcon(IconRetriever.IconName.ExplorerRootIconMovieMenu)));
+		this.addMoviesRootMenuItem.setIcon(IconRetriever.retrieveExplorerTreeFolderMoviesMenu());
 		this.addMoviesRootMenuItem.setAction(new ActionListener() {
 
 			@Override

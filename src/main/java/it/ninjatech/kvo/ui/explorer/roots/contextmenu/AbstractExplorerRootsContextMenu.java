@@ -1,24 +1,24 @@
 package it.ninjatech.kvo.ui.explorer.roots.contextmenu;
 
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
 
 import com.alee.laf.menu.WebPopupMenu;
 
-public abstract class AbstractExplorerRootsContextMenu extends WebPopupMenu implements ActionListener {
+public abstract class AbstractExplorerRootsContextMenu<N extends AbstractExplorerRootsTreeNode> extends WebPopupMenu {
 
 	private static final long serialVersionUID = 1699211695851984234L;
 
 	protected final ExplorerRootsController controller;
+	protected final N node;
 	
-	protected AbstractExplorerRootsContextMenu(ExplorerRootsController controller) {
+	protected AbstractExplorerRootsContextMenu(ExplorerRootsController controller, N node) {
 		this.controller = controller;
+		this.node = node;
+		
+		build();
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-	}
+	protected abstract void build();
 	
 }

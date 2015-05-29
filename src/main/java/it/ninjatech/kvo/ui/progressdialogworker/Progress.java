@@ -2,7 +2,7 @@ package it.ninjatech.kvo.ui.progressdialogworker;
 
 public final class Progress {
 
-	public enum Type {
+	protected enum Type {
 		Init, Update;
 	}
 	

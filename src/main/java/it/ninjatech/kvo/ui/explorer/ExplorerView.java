@@ -7,8 +7,6 @@ import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsView;
 
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
-
 import com.alee.global.StyleConstants;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.tabbedpane.TabbedPaneStyle;
@@ -41,7 +39,7 @@ public class ExplorerView extends WebPanel {
 		setPreferredWidth(uiWidth / 5);
 		
 		add(this.container);
-		this.container.addTab("Roots", new ImageIcon(IconRetriever.retrieveIcon(IconRetriever.IconName.ExplorerRootIcon)), this.roots);
+		this.container.addTab("Roots", IconRetriever.retrieveExplorerTreeFolderTab(), this.roots);
 	}
 	
 }

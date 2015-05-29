@@ -35,7 +35,7 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 
 	@Override
 	public Icon getCustomIcon() {
-		return IconRetriever.retrieveExplorerTreeRootIcon();
+		return IconRetriever.retrieveExplorerTreeFolder();
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 	}
 	
 	@Override
-	public AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller) {
+	public AbstractExplorerRootsContextMenu<RootsExplorerRootsTreeNode> getContextMenu(ExplorerRootsController controller) {
 		return null;
 	}
 	

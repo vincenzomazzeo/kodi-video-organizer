@@ -22,7 +22,7 @@ public class FsFileExplorerRootsTreeNode extends AbstractFsExplorerRootsTreeNode
 	}
 	
 	@Override
-	public AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller) {
+	public AbstractExplorerRootsContextMenu<FsFileExplorerRootsTreeNode> getContextMenu(ExplorerRootsController controller) {
 		return null;
 	}
 	

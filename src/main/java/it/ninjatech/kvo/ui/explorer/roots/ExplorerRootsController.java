@@ -5,6 +5,7 @@ import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.Type;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
 
@@ -14,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.tree.TreePath;
 
 import com.alee.extended.filechooser.WebDirectoryChooser;
-import com.alee.laf.menu.WebPopupMenu;
 import com.alee.managers.notification.NotificationManager;
 import com.alee.utils.swing.DialogOptions;
 
@@ -90,7 +90,7 @@ public class ExplorerRootsController {
 			AbstractExplorerRootsTreeNode node = (AbstractExplorerRootsTreeNode)path.getLastPathComponent();
 
 			if (node.hasContextMenu()) {
-				WebPopupMenu menu = node.getContextMenu(this);
+				AbstractExplorerRootsContextMenu<?> menu = node.getContextMenu(this);
 				menu.show(this.view.getTree(), x, y);
 			}
 		}

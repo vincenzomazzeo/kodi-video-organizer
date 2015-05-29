@@ -15,7 +15,7 @@ public abstract class AbstractProgressDialogWorker<T> extends SwingWorker<T, Pro
 	private final AbstractWorker<T> worker;
 	protected final WebProgressDialog progress;
 	
-	public AbstractProgressDialogWorker(AbstractWorker<T> worker, String title) {
+	protected AbstractProgressDialogWorker(AbstractWorker<T> worker, String title) {
 		this.worker = worker;
 		this.progress = new WebProgressDialog(title);
 		

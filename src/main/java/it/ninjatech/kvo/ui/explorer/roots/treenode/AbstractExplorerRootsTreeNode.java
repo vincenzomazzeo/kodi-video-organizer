@@ -37,7 +37,7 @@ public abstract class AbstractExplorerRootsTreeNode extends DefaultMutableTreeNo
 	
 	public abstract boolean hasContextMenu();
 	
-	public abstract AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller);
+	public abstract AbstractExplorerRootsContextMenu<?> getContextMenu(ExplorerRootsController controller);
 	
 	@Override
 	public TreeNode getChildAt(int childIndex) {

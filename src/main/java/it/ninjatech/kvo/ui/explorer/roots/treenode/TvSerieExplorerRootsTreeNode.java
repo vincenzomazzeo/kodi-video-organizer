@@ -17,8 +17,8 @@ public class TvSerieExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeN
 	}
 
 	@Override
-	public AbstractExplorerRootsContextMenu getContextMenu(ExplorerRootsController controller) {
-		return new TvSerieExplorerRootsContextMenu(controller);
+	public AbstractExplorerRootsContextMenu<TvSerieExplorerRootsTreeNode> getContextMenu(ExplorerRootsController controller) {
+		return new TvSerieExplorerRootsContextMenu(controller, this);
 	}
 	
 }
