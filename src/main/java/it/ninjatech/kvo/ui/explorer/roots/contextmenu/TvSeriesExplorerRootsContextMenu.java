@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.ui.explorer.roots.contextmenu;
 
+import java.awt.Desktop;
+
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSeriesOpenExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
@@ -17,10 +19,20 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
 	@Override
 	protected void build() {
 		WebMenuItem menuItem = null;
+
+		if (Desktop.isDesktopSupported()) {
+			// Open in System Explorer
+			menuItem = new WebMenuItem(new TvSeriesOpenExplorerRootsAction(this.controller, this.node, "Open in System Explorer", null));
+			add(menuItem);
+		}
 		
-		// Open in System Explorer
-		menuItem = new WebMenuItem(new TvSeriesOpenExplorerRootsAction(this.controller, this.node, "Open in System Explorer", null));
-		add(menuItem);
+		// Remove
+		
+		// Rescan
+		
+		// Refresh all
+		
+		// Add new Tv Serie
 	}
-	
+
 }

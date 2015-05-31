@@ -21,14 +21,9 @@ public class TvSeriesOpenExplorerRootsAction extends AbstractExplorerRootsAction
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		try {
-			if (Desktop.isDesktopSupported()) {
-				TvSeriesPathEntity pathEntity = this.node.getValue();
-				File path = new File(pathEntity.getPath());
-				Desktop.getDesktop().open(path);
-			}
-			else {
-				// TODO gestire
-			}
+			TvSeriesPathEntity pathEntity = this.node.getValue();
+			File path = new File(pathEntity.getPath());
+			Desktop.getDesktop().open(path);
 		}
 		catch (Exception e) {
 			// TODO gestire
