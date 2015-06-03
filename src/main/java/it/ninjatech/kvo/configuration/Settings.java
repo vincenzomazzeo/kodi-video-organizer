@@ -9,11 +9,14 @@ public class Settings {
 
 	private static final String LAST_MOVIES_ROOT_PARENT = "lastMoviesRootParent";
 	private static final String LAST_TV_SERIES_ROOT_PARENT = "lastTvSeriesRootParent";
+	private static final String THE_TV_DB_API_KEY = "theTvDbApiKey";
 	
 	@JsonProperty(LAST_MOVIES_ROOT_PARENT)
 	private File lastMoviesRootParent;
 	@JsonProperty(LAST_TV_SERIES_ROOT_PARENT)
 	private File lastTvSeriesRootParent;
+	@JsonProperty(THE_TV_DB_API_KEY)
+	private String theTvDbApiKey;
 
 	@JsonCreator
 	protected Settings() {}
@@ -32,6 +35,14 @@ public class Settings {
 
 	public void setLastTvSeriesRootParent(File lastTvSeriesRootParent) {
 		this.lastTvSeriesRootParent = lastTvSeriesRootParent;
+	}
+
+	public String getTheTvDbApiKey() {
+		return this.theTvDbApiKey;
+	}
+
+	public void setTheTvDbApiKey(String theTvDbApiKey) {
+		this.theTvDbApiKey = theTvDbApiKey;
 	}
 
 }

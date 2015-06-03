@@ -12,12 +12,21 @@
 		<maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Dependencies' versions -->
+		<assertj.version>3.0.0</assertj.version>
 		<h2.version>1.4.187</h2.version>
 		<jackson.version>2.5.3</jackson.version>
+		<jersey.version>1.19</jersey.version>
+		<junit.version>4.12</junit.version>
 		<weblaf.version>1.28</weblaf.version>
 	</properties>
 	<!---->
 	<dependencies>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -37,6 +46,17 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.sciss</groupId>
