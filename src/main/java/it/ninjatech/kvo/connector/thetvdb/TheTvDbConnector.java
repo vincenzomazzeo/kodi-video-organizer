@@ -1,8 +1,13 @@
 package it.ninjatech.kvo.connector.thetvdb;
 
 import it.ninjatech.kvo.configuration.SettingsHandler;
+import it.ninjatech.kvo.connector.thetvdb.model.Languages;
+import it.ninjatech.kvo.connector.thetvdb.model.TvSerie;
+import it.ninjatech.kvo.connector.thetvdb.model.TvSeriesSearchResult;
 
 import javax.ws.rs.core.MediaType;
+
+import org.h2.util.StringUtils;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
@@ -30,6 +35,31 @@ public class TheTvDbConnector {
 
 		return result;
 	}
+
+	public TvSeriesSearchResult search(String name, String language) {
+		TvSeriesSearchResult result = null;
+
+		WebResource webResource = this.webResource.
+				path("/GetSeries.php").
+				queryParam("seriesname", name);
+		if (!StringUtils.isNullOrEmpty(language)) {
+			webResource = webResource.queryParam("language", language);
+		}
+		result = webResource.
+				type(MediaType.TEXT_XML).
+				get(TvSeriesSearchResult.class);
+
+		return result;
+	}
 	
+	public TvSerie getData(String id, String language) {
+		TvSerie result = null;
+		
+		// TODO
+		
+		return result;
+	}
+	
+	public Banners get
 
 }

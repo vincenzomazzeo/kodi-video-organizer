@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.connector.thetvdb;
+package it.ninjatech.kvo.connector.thetvdb.model;
 
 import java.util.List;
 
