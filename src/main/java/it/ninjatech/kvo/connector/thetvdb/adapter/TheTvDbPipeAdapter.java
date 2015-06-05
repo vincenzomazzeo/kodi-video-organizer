@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class PipeAdapter extends XmlAdapter<String, List<String>> {
+public class TheTvDbPipeAdapter extends XmlAdapter<String, List<String>> {
 
 	@Override
 	public List<String> unmarshal(String value) throws Exception {

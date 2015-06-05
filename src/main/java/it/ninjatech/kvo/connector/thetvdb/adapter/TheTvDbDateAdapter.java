@@ -5,7 +5,7 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class DateAdapter extends XmlAdapter<String, Date> {
+public class TheTvDbDateAdapter extends XmlAdapter<String, Date> {
 
 	@Override
 	public Date unmarshal(String value) throws Exception {
