@@ -25,9 +25,14 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
 			//add(menuItem);
 		}
 		
-		// Refresh
+		if (this.node.getValue().getTvSerie() != null) {
+			// Refresh
+		}
+		else {
+			// Fetch
+		}
 		
-		// In base al fatto che il fetch abbia funzionato o meno bisogna contestualizzare il menu
+		// Rescan ???
 	}
 
 }
