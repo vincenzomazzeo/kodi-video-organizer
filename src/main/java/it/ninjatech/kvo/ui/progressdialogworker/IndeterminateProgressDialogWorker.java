@@ -9,7 +9,8 @@ public class IndeterminateProgressDialogWorker<T> extends AbstractProgressDialog
 	public IndeterminateProgressDialogWorker(AbstractWorker<T> worker, String title) {
 		super(worker, title);
 		
-		this.progress.setIndeterminate(true);
+		this.progress.getProgressBar().setIndeterminate(true);
+		this.progress.getProgressBar().setStringPainted(false);
 	}
 	
 	@Override

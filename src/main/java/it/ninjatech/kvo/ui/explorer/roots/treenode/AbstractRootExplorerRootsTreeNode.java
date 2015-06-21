@@ -1,7 +1,5 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
-import javax.swing.Icon;
-
 import it.ninjatech.kvo.model.AbstractPathEntity;
 
 public abstract class AbstractRootExplorerRootsTreeNode<R extends AbstractPathEntity> extends AbstractExplorerRootsTreeNode {
@@ -17,23 +15,8 @@ public abstract class AbstractRootExplorerRootsTreeNode<R extends AbstractPathEn
 	}
 	
 	@Override
-	public String toString() {
-		return this.value.getLabel();
-	}
-	
-	@Override
 	public boolean isLeaf() {
 		return false;
-	}
-	
-	@Override
-	public boolean hasCustomIcon() {
-		return false;
-	}
-	
-	@Override
-	public Icon getCustomIcon() {
-		return null;
 	}
 	
 	@Override

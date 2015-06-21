@@ -1,6 +1,9 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
+import javax.swing.Icon;
+
 import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.ui.IconRetriever;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.TvSerieExplorerRootsContextMenu;
@@ -19,6 +22,21 @@ public class TvSerieExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeN
 	@Override
 	public AbstractExplorerRootsContextMenu<TvSerieExplorerRootsTreeNode> getContextMenu(ExplorerRootsController controller) {
 		return new TvSerieExplorerRootsContextMenu(controller, this);
+	}
+	
+	@Override
+	public String toString() {
+		return this.value.getTvSerie() == null ? this.value.getLabel() : this.value.getTvSerie().getName();
+	}
+	
+	@Override
+	public boolean hasCustomIcon() {
+		return this.value.getTvSerie() != null;
+	}
+	
+	@Override
+	public Icon getCustomIcon() {
+		return IconRetriever.retrieveExplorerTreeTvSerie();
 	}
 	
 }

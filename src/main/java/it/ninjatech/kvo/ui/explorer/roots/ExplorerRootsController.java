@@ -3,13 +3,19 @@ package it.ninjatech.kvo.ui.explorer.roots;
 import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.model.AbstractPathEntity;
+import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.Type;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
+import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
+import it.ninjatech.kvo.worker.TvSerieFetcher;
+import it.ninjatech.kvo.worker.TvSerieFinder;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.tree.TreePath;
@@ -34,6 +40,42 @@ public class ExplorerRootsController {
 		this.view.setController(this);
 	}
 
+	public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
+		TvSerieFinder tvSerieFinder = new TvSerieFinder(node.getValue().getLabel());
+		
+		IndeterminateProgressDialogWorker<List<TvSerie>> finder = new IndeterminateProgressDialogWorker<>(tvSerieFinder, "Searching for TV Serie");
+		
+		List<TvSerie> tvSeries = null;
+		finder.start();
+		try {
+			tvSeries = finder.get();
+		}
+		catch (Exception e) {
+			// TODO gestire
+		}
+		
+		if (tvSeries.size() == 1) {
+			TvSerieFetcher tvSerieFetcher = new TvSerieFetcher(tvSeries.get(0));
+			
+			IndeterminateProgressDialogWorker<TvSerie> fetcher = new IndeterminateProgressDialogWorker<>(tvSerieFetcher, "Fetching data");
+			
+			TvSerie tvSerie = null;
+			fetcher.start();
+			try {
+				tvSerie = fetcher.get();
+				node.getValue().setTvSerie(tvSerie);
+				NotificationManager.showNotification(String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
+				this.model.reload(node);
+			}
+			catch (Exception e) {
+				// TODO gestire
+			}
+		}
+		else {
+			// TODO gestire
+		}
+	}
+	
 	protected void notifyAddRoot(int x, int y) {
 		this.view.showAddRootMenu(x, y);
 	}

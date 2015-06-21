@@ -11,7 +11,8 @@ public final class IconRetriever {
 		
 		Folder("folder.png"),
 		Folder_Movies("folder_movies.png"),
-		Folder_TvSeries("folder_tvseries.png");
+		Folder_TvSeries("folder_tvseries.png"),
+		TvSerie("tvserie.png");
 		
 		private final String value; 
 		
@@ -33,6 +34,7 @@ public final class IconRetriever {
 	private static ImageIcon explorerTreeFolderTab;
 	private static ImageIcon explorerTreeFolderMoviesTab;
 	private static ImageIcon explorerTreeFolderTvSeriesTab;
+	private static ImageIcon explorerTreeTvSerie;
 	
 	public static ImageIcon retrieveExplorerTreeFolder() {
 		if (explorerTreeFolder == null) {
@@ -96,6 +98,14 @@ public final class IconRetriever {
 		}
 		
 		return explorerTreeFolderTvSeriesTab;
+	}
+	
+	public static ImageIcon retrieveExplorerTreeTvSerie() {
+		if (explorerTreeTvSerie == null) {
+			explorerTreeTvSerie = retrieveAndScaleIcon(IconName.TvSerie, EXPLORER_TREE_ICON_SIZE);
+		}
+		
+		return explorerTreeTvSerie;
 	}
 	
 	private static URL retrieveIcon(IconName icon) {

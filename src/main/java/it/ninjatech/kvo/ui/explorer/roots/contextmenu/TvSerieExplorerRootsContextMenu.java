@@ -1,6 +1,8 @@
 package it.ninjatech.kvo.ui.explorer.roots.contextmenu;
 
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.PathOpenExplorerRootsAction;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSerieFetchExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 
 import java.awt.Desktop;
@@ -17,12 +19,9 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
 
 	@Override
 	protected void build() {
-		WebMenuItem menuItem = null;
-
 		if (Desktop.isDesktopSupported()) {
 			// Open in System Explorer
-			//menuItem = new WebMenuItem(new TvSeriesOpenExplorerRootsAction(this.controller, this.node, "Open in System Explorer", null));
-			//add(menuItem);
+			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, "Open in System Explorer", null, this.node.getValue().getPath())));
 		}
 		
 		if (this.node.getValue().getTvSerie() != null) {
@@ -30,6 +29,8 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
 		}
 		else {
 			// Fetch
+			// TODO to check if the connector is ready
+			add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, node, "Fetch", null)));
 		}
 		
 		// Rescan ???
