@@ -3,7 +3,7 @@ package it.ninjatech.kvo.ui.explorer.roots.treenode;
 import javax.swing.Icon;
 
 import it.ninjatech.kvo.model.TvSeriePathEntity;
-import it.ninjatech.kvo.ui.IconRetriever;
+import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.TvSerieExplorerRootsContextMenu;
@@ -36,7 +36,7 @@ public class TvSerieExplorerRootsTreeNode extends AbstractRootExplorerRootsTreeN
 	
 	@Override
 	public Icon getCustomIcon() {
-		return IconRetriever.retrieveExplorerTreeTvSerie();
+		return ImageRetriever.retrieveExplorerTreeTvSerie();
 	}
 	
 }

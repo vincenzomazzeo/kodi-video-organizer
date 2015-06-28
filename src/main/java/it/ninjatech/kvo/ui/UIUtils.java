@@ -5,6 +5,7 @@ import java.awt.DisplayMode;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import com.alee.laf.panel.WebPanel;
 import com.alee.utils.SystemUtils;
 
 public final class UIUtils {
@@ -13,6 +14,14 @@ public final class UIUtils {
 	private static final int HD_HEIGHT = 1080;
 	private static final BigDecimal _16_9 = new BigDecimal("1.7777");
 	private static final BigDecimal _4_3 = new BigDecimal("1.3333");
+	
+	public static WebPanel makeSeparatorPane(int height) {
+		WebPanel result = new WebPanel();
+		
+		result.setPreferredHeight(height);
+		
+		return result;
+	}
 	
 	protected static Dimension getStartupDimension() {
 		Dimension result = null;

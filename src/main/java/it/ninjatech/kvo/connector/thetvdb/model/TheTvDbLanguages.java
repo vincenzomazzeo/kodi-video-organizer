@@ -1,11 +1,10 @@
 package it.ninjatech.kvo.connector.thetvdb.model;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.utils.LanguageMap;
+import it.ninjatech.kvo.utils.EnhancedLocaleMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -21,8 +20,8 @@ public class TheTvDbLanguages {
 
 	protected TheTvDbLanguages() {}
 	
-	public List<Locale> toLanguages() {
-		List<Locale> result = new ArrayList<>();
+	public List<EnhancedLocale> toLanguages() {
+		List<EnhancedLocale> result = new ArrayList<>();
 		
 		for (TheTvDbLanguage language : this.languages) {
 			result.add(language.toLanguage());
@@ -44,17 +43,11 @@ public class TheTvDbLanguages {
 
 		@XmlElement(name = "abbreviation")
 		private String abbreviation;
-		@XmlElement(name = "name")
-		private String name;
 		
 		protected TheTvDbLanguage() {}
 
 		protected EnhancedLocale toLanguage() {
-			EnhancedLocale result = null;
-			
-			
-			
-			return result;
+			return EnhancedLocaleMap.getByLanguage(this.abbreviation);
 		}
 		
 		protected String getAbbreviation() {
@@ -63,14 +56,6 @@ public class TheTvDbLanguages {
 
 		protected void setAbbreviation(String abbreviation) {
 			this.abbreviation = abbreviation;
-		}
-
-		protected String getName() {
-			return this.name;
-		}
-
-		protected void setName(String name) {
-			this.name = name;
 		}
 
 	}

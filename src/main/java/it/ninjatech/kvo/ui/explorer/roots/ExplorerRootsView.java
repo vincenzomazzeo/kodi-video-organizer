@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.roots;
 
-import it.ninjatech.kvo.ui.IconRetriever;
+import it.ninjatech.kvo.ui.ImageRetriever;
 
 import java.awt.Insets;
 import java.awt.Point;
@@ -103,7 +103,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 	public void treeCollapsed(TreeExpansionEvent event) {
 	}
 
-	public void setController(ExplorerRootsController controller) {
+	protected void setController(ExplorerRootsController controller) {
 		this.controller = controller;
 	}
 
@@ -131,7 +131,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 
 		this.addTvShowsRootMenuItem.setMargin(new Insets(8, 8, 8, 8));
 		this.addTvShowsRootMenuItem.setDrawBorder(true);
-		this.addTvShowsRootMenuItem.setIcon(IconRetriever.retrieveExplorerTreeFolderTvSeriesMenu());
+		this.addTvShowsRootMenuItem.setIcon(ImageRetriever.retrieveExplorerTreeFolderTvSeriesMenu());
 		this.addTvShowsRootMenuItem.setAction(new ActionListener() {
 
 			@Override
@@ -144,7 +144,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 
 		this.addMoviesRootMenuItem.setMargin(new Insets(8, 8, 8, 8));
 		this.addMoviesRootMenuItem.setDrawBorder(true);
-		this.addMoviesRootMenuItem.setIcon(IconRetriever.retrieveExplorerTreeFolderMoviesMenu());
+		this.addMoviesRootMenuItem.setIcon(ImageRetriever.retrieveExplorerTreeFolderMoviesMenu());
 		this.addMoviesRootMenuItem.setAction(new ActionListener() {
 
 			@Override

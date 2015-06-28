@@ -14,7 +14,7 @@ public class Flags {
 		EnhancedLocaleMap.init();
 		
 		JFrame frame = new JFrame();
-		JLabel lblimage = new JLabel(EnhancedLocaleMap.getFlagByCountry(Locale.CANADA.getCountry()));
+		JLabel lblimage = new JLabel(EnhancedLocaleMap.getByCountry(Locale.CANADA.getCountry()).getCountryFlag());
 		frame.getContentPane().setLayout(new FlowLayout());
 		frame.getContentPane().add(lblimage);
 		frame.pack();

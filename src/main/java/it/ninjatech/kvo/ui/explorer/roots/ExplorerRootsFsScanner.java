@@ -31,7 +31,7 @@ public class ExplorerRootsFsScanner {
 		worker.start();
 	}
 	
-	public static final class Scanner extends AbstractWorker<Void> {
+	private static final class Scanner extends AbstractWorker<Void> {
 
 		private final File root;
 		private final AbstractExplorerRootsTreeNode parent;

@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.worker;
 
-import it.ninjatech.kvo.connector.thetvdb.TheTvDbConnector;
+import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.TvSerie;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class TvSerieFinder extends AbstractWorker<List<TvSerie>> {
 		
 		notifyUpdate(this.name, null);
 		// TODO to handle language
-		result = TheTvDbConnector.getInstance().search(this.name, null);
+		result = TheTvDbManager.getInstance().search(this.name, null);
 		
 		return result;
 	}

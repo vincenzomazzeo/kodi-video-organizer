@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.worker;
 
-import it.ninjatech.kvo.connector.thetvdb.TheTvDbConnector;
+import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.TvSerie;
 
 public class TvSerieFetcher extends AbstractWorker<TvSerie> {
@@ -15,7 +15,7 @@ public class TvSerieFetcher extends AbstractWorker<TvSerie> {
 	public TvSerie work() throws Exception {
 		notifyUpdate(this.tvSerie.getName(), null);
 		
-		TheTvDbConnector.getInstance().getData(this.tvSerie);
+		TheTvDbManager.getInstance().getData(this.tvSerie);
 		
 		return this.tvSerie;
 	}

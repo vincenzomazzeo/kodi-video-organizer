@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui;
 
 import it.ninjatech.kvo.KodiVideoOrganizer;
+import it.ninjatech.kvo.ui.component.ToolBar;
 import it.ninjatech.kvo.ui.explorer.ExplorerView;
 
 import java.awt.BorderLayout;
@@ -17,23 +18,25 @@ public class UI extends WebFrame implements WindowListener {
 	private static final long serialVersionUID = -8112321473328517789L;
 
 	private static UI self;
-	
+
 	public static UI build() {
 		self = self == null ? new UI() : self;
-		
+
 		return self;
 	}
-	
+
 	public static UI get() {
 		return self;
 	}
-	
+
+	private ToolBar toolBar;
+
 	private UI() {
 		super("Kodi Video Organizer");
 
 		init();
 	}
-	
+
 	@Override
 	public void windowOpened(WindowEvent windowEvent) {
 	}
@@ -63,6 +66,10 @@ public class UI extends WebFrame implements WindowListener {
 	public void windowDeactivated(WindowEvent windowEvent) {
 	}
 
+	public ToolBar getToolBar() {
+		return this.toolBar;
+	}
+
 	private void init() {
 		initialize();
 
@@ -72,6 +79,9 @@ public class UI extends WebFrame implements WindowListener {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		addWindowListener(this);
+
+		this.toolBar = new ToolBar();
+		add(this.toolBar, BorderLayout.NORTH);
 
 		ExplorerView explorer = new ExplorerView(startupDimension.width);
 		add(explorer, BorderLayout.LINE_START);
