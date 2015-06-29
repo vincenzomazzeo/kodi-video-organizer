@@ -13,6 +13,7 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.toolbar.ToolbarStyle;
 import com.alee.laf.toolbar.WebToolBar;
 import com.alee.managers.notification.NotificationManager;
+import com.alee.managers.notification.NotificationOption;
 import com.alee.managers.tooltip.TooltipManager;
 
 public class ToolBar extends WebToolBar implements ActionListener {
@@ -39,7 +40,7 @@ public class ToolBar extends WebToolBar implements ActionListener {
 	}
 	
 	public void showNotificationForScraperSettings(String notification) {
-		NotificationManager.showNotification(this.scrapersSettings, notification);
+		NotificationManager.showNotification(this.scrapersSettings, notification, NotificationOption.discard);
 	}
 
 	private void init() {
