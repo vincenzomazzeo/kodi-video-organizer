@@ -70,7 +70,7 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		add(showExceptionsOverlayPanel);
 		showExceptionsOverlayPanel.setOpaque(false);
 
-		this.showExceptionsView = WebButton.createIconWebButton(ImageRetriever.retrieveMenuBarScrapersSettings(), StyleConstants.smallRound, true);
+		this.showExceptionsView = WebButton.createIconWebButton(ImageRetriever.retrieveToolBarException(), StyleConstants.smallRound, true);
 		showExceptionsOverlayPanel.setComponent(this.showExceptionsView);
 		TooltipManager.setTooltip(this.showExceptionsView, "Show Exceptions");
 		this.showExceptionsView.addActionListener(this);
@@ -85,7 +85,7 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		addSeparator();
 		addSpacing(40);
 
-		this.scrapersSettings = WebButton.createIconWebButton(ImageRetriever.retrieveMenuBarScrapersSettings(), StyleConstants.smallRound, true);
+		this.scrapersSettings = WebButton.createIconWebButton(ImageRetriever.retrieveToolBarScrapersSettings(), StyleConstants.smallRound, true);
 		add(this.scrapersSettings);
 		TooltipManager.setTooltip(this.scrapersSettings, "Scrapers Settings");
 		this.scrapersSettings.addActionListener(this);

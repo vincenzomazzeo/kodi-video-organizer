@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.exception;
 
+import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
 
 import java.awt.Color;
@@ -33,6 +34,7 @@ public class ExceptionView extends WebDialog implements CollapsiblePaneListener 
 		this.panes = new HashMap<>();
 		this.adding = false;
 		
+		setIconImage(ImageRetriever.retrieveToolBarException().getImage());
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 
 		init();

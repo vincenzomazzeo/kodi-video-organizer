@@ -43,6 +43,7 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 
 		this.container = new WebPanel(new BorderLayout());
 
+		setIconImage(ImageRetriever.retrieveToolBarScrapersSettings().getImage());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		init();

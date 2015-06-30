@@ -9,6 +9,7 @@ public final class ImageRetriever {
 	private enum ImageName {
 		
 		Apikey("apikey.jpg"),
+		Exception("exception.png"),
 		Folder("folder.png"),
 		Folder_Movies("folder_movies.png"),
 		Folder_TvSeries("folder_tvseries.png"),
@@ -41,8 +42,9 @@ public final class ImageRetriever {
 	private static ImageIcon explorerTreeFolderMoviesTab;
 	private static ImageIcon explorerTreeFolderTvSeriesTab;
 	private static ImageIcon explorerTreeTvSerie;
-	private static ImageIcon menuBarScrapersSettings;
 	private static ImageIcon theTvDbLogo;
+	private static ImageIcon toolBarException;
+	private static ImageIcon toolBarScrapersSettings;
 	
 	public static ImageIcon retrieveApikey() {
 		if (apikey == null) {
@@ -124,20 +126,28 @@ public final class ImageRetriever {
 		return explorerTreeTvSerie;
 	}
 	
-	public static ImageIcon retrieveMenuBarScrapersSettings() {
-		if (menuBarScrapersSettings == null) {
-			menuBarScrapersSettings = retrieveAndScaleImage(ImageName.Scrapers_Settings, MENU_BAR_BUTTON_SIZE);
-		}
-		
-		return menuBarScrapersSettings;
-	}
-	
 	public static ImageIcon retrieveTheTvDbLogo() {
 		if (theTvDbLogo == null) {
 			theTvDbLogo = retrieveAndScaleImageByWidth(ImageName.TheTVDB_Logo, THE_TV_DB_LOGO_SIZE);
 		}
 		
 		return theTvDbLogo;
+	}
+	
+	public static ImageIcon retrieveToolBarException() {
+		if (toolBarException == null) {
+			toolBarException = retrieveAndScaleImage(ImageName.Exception, MENU_BAR_BUTTON_SIZE);
+		}
+		
+		return toolBarException;
+	}
+	
+	public static ImageIcon retrieveToolBarScrapersSettings() {
+		if (toolBarScrapersSettings == null) {
+			toolBarScrapersSettings = retrieveAndScaleImage(ImageName.Scrapers_Settings, MENU_BAR_BUTTON_SIZE);
+		}
+		
+		return toolBarScrapersSettings;
 	}
 	
 	private static ImageIcon retrieveImage(ImageName imageName) {
