@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.ui.exception;
+package it.ninjatech.kvo.ui.exceptionconsole;
 
 import it.ninjatech.kvo.ui.UI;
 
@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class ExceptionController {
+public class ExceptionConsoleController {
 
-	private final ExceptionView view;
+	private final ExceptionConsoleView view;
 	private final Set<String> toRead;
 	private boolean expandingFirstInAction;
 
-	public ExceptionController(ExceptionView view) {
+	public ExceptionConsoleController(ExceptionConsoleView view) {
 		this.view = view;
 		this.toRead = new HashSet<>();
 		this.expandingFirstInAction = false;

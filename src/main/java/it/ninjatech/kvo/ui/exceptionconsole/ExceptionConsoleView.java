@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.ui.exception;
+package it.ninjatech.kvo.ui.exceptionconsole;
 
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
@@ -19,22 +19,22 @@ import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebTextArea;
 
-public class ExceptionView extends WebDialog implements CollapsiblePaneListener {
+public class ExceptionConsoleView extends WebDialog implements CollapsiblePaneListener {
 
 	private static final long serialVersionUID = 4772626517954754101L;
 
 	private final Map<String, WebCollapsiblePane> panes;
-	private ExceptionController controller;
+	private ExceptionConsoleController controller;
 	private WebPanel container;
 	private boolean adding;
 	
-	public ExceptionView() {
+	public ExceptionConsoleView() {
 		super(UI.get(), "Exceptions", true);
 
 		this.panes = new HashMap<>();
 		this.adding = false;
 		
-		setIconImage(ImageRetriever.retrieveToolBarException().getImage());
+		setIconImage(ImageRetriever.retrieveToolBarExceptionConsole().getImage());
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 
 		init();
@@ -66,7 +66,7 @@ public class ExceptionView extends WebDialog implements CollapsiblePaneListener 
 		}
 	}
 
-	protected void setController(ExceptionController controller) {
+	protected void setController(ExceptionConsoleController controller) {
 		this.controller = controller;
 	}
 	

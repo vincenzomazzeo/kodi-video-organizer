@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.exception.ExceptionView;
+import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleView;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsController;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsView;
 
@@ -26,15 +26,15 @@ public class ToolBar extends WebToolBar implements ActionListener {
 
 	private static final long serialVersionUID = -2693914047879971469L;
 
-	private final ExceptionView exceptionView;
+	private final ExceptionConsoleView exceptionConsoleView;
 	private WebButton scrapersSettings;
-	private WebButton showExceptionsView;
+	private WebButton showExceptionConsole;
 	private WebLabel exceptionsToReadLabel;
 
-	public ToolBar(ExceptionView exceptionView) {
+	public ToolBar(ExceptionConsoleView exceptionConsoleView) {
 		super(WebToolBar.HORIZONTAL);
 
-		this.exceptionView = exceptionView;
+		this.exceptionConsoleView = exceptionConsoleView;
 
 		init();
 	}
@@ -48,8 +48,8 @@ public class ToolBar extends WebToolBar implements ActionListener {
 			new ScrapersSettingsController(view);
 			view.setVisible(true);
 		}
-		else if (source == this.showExceptionsView) {
-			this.exceptionView.setVisible(true);
+		else if (source == this.showExceptionConsole) {
+			this.exceptionConsoleView.setVisible(true);
 		}
 	}
 
@@ -66,21 +66,21 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		setFloatable(false);
 
-		WebOverlay showExceptionsOverlayPanel = new WebOverlay();
-		add(showExceptionsOverlayPanel);
-		showExceptionsOverlayPanel.setOpaque(false);
+		WebOverlay showExceptionsConsoleOverlayPanel = new WebOverlay();
+		add(showExceptionsConsoleOverlayPanel);
+		showExceptionsConsoleOverlayPanel.setOpaque(false);
 
-		this.showExceptionsView = WebButton.createIconWebButton(ImageRetriever.retrieveToolBarException(), StyleConstants.smallRound, true);
-		showExceptionsOverlayPanel.setComponent(this.showExceptionsView);
-		TooltipManager.setTooltip(this.showExceptionsView, "Show Exceptions");
-		this.showExceptionsView.addActionListener(this);
+		this.showExceptionConsole = WebButton.createIconWebButton(ImageRetriever.retrieveToolBarExceptionConsole(), StyleConstants.smallRound, true);
+		showExceptionsConsoleOverlayPanel.setComponent(this.showExceptionConsole);
+		TooltipManager.setTooltip(this.showExceptionConsole, "Exception Console");
+		this.showExceptionConsole.addActionListener(this);
 
 		this.exceptionsToReadLabel = new WebLabel();
 		this.exceptionsToReadLabel.setBoldFont().setForeground(Color.RED);
 		this.exceptionsToReadLabel.setBorder(getBorder());
 		this.exceptionsToReadLabel.setFontSize(15);
-		showExceptionsOverlayPanel.addOverlay(this.exceptionsToReadLabel, SwingConstants.TRAILING, SwingConstants.TOP);
-		showExceptionsOverlayPanel.setComponentMargin(0, 0, 0, this.exceptionsToReadLabel.getPreferredSize().width);
+		showExceptionsConsoleOverlayPanel.addOverlay(this.exceptionsToReadLabel, SwingConstants.TRAILING, SwingConstants.TOP);
+		showExceptionsConsoleOverlayPanel.setComponentMargin(0, 0, 0, this.exceptionsToReadLabel.getPreferredSize().width);
 
 		addSeparator();
 		addSpacing(40);

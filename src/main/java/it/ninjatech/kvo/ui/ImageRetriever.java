@@ -9,7 +9,7 @@ public final class ImageRetriever {
 	private enum ImageName {
 		
 		Apikey("apikey.jpg"),
-		Exception("exception.png"),
+		ExceptionConsole("exception_console.png"),
 		Folder("folder.png"),
 		Folder_Movies("folder_movies.png"),
 		Folder_TvSeries("folder_tvseries.png"),
@@ -43,7 +43,7 @@ public final class ImageRetriever {
 	private static ImageIcon explorerTreeFolderTvSeriesTab;
 	private static ImageIcon explorerTreeTvSerie;
 	private static ImageIcon theTvDbLogo;
-	private static ImageIcon toolBarException;
+	private static ImageIcon toolBarExceptionConsole;
 	private static ImageIcon toolBarScrapersSettings;
 	
 	public static ImageIcon retrieveApikey() {
@@ -134,12 +134,12 @@ public final class ImageRetriever {
 		return theTvDbLogo;
 	}
 	
-	public static ImageIcon retrieveToolBarException() {
-		if (toolBarException == null) {
-			toolBarException = retrieveAndScaleImage(ImageName.Exception, MENU_BAR_BUTTON_SIZE);
+	public static ImageIcon retrieveToolBarExceptionConsole() {
+		if (toolBarExceptionConsole == null) {
+			toolBarExceptionConsole = retrieveAndScaleImage(ImageName.ExceptionConsole, MENU_BAR_BUTTON_SIZE);
 		}
 		
-		return toolBarException;
+		return toolBarExceptionConsole;
 	}
 	
 	public static ImageIcon retrieveToolBarScrapersSettings() {

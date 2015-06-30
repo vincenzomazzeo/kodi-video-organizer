@@ -2,8 +2,8 @@ package it.ninjatech.kvo.ui;
 
 import it.ninjatech.kvo.KodiVideoOrganizer;
 import it.ninjatech.kvo.ui.component.ToolBar;
-import it.ninjatech.kvo.ui.exception.ExceptionController;
-import it.ninjatech.kvo.ui.exception.ExceptionView;
+import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleController;
+import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleView;
 import it.ninjatech.kvo.ui.explorer.ExplorerView;
 
 import java.awt.BorderLayout;
@@ -32,7 +32,7 @@ public class UI extends WebFrame implements WindowListener {
 	}
 
 	private ToolBar toolBar;
-	private ExceptionController exceptionController;
+	private ExceptionConsoleController exceptionController;
 
 	private UI() {
 		super("Kodi Video Organizer");
@@ -92,8 +92,8 @@ public class UI extends WebFrame implements WindowListener {
 		setLocationRelativeTo(null);
 		addWindowListener(this);
 
-		ExceptionView exceptionView = new ExceptionView();
-		this.exceptionController = new ExceptionController(exceptionView);
+		ExceptionConsoleView exceptionView = new ExceptionConsoleView();
+		this.exceptionController = new ExceptionConsoleController(exceptionView);
 		
 		this.toolBar = new ToolBar(exceptionView);
 		add(this.toolBar, BorderLayout.NORTH);

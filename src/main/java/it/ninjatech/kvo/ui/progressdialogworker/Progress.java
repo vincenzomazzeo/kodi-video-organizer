@@ -2,7 +2,7 @@ package it.ninjatech.kvo.ui.progressdialogworker;
 
 public final class Progress {
 
-	protected enum Type {
+	public enum Type {
 		Init, Update;
 	}
 	
@@ -10,21 +10,21 @@ public final class Progress {
 	private final String message;
 	private final Integer value;
 	
-	protected Progress(Type type, String message, Integer value) {
+	public Progress(Type type, String message, Integer value) {
 		this.type = type;
 		this.message = message;
 		this.value = value;
 	}
 
-	protected Type getType() {
+	public Type getType() {
 		return this.type;
 	}
 	
-	protected String getMessage() {
+	public String getMessage() {
 		return this.message;
 	}
 
-	protected Integer getValue() {
+	public Integer getValue() {
 		return this.value;
 	}
 	

@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.test;
 
-import it.ninjatech.kvo.ui.exception.ExceptionController;
-import it.ninjatech.kvo.ui.exception.ExceptionView;
+import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleController;
+import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleView;
 
 import com.alee.laf.rootpane.WebDialog;
 
@@ -13,8 +13,8 @@ public class DialogLauncher {
 //		ScrapersSettingsView view = new ScrapersSettingsView();
 //		ScrapersSettingsController controller = new ScrapersSettingsController(view);
 		
-		ExceptionView view = new ExceptionView();
-		ExceptionController controller = new ExceptionController(view);
+		ExceptionConsoleView view = new ExceptionConsoleView();
+		ExceptionConsoleController controller = new ExceptionConsoleController(view);
 		
 		view.setDefaultCloseOperation(WebDialog.DISPOSE_ON_CLOSE);
 		
