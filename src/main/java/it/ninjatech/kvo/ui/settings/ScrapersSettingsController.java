@@ -4,8 +4,9 @@ import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
-import it.ninjatech.kvo.utils.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.worker.AbstractWorker;
 
 import java.util.Collections;
@@ -65,7 +66,7 @@ public class ScrapersSettingsController {
 					}
 				}
 				catch (Exception e) {
-					// TODO gestire
+					UI.get().notifyException(e);
 				}
 			}
 		}

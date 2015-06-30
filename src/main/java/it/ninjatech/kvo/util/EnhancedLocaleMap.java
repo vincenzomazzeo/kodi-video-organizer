@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.utils;
+package it.ninjatech.kvo.util;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
 

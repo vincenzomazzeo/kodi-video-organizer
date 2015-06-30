@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.roots.contextmenu.action;
 
+import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
 
@@ -28,8 +29,7 @@ public class PathOpenExplorerRootsAction extends AbstractExplorerRootsAction<Abs
 			Desktop.getDesktop().open(path);
 		}
 		catch (Exception e) {
-			// TODO gestire
-			e.printStackTrace();
+			UI.get().notifyException(e);
 		}
 	}
 

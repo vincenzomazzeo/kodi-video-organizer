@@ -42,40 +42,42 @@ public class ExplorerRootsController {
 
 	public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
 		TvSerieFinder tvSerieFinder = new TvSerieFinder(node.getValue().getLabel());
-		
+
 		IndeterminateProgressDialogWorker<List<TvSerie>> finder = new IndeterminateProgressDialogWorker<>(tvSerieFinder, "Searching for TV Serie");
-		
+
 		List<TvSerie> tvSeries = null;
 		finder.start();
 		try {
 			tvSeries = finder.get();
 		}
 		catch (Exception e) {
-			// TODO gestire
+			UI.get().notifyException(e);
 		}
-		
-		if (tvSeries.size() == 1) {
-			TvSerieFetcher tvSerieFetcher = new TvSerieFetcher(tvSeries.get(0));
-			
-			IndeterminateProgressDialogWorker<TvSerie> fetcher = new IndeterminateProgressDialogWorker<>(tvSerieFetcher, "Fetching data");
-			
-			TvSerie tvSerie = null;
-			fetcher.start();
-			try {
-				tvSerie = fetcher.get();
-				node.getValue().setTvSerie(tvSerie);
-				NotificationManager.showNotification(String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
-				this.model.reload(node);
+
+		if (tvSeries != null) {
+			if (tvSeries.size() == 1) {
+				TvSerieFetcher tvSerieFetcher = new TvSerieFetcher(tvSeries.get(0));
+
+				IndeterminateProgressDialogWorker<TvSerie> fetcher = new IndeterminateProgressDialogWorker<>(tvSerieFetcher, "Fetching data");
+
+				TvSerie tvSerie = null;
+				fetcher.start();
+				try {
+					tvSerie = fetcher.get();
+					node.getValue().setTvSerie(tvSerie);
+					NotificationManager.showNotification(String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
+					this.model.reload(node);
+				}
+				catch (Exception e) {
+					UI.get().notifyException(e);
+				}
 			}
-			catch (Exception e) {
+			else {
 				// TODO gestire
 			}
 		}
-		else {
-			// TODO gestire
-		}
 	}
-	
+
 	protected void notifyAddRoot(int x, int y) {
 		this.view.showAddRootMenu(x, y);
 	}

@@ -2,11 +2,14 @@ package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.Type;
+import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.worker.AbstractPathBuilder;
 import it.ninjatech.kvo.worker.TvSeriesFilePathBuilder;
 
 import java.io.File;
+
+import javax.swing.SwingUtilities;
 
 public class ExplorerRootsRootScanner {
 
@@ -20,7 +23,7 @@ public class ExplorerRootsRootScanner {
 
 	public AbstractPathEntity scan() {
 		AbstractPathEntity result = null;
-		
+
 		AbstractPathBuilder builder = null;
 		switch (this.type) {
 		case TvSerie:
@@ -31,17 +34,24 @@ public class ExplorerRootsRootScanner {
 		}
 
 		String title = String.format("Scanning %s root %s", this.type.getPlural(), this.root.getName());
-				
+
 		DeterminateProgressDialogWorker<AbstractPathEntity> worker = new DeterminateProgressDialogWorker<>(builder, title);
-		
+
 		worker.start();
 		try {
 			result = worker.get();
 		}
-		catch (Exception e) {
-			// TODO gestire
+		catch (final Exception e) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					UI.get().notifyException(e);
+
+				}
+			});
 		}
-		
+
 		return result;
 	}
 

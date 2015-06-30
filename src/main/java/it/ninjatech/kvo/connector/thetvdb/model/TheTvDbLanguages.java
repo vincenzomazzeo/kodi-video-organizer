@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.connector.thetvdb.model;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.utils.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.util.ArrayList;
 import java.util.List;

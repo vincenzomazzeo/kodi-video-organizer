@@ -10,8 +10,8 @@ import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSerie;
 import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSeriesSearchResult;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.utils.EnhancedLocaleMap;
-import it.ninjatech.kvo.utils.LanguageMap;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.LanguageMap;
 
 import java.util.List;
 import java.util.Locale;

@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.db;
 
-import it.ninjatech.kvo.utils.Utils;
+import it.ninjatech.kvo.util.Utils;
 
 import java.io.File;
 import java.sql.Connection;

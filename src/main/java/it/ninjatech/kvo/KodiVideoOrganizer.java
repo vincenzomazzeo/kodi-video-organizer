@@ -5,8 +5,8 @@ import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.PostStartNotificator;
 import it.ninjatech.kvo.ui.UI;
-import it.ninjatech.kvo.utils.EnhancedLocaleMap;
-import it.ninjatech.kvo.utils.Utils;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.Utils;
 
 import javax.swing.SwingUtilities;
 

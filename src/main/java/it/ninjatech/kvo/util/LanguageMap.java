@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.utils;
+package it.ninjatech.kvo.util;
 
 import java.util.HashMap;
 import java.util.Locale;

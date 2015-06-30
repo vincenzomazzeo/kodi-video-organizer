@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.test;
 
-import it.ninjatech.kvo.utils.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.awt.FlowLayout;
 import java.util.Locale;

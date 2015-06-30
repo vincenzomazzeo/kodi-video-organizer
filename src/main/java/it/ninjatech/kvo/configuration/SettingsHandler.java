@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.configuration;
 
-import it.ninjatech.kvo.utils.Utils;
+import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.util.Utils;
 
 import java.io.File;
 
@@ -51,8 +52,7 @@ public class SettingsHandler {
 			this.objectMapper.writeValue(this.settingsFile, this.settings);
 		}
 		catch (Exception e) {
-			// TODO gestire
-			e.printStackTrace();
+			UI.get().notifyException(e);
 		}
 	}
 

@@ -56,6 +56,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 		this.addMoviesRootMenuItem = new WebDynamicMenuItem();
 
 		getVerticalScrollBar().setUnitIncrement(30);
+		getVerticalScrollBar().setBlockIncrement(30);
 		
 		this.tree.addMouseListener(this);
 		this.tree.addTreeExpansionListener(this);

@@ -3,7 +3,7 @@ package it.ninjatech.kvo.connector.thetvdb.model;
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbDateAdapter;
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbPipeAdapter;
 import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.utils.LanguageMap;
+import it.ninjatech.kvo.util.LanguageMap;
 
 import java.math.BigDecimal;
 import java.util.Date;
