@@ -106,7 +106,7 @@ public class Loader extends WebFrame {
 			notifyUpdate("Reading settings", 10);
 			SettingsHandler.init();
 
-			notifyUpdate("Connecting to the DB", 20);
+			notifyUpdate("Connecting to DB", 20);
 			ConnectionHandler.init();
 
 			notifyUpdate("Loading enhanced locale map", 50);

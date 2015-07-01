@@ -498,10 +498,14 @@ public final class EnhancedLocaleMap {
 	private static final int FLAG_REAL_WIDTH = 32;
 	private static final int FLAG_REAL_HEIGHT = 24;
 	
+	private static EnhancedLocale emptyLocale;
 	private static Map<String, EnhancedLocale> byCountry;
 	private static Map<String, EnhancedLocale> byLanguage;
 
 	public static void init() throws Exception {
+		ImageIcon transparentFlag = getTransparentFlag();
+		emptyLocale = new EnhancedLocale("_", "", transparentFlag, "_", "", transparentFlag);
+		
 		BufferedImage flags = ImageIO.read(EnhancedLocaleMap.class.getResource("/images/flags.png"));
 		EnumMap<FlagCoord, ImageIcon> flagMap = new EnumMap<>(FlagCoord.class);
 		for (FlagCoord flagCoord : FlagCoord.values()) {
@@ -528,6 +532,14 @@ public final class EnhancedLocaleMap {
 		}
 	}
 
+	public static EnhancedLocale getEmptyLocale() {
+		return emptyLocale;
+	}
+	
+	public static boolean isEmptyLocale(EnhancedLocale emptyLocale) {
+		return emptyLocale.equals(EnhancedLocaleMap.emptyLocale);
+	}
+	
 	public static EnhancedLocale getByCountry(String country) {
 		return byCountry.get(country.toLowerCase());
 	}
@@ -545,6 +557,15 @@ public final class EnhancedLocaleMap {
 		if (scaleFactor != 0d) {
 			result = new ImageIcon(result.getImage().getScaledInstance((int)width, FLAG_HEIGHT, Image.SCALE_SMOOTH));
 		}
+		
+		return result;
+	}
+	
+	private static ImageIcon getTransparentFlag() {
+		ImageIcon result = null;
+		
+		double scaleFactor = (double)FLAG_HEIGHT / (double)FLAG_REAL_HEIGHT;
+		double width = scaleFactor * (double)FLAG_REAL_WIDTH;
 		
 		return result;
 	}

@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.roots.contextmenu;
 
+import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.PathOpenExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSerieFetchExplorerRootsAction;
@@ -24,13 +25,14 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
 			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, "Open in System Explorer", null, this.node.getValue().getPath())));
 		}
 		
-		if (this.node.getValue().getTvSerie() != null) {
-			// Refresh
-		}
-		else {
-			// Fetch
-			// TODO to check if the connector is ready
-			add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, node, "Fetch", null)));
+		if (TheTvDbManager.getInstance().isActive()) {
+    		if (this.node.getValue().getTvSerie() != null) {
+    			// Refresh
+    		}
+    		else {
+    			// Fetch
+   				add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, node, "Fetch", null)));
+    		}
 		}
 		
 		// Rescan ???
