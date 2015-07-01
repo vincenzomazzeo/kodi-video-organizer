@@ -1,22 +1,11 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.UI;
-import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
-import it.ninjatech.kvo.worker.AbstractWorker;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.alee.laf.optionpane.WebOptionPane;
 
 public class SearchTvSerieController {
 
@@ -26,6 +15,11 @@ public class SearchTvSerieController {
 		this.view = view;
 
 		this.view.setController(this);
+		
+		List<EnhancedLocale> languages = new ArrayList<>();
+		languages.add(EnhancedLocaleMap.getEmptyLocale());
+		languages.addAll(TheTvDbManager.getInstance().getLanguages());
+		this.view.setLanguages(languages);
 	}
 
 	protected void notifySearch() {

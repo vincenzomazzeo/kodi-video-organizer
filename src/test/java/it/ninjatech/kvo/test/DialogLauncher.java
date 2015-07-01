@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.test;
 
+import it.ninjatech.kvo.configuration.SettingsHandler;
+import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.ui.tvserie.SearchTvSerieController;
 import it.ninjatech.kvo.ui.tvserie.SearchTvSerieView;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
@@ -7,7 +9,9 @@ import it.ninjatech.kvo.util.EnhancedLocaleMap;
 public class DialogLauncher {
 
 	public static void main(String[] args) throws Exception {
+		SettingsHandler.init();
 		EnhancedLocaleMap.init();
+		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
 		
 //		ScrapersSettingsView view = new ScrapersSettingsView();
 //		ScrapersSettingsController controller = new ScrapersSettingsController(view);

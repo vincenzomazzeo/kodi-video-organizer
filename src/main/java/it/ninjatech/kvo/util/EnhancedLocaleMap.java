@@ -2,6 +2,8 @@ package it.ninjatech.kvo.util;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;
@@ -566,6 +568,11 @@ public final class EnhancedLocaleMap {
 		
 		double scaleFactor = (double)FLAG_HEIGHT / (double)FLAG_REAL_HEIGHT;
 		double width = scaleFactor * (double)FLAG_REAL_WIDTH;
+		
+		BufferedImage image = new BufferedImage((int)width, (int)FLAG_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		((Graphics2D)image.getGraphics()).setBackground(new Color(0, 0, 0, 0));
+		
+		result = new ImageIcon(image);
 		
 		return result;
 	}
