@@ -2,8 +2,8 @@ package it.ninjatech.kvo.test;
 
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
-import it.ninjatech.kvo.ui.tvserie.SearchTvSerieController;
-import it.ninjatech.kvo.ui.tvserie.SearchTvSerieView;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchView;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 public class DialogLauncher {
@@ -16,8 +16,8 @@ public class DialogLauncher {
 //		ScrapersSettingsView view = new ScrapersSettingsView();
 //		ScrapersSettingsController controller = new ScrapersSettingsController(view);
 		
-		SearchTvSerieView view = new SearchTvSerieView();
-		SearchTvSerieController controller = new SearchTvSerieController(view);
+		TvSerieSearchView view = new TvSerieSearchView();
+		TvSerieSearchController controller = new TvSerieSearchController(view);
 		
 //		ExceptionConsoleView view = new ExceptionConsoleView();
 //		ExceptionConsoleController controller = new ExceptionConsoleController(view);

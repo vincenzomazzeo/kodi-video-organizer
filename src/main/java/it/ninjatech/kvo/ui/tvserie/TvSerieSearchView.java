@@ -21,17 +21,17 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.text.WebTextField;
 
-public class SearchTvSerieView extends WebDialog implements ActionListener {
+public class TvSerieSearchView extends WebDialog implements ActionListener {
 
 	private static final long serialVersionUID = 5517804638406906373L;
 	
-	private SearchTvSerieController controller;
+	private TvSerieSearchController controller;
 	private final WebPanel container;
 	private WebTextField searchF;
 	private WebComboBox languageCB;
 	private WebButton searchB;
 
-	public SearchTvSerieView() {
+	public TvSerieSearchView() {
 		super(UI.get(), "Search for TV Serie", true);
 
 		this.container = new WebPanel(new BorderLayout());
@@ -50,7 +50,7 @@ public class SearchTvSerieView extends WebDialog implements ActionListener {
 		this.controller.notifySearch();
 	}
 
-	protected void setController(SearchTvSerieController controller) {
+	protected void setController(TvSerieSearchController controller) {
 		this.controller = controller;
 	}
 	

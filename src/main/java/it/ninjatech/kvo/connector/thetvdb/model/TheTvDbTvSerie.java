@@ -3,7 +3,7 @@ package it.ninjatech.kvo.connector.thetvdb.model;
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbDateAdapter;
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbPipeAdapter;
 import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.util.LanguageMap;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -88,7 +88,7 @@ public class TheTvDbTvSerie {
 
 		protected void fill(TvSerie tvSerie) {
 			tvSerie.setName(this.name);
-			tvSerie.setLanguage(LanguageMap.getInstance().getLanguage(this.language));
+			tvSerie.setLanguage(EnhancedLocaleMap.getByLanguage(this.language));
 			tvSerie.setFirstAired(this.firstAired);
 		}
 		

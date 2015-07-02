@@ -7,11 +7,11 @@ import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchTvSerieController {
+public class TvSerieSearchController {
 
-	private final SearchTvSerieView view;
+	private final TvSerieSearchView view;
 
-	public SearchTvSerieController(SearchTvSerieView view) {
+	public TvSerieSearchController(TvSerieSearchView view) {
 		this.view = view;
 
 		this.view.setController(this);

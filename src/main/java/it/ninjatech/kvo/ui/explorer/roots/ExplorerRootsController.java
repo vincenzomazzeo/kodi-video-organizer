@@ -3,16 +3,18 @@ package it.ninjatech.kvo.ui.explorer.roots;
 import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.model.AbstractPathEntity;
+import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.Type;
+import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
-import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
-import it.ninjatech.kvo.worker.TvSerieFetcher;
-import it.ninjatech.kvo.worker.TvSerieFinder;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchView;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.io.File;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.tree.TreePath;
 
 import com.alee.extended.filechooser.WebDirectoryChooser;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.managers.notification.NotificationManager;
 import com.alee.utils.swing.DialogOptions;
 
@@ -41,35 +44,25 @@ public class ExplorerRootsController {
 	}
 
 	public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
-		TvSerieFinder tvSerieFinder = new TvSerieFinder(node.getValue().getLabel());
-
-		IndeterminateProgressDialogWorker<List<TvSerie>> finder = new IndeterminateProgressDialogWorker<>(tvSerieFinder, "Searching for TV Serie");
-
-		List<TvSerie> tvSeries = null;
-		finder.start();
-		try {
-			tvSeries = finder.get();
-		}
-		catch (Exception e) {
-			UI.get().notifyException(e);
-		}
+		EnhancedLocale language = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
+		List<TvSerie> tvSeries = TvSerieUtils.searchFor(node.getValue().getLabel(), language);
 
 		if (tvSeries != null) {
-			if (tvSeries.size() == 1) {
-				TvSerieFetcher tvSerieFetcher = new TvSerieFetcher(tvSeries.get(0));
-
-				IndeterminateProgressDialogWorker<TvSerie> fetcher = new IndeterminateProgressDialogWorker<>(tvSerieFetcher, "Fetching data");
-
-				TvSerie tvSerie = null;
-				fetcher.start();
-				try {
-					tvSerie = fetcher.get();
+			if (tvSeries.size() == 0) {
+				if (WebOptionPane.showConfirmDialog(UI.get(), "No TV Serie found. Do you want to search again changing name or languange?", 
+				                                    "Confirm", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
+					TvSerieSearchView searchView = new TvSerieSearchView();
+					TvSerieSearchController searchController = new TvSerieSearchController(searchView);
+					searchView.setVisible(true);
+				}
+			}
+			else if (tvSeries.size() == 1) {
+				TvSerie tvSerie = tvSeries.get(0);
+				tvSerie = TvSerieUtils.fetch(tvSerie);
+				if (tvSerie != null) {
 					node.getValue().setTvSerie(tvSerie);
 					NotificationManager.showNotification(String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 					this.model.reload(node);
-				}
-				catch (Exception e) {
-					UI.get().notifyException(e);
 				}
 			}
 			else {
@@ -161,5 +154,5 @@ public class ExplorerRootsController {
 
 		NotificationManager.showNotification(String.format("<html>%s root <b>%s</b> added</html>", type.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 	}
-
+	
 }

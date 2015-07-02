@@ -11,10 +11,8 @@ import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSeriesSearchResult;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
-import it.ninjatech.kvo.util.LanguageMap;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -25,10 +23,6 @@ import org.junit.Test;
 public class TheTvDbManagerUT {
 
 	public static void main(String[] args) throws Exception {
-		for (Locale locale : Locale.getAvailableLocales()) {
-			System.out.printf("[%s] %s - %s\n", locale.getLanguage(), locale.getDisplayLanguage(), locale.getVariant());
-		}
-		
 //		SettingsHandler.init();
 //		TheTvDbConnector connector = TheTvDbConnector.getInstance();
 //		
@@ -88,12 +82,12 @@ public class TheTvDbManagerUT {
 	
 	@Test
 	public void searchTvSeries() throws Exception {
-		List<TvSerie> result = connector.search("game of", null);
+		List<TvSerie> result = connector.search("game of", EnhancedLocaleMap.getEmptyLocale());
 		
 		assertThat(result).isNotNull();
 		assertThat(result).isNotEmpty();	
 		
-		result = connector.search("trono", LanguageMap.getInstance().getLanguage("it"));
+		result = connector.search("trono", EnhancedLocaleMap.getByLanguage("it"));
 		
 		assertThat(result).isNotNull();
 		assertThat(result).isNotEmpty();
@@ -110,7 +104,7 @@ public class TheTvDbManagerUT {
 	
 	@Test
 	public void fillTvSerie() throws Exception {
-		List<TvSerie> result = connector.search("trono", LanguageMap.getInstance().getLanguage("it"));
+		List<TvSerie> result = connector.search("trono", EnhancedLocaleMap.getByLanguage("it"));
 		
 		assertThat(result).isNotNull();
 		assertThat(result).isNotEmpty();

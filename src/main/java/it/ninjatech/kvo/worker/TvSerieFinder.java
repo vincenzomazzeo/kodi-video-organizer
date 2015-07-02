@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.worker;
 
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
+import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 
 import java.util.ArrayList;
@@ -9,9 +10,11 @@ import java.util.List;
 public class TvSerieFinder extends AbstractWorker<List<TvSerie>> {
 
 	private final String name;
+	private final EnhancedLocale language;
 	
-	public TvSerieFinder(String name) {
+	public TvSerieFinder(String name, EnhancedLocale language) {
 		this.name = name;
+		this.language = language;
 	}
 
 	@Override
@@ -19,8 +22,7 @@ public class TvSerieFinder extends AbstractWorker<List<TvSerie>> {
 		List<TvSerie> result = new ArrayList<>();
 		
 		notifyUpdate(this.name, null);
-		// TODO to handle language
-		result = TheTvDbManager.getInstance().search(this.name, null);
+		result = TheTvDbManager.getInstance().search(this.name, this.language);
 		
 		return result;
 	}

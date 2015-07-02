@@ -1,7 +1,6 @@
 package it.ninjatech.kvo.model;
 
 import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
 
 public class TvSerie {
@@ -9,17 +8,17 @@ public class TvSerie {
 	private final String id;
 	private final String providerId;
 	private String name;
-	private Locale language;
+	private EnhancedLocale language;
 	private Date firstAired;
 	
-	public TvSerie(String id, String providerId, String name, Locale language) {
+	public TvSerie(String id, String providerId, String name, EnhancedLocale language) {
 		this.id = id;
 		this.providerId = providerId;
 		this.name = name;
 		this.language = language;
 	}
 	
-	public TvSerie(String providerId, String name, Locale language) {
+	public TvSerie(String providerId, String name, EnhancedLocale language) {
 		this(UUID.randomUUID().toString(), providerId, name, language);
 	}
 
@@ -39,11 +38,11 @@ public class TvSerie {
 		this.name = name;
 	}
 	
-	public Locale getLanguage() {
+	public EnhancedLocale getLanguage() {
 		return this.language;
 	}
 	
-	public void setLanguage(Locale language) {
+	public void setLanguage(EnhancedLocale language) {
 		this.language = language;
 	}
 

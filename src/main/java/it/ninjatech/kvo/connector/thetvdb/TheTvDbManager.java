@@ -5,9 +5,9 @@ import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSerie;
 import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSeriesSearchResult;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.ws.rs.core.MediaType;
 
@@ -87,14 +87,14 @@ public class TheTvDbManager {
 		return result;
 	}
 
-	public List<TvSerie> search(String name, Locale language) {
+	public List<TvSerie> search(String name, EnhancedLocale language) {
 		List<TvSerie> result = null;
 
 		WebResource webResource = this.webResource.
 				path("/GetSeries.php").
 				queryParam("seriesname", name);
-		if (language != null) {
-			webResource = webResource.queryParam("language", language.getLanguage());
+		if (!EnhancedLocaleMap.isEmptyLocale(language)) {
+			webResource = webResource.queryParam("language", language.getLanguageCode());
 		}
 		TheTvDbTvSeriesSearchResult searchResult = webResource.
 				type(MediaType.TEXT_XML).
@@ -111,7 +111,7 @@ public class TheTvDbManager {
 				path("/series").
 				path(String.format("/%s", tvSerie.getProviderId())).
 				path("/all").
-				path(String.format("/%s.xml", tvSerie.getLanguage().getLanguage())).
+				path(String.format("/%s.xml", tvSerie.getLanguage().getLanguageCode())).
 				type(MediaType.TEXT_XML).
 				get(TheTvDbTvSerie.class);
 

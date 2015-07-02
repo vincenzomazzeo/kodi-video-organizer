@@ -2,7 +2,7 @@ package it.ninjatech.kvo.connector.thetvdb.model;
 
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbDateAdapter;
 import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.util.LanguageMap;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,7 +57,7 @@ public class TheTvDbTvSeriesSearchResult {
 		protected TheTvDbTvSerie() {}
 
 		protected TvSerie toTvSerie() {
-			TvSerie result = new TvSerie(String.valueOf(this.id), this.name, LanguageMap.getInstance().getLanguage(this.language));
+			TvSerie result = new TvSerie(String.valueOf(this.id), this.name, EnhancedLocaleMap.getByLanguage(this.language));
 			result.setFirstAired(this.firstAired);
 			
 			return result;
