@@ -7,12 +7,16 @@ import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class TvSerieSearchController {
 
 	private final TvSerieSearchView view;
+	private final TvSerieSearchListener listener;
 
-	public TvSerieSearchController(TvSerieSearchView view) {
+	public TvSerieSearchController(TvSerieSearchView view, TvSerieSearchListener listener) {
 		this.view = view;
+		this.listener = listener;
 
 		this.view.setController(this);
 		
@@ -22,65 +26,21 @@ public class TvSerieSearchController {
 		this.view.setLanguages(languages);
 	}
 
-	protected void notifySearch() {
-//		ConfirmWorker confirmWorker = new ConfirmWorker(this.view.getTheTvDbApikey(), this.view.getTheTvDbLanguage());
-//
-//		new IndeterminateProgressDialogWorker<>(confirmWorker, "Storing Scrapers Settings").start();
-//
-//		this.view.setVisible(false);
+	public String getSearch() {
+		return this.view.getSearch();
 	}
-
-//	private static final class TheTvDbManagerWorker extends AbstractWorker<List<EnhancedLocale>> {
-//
-//		private final String apikey;
-//
-//		protected TheTvDbManagerWorker(String apikey) {
-//			this.apikey = apikey;
-//		}
-//
-//		@Override
-//		public List<EnhancedLocale> work() throws Exception {
-//			List<EnhancedLocale> result = TheTvDbManager.getInstance().checkApiKey(this.apikey);
-//
-//			if (result != null) {
-//				Collections.sort(result, EnhancedLocale.languageComparator());
-//			}
-//
-//			return result;
-//		}
-//
-//	}
-//
-//	private static final class ConfirmWorker extends AbstractWorker<Void> {
-//
-//		private final String theTvDbApikey;
-//		private final EnhancedLocale theTvDbPreferredLanguage;
-//
-//		protected ConfirmWorker(String theTvDbApikey, EnhancedLocale theTvDbPreferredLanguage) {
-//			this.theTvDbApikey = theTvDbApikey;
-//			this.theTvDbPreferredLanguage = theTvDbPreferredLanguage;
-//		}
-//
-//		@Override
-//		public Void work() throws Exception {
-//			if (StringUtils.isNotBlank(this.theTvDbApikey)) {
-//				SettingsHandler.getInstance().getSettings().setTheTvDbApiKey(this.theTvDbApikey);
-//				SettingsHandler.getInstance().getSettings().setTheTvDbPreferredLanguage(this.theTvDbPreferredLanguage.getLanguageCode());
-//				SettingsHandler.getInstance().store();
-//
-//				TheTvDbManager.getInstance().setApiKey(this.theTvDbApikey);
-//			}
-//			else {
-//				SettingsHandler.getInstance().getSettings().setTheTvDbApiKey(null);
-//				SettingsHandler.getInstance().getSettings().setTheTvDbPreferredLanguage(null);
-//				SettingsHandler.getInstance().store();
-//				
-//				TheTvDbManager.getInstance().deactivate();
-//			}
-//
-//			return null;
-//		}
-//
-//	}
+	
+	public EnhancedLocale getLanguage() {
+		return this.view.getLanguage();
+	}
+	
+	protected void notifySearch() {
+		if (StringUtils.isNotBlank(this.view.getSearch())) {
+			if (this.listener.notifyTvSerieSearch(this.view.getSearch(), this.view.getLanguage())) {
+				this.view.setVisible(false);
+				this.view.dispose();
+			}
+		}
+	}
 
 }

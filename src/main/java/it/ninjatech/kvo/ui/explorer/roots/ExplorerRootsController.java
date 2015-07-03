@@ -13,6 +13,7 @@ import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchListener;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchView;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
@@ -44,31 +45,8 @@ public class ExplorerRootsController {
 	}
 
 	public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
-		EnhancedLocale language = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
-		List<TvSerie> tvSeries = TvSerieUtils.searchFor(node.getValue().getLabel(), language);
-
-		if (tvSeries != null) {
-			if (tvSeries.size() == 0) {
-				if (WebOptionPane.showConfirmDialog(UI.get(), "No TV Serie found. Do you want to search again changing name or languange?", 
-				                                    "Confirm", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
-					TvSerieSearchView searchView = new TvSerieSearchView();
-					TvSerieSearchController searchController = new TvSerieSearchController(searchView);
-					searchView.setVisible(true);
-				}
-			}
-			else if (tvSeries.size() == 1) {
-				TvSerie tvSerie = tvSeries.get(0);
-				tvSerie = TvSerieUtils.fetch(tvSerie);
-				if (tvSerie != null) {
-					node.getValue().setTvSerie(tvSerie);
-					NotificationManager.showNotification(String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
-					this.model.reload(node);
-				}
-			}
-			else {
-				// TODO gestire
-			}
-		}
+		TvSerieHandler tvSerieHandler = new TvSerieHandler(this, node);
+		tvSerieHandler.handle();
 	}
 
 	protected void notifyAddRoot(int x, int y) {
@@ -154,5 +132,67 @@ public class ExplorerRootsController {
 
 		NotificationManager.showNotification(String.format("<html>%s root <b>%s</b> added</html>", type.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 	}
-	
+
+	private static class TvSerieHandler implements TvSerieSearchListener {
+
+		private final ExplorerRootsController parent;
+		private final TvSerieExplorerRootsTreeNode node;
+
+		private TvSerieHandler(ExplorerRootsController parent, TvSerieExplorerRootsTreeNode node) {
+			this.parent = parent;
+			this.node = node;
+		}
+
+		@Override
+		public boolean notifyTvSerieSearch(String search, EnhancedLocale language) {
+			return search(search, language, false);
+		}
+
+		private void handle() {
+			String search = this.node.getValue().getLabel();
+			EnhancedLocale language = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
+			
+			search(search, language, true);
+		}
+
+		private boolean search(String search, EnhancedLocale language, boolean askOnEmpty) {
+			boolean result = false;
+
+			List<TvSerie> tvSeries = TvSerieUtils.searchFor(search, language);
+
+			if (tvSeries != null) {
+				if (tvSeries.isEmpty()) {
+					if (askOnEmpty) {
+						if (WebOptionPane.showConfirmDialog(UI.get(), "No TV Serie found. Do you want to search again changing name or languange?",
+															"Confirm", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
+							TvSerieSearchView searchView = new TvSerieSearchView();
+							new TvSerieSearchController(searchView, this);
+							searchView.setVisible(true);
+						}
+					}
+				}
+				else if (tvSeries.size() == 1) {
+					result = true;
+					TvSerie tvSerie = tvSeries.get(0);
+					tvSerie = TvSerieUtils.fetch(tvSerie);
+					if (tvSerie != null) {
+						this.node.getValue().setTvSerie(tvSerie);
+						NotificationManager.showNotification(String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
+						this.parent.model.reload(node);
+					}
+				}
+				else {
+					// TODO gestire
+				}
+			}
+			else {
+				// If tvSeries is null is because there was an error. The program will continue without search more.
+				result = true;
+			}
+
+			return result;
+		}
+
+	}
+
 }

@@ -17,7 +17,7 @@ public class DialogLauncher {
 //		ScrapersSettingsController controller = new ScrapersSettingsController(view);
 		
 		TvSerieSearchView view = new TvSerieSearchView();
-		TvSerieSearchController controller = new TvSerieSearchController(view);
+		TvSerieSearchController controller = new TvSerieSearchController(view, null);
 		
 //		ExceptionConsoleView view = new ExceptionConsoleView();
 //		ExceptionConsoleController controller = new ExceptionConsoleController(view);

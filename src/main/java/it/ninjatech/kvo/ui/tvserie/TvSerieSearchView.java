@@ -54,6 +54,14 @@ public class TvSerieSearchView extends WebDialog implements ActionListener {
 		this.controller = controller;
 	}
 	
+	protected String getSearch() {
+		return this.searchF.getText();
+	}
+	
+	protected EnhancedLocale getLanguage() {
+		return (EnhancedLocale)this.languageCB.getSelectedItem();
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected void setLanguages(List<EnhancedLocale> languages) {
 		this.languageCB.removeAllItems();
