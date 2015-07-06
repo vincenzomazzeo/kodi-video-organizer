@@ -23,14 +23,15 @@ public class ExceptionConsoleView extends WebDialog implements CollapsiblePaneLi
 
 	private static final long serialVersionUID = 4772626517954754101L;
 
+	private final ExceptionConsoleController controller;
 	private final Map<String, WebCollapsiblePane> panes;
-	private ExceptionConsoleController controller;
 	private WebPanel container;
 	private boolean adding;
 	
-	public ExceptionConsoleView() {
+	protected ExceptionConsoleView(ExceptionConsoleController controller) {
 		super(UI.get(), "Exceptions", true);
 
+		this.controller = controller;
 		this.panes = new HashMap<>();
 		this.adding = false;
 		
@@ -66,10 +67,6 @@ public class ExceptionConsoleView extends WebDialog implements CollapsiblePaneLi
 		}
 	}
 
-	protected void setController(ExceptionConsoleController controller) {
-		this.controller = controller;
-	}
-	
 	protected void addException(String id, Throwable exception) {
 		this.adding = true;
 		

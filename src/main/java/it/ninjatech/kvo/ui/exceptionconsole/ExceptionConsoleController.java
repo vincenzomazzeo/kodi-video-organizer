@@ -12,12 +12,14 @@ public class ExceptionConsoleController {
 	private final Set<String> toRead;
 	private boolean expandingFirstInAction;
 
-	public ExceptionConsoleController(ExceptionConsoleView view) {
-		this.view = view;
+	public ExceptionConsoleController() {
+		this.view = new ExceptionConsoleView(this);
 		this.toRead = new HashSet<>();
 		this.expandingFirstInAction = false;
+	}
 
-		this.view.setController(this);
+	public ExceptionConsoleView getView() {
+		return this.view;
 	}
 
 	public int notifyException(Throwable exception) {

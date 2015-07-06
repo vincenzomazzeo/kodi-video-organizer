@@ -22,10 +22,8 @@ public class ScrapersSettingsController {
 
 	private final ScrapersSettingsView view;
 
-	public ScrapersSettingsController(ScrapersSettingsView view) {
-		this.view = view;
-
-		this.view.setController(this);
+	public ScrapersSettingsController() {
+		this.view = new ScrapersSettingsView(this);
 
 		TheTvDbManager theTvDbManager = TheTvDbManager.getInstance();
 		if (theTvDbManager.isActive()) {
@@ -33,6 +31,10 @@ public class ScrapersSettingsController {
 			this.view.setTheTvDbLanguages(theTvDbManager.getLanguages());
 			this.view.selectTheTvDbLanguage(EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage()));
 		}
+	}
+
+	public ScrapersSettingsView getView() {
+		return this.view;
 	}
 
 	protected void notifyConfirm() {

@@ -14,7 +14,8 @@ import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTree
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchListener;
-import it.ninjatech.kvo.ui.tvserie.TvSerieSearchView;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchMultiResultController;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchMultiResultListener;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.io.File;
@@ -35,17 +36,19 @@ public class ExplorerRootsController {
 	private final ExplorerRootsView view;
 	private final WebDirectoryChooser rootChooser;
 
-	public ExplorerRootsController(ExplorerRootsModel model, ExplorerRootsView view) {
+	public ExplorerRootsController(ExplorerRootsModel model) {
 		this.model = model;
-		this.view = view;
+		this.view = new ExplorerRootsView(this, this.model);
 
 		this.rootChooser = new WebDirectoryChooser(UI.get());
+	}
 
-		this.view.setController(this);
+	public ExplorerRootsView getView() {
+		return this.view;
 	}
 
 	public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
-		TvSerieHandler tvSerieHandler = new TvSerieHandler(this, node);
+		TvSerieSearchHandler tvSerieHandler = new TvSerieSearchHandler(this, node);
 		tvSerieHandler.handle();
 	}
 
@@ -133,12 +136,12 @@ public class ExplorerRootsController {
 		NotificationManager.showNotification(String.format("<html>%s root <b>%s</b> added</html>", type.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 	}
 
-	private static class TvSerieHandler implements TvSerieSearchListener {
+	private static class TvSerieSearchHandler implements TvSerieSearchListener, TvSerieSearchMultiResultListener {
 
 		private final ExplorerRootsController parent;
 		private final TvSerieExplorerRootsTreeNode node;
 
-		private TvSerieHandler(ExplorerRootsController parent, TvSerieExplorerRootsTreeNode node) {
+		private TvSerieSearchHandler(ExplorerRootsController parent, TvSerieExplorerRootsTreeNode node) {
 			this.parent = parent;
 			this.node = node;
 		}
@@ -146,6 +149,11 @@ public class ExplorerRootsController {
 		@Override
 		public boolean notifyTvSerieSearch(String search, EnhancedLocale language) {
 			return search(search, language, false);
+		}
+
+		@Override
+		public void notifyTvSerie(TvSerie tvSerie) {
+			fetch(tvSerie);
 		}
 
 		private void handle() {
@@ -165,24 +173,20 @@ public class ExplorerRootsController {
 					if (askOnEmpty) {
 						if (WebOptionPane.showConfirmDialog(UI.get(), "No TV Serie found. Do you want to search again changing name or languange?",
 															"Confirm", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
-							TvSerieSearchView searchView = new TvSerieSearchView();
-							new TvSerieSearchController(searchView, this);
-							searchView.setVisible(true);
+							TvSerieSearchController controller = new TvSerieSearchController(this);
+							controller.getView().setVisible(true);
 						}
 					}
 				}
 				else if (tvSeries.size() == 1) {
 					result = true;
 					TvSerie tvSerie = tvSeries.get(0);
-					tvSerie = TvSerieUtils.fetch(tvSerie);
-					if (tvSerie != null) {
-						this.node.getValue().setTvSerie(tvSerie);
-						NotificationManager.showNotification(String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
-						this.parent.model.reload(node);
-					}
+					fetch(tvSerie);
 				}
 				else {
-					// TODO gestire
+					result = true;
+					TvSerieSearchMultiResultController controller = new TvSerieSearchMultiResultController(tvSeries, this);
+					controller.getView().setVisible(true);
 				}
 			}
 			else {
@@ -191,6 +195,15 @@ public class ExplorerRootsController {
 			}
 
 			return result;
+		}
+		
+		private void fetch(TvSerie tvSerie) {
+			tvSerie = TvSerieUtils.fetch(tvSerie);
+			if (tvSerie != null) {
+				this.node.getValue().setTvSerie(tvSerie);
+				NotificationManager.showNotification(UI.get(), String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
+				this.parent.model.reload(this.node);
+			}
 		}
 
 	}

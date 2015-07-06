@@ -14,16 +14,18 @@ public class TvSerieSearchController {
 	private final TvSerieSearchView view;
 	private final TvSerieSearchListener listener;
 
-	public TvSerieSearchController(TvSerieSearchView view, TvSerieSearchListener listener) {
-		this.view = view;
+	public TvSerieSearchController(TvSerieSearchListener listener) {
+		this.view = new TvSerieSearchView(this);
 		this.listener = listener;
 
-		this.view.setController(this);
-		
 		List<EnhancedLocale> languages = new ArrayList<>();
 		languages.add(EnhancedLocaleMap.getEmptyLocale());
 		languages.addAll(TheTvDbManager.getInstance().getLanguages());
 		this.view.setLanguages(languages);
+	}
+
+	public TvSerieSearchView getView() {
+		return this.view;
 	}
 
 	public String getSearch() {

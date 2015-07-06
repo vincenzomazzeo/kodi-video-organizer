@@ -20,19 +20,22 @@ public class TheTvDbTvSeriesSearchResult {
 
 	@XmlElement(name = "Series")
 	private List<TheTvDbTvSerie> tvSeries;
-	
-	protected TheTvDbTvSeriesSearchResult() {}
-	
+
+	protected TheTvDbTvSeriesSearchResult() {
+	}
+
 	public List<TvSerie> toTvSeries() {
 		List<TvSerie> result = new ArrayList<>();
-		
-		for (TheTvDbTvSerie tvSerie : this.tvSeries) {
-			result.add(tvSerie.toTvSerie());
+
+		if (this.tvSeries != null) {
+			for (TheTvDbTvSerie tvSerie : this.tvSeries) {
+				result.add(tvSerie.toTvSerie());
+			}
 		}
-		
+
 		return result;
 	}
-	
+
 	protected List<TheTvDbTvSerie> getTvSeries() {
 		return this.tvSeries;
 	}
@@ -43,7 +46,7 @@ public class TheTvDbTvSeriesSearchResult {
 
 	@XmlAccessorType(XmlAccessType.FIELD)
 	protected static class TheTvDbTvSerie {
-		
+
 		@XmlElement(name = "seriesid")
 		private Integer id;
 		@XmlElement(name = "language")
@@ -53,16 +56,17 @@ public class TheTvDbTvSeriesSearchResult {
 		@XmlElement(name = "FirstAired")
 		@XmlJavaTypeAdapter(TheTvDbDateAdapter.class)
 		private Date firstAired;
-		
-		protected TheTvDbTvSerie() {}
+
+		protected TheTvDbTvSerie() {
+		}
 
 		protected TvSerie toTvSerie() {
 			TvSerie result = new TvSerie(String.valueOf(this.id), this.name, EnhancedLocaleMap.getByLanguage(this.language));
 			result.setFirstAired(this.firstAired);
-			
+
 			return result;
 		}
-		
+
 		protected Integer getId() {
 			return this.id;
 		}
@@ -96,5 +100,5 @@ public class TheTvDbTvSeriesSearchResult {
 		}
 
 	}
-	
+
 }

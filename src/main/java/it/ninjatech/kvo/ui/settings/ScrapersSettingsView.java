@@ -32,15 +32,16 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 
 	private static final long serialVersionUID = -5869048947514865726L;
 
-	private ScrapersSettingsController controller;
+	private final ScrapersSettingsController controller;
 	private final WebPanel container;
 	private WebTextField theTvDbApikeyF;
 	private WebComboBox theTvDbPreferredLanguageCB;
 	private WebButton confirmB;
 
-	public ScrapersSettingsView() {
+	protected ScrapersSettingsView(ScrapersSettingsController controller) {
 		super(UI.get(), "Scrapers Settings", true);
 
+		this.controller = controller;
 		this.container = new WebPanel(new BorderLayout());
 
 		setIconImage(ImageRetriever.retrieveToolBarScrapersSettings().getImage());
@@ -81,10 +82,6 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 	public void mouseExited(MouseEvent event) {
 	}
 
-	protected void setController(ScrapersSettingsController controller) {
-		this.controller = controller;
-	}
-	
 	protected String getTheTvDbApikey() {
 		return this.theTvDbApikeyF.getText();
 	}

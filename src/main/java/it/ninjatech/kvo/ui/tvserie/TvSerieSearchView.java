@@ -25,15 +25,16 @@ public class TvSerieSearchView extends WebDialog implements ActionListener {
 
 	private static final long serialVersionUID = 5517804638406906373L;
 	
-	private TvSerieSearchController controller;
+	private final TvSerieSearchController controller;
 	private final WebPanel container;
 	private WebTextField searchF;
 	private WebComboBox languageCB;
 	private WebButton searchB;
 
-	public TvSerieSearchView() {
+	protected TvSerieSearchView(TvSerieSearchController controller) {
 		super(UI.get(), "Search for TV Serie", true);
 
+		this.controller = controller;
 		this.container = new WebPanel(new BorderLayout());
 
 		setIconImage(ImageRetriever.retrieveExplorerTreeTvSerie().getImage());
@@ -50,10 +51,6 @@ public class TvSerieSearchView extends WebDialog implements ActionListener {
 		this.controller.notifySearch();
 	}
 
-	protected void setController(TvSerieSearchController controller) {
-		this.controller = controller;
-	}
-	
 	protected String getSearch() {
 		return this.searchF.getText();
 	}

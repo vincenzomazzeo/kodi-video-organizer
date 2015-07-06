@@ -3,7 +3,6 @@ package it.ninjatech.kvo.ui.component;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleView;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsController;
-import it.ninjatech.kvo.ui.settings.ScrapersSettingsView;
 
 import java.awt.Color;
 import java.awt.ComponentOrientation;
@@ -44,9 +43,8 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		Object source = event.getSource();
 
 		if (source == this.scrapersSettings) {
-			ScrapersSettingsView view = new ScrapersSettingsView();
-			new ScrapersSettingsController(view);
-			view.setVisible(true);
+			ScrapersSettingsController controller = new ScrapersSettingsController();
+			controller.getView().setVisible(true);
 		}
 		else if (source == this.showExceptionConsole) {
 			this.exceptionConsoleView.setVisible(true);

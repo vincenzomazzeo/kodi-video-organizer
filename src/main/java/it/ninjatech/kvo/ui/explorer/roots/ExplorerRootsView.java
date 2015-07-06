@@ -40,16 +40,17 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 		return result;
 	}
 
-	private ExplorerRootsController controller;
+	private final ExplorerRootsController controller;
 	private final WebTree<DefaultMutableTreeNode> tree;
 	private final WebDynamicMenu addRootMenu;
 	private final WebDynamicMenuItem addTvShowsRootMenuItem;
 	private final WebDynamicMenuItem addMoviesRootMenuItem;
 
 	@SuppressWarnings("unchecked")
-	public ExplorerRootsView(ExplorerRootsModel model) {
+	protected ExplorerRootsView(ExplorerRootsController controller, ExplorerRootsModel model) {
 		super(makeTree(model), true, false);
 		
+		this.controller = controller;
 		this.tree = (WebTree<DefaultMutableTreeNode>)this.getViewport().getView();
 		this.addRootMenu = new WebDynamicMenu();
 		this.addTvShowsRootMenuItem = new WebDynamicMenuItem();
@@ -102,10 +103,6 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 
 	@Override
 	public void treeCollapsed(TreeExpansionEvent event) {
-	}
-
-	protected void setController(ExplorerRootsController controller) {
-		this.controller = controller;
 	}
 
 	protected void setTooltip() {

@@ -15,11 +15,11 @@ public final class TvSerieUtils {
 		
 		TvSerieFinder tvSerieFinder = new TvSerieFinder(name, language);
 
-		IndeterminateProgressDialogWorker<List<TvSerie>> finder = new IndeterminateProgressDialogWorker<>(tvSerieFinder, "Searching for TV Serie");
+		IndeterminateProgressDialogWorker<List<TvSerie>> worker = new IndeterminateProgressDialogWorker<>(tvSerieFinder, "Searching for TV Serie");
 
-		finder.start();
+		worker.start();
 		try {
-			result = finder.get();
+			result = worker.get();
 		}
 		catch (Exception e) {
 			UI.get().notifyException(e);
@@ -33,11 +33,11 @@ public final class TvSerieUtils {
 		
 		TvSerieFetcher tvSerieFetcher = new TvSerieFetcher(tvSerie);
 
-		IndeterminateProgressDialogWorker<TvSerie> fetcher = new IndeterminateProgressDialogWorker<>(tvSerieFetcher, "Fetching data");
+		IndeterminateProgressDialogWorker<TvSerie> worker = new IndeterminateProgressDialogWorker<>(tvSerieFetcher, "Fetching data");
 
-		fetcher.start();
+		worker.start();
 		try {
-			result = fetcher.get();
+			result = worker.get();
 		}
 		catch (Exception e) {
 			UI.get().notifyException(e);
