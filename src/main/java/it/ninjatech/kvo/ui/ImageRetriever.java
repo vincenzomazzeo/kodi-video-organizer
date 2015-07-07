@@ -13,6 +13,7 @@ public final class ImageRetriever {
 		Folder("folder.png"),
 		Folder_Movies("folder_movies.png"),
 		Folder_TvSeries("folder_tvseries.png"),
+		Loading("loading.gif"),
 		Scrapers_Settings("scrapers_settings.png"),
 		TvSerie("tvserie.png"),
 		TheTVDB_Logo("thetvdb_logo.png");
@@ -42,6 +43,7 @@ public final class ImageRetriever {
 	private static ImageIcon explorerTreeFolderMoviesTab;
 	private static ImageIcon explorerTreeFolderTvSeriesTab;
 	private static ImageIcon explorerTreeTvSerie;
+	private static ImageIcon loading;
 	private static ImageIcon theTvDbLogo;
 	private static ImageIcon toolBarExceptionConsole;
 	private static ImageIcon toolBarScrapersSettings;
@@ -124,6 +126,14 @@ public final class ImageRetriever {
 		}
 		
 		return explorerTreeTvSerie;
+	}
+	
+	public static ImageIcon retrieveLoading() {
+		if (loading == null) {
+			loading = retrieveImage(ImageName.Loading);
+		}
+		
+		return loading;
 	}
 	
 	public static ImageIcon retrieveTheTvDbLogo() {

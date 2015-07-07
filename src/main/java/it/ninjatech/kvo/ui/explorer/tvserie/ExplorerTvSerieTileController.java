@@ -1,14 +1,18 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
+import it.ninjatech.kvo.model.TvSeriePathEntity;
+
 public class ExplorerTvSerieTileController {
 
+	private final TvSeriePathEntity tvSeriePathEntity;
 	private final ExplorerTvSerieTileView view;
 	
-	public ExplorerTvSerieTileController(int uiWidth) {
-		this.view = new ExplorerTvSerieTileView(this, uiWidth);
+	protected ExplorerTvSerieTileController(TvSeriePathEntity tvSeriePathEntity, int tileWidth, int tileHeight) {
+		this.tvSeriePathEntity = tvSeriePathEntity;
+		this.view = new ExplorerTvSerieTileView(this, tileWidth, tileHeight);
 	}
 
-	public ExplorerTvSerieTileView getView() {
+	protected ExplorerTvSerieTileView getView() {
 		return this.view;
 	}
 	

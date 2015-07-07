@@ -1,12 +1,18 @@
 package it.ninjatech.kvo.test;
 
+import it.ninjatech.kvo.configuration.SettingsHandler;
+import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
+import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.ui.explorer.tvserie.ExplorerTvSerieController;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
+
 import java.awt.Dimension;
 import java.awt.DisplayMode;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import it.ninjatech.kvo.ui.UIUtils;
-import it.ninjatech.kvo.ui.explorer.tvserie.ExplorerTvSerieTileController;
 
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
@@ -16,30 +22,52 @@ public class TvSerieTiles extends WebDialog {
 
 	private static final long serialVersionUID = 2234913674587205795L;
 
-	public static void main(String[] args) {
-		TvSerieTiles dialog = new TvSerieTiles();
+	public static void main(String[] args) throws Exception {
+		SettingsHandler.init();
+		EnhancedLocaleMap.init();
+		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
+		
+		TvSerie tvSerie = new TvSerie("3073320", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
+//		TheTvDbManager.getInstance().getData(tvSerie);
+		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("d:/GitHubRepository/Test")) ;
+		tvSeriesPathEntity.addTvSerie(new File("d:/GitHubRepository/Test/Ciccio"));
+		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
+		tvSeriePathEntity.setTvSerie(tvSerie);
+		
+		TvSerieTiles dialog = new TvSerieTiles(tvSeriePathEntity);
 		
 		dialog.setVisible(true);
 	}
 	
-	private TvSerieTiles() {
+	private TvSerieTiles(TvSeriePathEntity tvSeriePathEntity) {
 		super();
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		setResizable(false);
 		
-		init();
+		init(tvSeriePathEntity);
 		pack();
 		setLocationRelativeTo(null);
 	}
 
-	private void init() {
+	private void init(TvSeriePathEntity tvSeriePathEntity) {
 		Dimension startupDimension = UIUtils.getStartupDimension();
 		
-		ExplorerTvSerieTileController controller = new ExplorerTvSerieTileController(startupDimension.width);
+		setPreferredSize(new Dimension(startupDimension.width / 5 + 100, 300));
 		
+		ExplorerTvSerieController controller = new ExplorerTvSerieController(startupDimension.width / 5);
 		add(controller.getView());
+		
+		for (int i = 0; i < 20; i++) {
+			controller.ciccio();
+		}
+		
+		controller.addTile(tvSeriePathEntity);
+		
+		for (int i = 0; i < 20; i++) {
+			controller.ciccio();
+		}
 	}
 	
 	public static class UIUtils {

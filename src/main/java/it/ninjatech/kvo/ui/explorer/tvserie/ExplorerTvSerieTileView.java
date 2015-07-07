@@ -1,26 +1,37 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
+import it.ninjatech.kvo.ui.ImageRetriever;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 
+import com.alee.extended.transition.ComponentTransition;
+import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
+import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 
 public class ExplorerTvSerieTileView extends WebPanel {
 
-	private final ExplorerTvSerieTileController controller;
+	private static final long serialVersionUID = -4365144207002586456L;
 	
-	protected ExplorerTvSerieTileView(ExplorerTvSerieTileController controller, int uiWidth) {
+	private final ExplorerTvSerieTileController controller;
+	private ComponentTransition transition;
+	
+	protected ExplorerTvSerieTileView(ExplorerTvSerieTileController controller, int width, int height) {
 		super();
 		
 		this.controller = controller;
 		
-		init(uiWidth);
+		setPreferredSize(new Dimension(width, height));
+		setLayout(new BorderLayout());
+		
+		init();
 	}
 	
-	private void init(int uiWidth) {
-		int width = uiWidth / 5;
-		int height = (int)((double)(width / 5 * 16) / 9d);
-		
-		setPreferredSize(new Dimension(width, height));
+	private void init() {
+		this.transition = new ComponentTransition(new WebLabel(ImageRetriever.retrieveLoading()), new FadeTransitionEffect());
+		add(this.transition, BorderLayout.CENTER);
 	}
 	
 }

@@ -58,6 +58,8 @@ public class TheTvDbTvSerie {
 		@XmlElement(name = "FirstAired")
 		@XmlJavaTypeAdapter(TheTvDbDateAdapter.class)
 		private Date firstAired;
+		@XmlElement(name = "ContentRating")
+		private String contentRating;
 		@XmlElement(name = "Genre")
 		@XmlJavaTypeAdapter(TheTvDbPipeAdapter.class)
 		private List<String> genres;
@@ -90,6 +92,17 @@ public class TheTvDbTvSerie {
 			tvSerie.setName(this.name);
 			tvSerie.setLanguage(EnhancedLocaleMap.getByLanguage(this.language));
 			tvSerie.setFirstAired(this.firstAired);
+			tvSerie.setContentRating(this.contentRating);
+			tvSerie.setGenres(this.genres);
+			tvSerie.setNetwork(this.network);
+			tvSerie.setOverview(this.overview);
+			tvSerie.setRating(this.rating != null ? this.rating.toString() : null);
+			tvSerie.setRatingCount(this.ratingCount != null ? this.ratingCount.toString() : null);
+			tvSerie.setStatus(this.status);
+			tvSerie.setBanner(this.banner);
+			tvSerie.setFanart(this.fanart);
+			tvSerie.setPoster(this.poster);
+			tvSerie.setImdbId(this.imdbId);
 		}
 		
 		protected Integer getId() {
@@ -114,6 +127,14 @@ public class TheTvDbTvSerie {
 
 		protected void setFirstAired(Date firstAired) {
 			this.firstAired = firstAired;
+		}
+
+		protected String getContentRating() {
+			return this.contentRating;
+		}
+
+		protected void setContentRating(String contentRating) {
+			this.contentRating = contentRating;
 		}
 
 		protected List<String> getGenres() {
