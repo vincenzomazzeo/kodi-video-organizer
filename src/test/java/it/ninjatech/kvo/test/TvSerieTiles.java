@@ -59,15 +59,15 @@ public class TvSerieTiles extends WebDialog {
 		ExplorerTvSerieController controller = new ExplorerTvSerieController(startupDimension.width / 5);
 		add(controller.getView());
 		
-		for (int i = 0; i < 20; i++) {
-			controller.ciccio();
-		}
+//		for (int i = 0; i < 20; i++) {
+//			controller.ciccio();
+//		}
 		
 		controller.addTile(tvSeriePathEntity);
 		
-		for (int i = 0; i < 20; i++) {
-			controller.ciccio();
-		}
+//		for (int i = 0; i < 20; i++) {
+//			controller.ciccio();
+//		}
 	}
 	
 	public static class UIUtils {

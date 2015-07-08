@@ -2,18 +2,16 @@ package it.ninjatech.kvo.ui.explorer.tvserie;
 
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 
-import java.awt.Rectangle;
+import java.util.List;
 
 public class ExplorerTvSerieController {
 
-	private final int tileWidth;
-	private final int tileHeight;
+	private final ExplorerTvSerieModel model;
 	private final ExplorerTvSerieView view;
 	
 	public ExplorerTvSerieController(int explorerWidth) {
-		this.tileWidth = explorerWidth;
-		this.tileHeight = (int)((double)(this.tileWidth * 9) / 16d);
-		this.view = new ExplorerTvSerieView(this);
+		this.model = new ExplorerTvSerieModel();
+		this.view = new ExplorerTvSerieView(this, this.model, explorerWidth, (int)((double)(explorerWidth * 9) / 16d));
 	}
 
 	public ExplorerTvSerieView getView() {
@@ -21,17 +19,14 @@ public class ExplorerTvSerieController {
 	}
 	
 	public void addTile(TvSeriePathEntity tvSeriePathEntity) {
-		ExplorerTvSerieTileController controller = new ExplorerTvSerieTileController(tvSeriePathEntity, this.tileWidth, this.tileHeight);
-		this.view.addTile(controller.getView());
-	}
-	
-	public void ciccio() {
-		this.view.ciccio();
+		this.model.addTile(tvSeriePathEntity);
 	}
 	
 	protected void handleStateChanged() {
-		Rectangle viewRect = this.view.getViewport().getViewRect();
-		System.out.printf("%d-%d\n", viewRect.x, viewRect.y);
+		List<ExplorerTvSerieTileView> tiles = this.view.getVisibleTiles();
+		for (ExplorerTvSerieTileView tile : tiles) {
+			System.out.println(tile);
+		}
 	}
 	
 }

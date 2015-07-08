@@ -1,9 +1,9 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
+import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.ImageRetriever;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import com.alee.extended.transition.ComponentTransition;
@@ -15,12 +15,14 @@ public class ExplorerTvSerieTileView extends WebPanel {
 
 	private static final long serialVersionUID = -4365144207002586456L;
 	
-	private final ExplorerTvSerieTileController controller;
+	private final TvSeriePathEntity value;
+	private final ExplorerTvSerieController controller;
 	private ComponentTransition transition;
 	
-	protected ExplorerTvSerieTileView(ExplorerTvSerieTileController controller, int width, int height) {
+	protected ExplorerTvSerieTileView(TvSeriePathEntity value, ExplorerTvSerieController controller, int width, int height) {
 		super();
 		
+		this.value = value;
 		this.controller = controller;
 		
 		setPreferredSize(new Dimension(width, height));
