@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui;
 
+import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
@@ -106,6 +107,9 @@ public class Loader extends WebFrame {
 			notifyUpdate("Reading settings", 10);
 			SettingsHandler.init();
 
+			notifyUpdate("Initializing Async Manager", 15);
+			AsyncManager.init();
+			
 			notifyUpdate("Connecting to DB", 20);
 			ConnectionHandler.init();
 

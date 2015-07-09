@@ -1,5 +1,6 @@
 package it.ninjatech.kvo;
 
+import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.Loader;
 
@@ -25,6 +26,7 @@ public class KodiVideoOrganizer {
 
 	public static void exit() {
 		ConnectionHandler.shutdown();
+		AsyncManager.shutdown();
 
 		System.exit(0);
 	}
