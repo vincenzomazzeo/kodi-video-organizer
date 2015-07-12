@@ -83,7 +83,7 @@ public class TheTvDbTvSerie {
 		private String banner;
 		@XmlElement(name = "fanart")
 		private String fanart;
-		@XmlElement(name = "posters")
+		@XmlElement(name = "poster")
 		private String poster;
 		
 		protected TheTvDbBase() {}

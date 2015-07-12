@@ -15,6 +15,14 @@ public final class Utils {
 		return result;
 	}
 	
+	public static File getCacheDirectory() {
+		File result = null;
+		
+		result = new File(getWorkingDirectory(), "cache");
+		
+		return result;
+	}
+	
 	// Normalize to "Normalization Form Canonical Decomposition" (NFD)
 	public static String normalizeUnicode(String str) {
 		String result = str;

@@ -5,6 +5,9 @@ import it.ninjatech.kvo.ui.ImageRetriever;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
@@ -29,6 +32,18 @@ public class ExplorerTvSerieTileView extends WebPanel {
 		setLayout(new BorderLayout());
 		
 		init();
+	}
+	
+	protected TvSeriePathEntity getValue() {
+		return this.value;
+	}
+	
+	protected void setImages(Image fanart, Image poster) {
+		this.transition.performTransition(new WebLabel(new ImageIcon(fanart)));
+	}
+	
+	protected void clear() {
+		// TODO
 	}
 	
 	private void init() {

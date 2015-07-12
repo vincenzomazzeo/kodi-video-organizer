@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.test;
 
+import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.TvSerie;
@@ -24,11 +25,12 @@ public class TvSerieTiles extends WebDialog {
 
 	public static void main(String[] args) throws Exception {
 		SettingsHandler.init();
+		AsyncManager.init();
 		EnhancedLocaleMap.init();
 		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
 		
-		TvSerie tvSerie = new TvSerie("3073320", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
-//		TheTvDbManager.getInstance().getData(tvSerie);
+		TvSerie tvSerie = new TvSerie("121361", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
+		TheTvDbManager.getInstance().getData(tvSerie);
 		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("d:/GitHubRepository/Test")) ;
 		tvSeriesPathEntity.addTvSerie(new File("d:/GitHubRepository/Test/Ciccio"));
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();

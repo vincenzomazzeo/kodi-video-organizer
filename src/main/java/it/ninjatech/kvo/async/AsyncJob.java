@@ -1,12 +1,11 @@
 package it.ninjatech.kvo.async;
 
-public abstract class AsyncJob implements Runnable {
+import java.io.Serializable;
 
-	protected abstract void work();
+public abstract class AsyncJob implements Serializable {
+
+	private static final long serialVersionUID = 749327021228311380L;
+
+	protected abstract void execute();
 	
-	@Override
-	public void run() {
-		work();
-	}
-
 }

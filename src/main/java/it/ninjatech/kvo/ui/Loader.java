@@ -12,6 +12,7 @@ import it.ninjatech.kvo.worker.WorkerProgressListener;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.SwingConstants;
@@ -103,7 +104,18 @@ public class Loader extends WebFrame {
 					throw new Exception("Failed to create working directory. Program will exit.");
 				}
 			}
-
+			if (!Utils.getCacheDirectory().exists()) {
+				if (!Utils.getCacheDirectory().mkdirs()) {
+					throw new Exception("Failed to create cache directory. Program will exit.");
+				}
+			}
+			
+			notifyUpdate("Cleaning cache", 5);
+			File[] cachedFiles = Utils.getCacheDirectory().listFiles();
+			for (File cachedFile : cachedFiles) {
+				cachedFile.delete();
+			}
+			
 			notifyUpdate("Reading settings", 10);
 			SettingsHandler.init();
 

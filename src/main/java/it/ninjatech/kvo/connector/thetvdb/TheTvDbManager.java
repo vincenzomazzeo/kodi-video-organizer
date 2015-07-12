@@ -7,6 +7,7 @@ import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
+import java.io.File;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
@@ -30,7 +31,7 @@ public class TheTvDbManager {
 	private List<EnhancedLocale> languages;
 
 	private TheTvDbManager() {
-		this.webResource = Client.create().resource("http://thetvdb.com/api");
+		this.webResource = Client.create().resource("http://thetvdb.com");
 		this.active = false;
 		this.languages = null;
 	}
@@ -38,21 +39,22 @@ public class TheTvDbManager {
 	public boolean isActive() {
 		return this.active;
 	}
-	
+
 	public List<EnhancedLocale> getLanguages() {
 		return this.languages;
 	}
-	
+
 	public void deactivate() {
 		this.active = false;
 		this.apiKey = null;
 		this.languages = null;
 	}
-	
+
 	public List<EnhancedLocale> checkApiKey(String apiKey) {
 		List<EnhancedLocale> result = null;
-		
+
 		ClientResponse response = this.webResource.
+				path("/api").
 				path(String.format("/%s", apiKey)).
 				path("/languages.xml").
 				type(MediaType.TEXT_XML).
@@ -62,21 +64,22 @@ public class TheTvDbManager {
 			TheTvDbLanguages languages = response.getEntity(TheTvDbLanguages.class);
 			result = languages.toLanguages();
 		}
-		
+
 		return result;
 	}
-	
+
 	public boolean setApiKey(String apiKey) {
 		boolean result = false;
 
 		ClientResponse response = this.webResource.
+				path("/api").
 				path(String.format("/%s", apiKey)).
 				path("/languages.xml").
 				type(MediaType.TEXT_XML).
 				get(ClientResponse.class);
 
 		result = response.getStatus() == Status.OK.getStatusCode();
-		
+
 		if (result) {
 			this.active = true;
 			this.apiKey = apiKey;
@@ -91,6 +94,7 @@ public class TheTvDbManager {
 		List<TvSerie> result = null;
 
 		WebResource webResource = this.webResource.
+				path("/api").
 				path("/GetSeries.php").
 				queryParam("seriesname", name);
 		if (!EnhancedLocaleMap.isEmptyLocale(language)) {
@@ -107,6 +111,7 @@ public class TheTvDbManager {
 
 	public void getData(TvSerie tvSerie) {
 		TheTvDbTvSerie theTvDbTvSerie = this.webResource.
+				path("/api").
 				path(String.format("/%s", this.apiKey)).
 				path("/series").
 				path(String.format("/%s", tvSerie.getProviderId())).
@@ -116,6 +121,13 @@ public class TheTvDbManager {
 				get(TheTvDbTvSerie.class);
 
 		theTvDbTvSerie.fill(tvSerie);
+	}
+
+	public File getImage(String path) {
+		return this.webResource.
+				path("/banners").
+				path(String.format("/%s", path)).
+				get(File.class);
 	}
 
 	public void getBanners(TvSerie tvSerie) {

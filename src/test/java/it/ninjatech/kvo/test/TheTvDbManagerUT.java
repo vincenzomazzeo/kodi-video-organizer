@@ -12,8 +12,16 @@ import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
+import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
@@ -117,6 +125,22 @@ public class TheTvDbManagerUT {
 				assertThat(tvSerie.getFirstAired()).isEqualTo("2011-04-17");
 			}
 		}
+	}
+	
+	@Test
+	public void getImage() throws Exception {
+		File image = connector.getImage("fanart/original/121361-83.jpg");
+		
+		BufferedImage i = ImageIO.read(image);
+		
+		JDialog frame = new JDialog();
+		frame.setModal(true);
+
+		JLabel lblimage = new JLabel(new ImageIcon(i));
+		frame.getContentPane().add(lblimage, BorderLayout.CENTER);
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
 	}
 	
 	@Test

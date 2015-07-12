@@ -1,9 +1,7 @@
 package it.ninjatech.kvo.async;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
+import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,7 +10,7 @@ public class AsyncManager {
 	private static AsyncManager self;
 	
 	public static void init() {
-		if (self != null) {
+		if (self == null) {
 			self = new AsyncManager();
 		}
 	}
@@ -24,30 +22,30 @@ public class AsyncManager {
 	public static void shutdown() {
 		if (self != null) {
 			try {
-				self.tvSerieTileExecutorService.shutdownNow();
+				self.executors.shutdownNow();
 			}
 			catch (Exception e) {}
 			self = null;
 		}
 	}
-	
-	private final ExecutorService tvSerieTileExecutorService;
-	private final Set<String> tvSerieTileJobIds;
-	private final Deque<TvSerieTileImagesAsyncJob> tvSerieTileJobs;
+
+	private final ExecutorService executors;
+	private final AsyncHandler<TvSerieTileImagesAsyncJob> tvSerieTileHandler;
 	
 	private AsyncManager() {
-		this.tvSerieTileExecutorService = Executors.newSingleThreadExecutor();
-		this.tvSerieTileJobIds = new HashSet<>();
-		this.tvSerieTileJobs = new ArrayDeque<>();
+		this.executors = Executors.newFixedThreadPool(1);
+		
+		this.tvSerieTileHandler = new AsyncHandler<>();
+		
+		this.executors.submit(this.tvSerieTileHandler);
 	}
 	
-	public void submit(String id, TvSerieTileImagesAsyncJob job) {
-		this.tvSerieTileJobIds.add(id);
-		this.tvSerieTileJobs.offer(job);
+	public void submit(String id, TvSerieTileImagesAsyncJob job, AsyncJobListener<TvSerieTileImagesAsyncJob> listener) {
+		this.tvSerieTileHandler.submitJob(id, job, listener);
 	}
 	
 	public void cancelTvSerieTileImagesAsyncJob(String id) {
-		this.tvSerieTileJobIds.remove(id);
+		this.tvSerieTileHandler.removeJob(id);
 	}
 	
 }
