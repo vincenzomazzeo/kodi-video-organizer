@@ -1,7 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
 import it.ninjatech.kvo.model.TvSeriePathEntity;
-import it.ninjatech.kvo.ui.Dimensions;
 
 import java.awt.Component;
 import java.awt.Rectangle;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import com.alee.extended.layout.VerticalFlowLayout;
@@ -39,8 +39,9 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 
 		this.model.setView(this);
 
-		init();
-
+		getVerticalScrollBar().setUnitIncrement(30);
+		getVerticalScrollBar().setBlockIncrement(30);
+		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		getVerticalScrollBar().addAdjustmentListener(this);
 		addHierarchyListener(this);
 	}
@@ -113,7 +114,7 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 			Component component = container.getComponentAt(0, y);
 			if (component != null && component.getClass().equals(ExplorerTvSerieTileView.class)) {
 				result.add((ExplorerTvSerieTileView)component);
-				y += component.getHeight();
+				y = component.getY()  + component.getHeight();
 			}
 			else {
 				break;
@@ -121,11 +122,6 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 		}
 
 		return result;
-	}
-
-	private void init() {
-		((WebPanel)getViewport().getView()).setPreferredWidth(Dimensions.getExplorerWidth());
-		((WebPanel)getViewport().getView()).setMinimumWidth(Dimensions.getExplorerWidth());
 	}
 
 }

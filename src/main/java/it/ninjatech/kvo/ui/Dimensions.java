@@ -66,7 +66,7 @@ public final class Dimensions {
 	
 	public static Dimension getExplorerTileSize() {
 		if (explorerTileSize == null) {
-			int width = getExplorerWidth();
+			int width = getExplorerWidth() - 31;
 			int height = (int)((double)(width * 9) / 16d);
 			explorerTileSize = new Dimension(width, height);
 		}

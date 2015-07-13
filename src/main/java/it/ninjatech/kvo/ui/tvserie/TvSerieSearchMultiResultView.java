@@ -85,12 +85,14 @@ public class TvSerieSearchMultiResultView extends WebDialog implements MouseList
 		this.table.getColumnModel().getColumn(1).setCellRenderer(new FlagRenderer());
 		this.table.getColumnModel().getColumn(2).setCellRenderer(new TextRenderer(SwingConstants.RIGHT));
 
-		this.table.getTableHeader().getColumnModel().getColumn(0).setMinWidth(400);
-		this.table.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(400);
-		this.table.getTableHeader().getColumnModel().getColumn(1).setMinWidth(70);
-		this.table.getTableHeader().getColumnModel().getColumn(1).setMaxWidth(70);
+		this.table.getTableHeader().getColumnModel().getColumn(0).setMinWidth(350);
+		this.table.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(350);
+		this.table.getTableHeader().getColumnModel().getColumn(1).setMinWidth(100);
+		this.table.getTableHeader().getColumnModel().getColumn(1).setMaxWidth(100);
 		
 		WebScrollPane container = new WebScrollPane(this.table);
+		container.getVerticalScrollBar().setUnitIncrement(30);
+		container.getVerticalScrollBar().setBlockIncrement(30);
 		add(container);
 	}
 	

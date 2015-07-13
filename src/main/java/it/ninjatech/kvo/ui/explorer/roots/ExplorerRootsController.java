@@ -8,6 +8,7 @@ import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.Type;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
@@ -19,6 +20,7 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieSearchMultiResultListener;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,11 +35,13 @@ public class ExplorerRootsController {
 
 	private final ExplorerRootsModel model;
 
+	private final ExplorerController parent;
 	private final ExplorerRootsView view;
 	private final WebDirectoryChooser rootChooser;
 
-	public ExplorerRootsController(ExplorerRootsModel model) {
+	public ExplorerRootsController(ExplorerRootsModel model, ExplorerController parent) {
 		this.model = model;
+		this.parent = parent;
 		this.view = new ExplorerRootsView(this, this.model);
 
 		this.rootChooser = new WebDirectoryChooser(UI.get());
@@ -66,6 +70,7 @@ public class ExplorerRootsController {
 				SettingsHandler.getInstance().store();
 			}
 			addRoot(root, Type.TvSerie);
+			this.parent.addTvSerieTab();
 			this.view.removeTooltip();
 		}
 	}
@@ -185,8 +190,21 @@ public class ExplorerRootsController {
 				}
 				else {
 					result = true;
-					TvSerieSearchMultiResultController controller = new TvSerieSearchMultiResultController(tvSeries, this);
-					controller.getView().setVisible(true);
+					// Search for match
+					List<TvSerie> candidates = new ArrayList<>();
+					for (TvSerie tvSerie : tvSeries) {
+						if (search.equalsIgnoreCase(tvSerie.getName()) && language.equals(tvSerie.getLanguage())) {
+							candidates.add(tvSerie);
+						}
+					}
+					if (candidates.size() == 1) {
+						TvSerie tvSerie = candidates.get(0);
+						fetch(tvSerie);
+					}
+					else {
+						TvSerieSearchMultiResultController controller = new TvSerieSearchMultiResultController(tvSeries, this);
+						controller.getView().setVisible(true);
+					}
 				}
 			}
 			else {
@@ -203,6 +221,7 @@ public class ExplorerRootsController {
 				this.node.getValue().setTvSerie(tvSerie);
 				NotificationManager.showNotification(UI.get(), String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 				this.parent.model.reload(this.node);
+				this.parent.parent.addTvSerieTile(this.node.getValue());
 			}
 		}
 
