@@ -6,20 +6,22 @@ import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.explorer.tvserie.ExplorerTvSerieController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.DisplayMode;
 import java.io.File;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import com.alee.laf.panel.WebPanel;
-import com.alee.laf.rootpane.WebDialog;
-import com.alee.utils.SystemUtils;
+import javax.swing.SwingUtilities;
 
-public class TvSerieTiles extends WebDialog {
+import com.alee.laf.rootpane.WebFrame;
+
+public class TvSerieTiles extends WebFrame {
 
 	private static final long serialVersionUID = 2234913674587205795L;
 
@@ -29,105 +31,117 @@ public class TvSerieTiles extends WebDialog {
 		EnhancedLocaleMap.init();
 		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
 		
-		TvSerie tvSerie = new TvSerie("121361", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
-		TheTvDbManager.getInstance().getData(tvSerie);
-		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("d:/GitHubRepository/Test")) ;
-		tvSeriesPathEntity.addTvSerie(new File("d:/GitHubRepository/Test/Ciccio"));
-		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
-		tvSeriePathEntity.setTvSerie(tvSerie);
+		List<Data> datas = new ArrayList<>();
+		datas.add(new Data("121361", "Il Trono di Spade"));
+		datas.add(new Data("80348", "Chuck"));
+		datas.add(new Data("279121", "The Flash"));
+		datas.add(new Data("257655", "Arrow"));
+		datas.add(new Data("76290", "24"));
+		datas.add(new Data("248742", "Person of Interest"));
+		datas.add(new Data("72158", "One Tree Hill"));
 		
-		TvSerieTiles dialog = new TvSerieTiles(tvSeriePathEntity);
+//		TvSerie tvSerie = new TvSerie("121361", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
+//		TheTvDbManager.getInstance().getData(tvSerie);
+//		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("d:/GitHubRepository/Test")) ;
+//		tvSeriesPathEntity.addTvSerie(new File("d:/GitHubRepository/Test/Ciccio"));
+//		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
+//		tvSeriePathEntity.setTvSerie(tvSerie);
 		
-		dialog.setVisible(true);
+		TvSerieTiles frame = new TvSerieTiles(/*tvSeriePathEntity*/);
+		
+		frame.setVisible(true);
+		
+		System.out.println("start thread");
+		
+		(new Thread(new Loader(datas, frame.controller))).start();
 	}
 	
-	private TvSerieTiles(TvSeriePathEntity tvSeriePathEntity) {
+	private final ExplorerTvSerieController controller;
+	
+	private TvSerieTiles(/*TvSeriePathEntity tvSeriePathEntity*/) {
 		super();
+		
+		this.controller = new ExplorerTvSerieController();
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		setResizable(false);
 		
-		init(tvSeriePathEntity);
-		pack();
+		init(/*tvSeriePathEntity*/);
 		setLocationRelativeTo(null);
 	}
 
-	private void init(TvSeriePathEntity tvSeriePathEntity) {
-		Dimension startupDimension = UIUtils.getStartupDimension();
+	private void init(/*TvSeriePathEntity tvSeriePathEntity*/) {
+		Dimension startupDimension = Dimensions.getStartupSize();
 		
-		setPreferredSize(new Dimension(startupDimension.width / 5 + 100, 300));
+		getContentPane().setLayout(new BorderLayout());
+		setSize(startupDimension.width / 5 + 30, 500);
 		
-		ExplorerTvSerieController controller = new ExplorerTvSerieController(startupDimension.width / 5);
-		add(controller.getView());
+//		ExplorerTile tile = new ExplorerTile(null, ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
+//		                                     TvSerieUtils.getTitle(tvSeriePathEntity), 
+//		                                     TvSerieUtils.getYear(tvSeriePathEntity),
+//		                                     TvSerieUtils.getRate(tvSeriePathEntity),
+//		                                     TvSerieUtils.getGenre(tvSeriePathEntity));
+//		add(tile, BorderLayout.CENTER);
+//		pack();
+//		ExplorerTvSerieController controller = new ExplorerTvSerieController();
+		add(this.controller.getView(), BorderLayout.CENTER);
 		
-//		for (int i = 0; i < 20; i++) {
-//			controller.ciccio();
-//		}
-		
-		controller.addTile(tvSeriePathEntity);
-		
-//		for (int i = 0; i < 20; i++) {
-//			controller.ciccio();
-//		}
+//		controller.addTile(tvSeriePathEntity);
 	}
 	
-	public static class UIUtils {
+	private static class Data {
+		
+		private final String id;
+		private final String title;
+		
+		public Data(String id, String title) {
+			this.id = id;
+			this.title = title;
+		}
+		
+	}
+	
+	private static class Loader implements Runnable {
 
-		private static final int HD_WIDTH = 1920;
-		private static final int HD_HEIGHT = 1080;
-		private static final BigDecimal _16_9 = new BigDecimal("1.7777");
-		private static final BigDecimal _4_3 = new BigDecimal("1.3333");
+		private final List<Data> datas;
+		private final ExplorerTvSerieController controller;
 		
-		public static WebPanel makeSeparatorPane(int height) {
-			WebPanel result = new WebPanel();
-			
-			result.setPreferredHeight(height);
-			
-			return result;
+		public Loader(List<Data> datas, ExplorerTvSerieController controller) {
+			this.datas = datas;
+			this.controller = controller;
 		}
-		
-		protected static Dimension getStartupDimension() {
-			Dimension result = null;
+
+		@Override
+		public void run() {
+			System.out.println("running");
 			
-			DisplayMode displayMode = SystemUtils.getGraphicsConfiguration().getDevice().getDisplayMode();
-			
-			BigDecimal width = new BigDecimal(displayMode.getWidth());
-			BigDecimal height = new BigDecimal(displayMode.getHeight());
-			BigDecimal ratio = width.divide(height, 4, RoundingMode.DOWN);
-			
-			int startupWidth = 0;
-			int startupHeight = 0;
-			if (ratio.equals(_16_9)) {
-				if (displayMode.getWidth() > HD_WIDTH) {
-					startupHeight = HD_HEIGHT;
-					startupWidth = HD_WIDTH;
+			for (Data data : datas) {
+				System.out.println(data.title);
+				TvSerie tvSerie = new TvSerie(data.id, data.title, EnhancedLocaleMap.getByLanguage("it"));
+				TheTvDbManager.getInstance().getData(tvSerie);
+				TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("d:/GitHubRepository/Test")) ;
+				tvSeriesPathEntity.addTvSerie(new File("d:/GitHubRepository/Test/Ciccio"));
+				final TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
+				tvSeriePathEntity.setTvSerie(tvSerie);
+				System.out.println(data.title + " - " + tvSerie.getName() + " - " + tvSerie.getFanart() + " - " + tvSerie.getPoster());
+				
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						System.out.println("Adding tile");
+						controller.addTile(tvSeriePathEntity);
+					}});
+				
+				try {
+					Thread.sleep(TimeUnit.SECONDS.toMillis(3));
 				}
-				else {
-					startupHeight = (int)(displayMode.getHeight() * .9);
-					startupWidth = (int)(displayMode.getWidth() * .9);
-				}
-			}
-			else if (ratio.equals(_4_3)) {
-				startupHeight = (int)(displayMode.getHeight() * .9);
-				startupWidth = (int)(startupHeight / _16_9.doubleValue());
-			}
-			else {
-				if (displayMode.getWidth() > displayMode.getHeight()) {
-					startupHeight = (int)(displayMode.getHeight() * .9);
-					startupWidth = (int)(startupHeight / _16_9.doubleValue());
-				}
-				else {
-					startupWidth = (int)(displayMode.getHeight() * .9);
-					startupHeight = (int)(startupWidth * _16_9.doubleValue());
+				catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
-			result = new Dimension(startupWidth, startupHeight);
-			
-			return result;
 		}
-		
-		private UIUtils() {}
 		
 	}
 	

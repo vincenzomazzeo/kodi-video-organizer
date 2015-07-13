@@ -84,7 +84,7 @@ public class UI extends WebFrame implements WindowListener {
 	private void init() {
 		initialize();
 
-		Dimension startupDimension = UIUtils.getStartupDimension();
+		Dimension startupDimension = Dimensions.getStartupSize();
 
 		setSize(startupDimension);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -96,7 +96,7 @@ public class UI extends WebFrame implements WindowListener {
 		this.toolBar = new ToolBar(this.exceptionController.getView());
 		add(this.toolBar, BorderLayout.NORTH);
 
-		ExplorerView explorer = new ExplorerView(startupDimension.width);
+		ExplorerView explorer = new ExplorerView();
 		add(explorer, BorderLayout.LINE_START);
 	}
 

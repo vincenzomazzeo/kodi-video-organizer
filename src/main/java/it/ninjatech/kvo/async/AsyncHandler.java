@@ -20,18 +20,20 @@ public class AsyncHandler<Job extends AsyncJob> implements Runnable {
 	@Override
 	public void run() {
 		try {
-			final AsyncJobWrapper<Job> jobWrapper = this.jobs.take();
-			if (this.activeJobs.contains(jobWrapper.getId())) {
-				jobWrapper.getJob().execute();
-				if (this.activeJobs.remove(jobWrapper.getId())) {
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							jobWrapper.getListener().notify(jobWrapper.getId(), jobWrapper.getJob());
-						}
-					});
+			do {
+				final AsyncJobWrapper<Job> jobWrapper = this.jobs.take();
+				if (this.activeJobs.contains(jobWrapper.getId())) {
+					jobWrapper.getJob().execute();
+					if (this.activeJobs.remove(jobWrapper.getId())) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								jobWrapper.getListener().notify(jobWrapper.getId(), jobWrapper.getJob());
+							}
+						});
+					}
 				}
-			}
+			} while (true);
 		}
 		catch (InterruptedException e) {
 		}

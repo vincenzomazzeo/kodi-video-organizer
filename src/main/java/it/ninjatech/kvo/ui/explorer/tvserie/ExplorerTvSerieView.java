@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
 import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.ui.Dimensions;
 
 import java.awt.Component;
 import java.awt.Rectangle;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.SwingUtilities;
+
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
@@ -22,37 +25,33 @@ import com.alee.laf.scroll.WebScrollPane;
 public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentListener, HierarchyListener {
 
 	private static final long serialVersionUID = -1748479108540324466L;
-	
+
 	private final ExplorerTvSerieController controller;
 	private final ExplorerTvSerieModel model;
 	private final Map<String, ExplorerTvSerieTileView> tilesMap;
-	private final int tileWidth;
-	private final int tileHeight;
-	
-	protected ExplorerTvSerieView(ExplorerTvSerieController controller, ExplorerTvSerieModel model, int tileWidth, int tileHeight) {
+
+	protected ExplorerTvSerieView(ExplorerTvSerieController controller, ExplorerTvSerieModel model) {
 		super(new WebPanel(new VerticalFlowLayout()));
-		
+
 		this.controller = controller;
 		this.model = model;
 		this.tilesMap = new HashMap<>();
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
-		
+
 		this.model.setView(this);
-		
+
 		init();
-		
+
 		getVerticalScrollBar().addAdjustmentListener(this);
 		addHierarchyListener(this);
 	}
-	
+
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent event) {
 		if (!event.getValueIsAdjusting()) {
 			this.controller.handleStateChanged();
 		}
 	}
-	
+
 	@Override
 	public void hierarchyChanged(HierarchyEvent event) {
 		if ((event.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) == HierarchyEvent.SHOWING_CHANGED && getParent().isShowing()) {
@@ -62,38 +61,49 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 
 	protected void fireModelUpdate() {
 		getVerticalScrollBar().removeAdjustmentListener(this);
-		
+
 		Rectangle viewRect = getViewport().getViewRect();
 		WebPanel container = (WebPanel)getViewport().getView();
 		container.removeAll();
-		
+
 		Set<String> tileKeys = new HashSet<>(this.tilesMap.keySet());
 		for (TvSeriePathEntity tvSerie : this.model.getData()) {
 			ExplorerTvSerieTileView view = this.tilesMap.get(tvSerie.getId());
 			if (view == null) {
-				view = new ExplorerTvSerieTileView(tvSerie, this.controller, this.tileWidth, this.tileHeight);
+				view = new ExplorerTvSerieTileView(tvSerie, this.controller);
 				this.tilesMap.put(tvSerie.getId(), view);
 			}
 			else {
 				tileKeys.remove(tvSerie.getId());
 			}
-			
+
 			container.add(view);
 		}
-		
+		revalidate();
+		repaint();
+
 		for (String tileKey : tileKeys) {
-			this.tilesMap.remove(tileKey);
-			// TODO capire se bisogna pulire le eventuali immagini
+			ExplorerTvSerieTileView tile = this.tilesMap.remove(tileKey);
+			tile.clear();
 		}
-		
+
 		scrollRectToVisible(viewRect);
-		
+
 		getVerticalScrollBar().addAdjustmentListener(this);
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				controller.handleStateChanged();
+			}
+			
+		});
 	}
-	
+
 	protected List<ExplorerTvSerieTileView> getVisibleTiles() {
 		List<ExplorerTvSerieTileView> result = new ArrayList<>();
-		
+
 		WebPanel container = (WebPanel)getViewport().getView();
 
 		Rectangle viewRect = getViewport().getViewRect();
@@ -109,12 +119,13 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 				break;
 			}
 		}
-		
+
 		return result;
 	}
 
 	private void init() {
-		
+		((WebPanel)getViewport().getView()).setPreferredWidth(Dimensions.getExplorerWidth());
+		((WebPanel)getViewport().getView()).setMinimumWidth(Dimensions.getExplorerWidth());
 	}
-	
+
 }

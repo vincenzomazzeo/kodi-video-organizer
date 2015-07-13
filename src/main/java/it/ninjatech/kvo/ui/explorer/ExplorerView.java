@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.explorer;
 
+import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsModel;
@@ -18,7 +19,7 @@ public class ExplorerView extends WebPanel {
 	private final WebTabbedPane container;
 	private final ExplorerRootsController rootsController;
 	
-	public ExplorerView(int uiWidth) {
+	public ExplorerView() {
 		super();
 		
 		this.container = new WebTabbedPane(WebTabbedPane.TOP, TabbedPaneStyle.attached);
@@ -26,15 +27,15 @@ public class ExplorerView extends WebPanel {
 		ExplorerRootsModel rootsModel = new ExplorerRootsModel();
 		this.rootsController = new ExplorerRootsController(rootsModel);
 		
-		init(uiWidth);
+		init();
 	}
 	
-	private void init(int uiWidth) {
+	private void init() {
 		setPaintLeft(false);
 		setUndecorated(false);
 		setMargin(new Insets(3, 3, 3, 3));
 		setRound(StyleConstants.largeRound);
-		setPreferredWidth(uiWidth / 5);
+		setPreferredWidth(Dimensions.getExplorerWidth());
 		
 		add(this.container);
 		this.container.addTab("Roots", ImageRetriever.retrieveExplorerTreeFolderTab(), this.rootsController.getView());

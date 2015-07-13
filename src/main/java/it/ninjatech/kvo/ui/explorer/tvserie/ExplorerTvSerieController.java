@@ -4,6 +4,7 @@ import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.ui.Dimensions;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,25 +15,21 @@ import java.util.Set;
 public class ExplorerTvSerieController implements AsyncJobListener<TvSerieTileImagesAsyncJob> {
 
 	private final ExplorerTvSerieModel model;
-	private final int tileWidth;
-	private final int tileHeight;
 	private final ExplorerTvSerieView view;
-	private final Map<String, ExplorerTvSerieTileView> asyncTileJobs;
+	private final Map<String, TileStatus> tiles;
 	
-	public ExplorerTvSerieController(int explorerWidth) {
+	public ExplorerTvSerieController() {
 		this.model = new ExplorerTvSerieModel();
-		this.tileWidth = explorerWidth;
-		this.tileHeight = (int)((double)(explorerWidth * 9) / 16d);
-		this.view = new ExplorerTvSerieView(this, this.model, this.tileWidth, this.tileHeight);
-		this.asyncTileJobs = new HashMap<>();
+		this.view = new ExplorerTvSerieView(this, this.model);
+		this.tiles = new HashMap<>();
 	}
 
 	@Override
 	public void notify(String id, TvSerieTileImagesAsyncJob job) {
-		ExplorerTvSerieTileView tile = this.asyncTileJobs.remove(id);
-		if (tile != null) {
-			tile.setImages(job.getFanart(), job.getPoster());
-		}
+		System.out.printf("-> notify %s\n", id);
+		TileStatus tileStatus = this.tiles.get(id);
+		tileStatus.alreadyLoaded = true;
+		tileStatus.tile.setImages(job.getFanart(), job.getPoster());
 	}
 	
 	public ExplorerTvSerieView getView() {
@@ -44,24 +41,45 @@ public class ExplorerTvSerieController implements AsyncJobListener<TvSerieTileIm
 	}
 	
 	protected void handleStateChanged() {
-		Set<String> keys = new HashSet<>(this.asyncTileJobs.keySet());
+		Set<String> tilesToRemove = new HashSet<>(this.tiles.keySet());
 		
 		List<ExplorerTvSerieTileView> tiles = this.view.getVisibleTiles();
 		for (ExplorerTvSerieTileView tile : tiles) {
 			TvSeriePathEntity tvSeriePathEntity = tile.getValue();
 			String jobId = tvSeriePathEntity.getId();
-			if (!keys.remove(jobId)) {
-				this.asyncTileJobs.put(jobId, tile);
-				TvSerieTileImagesAsyncJob job = new TvSerieTileImagesAsyncJob(tvSeriePathEntity, this.tileWidth, this.tileHeight, this.tileWidth, this.tileHeight);
+			TileStatus tileStatus = this.tiles.get(jobId);
+			if (tileStatus == null) {
+				// Tile not visible
+				this.tiles.put(jobId, new TileStatus(tile));
+				TvSerieTileImagesAsyncJob job = new TvSerieTileImagesAsyncJob(tvSeriePathEntity, Dimensions.getExplorerTileSize(), Dimensions.getExplorerTilePosterSize());
 				AsyncManager.getInstance().submit(jobId, job, this);
+			}
+			else {
+				tilesToRemove.remove(jobId);
 			}
 		}
 		
-		for (String key : keys) {
-			ExplorerTvSerieTileView tile = this.asyncTileJobs.remove(key);
-			tile.clear();
-			AsyncManager.getInstance().cancelTvSerieTileImagesAsyncJob(key);
+		for (String tileToRemove : tilesToRemove) {
+			TileStatus tileStatus = this.tiles.remove(tileToRemove);
+			if (tileStatus.alreadyLoaded) {
+				tileStatus.tile.clear();
+			}
+			else {
+				AsyncManager.getInstance().cancelTvSerieTileImagesAsyncJob(tileToRemove);
+			}
 		}
+	}
+	
+	private static class TileStatus {
+		
+		private final ExplorerTvSerieTileView tile;
+		private boolean alreadyLoaded;
+		
+		private TileStatus(ExplorerTvSerieTileView tile) {
+			this.tile = tile;
+			this.alreadyLoaded = false;
+		}
+		
 	}
 
 }

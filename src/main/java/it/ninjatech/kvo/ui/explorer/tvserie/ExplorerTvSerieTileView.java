@@ -2,53 +2,79 @@ package it.ninjatech.kvo.ui.explorer.tvserie;
 
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.TvSerieUtils;
+import it.ninjatech.kvo.ui.component.ExplorerTile;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Image;
-
-import javax.swing.ImageIcon;
 
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
-import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 
 public class ExplorerTvSerieTileView extends WebPanel {
 
 	private static final long serialVersionUID = -4365144207002586456L;
-	
+
 	private final TvSeriePathEntity value;
 	private final ExplorerTvSerieController controller;
 	private ComponentTransition transition;
-	
-	protected ExplorerTvSerieTileView(TvSeriePathEntity value, ExplorerTvSerieController controller, int width, int height) {
+	private ExplorerTile defaultTile;
+	private ExplorerTile fullTile;
+
+	protected ExplorerTvSerieTileView(TvSeriePathEntity value, ExplorerTvSerieController controller) {
 		super();
-		
+
 		this.value = value;
 		this.controller = controller;
-		
-		setPreferredSize(new Dimension(width, height));
-		setLayout(new BorderLayout());
-		
+
 		init();
 	}
-	
+
 	protected TvSeriePathEntity getValue() {
 		return this.value;
 	}
-	
+
 	protected void setImages(Image fanart, Image poster) {
-		this.transition.performTransition(new WebLabel(new ImageIcon(fanart)));
+		if (fanart != null || poster != null) {
+			this.fullTile = new ExplorerTile(fanart, poster != null ? poster : ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
+											 TvSerieUtils.getTitle(this.value),
+											 TvSerieUtils.getYear(this.value),
+											 TvSerieUtils.getRate(this.value),
+											 TvSerieUtils.getGenre(this.value));
+			this.transition.performTransition(this.fullTile);
+		}
 	}
-	
+
 	protected void clear() {
-		// TODO
+		this.transition.performTransition(this.defaultTile);
+		if (this.fullTile != null) {
+			this.fullTile.destroy();
+			this.fullTile = null;
+		}
 	}
-	
+
+	protected void destroy() {
+		removeAll();
+		this.defaultTile.destroy();
+		this.defaultTile = null;
+		if (this.fullTile != null) {
+			this.fullTile.destroy();
+			this.fullTile = null;
+		}
+	}
+
 	private void init() {
-		this.transition = new ComponentTransition(new WebLabel(ImageRetriever.retrieveLoading()), new FadeTransitionEffect());
+		setLayout(new BorderLayout());
+
+		this.defaultTile = new ExplorerTile(null, ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
+											TvSerieUtils.getTitle(this.value),
+											TvSerieUtils.getYear(this.value),
+											TvSerieUtils.getRate(this.value),
+											TvSerieUtils.getGenre(this.value));
+
+		this.transition = new ComponentTransition(this.defaultTile, new FadeTransitionEffect());
 		add(this.transition, BorderLayout.CENTER);
 	}
-	
+
 }

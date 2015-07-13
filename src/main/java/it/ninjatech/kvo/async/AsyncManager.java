@@ -41,10 +41,12 @@ public class AsyncManager {
 	}
 	
 	public void submit(String id, TvSerieTileImagesAsyncJob job, AsyncJobListener<TvSerieTileImagesAsyncJob> listener) {
+		System.out.printf("-> submit %s\n", id);
 		this.tvSerieTileHandler.submitJob(id, job, listener);
 	}
 	
 	public void cancelTvSerieTileImagesAsyncJob(String id) {
+		System.out.printf("-> cancel %s\n", id);
 		this.tvSerieTileHandler.removeJob(id);
 	}
 	

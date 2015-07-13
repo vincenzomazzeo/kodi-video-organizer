@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui;
 
+import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -16,6 +17,7 @@ public final class ImageRetriever {
 		Loading("loading.gif"),
 		Scrapers_Settings("scrapers_settings.png"),
 		TvSerie("tvserie.png"),
+		TvSerie_Tile_Poster("tvserie_tile_poster.png"),
 		TheTVDB_Logo("thetvdb_logo.png");
 		
 		private final String value; 
@@ -34,6 +36,7 @@ public final class ImageRetriever {
 	private static final int THE_TV_DB_LOGO_SIZE = 300;
 	
 	private static ImageIcon apikey;
+	private static ImageIcon explorerTilePosterTvSerie;
 	private static ImageIcon explorerTreeFolder;
 	private static ImageIcon explorerTreeFolderMovies;
 	private static ImageIcon explorerTreeFolderTvSeries;
@@ -54,6 +57,14 @@ public final class ImageRetriever {
 		}
 		
 		return apikey;
+	}
+	
+	public static ImageIcon retrieveExplorerTilePosterTvSerie() {
+		if (explorerTilePosterTvSerie == null) {
+			explorerTilePosterTvSerie = retrieveAndScaleImage(ImageName.TvSerie_Tile_Poster, Dimensions.getExplorerTilePosterSize());
+		}
+		
+		return explorerTilePosterTvSerie;
 	}
 	
 	public static ImageIcon retrieveExplorerTreeFolder() {
@@ -189,6 +200,14 @@ public final class ImageRetriever {
 		if (scaleFactor != 0d) {
 			result = new ImageIcon(result.getImage().getScaledInstance(width, (int)height, Image.SCALE_SMOOTH));
 		}
+
+		return result;
+	}
+	
+	private static ImageIcon retrieveAndScaleImage(ImageName imageName, Dimension size) {
+		ImageIcon result = null;
+
+		result = new ImageIcon(retrieveImage(imageName).getImage().getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH));
 
 		return result;
 	}
