@@ -92,6 +92,46 @@ public final class Dimensions {
 		return getExplorerTileSize().height / 4;
 	}
 
+	public static Dimension getTvSerieFanartSliderBannerSize() {
+		return getTvSerieFanartSize(37, 1000, 185);
+	}
+	
+	public static Dimension getTvSerieFanartSliderCharacterSize() {
+		return getTvSerieFanartSize(200, 512, 512);
+	}
+	
+	public static Dimension getTvSerieFanartSliderClearartSize() {
+		return getTvSerieFanartSize(200, 500, 281);
+	}
+	
+	public static Dimension getTvSerieFanartSliderFanartSize() {
+		return getTvSerieFanartSize(200, 1920, 1080);
+	}
+	
+	public static Dimension getTvSerieFanartSliderLandscapeSize() {
+		return getTvSerieFanartSize(200, 500, 281);
+	}
+	
+	public static Dimension getTvSerieFanartSliderLogoSize() {
+		return getTvSerieFanartSize(37, 400, 155);
+	}
+	
+	public static Dimension getTvSerieFanartSliderPosterSize() {
+		return getTvSerieFanartSize(200, 1000, 1426);
+	}
+	
+	private static Dimension getTvSerieFanartSize(int preferredHeight, int realWidth, int realHeight) {
+		Dimension result = new Dimension();
+		
+		Dimension startupSize = getStartupSize();
+		int maxHeight = startupSize.height / 5;
+		
+		result.height = maxHeight < preferredHeight ? maxHeight : preferredHeight;
+		result.width = result.height * realWidth / realHeight;
+		
+		return result;
+	}
+	
 	private Dimensions() {
 	}
 

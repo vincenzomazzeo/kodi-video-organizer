@@ -10,12 +10,20 @@ public final class ImageRetriever {
 	private enum ImageName {
 		
 		Apikey("apikey.jpg"),
+		ContentRating_TV14("TV-14.png"),
+		ContentRating_TVG("TV-G.png"),
+		ContentRating_TVMA("TV-MA.png"),
+		ContentRating_TVPG("TV-PG.png"),
+		ContentRating_TVY("TV-Y.png"),
+		ContentRating_TVY7("TV-Y7.png"),
 		ExceptionConsole("exception_console.png"),
 		Folder("folder.png"),
 		Folder_Movies("folder_movies.png"),
 		Folder_TvSeries("folder_tvseries.png"),
+		IMDb("imdb.png"),
 		Loading("loading.gif"),
 		Scrapers_Settings("scrapers_settings.png"),
+		Star("star.png"),
 		TvSerie("tvserie.png"),
 		TvSerie_Tile_Poster("tvserie_tile_poster.png"),
 		TheTVDB_Logo("thetvdb_logo.png");
@@ -34,6 +42,9 @@ public final class ImageRetriever {
 	private static final int EXPLORER_TREE_TAB_ICON_SIZE = 32;
 	private static final int MENU_BAR_BUTTON_SIZE = 40;
 	private static final int THE_TV_DB_LOGO_SIZE = 300;
+	private static final int WALL_CONTENT_RATING_SIZE = 20;
+	private static final int WALL_IMDB_SIZE = 20;
+	private static final int WALL_STAR_SIZE = 40;
 	
 	private static ImageIcon apikey;
 	private static ImageIcon explorerTilePosterTvSerie;
@@ -50,6 +61,14 @@ public final class ImageRetriever {
 	private static ImageIcon theTvDbLogo;
 	private static ImageIcon toolBarExceptionConsole;
 	private static ImageIcon toolBarScrapersSettings;
+	private static ImageIcon wallContentRatingTV14;
+	private static ImageIcon wallContentRatingTVG;
+	private static ImageIcon wallContentRatingTVMA;
+	private static ImageIcon wallContentRatingTVPG;
+	private static ImageIcon wallContentRatingTVY;
+	private static ImageIcon wallContentRatingTVY7;
+	private static ImageIcon wallIMDb;
+	private static ImageIcon wallStar;
 	
 	public static ImageIcon retrieveApikey() {
 		if (apikey == null) {
@@ -171,6 +190,70 @@ public final class ImageRetriever {
 		return toolBarScrapersSettings;
 	}
 	
+	public static ImageIcon retrieveWallContentRatingTV14() {
+		if (wallContentRatingTV14 == null) {
+			wallContentRatingTV14 = retrieveAndScaleImage(ImageName.ContentRating_TV14, WALL_CONTENT_RATING_SIZE);
+		}
+		
+		return wallContentRatingTV14;
+	}
+	
+	public static ImageIcon retrieveWallContentRatingTVG() {
+		if (wallContentRatingTVG == null) {
+			wallContentRatingTVG = retrieveAndScaleImage(ImageName.ContentRating_TVG, WALL_CONTENT_RATING_SIZE);
+		}
+		
+		return wallContentRatingTVG;
+	}
+	
+	public static ImageIcon retrieveWallContentRatingTVMA() {
+		if (wallContentRatingTVMA == null) {
+			wallContentRatingTVMA = retrieveAndScaleImage(ImageName.ContentRating_TVMA, WALL_CONTENT_RATING_SIZE);
+		}
+		
+		return wallContentRatingTVMA;
+	}
+	
+	public static ImageIcon retrieveWallContentRatingTVPG() {
+		if (wallContentRatingTVPG == null) {
+			wallContentRatingTVPG = retrieveAndScaleImage(ImageName.ContentRating_TVPG, WALL_CONTENT_RATING_SIZE);
+		}
+		
+		return wallContentRatingTVPG;
+	}
+	
+	public static ImageIcon retrieveWallContentRatingTVY() {
+		if (wallContentRatingTVY == null) {
+			wallContentRatingTVY = retrieveAndScaleImage(ImageName.ContentRating_TVY, WALL_CONTENT_RATING_SIZE);
+		}
+		
+		return wallContentRatingTVY;
+	}
+	
+	public static ImageIcon retrieveWallContentRatingTVY7() {
+		if (wallContentRatingTVY7 == null) {
+			wallContentRatingTVY7 = retrieveAndScaleImage(ImageName.ContentRating_TVY7, WALL_CONTENT_RATING_SIZE);
+		}
+		
+		return wallContentRatingTVY7;
+	}
+	
+	public static ImageIcon retrieveWallIMDb() {
+		if (wallIMDb == null) {
+			wallIMDb = retrieveAndScaleImageByHeight(ImageName.IMDb, WALL_IMDB_SIZE);
+		}
+		
+		return wallIMDb;
+	}
+	
+	public static ImageIcon retrieveWallStar() {
+		if (wallStar == null) {
+			wallStar = retrieveAndScaleImage(ImageName.Star, WALL_STAR_SIZE);
+		}
+		
+		return wallStar;
+	}
+	
 	private static ImageIcon retrieveImage(ImageName imageName) {
 		return new ImageIcon(ImageRetriever.class.getResource(imageName.value));
 	}
@@ -199,6 +282,21 @@ public final class ImageRetriever {
 
 		if (scaleFactor != 0d) {
 			result = new ImageIcon(result.getImage().getScaledInstance(width, (int)height, Image.SCALE_SMOOTH));
+		}
+
+		return result;
+	}
+	
+	private static ImageIcon retrieveAndScaleImageByHeight(ImageName imageName, int height) {
+		ImageIcon result = null;
+
+		result = retrieveImage(imageName);
+
+		double scaleFactor = (double)height / (double)result.getIconHeight();
+		double width = scaleFactor * (double)result.getIconWidth();
+
+		if (scaleFactor != 0d) {
+			result = new ImageIcon(result.getImage().getScaledInstance((int)width, height, Image.SCALE_SMOOTH));
 		}
 
 		return result;

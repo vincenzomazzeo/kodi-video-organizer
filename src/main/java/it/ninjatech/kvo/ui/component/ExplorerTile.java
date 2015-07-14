@@ -1,10 +1,10 @@
 package it.ninjatech.kvo.ui.component;
 
+import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.UIUtils;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -56,7 +56,7 @@ public class ExplorerTile extends WebPanel {
 
 		WebPanel background = new WebPanel(new BorderLayout());
 		if (this.fanart == null) {
-			background.setBackground(new Color(33, 39, 43));
+			background.setBackground(Colors.BACKGROUND_MISSING_IMAGE);
 		}
 		else {
 			background.add(new WebImage(this.fanart), BorderLayout.CENTER);
@@ -67,7 +67,7 @@ public class ExplorerTile extends WebPanel {
 		poster.setRound(2);
 
 		WebPanel info = makeInfoPane(size, posterSize, posterMargin, title, year, rate, genre);
-		info.setBackground(new Color(76, 80, 82, 150));
+		info.setBackground(Colors.BACKGROUND_INFO);
 
 		WebOverlay backOverlay = new WebOverlay(background, info, SwingUtilities.CENTER, SwingUtilities.BOTTOM);
 
@@ -95,19 +95,19 @@ public class ExplorerTile extends WebPanel {
 		WebLabel titleL = new WebLabel(title);
 		infoTop.add(titleL, BorderLayout.CENTER);
 		TooltipManager.setTooltip(titleL, title, TooltipWay.up, 0);
-		titleL.setForeground(new Color(86, 119, 252));
-		titleL.setFontSize(16);
 		titleL.setMargin(5);
-		titleL.setShadeColor(Color.BLACK);
+		titleL.setFontSize(16);
+		titleL.setForeground(Colors.FOREGROUND_TITLE);
+		titleL.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
 		titleL.setDrawShade(true);
 
 		WebLabel yearL = new WebLabel(year);
 		infoTop.add(yearL, BorderLayout.EAST);
-		yearL.setForeground(Color.WHITE);
-		yearL.setFontSize(14);
 		yearL.setHorizontalAlignment(SwingConstants.RIGHT);
 		yearL.setMargin(5);
-		yearL.setShadeColor(Color.BLACK);
+		yearL.setFontSize(14);
+		yearL.setForeground(Colors.FOREGROUND_STANDARD);
+		yearL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
 		yearL.setDrawShade(true);
 
 		WebPanel infoBottom = new WebPanel();
@@ -116,21 +116,21 @@ public class ExplorerTile extends WebPanel {
 
 		WebLabel rateL = new WebLabel(rate);
 		infoBottom.add(rateL, BorderLayout.WEST);
-		rateL.setForeground(Color.WHITE);
-		rateL.setFontSize(12);
 		rateL.setMargin(5);
+		rateL.setFontSize(12);
 		rateL.setItalicFont();
-		rateL.setShadeColor(Color.BLACK);
+		rateL.setForeground(Colors.FOREGROUND_STANDARD);
+		rateL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
 		rateL.setDrawShade(true);
 
 		WebLabel genreL = new WebLabel(genre);
 		infoBottom.add(genreL, BorderLayout.CENTER);
-		genreL.setForeground(new Color(121, 124, 127));
-		genreL.setFontSize(12);
 		genreL.setHorizontalAlignment(SwingConstants.RIGHT);
 		genreL.setMargin(5);
+		genreL.setFontSize(12);
 		genreL.setItalicFont();
-		genreL.setShadeColor(Color.BLACK);
+		genreL.setForeground(Colors.FOREGROUND_ALTERNATIVE);
+		genreL.setShadeColor(Colors.FOREGROUND_SHADE_ALTERNATIVE);
 		genreL.setDrawShade(true);
 
 		result.add(new TwoSidesPanel(SwingUtilities.VERTICAL, infoTop, infoBottom));

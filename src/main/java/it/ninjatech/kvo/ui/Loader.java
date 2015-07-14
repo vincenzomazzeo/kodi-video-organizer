@@ -5,6 +5,7 @@ import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
+import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.AbstractWorker;
@@ -119,6 +120,9 @@ public class Loader extends WebFrame {
 			notifyUpdate("Reading settings", 10);
 			SettingsHandler.init();
 
+			notifyUpdate("Initializing Transiction Effect Handler", 11);
+			TransictionEffectExecutor.init();
+			
 			notifyUpdate("Initializing Async Manager", 15);
 			AsyncManager.init();
 			

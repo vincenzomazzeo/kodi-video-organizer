@@ -22,22 +22,22 @@ public class AsyncManager {
 	public static void shutdown() {
 		if (self != null) {
 			try {
-				self.executors.shutdownNow();
+				self.executor.shutdownNow();
 			}
 			catch (Exception e) {}
 			self = null;
 		}
 	}
 
-	private final ExecutorService executors;
+	private final ExecutorService executor;
 	private final AsyncHandler<TvSerieTileImagesAsyncJob> tvSerieTileHandler;
 	
 	private AsyncManager() {
-		this.executors = Executors.newFixedThreadPool(1);
+		this.executor = Executors.newFixedThreadPool(1);
 		
 		this.tvSerieTileHandler = new AsyncHandler<>();
 		
-		this.executors.submit(this.tvSerieTileHandler);
+		this.executor.submit(this.tvSerieTileHandler);
 	}
 	
 	public void submit(String id, TvSerieTileImagesAsyncJob job, AsyncJobListener<TvSerieTileImagesAsyncJob> listener) {

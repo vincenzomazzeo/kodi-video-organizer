@@ -3,6 +3,7 @@ package it.ninjatech.kvo;
 import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.Loader;
+import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 
 import javax.swing.SwingUtilities;
 
@@ -26,6 +27,7 @@ public class KodiVideoOrganizer {
 
 	public static void exit() {
 		ConnectionHandler.shutdown();
+		TransictionEffectExecutor.shutdown();
 		AsyncManager.shutdown();
 
 		System.exit(0);
