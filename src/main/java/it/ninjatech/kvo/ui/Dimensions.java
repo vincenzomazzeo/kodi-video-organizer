@@ -93,31 +93,39 @@ public final class Dimensions {
 	}
 
 	public static Dimension getTvSerieFanartSliderBannerSize() {
-		return getTvSerieFanartSize(37, 1000, 185);
+		return getTvSerieFanartSize(50, 1000, 185);
 	}
 	
 	public static Dimension getTvSerieFanartSliderCharacterSize() {
-		return getTvSerieFanartSize(200, 512, 512);
+		return getTvSerieFanartSize(150, 512, 512);
 	}
 	
 	public static Dimension getTvSerieFanartSliderClearartSize() {
-		return getTvSerieFanartSize(200, 500, 281);
+		return getTvSerieFanartSize(150, 500, 281);
 	}
 	
 	public static Dimension getTvSerieFanartSliderFanartSize() {
-		return getTvSerieFanartSize(200, 1920, 1080);
+		return getTvSerieFanartSize(150, 1920, 1080);
 	}
 	
 	public static Dimension getTvSerieFanartSliderLandscapeSize() {
-		return getTvSerieFanartSize(200, 500, 281);
+		return getTvSerieFanartSize(150, 500, 281);
 	}
 	
 	public static Dimension getTvSerieFanartSliderLogoSize() {
-		return getTvSerieFanartSize(37, 400, 155);
+		return getTvSerieFanartSize(75, 400, 155);
 	}
 	
 	public static Dimension getTvSerieFanartSliderPosterSize() {
-		return getTvSerieFanartSize(200, 1000, 1426);
+		return getTvSerieFanartSize(150, 1000, 1426);
+	}
+	
+	public static Dimension getTvSerieSeasonSliderSize() {
+		return getTvSerieFanartSize(150, 400, 578);
+	}
+	
+	public static Dimension getTvSerieActorSliderSize() {
+		return getTvSerieFanartSize(150, 300, 450);
 	}
 	
 	private static Dimension getTvSerieFanartSize(int preferredHeight, int realWidth, int realHeight) {

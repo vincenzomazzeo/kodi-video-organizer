@@ -3,16 +3,21 @@ package it.ninjatech.kvo.test;
 import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
+import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
-import it.ninjatech.kvo.ui.tvserie.TvSerieView;
+import it.ninjatech.kvo.ui.tvserie.TvSerieController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 
 import com.alee.laf.rootpane.WebFrame;
+import com.alee.laf.scroll.WebScrollPane;
 
 public class TvSerieWall extends WebFrame implements WindowListener {
 
@@ -25,28 +30,37 @@ public class TvSerieWall extends WebFrame implements WindowListener {
 		EnhancedLocaleMap.init();
 		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
 		
-		TvSerieWall tvSerieWall = new TvSerieWall();
+//		TvSerie tvSerie = new TvSerie("121361", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
+		TvSerie tvSerie = new TvSerie("72158", "One Tree Hill", EnhancedLocaleMap.getByLanguage("it"));
+		TheTvDbManager.getInstance().getData(tvSerie);
+		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("/Users/Shared/Well/Multimedia/Video/TV Series")) ;
+		tvSeriesPathEntity.addTvSerie(new File("/Users/Shared/Well/Multimedia/Video/TV Series/One Tree Hill"));
+		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
+		tvSeriePathEntity.setTvSerie(tvSerie);
+		
+		TvSerieWall tvSerieWall = new TvSerieWall(tvSeriePathEntity);
 		
 		tvSerieWall.setVisible(true);
 	}
 	
-	private TvSerieWall() {
+	private TvSerieWall(TvSeriePathEntity tvSeriePathEntity) {
 		super();
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addWindowListener(this);
 		
-		setResizable(false);
-		
-		init();
+		init(tvSeriePathEntity);
 		setSize(new Dimension(1380, 900));
 		setLocationRelativeTo(null);
 	}
 	
-	private void init() {
+	private void init(TvSeriePathEntity tvSeriePathEntity) {
 		setLayout(new BorderLayout());
 		
-		add(new TvSerieView(), BorderLayout.CENTER);
+		TvSerieController controller = new TvSerieController(tvSeriePathEntity);
+		WebScrollPane pane = new WebScrollPane(controller.getView());
+		
+		add(pane, BorderLayout.CENTER);
 	}
 
 	@Override

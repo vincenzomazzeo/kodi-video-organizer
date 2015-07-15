@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.async;
 
+import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 
 import java.util.concurrent.ExecutorService;
@@ -30,24 +31,37 @@ public class AsyncManager {
 	}
 
 	private final ExecutorService executor;
-	private final AsyncHandler<TvSerieTileImagesAsyncJob> tvSerieTileHandler;
+	private final AsyncHandler<TvSerieTileImagesAsyncJob> tvSerieTileImagesHandler;
+	private final AsyncHandler<TvSerieLocalFanartAsyncJob> tvSerieLocalFanartHandler;
 	
 	private AsyncManager() {
-		this.executor = Executors.newFixedThreadPool(1);
+		this.executor = Executors.newFixedThreadPool(2);
 		
-		this.tvSerieTileHandler = new AsyncHandler<>();
+		this.tvSerieTileImagesHandler = new AsyncHandler<>();
+		this.tvSerieLocalFanartHandler = new AsyncHandler<>();
 		
-		this.executor.submit(this.tvSerieTileHandler);
+		this.executor.submit(this.tvSerieTileImagesHandler);
+		this.executor.submit(this.tvSerieLocalFanartHandler);
 	}
 	
 	public void submit(String id, TvSerieTileImagesAsyncJob job, AsyncJobListener<TvSerieTileImagesAsyncJob> listener) {
 		System.out.printf("-> submit %s\n", id);
-		this.tvSerieTileHandler.submitJob(id, job, listener);
+		this.tvSerieTileImagesHandler.submitJob(id, job, listener);
 	}
 	
 	public void cancelTvSerieTileImagesAsyncJob(String id) {
 		System.out.printf("-> cancel %s\n", id);
-		this.tvSerieTileHandler.removeJob(id);
+		this.tvSerieTileImagesHandler.removeJob(id);
+	}
+	
+	public void submit(String id, TvSerieLocalFanartAsyncJob job, AsyncJobListener<TvSerieLocalFanartAsyncJob> listener) {
+		System.out.printf("-> submit %s\n", id);
+		this.tvSerieLocalFanartHandler.submitJob(id, job, listener);
+	}
+	
+	public void cancelTvSerieLocalFanartAsyncJob(String id) {
+		System.out.printf("-> cancel %s\n", id);
+		this.tvSerieLocalFanartHandler.removeJob(id);
 	}
 	
 }

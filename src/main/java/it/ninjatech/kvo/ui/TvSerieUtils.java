@@ -4,6 +4,7 @@ import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.worker.TvSerieFetcher;
 import it.ninjatech.kvo.worker.TvSerieFinder;
 
@@ -50,11 +51,26 @@ public final class TvSerieUtils {
 		return result;
 	}
 
+	public static EnhancedLocale getLanguage(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && tvSeriePathEntity.getTvSerie().getLanguage() != null ? tvSeriePathEntity.getTvSerie().getLanguage() : EnhancedLocaleMap.getEmptyLocale();
+	}
+	
 	public static String getTitle(TvSeriePathEntity tvSeriePathEntity) {
 		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getName()) ?
 				tvSeriePathEntity.getTvSerie().getName() : tvSeriePathEntity.getLabel();
 	}
 
+	public static String getFirstAired(TvSeriePathEntity tvSeriePathEntity) {
+		String result = "";
+
+		if (tvSeriePathEntity.getTvSerie() != null && tvSeriePathEntity.getTvSerie().getFirstAired() != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			result = sdf.format(tvSeriePathEntity.getTvSerie().getFirstAired());
+		}
+
+		return result;
+	}
+	
 	public static String getYear(TvSeriePathEntity tvSeriePathEntity) {
 		String result = "";
 
@@ -88,8 +104,37 @@ public final class TvSerieUtils {
 
 		return result;
 	}
+	
+	public static String getOverview(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getOverview()) ? tvSeriePathEntity.getTvSerie().getOverview() : "";
+	}
+	
+	public static String getStatus(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getStatus()) ? tvSeriePathEntity.getTvSerie().getStatus() : "";
+	}
+	
+	public static String getRating(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getRating()) ? tvSeriePathEntity.getTvSerie().getRating() : "";
+	}
+	
+	public static String getRatingCount(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getRatingCount()) ? tvSeriePathEntity.getTvSerie().getRatingCount() : "";
+	}
+	
+	public static String getNetwork(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getNetwork()) ? tvSeriePathEntity.getTvSerie().getNetwork() : "";
+	}
+
+	public static String getContentRating(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getContentRating()) ? tvSeriePathEntity.getTvSerie().getContentRating() : "";
+	}
+	
+	public static String getImdbId(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getImdbId()) ? tvSeriePathEntity.getTvSerie().getImdbId() : "";
+	}
 
 	private TvSerieUtils() {
 	}
 
 }
+

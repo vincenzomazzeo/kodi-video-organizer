@@ -25,25 +25,17 @@ public class TvSerieTileImagesAsyncJob extends AsyncJob {
 	private final Dimension tileSize;
 	private final Dimension tilePosterSize;
 	
-	private Exception exception;
 	private Image fanart;
 	private Image poster;
 	
 	public TvSerieTileImagesAsyncJob(TvSeriePathEntity tvSeriePathEntity, Dimension tileSize, Dimension tilePosterSize) {
 		super();
+
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.tileSize = tileSize;
 		this.tilePosterSize = tilePosterSize;
 	}
 
-	public boolean hasException() {
-		return this.exception != null;
-	}
-	
-	public Exception getException() {
-		return this.exception;
-	}
-	
 	public Image getFanart() {
 		return this.fanart;
 	}

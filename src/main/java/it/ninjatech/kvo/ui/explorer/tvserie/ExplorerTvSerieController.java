@@ -5,6 +5,7 @@ import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.Dimensions;
+import it.ninjatech.kvo.ui.UI;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,7 +30,12 @@ public class ExplorerTvSerieController implements AsyncJobListener<TvSerieTileIm
 		System.out.printf("-> notify %s\n", id);
 		TileStatus tileStatus = this.tiles.get(id);
 		tileStatus.alreadyLoaded = true;
-		tileStatus.tile.setImages(job.getFanart(), job.getPoster());
+		if (job.getException() != null) {
+			UI.get().notifyException(job.getException());
+		}
+		else {
+			tileStatus.tile.setImages(job.getFanart(), job.getPoster());
+		}
 	}
 	
 	public ExplorerTvSerieView getView() {
