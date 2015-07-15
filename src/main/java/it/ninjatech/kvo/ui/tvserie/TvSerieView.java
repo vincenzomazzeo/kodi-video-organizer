@@ -6,7 +6,6 @@ import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.SwingConstants;
@@ -80,7 +79,7 @@ public class TvSerieView extends WebPanel {
 		
 		WebOverlay starOverlay = new WebOverlay(star, ratingL, SwingConstants.CENTER, SwingConstants.CENTER);
 		ratingPane.add(starOverlay);
-		starOverlay.setBackground(new Color(0, 0, 0, 0));
+		starOverlay.setBackground(Colors.TRANSPARENT);
 		
 		WebLabel ratingCountL = new WebLabel(ratingCount);
 		ratingPane.add(ratingCountL);

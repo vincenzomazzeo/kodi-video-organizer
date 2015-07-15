@@ -2,46 +2,82 @@ package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
+import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.transictioneffect.HorizontalScrollTransictionEffect;
 import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
 
-import com.alee.laf.button.WebButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+
+import com.alee.extended.image.WebDecoratedImage;
+import com.alee.extended.image.WebDecoratedImageStyle;
+import com.alee.extended.layout.VerticalFlowLayout;
+import com.alee.extended.painter.BorderPainter;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
+import com.alee.managers.style.skin.web.WebLabelPainter;
 
 public class TvSerieFanartSlider extends WebPanel implements ActionListener {
+
+	private enum FanartType {
+		Banner("Banner", Dimensions.getTvSerieFanartSliderBannerSize()),
+		Character("Character", Dimensions.getTvSerieFanartSliderCharacterSize()),
+		Clearart("Clearart", Dimensions.getTvSerieFanartSliderClearartSize()),
+		Fanart("Fanart", Dimensions.getTvSerieFanartSliderFanartSize()),
+		Landscape("Landscape", Dimensions.getTvSerieFanartSliderLandscapeSize()),
+		Logo("Logo", Dimensions.getTvSerieFanartSliderLogoSize()),
+		Poster("Poster", Dimensions.getTvSerieFanartSliderPosterSize());
+
+		private final String name;
+		private final Dimension size;
+		private ImageIcon voidImage;
+
+		private FanartType(String name, Dimension size) {
+			this.name = name;
+			this.size = size;
+		}
+	}
 
 	private static final long serialVersionUID = 3976307574433882162L;
 	private static final int HGAP = 20;
 
-	private final WebPanel[] panes;
-	private WebButton left;
-	private WebButton right;
+	private final EnumMap<FanartType, WebPanel> panes;
+	private JButton left;
+	private JButton right;
 	private WebScrollPane slider;
-	
-	protected TvSerieFanartSlider() {
-		super(new BorderLayout());
 
-		this.panes = new WebPanel[7];
-		
+	protected TvSerieFanartSlider() {
+		super(new BorderLayout(10, 0));
+
+		this.panes = new EnumMap<>(FanartType.class);
+
 		init();
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == this.left) {
 			final Rectangle visibleRect = this.slider.getViewport().getViewRect();
-			
-			for (int i = this.panes.length - 1; i >= 0; i--) {
-				WebPanel pane = this.panes[i];
+
+			List<WebPanel> panes = new ArrayList<>(this.panes.values());
+			Collections.reverse(panes);
+			for (WebPanel pane : panes) {
 				Rectangle paneBounds = pane.getBounds();
 				if (paneBounds.x < visibleRect.x) {
 					visibleRect.x = -(visibleRect.x - paneBounds.x + HGAP - 1);
@@ -54,8 +90,8 @@ public class TvSerieFanartSlider extends WebPanel implements ActionListener {
 		else if (source == this.right) {
 			final Rectangle visibleRect = this.slider.getViewport().getViewRect();
 			int viewportVisibleRightMargin = visibleRect.x + visibleRect.width;
-			
-			for (WebPanel pane : this.panes) {
+
+			for (WebPanel pane : this.panes.values()) {
 				Rectangle paneBounds = pane.getBounds();
 				if ((paneBounds.x + paneBounds.width) > viewportVisibleRightMargin) {
 					visibleRect.x = paneBounds.x + paneBounds.width - visibleRect.x - visibleRect.width + HGAP - 1;
@@ -68,57 +104,98 @@ public class TvSerieFanartSlider extends WebPanel implements ActionListener {
 	}
 
 	private void init() {
-		setBackground(Colors.BACKGROUND_MISSING_IMAGE);
-		
-		this.left = new WebButton("<");
-		add(this.left, BorderLayout.WEST);
+		setBackground(Colors.BACKGROUND_INFO);
+
+		WebPanel leftPane = new WebPanel(new VerticalFlowLayout(VerticalFlowLayout.MIDDLE));
+		add(leftPane, BorderLayout.WEST);
+		leftPane.setOpaque(false);
+		this.left = new JButton(ImageRetriever.retrieveWallArrowLeft());
+		leftPane.add(this.left);
 		this.left.addActionListener(this);
-		this.right = new WebButton(">");
-		add(this.right, BorderLayout.EAST);
+		this.left.setOpaque(false);
+		this.left.setContentAreaFilled(false);
+		this.left.setBorderPainted(false);
+		this.left.setFocusable(false);
+		this.left.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		WebPanel rightPane = new WebPanel(new VerticalFlowLayout(VerticalFlowLayout.MIDDLE));
+		add(rightPane, BorderLayout.EAST);
+		rightPane.setOpaque(false);
+		this.right = new JButton(ImageRetriever.retrieveWallArrowRight());
+		rightPane.add(this.right);
 		this.right.addActionListener(this);
-		
+		this.right.setOpaque(false);
+		this.right.setContentAreaFilled(false);
+		this.right.setBorderPainted(false);
+		this.right.setFocusable(false);
+		this.right.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
 		WebPanel viewport = new WebPanel(new FlowLayout(FlowLayout.LEFT, HGAP, 10));
-		viewport.setBackground(Colors.BACKGROUND_MISSING_IMAGE);
-		
-		this.panes[0] = new WebPanel(new BorderLayout());
-		viewport.add(this.panes[0]);
-		this.panes[0].setPreferredSize(Dimensions.getTvSerieFanartSliderBannerSize());
-		this.panes[0].add(new WebLabel("banner"));
-		
-		this.panes[1] = new WebPanel(new BorderLayout());
-		viewport.add(this.panes[1]);
-		this.panes[1].setPreferredSize(Dimensions.getTvSerieFanartSliderCharacterSize());
-		this.panes[1].add(new WebLabel("character"));
-		
-		this.panes[2] = new WebPanel(new BorderLayout());
-		viewport.add(this.panes[2]);
-		this.panes[2].setPreferredSize(Dimensions.getTvSerieFanartSliderClearartSize());
-		this.panes[2].add(new WebLabel("clearart"));
-		
-		this.panes[3] = new WebPanel(new BorderLayout());
-		viewport.add(this.panes[3]);
-		this.panes[3].setPreferredSize(Dimensions.getTvSerieFanartSliderFanartSize());
-		this.panes[3].add(new WebLabel("fanart"));
-		
-		this.panes[4] = new WebPanel(new BorderLayout());
-		viewport.add(this.panes[4]);
-		this.panes[4].setPreferredSize(Dimensions.getTvSerieFanartSliderLandscapeSize());
-		this.panes[4].add(new WebLabel("landscape"));
-		
-		this.panes[5] = new WebPanel(new BorderLayout());
-		viewport.add(this.panes[5]);
-		this.panes[5].setPreferredSize(Dimensions.getTvSerieFanartSliderLogoSize());
-		this.panes[5].add(new WebLabel("logo"));
-		
-		this.panes[6] = new WebPanel(new BorderLayout());
-		viewport.add(this.panes[6]);
-		this.panes[6].setPreferredSize(Dimensions.getTvSerieFanartSliderPosterSize());
-		this.panes[6].add(new WebLabel("poster"));
-		
-		this.slider = new WebScrollPane(viewport);
+		viewport.setBackground(Colors.BACKGROUND_INFO);
+
+		this.slider = new WebScrollPane(viewport, false, false);
 		add(this.slider, BorderLayout.CENTER);
 		this.slider.setHorizontalScrollBarPolicy(WebScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		this.slider.setVerticalScrollBarPolicy(WebScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+		this.panes.put(FanartType.Banner, makeFanartPane(FanartType.Banner));
+		viewport.add(this.panes.get(FanartType.Banner));
+
+		this.panes.put(FanartType.Character, makeFanartPane(FanartType.Character));
+		viewport.add(this.panes.get(FanartType.Character));
+
+		this.panes.put(FanartType.Clearart, makeFanartPane(FanartType.Clearart));
+		viewport.add(this.panes.get(FanartType.Clearart));
+
+		this.panes.put(FanartType.Fanart, makeFanartPane(FanartType.Fanart));
+		viewport.add(this.panes.get(FanartType.Fanart));
+
+		this.panes.put(FanartType.Landscape, makeFanartPane(FanartType.Landscape));
+		viewport.add(this.panes.get(FanartType.Landscape));
+
+		this.panes.put(FanartType.Logo, makeFanartPane(FanartType.Logo));
+		viewport.add(this.panes.get(FanartType.Logo));
+
+		this.panes.put(FanartType.Poster, makeFanartPane(FanartType.Poster));
+		viewport.add(this.panes.get(FanartType.Poster));
 	}
-	
+
+	private WebPanel makeFanartPane(FanartType fanartType) {
+		WebPanel result = new WebPanel(new VerticalFlowLayout(0, 0));
+		result.setOpaque(false);
+
+		if (fanartType.voidImage == null) {
+			fanartType.voidImage = UIUtils.makeEmptyIcon(fanartType.size, Colors.BACKGROUND_MISSING_IMAGE_ALPHA);
+		}
+
+		WebDecoratedImage image = new WebDecoratedImage(fanartType.voidImage);
+		result.add(image);
+		image.setMinimumSize(fanartType.size);
+		image.setShadeWidth(5);
+		image.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		image.setDrawGlassLayer(false);
+
+		result.add(UIUtils.makeVerticalFillerPane(10, false));
+
+		WebPanel namePane = new WebPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		result.add(namePane);
+		namePane.setOpaque(false);
+
+		WebLabel name = new WebLabel(fanartType.name);
+		namePane.add(name);
+		BorderPainter<WebLabel> borderPainter = new BorderPainter<>();
+		borderPainter.setRound(10);
+		borderPainter.setWidth(1);
+		borderPainter.setColor(WebDecoratedImageStyle.borderColor);
+		name.setPainter(new WebLabelPainter<>(borderPainter));
+		name.setPreferredWidth(100);
+		name.setMargin(2);
+		name.setHorizontalAlignment(SwingConstants.CENTER);
+		name.setForeground(Colors.FOREGROUND_STANDARD);
+		name.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		name.setDrawShade(true);
+
+		return result;
+	}
+
 }

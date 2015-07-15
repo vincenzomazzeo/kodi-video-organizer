@@ -9,7 +9,7 @@ import com.alee.utils.ThreadUtils;
 
 public class HorizontalScrollTransictionEffect implements TransictionEffect {
 
-	private static final int DURATION = 500;
+	private static final int DURATION = 200;
 
 	private final JScrollPane pane;
 	private final int amount;

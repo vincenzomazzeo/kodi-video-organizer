@@ -153,7 +153,7 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 		this.theTvDbPreferredLanguageCB = new WebComboBox();
 		this.theTvDbPreferredLanguageCB.setRenderer(new EnhancedLocaleLanguageComboBoxCellRenderer());
 
-		result = new GroupPanel(false, logoPane, UIUtils.makeSeparatorPane(20), theTvDbApiKeyL, this.theTvDbApikeyF, UIUtils.makeSeparatorPane(20), preferredLanguageL, this.theTvDbPreferredLanguageCB, UIUtils.makeSeparatorPane(20));
+		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, true), theTvDbApiKeyL, this.theTvDbApikeyF, UIUtils.makeVerticalFillerPane(20, true), preferredLanguageL, this.theTvDbPreferredLanguageCB, UIUtils.makeVerticalFillerPane(20, true));
 		result.setMargin(10);
 
 		return result;

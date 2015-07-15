@@ -56,7 +56,7 @@ public class ExplorerTile extends WebPanel {
 
 		WebPanel background = new WebPanel(new BorderLayout());
 		if (this.fanart == null) {
-			background.setBackground(Colors.BACKGROUND_MISSING_IMAGE);
+			background.setBackground(Colors.BACKGROUND_MISSING_IMAGE_ALPHA);
 		}
 		else {
 			background.add(new WebImage(this.fanart), BorderLayout.CENTER);
@@ -67,7 +67,7 @@ public class ExplorerTile extends WebPanel {
 		poster.setRound(2);
 
 		WebPanel info = makeInfoPane(size, posterSize, posterMargin, title, year, rate, genre);
-		info.setBackground(Colors.BACKGROUND_INFO);
+		info.setBackground(Colors.BACKGROUND_INFO_ALPHA);
 
 		WebOverlay backOverlay = new WebOverlay(background, info, SwingUtilities.CENTER, SwingUtilities.BOTTOM);
 
@@ -86,7 +86,7 @@ public class ExplorerTile extends WebPanel {
 		int bottomHeight = infoHeight - topHeight;
 		
 		result.setPreferredSize(new Dimension(size.width, infoHeight));
-		result.add(UIUtils.makeHorizontalFillerPane(posterMargin + posterSize.width));
+		result.add(UIUtils.makeHorizontalFillerPane(posterMargin + posterSize.width, true));
 
 		WebPanel infoTop = new WebPanel(new BorderLayout());
 		infoTop.setOpaque(false);

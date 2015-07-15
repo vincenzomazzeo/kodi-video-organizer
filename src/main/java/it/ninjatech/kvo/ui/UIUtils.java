@@ -1,23 +1,30 @@
 package it.ninjatech.kvo.ui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
 import javax.swing.ImageIcon;
 
 import com.alee.laf.panel.WebPanel;
 
 public final class UIUtils {
 
-	public static WebPanel makeSeparatorPane(int height) {
+	public static WebPanel makeVerticalFillerPane(int height, boolean opaque) {
 		WebPanel result = new WebPanel();
 		
 		result.setPreferredHeight(height);
+		result.setOpaque(opaque);
 		
 		return result;
 	}
 	
-	public static WebPanel makeHorizontalFillerPane(int width) {
+	public static WebPanel makeHorizontalFillerPane(int width, boolean opaque) {
 		WebPanel result = new WebPanel();
 		
 		result.setPreferredWidth(width);
+		result.setOpaque(opaque);
 		
 		return result;
 	}
@@ -45,6 +52,18 @@ public final class UIUtils {
 			result = ImageRetriever.retrieveWallContentRatingTVY7();
 			break;
 		}
+		
+		return result;
+	}
+	
+	public static ImageIcon makeEmptyIcon(Dimension size, Color color) {
+		ImageIcon result = null;
+		
+		BufferedImage bufferedImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
+		Graphics graphics = bufferedImage.getGraphics();
+		graphics.setColor(color);
+		graphics.fillRect(0, 0, size.width, size.height);
+		result = new ImageIcon(bufferedImage);
 		
 		return result;
 	}

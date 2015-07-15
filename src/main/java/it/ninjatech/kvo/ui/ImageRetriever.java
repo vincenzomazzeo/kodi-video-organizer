@@ -10,6 +10,8 @@ public final class ImageRetriever {
 	private enum ImageName {
 		
 		Apikey("apikey.jpg"),
+		ArrowLeft("arrow_left.png"),
+		ArrowRight("arrow_right.png"),
 		ContentRating_TV14("TV-14.png"),
 		ContentRating_TVG("TV-G.png"),
 		ContentRating_TVMA("TV-MA.png"),
@@ -42,6 +44,7 @@ public final class ImageRetriever {
 	private static final int EXPLORER_TREE_TAB_ICON_SIZE = 32;
 	private static final int MENU_BAR_BUTTON_SIZE = 40;
 	private static final int THE_TV_DB_LOGO_SIZE = 300;
+	private static final int WALL_ARROR_SIZE = 32;
 	private static final int WALL_CONTENT_RATING_SIZE = 20;
 	private static final int WALL_IMDB_SIZE = 20;
 	private static final int WALL_STAR_SIZE = 40;
@@ -61,6 +64,8 @@ public final class ImageRetriever {
 	private static ImageIcon theTvDbLogo;
 	private static ImageIcon toolBarExceptionConsole;
 	private static ImageIcon toolBarScrapersSettings;
+	private static ImageIcon wallArrowLeft;
+	private static ImageIcon wallArrowRight;
 	private static ImageIcon wallContentRatingTV14;
 	private static ImageIcon wallContentRatingTVG;
 	private static ImageIcon wallContentRatingTVMA;
@@ -188,6 +193,22 @@ public final class ImageRetriever {
 		}
 		
 		return toolBarScrapersSettings;
+	}
+	
+	public static ImageIcon retrieveWallArrowLeft() {
+		if (wallArrowLeft == null) {
+			wallArrowLeft = retrieveAndScaleImage(ImageName.ArrowLeft, WALL_ARROR_SIZE);
+		}
+		
+		return wallArrowLeft;
+	}
+	
+	public static ImageIcon retrieveWallArrowRight() {
+		if (wallArrowRight == null) {
+			wallArrowRight = retrieveAndScaleImage(ImageName.ArrowRight, WALL_ARROR_SIZE);
+		}
+		
+		return wallArrowRight;
 	}
 	
 	public static ImageIcon retrieveWallContentRatingTV14() {

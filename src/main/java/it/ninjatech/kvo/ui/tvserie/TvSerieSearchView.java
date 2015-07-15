@@ -89,7 +89,7 @@ public class TvSerieSearchView extends WebDialog implements ActionListener {
 		this.languageCB = new WebComboBox();
 		this.languageCB.setRenderer(new EnhancedLocaleLanguageComboBoxCellRenderer());
 
-		result = new GroupPanel(false, UIUtils.makeSeparatorPane(20), searchL, this.searchF, UIUtils.makeSeparatorPane(20), languageL, this.languageCB, UIUtils.makeSeparatorPane(20));
+		result = new GroupPanel(false, UIUtils.makeVerticalFillerPane(20, true), searchL, this.searchF, UIUtils.makeVerticalFillerPane(20, true), languageL, this.languageCB, UIUtils.makeVerticalFillerPane(20, true));
 		result.setMargin(10);
 
 		return result;
