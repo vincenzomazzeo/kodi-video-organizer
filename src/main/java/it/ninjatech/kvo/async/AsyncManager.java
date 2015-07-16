@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.async;
 
+import it.ninjatech.kvo.async.job.AbstractTvSerieImageLoaderAsyncJob;
+import it.ninjatech.kvo.async.job.TvSerieActorsAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 
@@ -31,37 +33,44 @@ public class AsyncManager {
 	}
 
 	private final ExecutorService executor;
-	private final AsyncHandler<TvSerieTileImagesAsyncJob> tvSerieTileImagesHandler;
-	private final AsyncHandler<TvSerieLocalFanartAsyncJob> tvSerieLocalFanartHandler;
+	private final AsyncHandler<AbstractTvSerieImageLoaderAsyncJob> tvSerieImageLoaderHandler;
 	
 	private AsyncManager() {
-		this.executor = Executors.newFixedThreadPool(2);
+		this.executor = Executors.newFixedThreadPool(1);
 		
-		this.tvSerieTileImagesHandler = new AsyncHandler<>();
-		this.tvSerieLocalFanartHandler = new AsyncHandler<>();
+		this.tvSerieImageLoaderHandler = new AsyncHandler<>();
 		
-		this.executor.submit(this.tvSerieTileImagesHandler);
-		this.executor.submit(this.tvSerieLocalFanartHandler);
+		this.executor.submit(this.tvSerieImageLoaderHandler);
 	}
 	
-	public void submit(String id, TvSerieTileImagesAsyncJob job, AsyncJobListener<TvSerieTileImagesAsyncJob> listener) {
-		System.out.printf("-> submit %s\n", id);
-		this.tvSerieTileImagesHandler.submitJob(id, job, listener);
+	public void submit(String id, TvSerieTileImagesAsyncJob job, AsyncJobListener listener) {
+		System.out.printf("-> submit tile images %s\n", id);
+		this.tvSerieImageLoaderHandler.submitJob(id, job, listener);
 	}
 	
 	public void cancelTvSerieTileImagesAsyncJob(String id) {
-		System.out.printf("-> cancel %s\n", id);
-		this.tvSerieTileImagesHandler.removeJob(id);
+		System.out.printf("-> cancel tile images %s\n", id);
+		this.tvSerieImageLoaderHandler.removeJob(id);
 	}
 	
-	public void submit(String id, TvSerieLocalFanartAsyncJob job, AsyncJobListener<TvSerieLocalFanartAsyncJob> listener) {
-		System.out.printf("-> submit %s\n", id);
-		this.tvSerieLocalFanartHandler.submitJob(id, job, listener);
+	public void submit(String id, TvSerieLocalFanartAsyncJob job, AsyncJobListener listener) {
+		System.out.printf("-> submit local fanart %s\n", id);
+		this.tvSerieImageLoaderHandler.submitJob(id, job, listener);
 	}
 	
 	public void cancelTvSerieLocalFanartAsyncJob(String id) {
-		System.out.printf("-> cancel %s\n", id);
-		this.tvSerieLocalFanartHandler.removeJob(id);
+		System.out.printf("-> cancel local fanart %s\n", id);
+		this.tvSerieImageLoaderHandler.removeJob(id);
+	}
+	
+	public void submit(String id, TvSerieActorsAsyncJob job, AsyncJobListener listener) {
+		System.out.printf("-> submit actors %s\n", id);
+		this.tvSerieImageLoaderHandler.submitJob(id, job, listener);
+	}
+	
+	public void cancelTvSerieActorsAsyncJob(String id) {
+		System.out.printf("-> cancel actors %s\n", id);
+		this.tvSerieImageLoaderHandler.removeJob(id);
 	}
 	
 }

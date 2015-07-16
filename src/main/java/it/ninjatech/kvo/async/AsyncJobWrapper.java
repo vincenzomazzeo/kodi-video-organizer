@@ -8,9 +8,9 @@ public class AsyncJobWrapper<Job extends AsyncJob> implements Serializable {
 
 	private final String id;
 	private final Job job;
-	private final AsyncJobListener<Job> listener;
+	private final AsyncJobListener listener;
 	
-	public AsyncJobWrapper(String id, Job job, AsyncJobListener<Job> listener) {
+	public AsyncJobWrapper(String id, Job job, AsyncJobListener listener) {
 		this.id = id;
 		this.job = job;
 		this.listener = listener;
@@ -24,7 +24,7 @@ public class AsyncJobWrapper<Job extends AsyncJob> implements Serializable {
 		return this.job;
 	}
 
-	protected AsyncJobListener<Job> getListener() {
+	protected AsyncJobListener getListener() {
 		return this.listener;
 	}
 	

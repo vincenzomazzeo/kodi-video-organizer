@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
+import it.ninjatech.kvo.async.AsyncJob;
 import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ExplorerTvSerieController implements AsyncJobListener<TvSerieTileImagesAsyncJob> {
+public class ExplorerTvSerieController implements AsyncJobListener {
 
 	private final ExplorerTvSerieModel model;
 	private final ExplorerTvSerieView view;
@@ -26,7 +27,7 @@ public class ExplorerTvSerieController implements AsyncJobListener<TvSerieTileIm
 	}
 
 	@Override
-	public void notify(String id, TvSerieTileImagesAsyncJob job) {
+	public void notify(String id, AsyncJob job) {
 		System.out.printf("-> notify %s\n", id);
 		TileStatus tileStatus = this.tiles.get(id);
 		tileStatus.alreadyLoaded = true;
@@ -34,7 +35,7 @@ public class ExplorerTvSerieController implements AsyncJobListener<TvSerieTileIm
 			UI.get().notifyException(job.getException());
 		}
 		else {
-			tileStatus.tile.setImages(job.getFanart(), job.getPoster());
+			tileStatus.tile.setImages(((TvSerieTileImagesAsyncJob)job).getFanart(), ((TvSerieTileImagesAsyncJob)job).getPoster());
 		}
 	}
 	

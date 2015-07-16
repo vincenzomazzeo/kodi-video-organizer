@@ -1,6 +1,5 @@
 package it.ninjatech.kvo.async.job;
 
-import it.ninjatech.kvo.async.AsyncJob;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.util.Utils;
@@ -10,12 +9,13 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class TvSerieTileImagesAsyncJob extends AsyncJob {
+public class TvSerieTileImagesAsyncJob extends AbstractTvSerieImageLoaderAsyncJob {
 
 	private static final long serialVersionUID = 3590654815985906200L;
 	private static final String FANTART = "fanart.jpg";
@@ -29,38 +29,46 @@ public class TvSerieTileImagesAsyncJob extends AsyncJob {
 	private Image poster;
 	
 	public TvSerieTileImagesAsyncJob(TvSeriePathEntity tvSeriePathEntity, Dimension tileSize, Dimension tilePosterSize) {
-		super();
+		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory, LoadType.Cache, LoadType.Remote));
 
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.tileSize = tileSize;
 		this.tilePosterSize = tilePosterSize;
 	}
 
+	@Override
+	protected void execute() {
+		try {
+			System.out.printf("-> executing tile images %s\n", this.tvSeriePathEntity.getId());
+			this.fanart = getImage(this.tvSeriePathEntity.getPath(), FANTART, 
+			                       String.format("%s_%s", this.tvSeriePathEntity.getId(), FANTART), 
+			                       this.tvSeriePathEntity.getTvSerie().getFanart(), 
+			                       this.tileSize);
+			this.poster = getImage(this.tvSeriePathEntity.getPath(), POSTER, 
+			                       String.format("%s_%s", this.tvSeriePathEntity.getId(), POSTER), 
+			                       this.tvSeriePathEntity.getTvSerie().getPoster(), 
+			                       this.tilePosterSize);
+//			BufferedImage fanart = getImage(FANTART, this.tvSeriePathEntity.getTvSerie().getFanart());
+//			BufferedImage poster = getImage(POSTER, this.tvSeriePathEntity.getTvSerie().getPoster());
+//			
+//			if (fanart != null) {
+//				this.fanart = fanart.getScaledInstance(this.tileSize.width, this.tileSize.height, Image.SCALE_SMOOTH);
+//			}
+//			if (poster != null) {
+//				this.poster = poster.getScaledInstance(this.tilePosterSize.width, this.tilePosterSize.height, Image.SCALE_SMOOTH);
+//			}
+		}
+		catch (Exception e) {
+			this.exception = e;
+		}
+	}
+	
 	public Image getFanart() {
 		return this.fanart;
 	}
 
 	public Image getPoster() {
 		return this.poster;
-	}
-
-	@Override
-	protected void execute() {
-		try {
-			System.out.printf("-> executing %s\n", this.tvSeriePathEntity.getId());
-			BufferedImage fanart = getImage(FANTART, this.tvSeriePathEntity.getTvSerie().getFanart());
-			BufferedImage poster = getImage(POSTER, this.tvSeriePathEntity.getTvSerie().getPoster());
-			
-			if (fanart != null) {
-				this.fanart = fanart.getScaledInstance(this.tileSize.width, this.tileSize.height, Image.SCALE_SMOOTH);
-			}
-			if (poster != null) {
-				this.poster = poster.getScaledInstance(this.tilePosterSize.width, this.tilePosterSize.height, Image.SCALE_SMOOTH);
-			}
-		}
-		catch (Exception e) {
-			this.exception = e;
-		}
 	}
 	
 	private BufferedImage getImage(String name, String remoteName) throws IOException {

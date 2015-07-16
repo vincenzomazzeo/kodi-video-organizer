@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.async;
 
-public interface AsyncJobListener<Job extends AsyncJob> {
+public interface AsyncJobListener {
 
-	public void notify(String id, Job job);
+	public void notify(String id, AsyncJob job);
 	
 }

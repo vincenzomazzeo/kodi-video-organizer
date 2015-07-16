@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.connector.thetvdb.model;
 
+import it.ninjatech.kvo.model.TvSerie;
+
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -15,6 +17,12 @@ public class TheTvDbActors {
 	private List<TheTvDbActor> actors;
 	
 	protected TheTvDbActors() {}
+	
+	public void fill(TvSerie tvSerie) {
+		for (TheTvDbActor actor : this.actors) {
+			actor.fill(tvSerie);
+		}
+	}
 	
 	protected List<TheTvDbActor> getActors() {
 		return this.actors;
@@ -38,6 +46,10 @@ public class TheTvDbActors {
 		
 		protected TheTvDbActor() {}
 
+		protected void fill(TvSerie tvSerie) {
+			tvSerie.addActor(this.realName, this.roleName, this.path, this.sortOrder);
+		}
+		
 		protected String getPath() {
 			return this.path;
 		}

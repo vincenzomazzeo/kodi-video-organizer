@@ -1,113 +1,56 @@
 package it.ninjatech.kvo.async.job;
 
-import it.ninjatech.kvo.async.AsyncJob;
+import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
+import java.util.EnumSet;
 
-import javax.imageio.ImageIO;
-
-public class TvSerieLocalFanartAsyncJob extends AsyncJob {
+public class TvSerieLocalFanartAsyncJob extends AbstractTvSerieImageLoaderAsyncJob {
 
 	private static final long serialVersionUID = 1042321164421715360L;
-	private static final String BANNER = "banner.jpg";
-	private static final String CHARACTER = "character.png";
-	private static final String CLEARART = "clearart.png";
-	private static final String FANART = "fanart.jpg";
-	private static final String LANDSCAPE = "landscape.jpg";
-	private static final String LOGO = "logo.png";
-	private static final String POSTER = "poster.jpg";
 	
 	private final TvSeriePathEntity tvSeriePathEntity;
-	private final Dimension bannerSize;
-	private final Dimension characterSize;
-	private final Dimension clearartSize;
-	private final Dimension fanartSize;
-	private final Dimension landscapeSize;
-	private final Dimension logoSize;
-	private final Dimension posterSize;
+	private final TvSerieFanart fanart;
+	private final Dimension size;
 	
-	private Image banner;
-	private Image character;
-	private Image clearart;
-	private Image fanart;
-	private Image landscape;
-	private Image logo;
-	private Image poster;
+	private Image image;
 	
-	public TvSerieLocalFanartAsyncJob(TvSeriePathEntity tvSeriePathEntity, Dimension bannerSize, Dimension characterSize, Dimension clearartSize, Dimension fanartSize, Dimension landscapeSize, Dimension logoSize, Dimension posterSize) {
-		super();
+	public TvSerieLocalFanartAsyncJob(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart, Dimension size) {
+		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory));
 	
 		this.tvSeriePathEntity = tvSeriePathEntity;
-		this.bannerSize = bannerSize;
-		this.characterSize = characterSize;
-		this.clearartSize = clearartSize;
-		this.fanartSize = fanartSize;
-		this.landscapeSize = landscapeSize;
-		this.logoSize = logoSize;
-		this.posterSize = posterSize;
-	}
-
-	public Image getBanner() {
-		return this.banner;
-	}
-
-	public Image getCharacter() {
-		return this.character;
-	}
-
-	public Image getClearart() {
-		return this.clearart;
-	}
-
-	public Image getFanart() {
-		return this.fanart;
-	}
-
-	public Image getLandscape() {
-		return this.landscape;
-	}
-
-	public Image getLogo() {
-		return this.logo;
-	}
-
-	public Image getPoster() {
-		return this.poster;
+		this.fanart = fanart;
+		this.size = size;
 	}
 
 	@Override
 	protected void execute() {
 		try {
-			System.out.printf("-> executing %s\n", this.tvSeriePathEntity.getId());
-			this.banner = getImage(BANNER, bannerSize);
-			this.character = getImage(CHARACTER, characterSize);
-			this.clearart = getImage(CLEARART, clearartSize);
-			this.fanart = getImage(FANART, fanartSize);
-			this.landscape = getImage(LANDSCAPE, landscapeSize);
-			this.logo = getImage(LOGO, logoSize);
-			this.poster = getImage(POSTER, posterSize);
+			System.out.printf("-> executing local fanart %s\n", this.tvSeriePathEntity.getId());
+			
+			this.image = getImage(this.tvSeriePathEntity.getPath(), this.fanart.getFilename(), null, null, this.size);
+			
+//			File image = new File(this.tvSeriePathEntity.getPath(), this.fanart.getFilename());
+//			if (image.exists()) {
+//				System.out.printf("-> [%s] image %s found in directory\n", this.tvSeriePathEntity.getId(), this.fanart.getName());
+//				this.image = ImageIO.read(image);
+//				
+//				this.image = this.image.getScaledInstance(this.size.width, this.size.height, Image.SCALE_SMOOTH);
+//			}
 		}
 		catch (Exception e) {
 			this.exception = e;
 		}
 	}
 	
-	private Image getImage(String name, Dimension size) throws IOException {
-		Image result = null;
-		
-		File image = new File(this.tvSeriePathEntity.getPath(), name);
-		if (image.exists()) {
-			System.out.printf("-> [%s] image %s found in directory\n", this.tvSeriePathEntity.getId(), name);
-			result = ImageIO.read(image);
-			
-			result = result.getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH);
-		}
-		
-		return result;
+	public TvSerieFanart getFanart() {
+		return this.fanart;
+	}
+
+	public Image getImage() {
+		return this.image;
 	}
 	
 }

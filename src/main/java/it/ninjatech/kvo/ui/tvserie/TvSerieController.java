@@ -1,40 +1,59 @@
 package it.ninjatech.kvo.ui.tvserie;
 
+import it.ninjatech.kvo.async.AsyncJob;
 import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
+import it.ninjatech.kvo.async.job.TvSerieActorsAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
+import it.ninjatech.kvo.model.TvSerieActor;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.UI;
 
 import java.awt.Dimension;
 
-public class TvSerieController implements AsyncJobListener<TvSerieLocalFanartAsyncJob> {
+public class TvSerieController implements AsyncJobListener {
 
-	private final TvSeriePathEntity tvSeriePathEntity;
 	private final TvSerieView view;
-	
-	public TvSerieController(TvSeriePathEntity tvSeriePathEntity) {
-		this.tvSeriePathEntity = tvSeriePathEntity;
-		this.view = new TvSerieView(this, this.tvSeriePathEntity);
+
+	public TvSerieController() {
+		this.view = new TvSerieView(this);
 	}
 
 	@Override
-	public void notify(String id, TvSerieLocalFanartAsyncJob job) {
+	public void notify(String id, AsyncJob job) {
 		if (job.getException() != null) {
 			UI.get().notifyException(job.getException());
 		}
 		else {
-			this.view.setFanart(job.getBanner(), job.getCharacter(), job.getClearart(), job.getFanart(), job.getLandscape(), job.getLogo(), job.getPoster());
+			if (job.getClass().equals(TvSerieLocalFanartAsyncJob.class)) {
+				this.view.getFanartSlider().setFanart(((TvSerieLocalFanartAsyncJob)job).getFanart(), ((TvSerieLocalFanartAsyncJob)job).getImage());
+			}
+			else if (job.getClass().equals(TvSerieActorsAsyncJob.class)) {
+				this.view.getActorSlider().setActor(((TvSerieActorsAsyncJob)job).getActor(), ((TvSerieActorsAsyncJob)job).getImage());
+			}
 		}
 	}
-
+	
 	public TvSerieView getView() {
 		return this.view;
 	}
 
-	protected void loadLocalFanart(Dimension bannerSize, Dimension characterSize, Dimension clearartSize, Dimension fanartSize, Dimension landscapeSize, Dimension logoSize, Dimension posterSize) {
-		TvSerieLocalFanartAsyncJob job = new TvSerieLocalFanartAsyncJob(this.tvSeriePathEntity, bannerSize, characterSize, clearartSize, fanartSize, landscapeSize, logoSize, posterSize);
-		AsyncManager.getInstance().submit(this.tvSeriePathEntity.getId(), job, this);
+	public void showTvSerie(TvSeriePathEntity tvSeriePathEntity) {
+		// TODO gestire activation/deactivation
+		this.view.fill(tvSeriePathEntity);
+		this.view.getSeasonSlider().fill(tvSeriePathEntity);
+		this.view.getActorSlider().fill(tvSeriePathEntity);
+
+		for (TvSerieFanartSlider.FanartType fanart : TvSerieFanartSlider.FanartType.values()) {
+			TvSerieLocalFanartAsyncJob job = new TvSerieLocalFanartAsyncJob(tvSeriePathEntity, fanart.getFanart(), fanart.getSize());
+			AsyncManager.getInstance().submit(String.format("%s_%s", tvSeriePathEntity.getId(), fanart), job, this);
+		}
+
+		Dimension actorSize = this.view.getActorSlider().getActorSize();
+		for (TvSerieActor actor : tvSeriePathEntity.getTvSerie().getActors()) {
+			TvSerieActorsAsyncJob job = new TvSerieActorsAsyncJob(actor, actorSize);
+			AsyncManager.getInstance().submit(actor.getId(), job, this);
+		}
 	}
-	
+
 }

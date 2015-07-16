@@ -1,48 +1,54 @@
 package it.ninjatech.kvo.ui.tvserie;
 
+import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.AbstractSlider;
+import it.ninjatech.kvo.ui.component.SliderPane;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import com.alee.extended.image.WebDecoratedImage;
-import com.alee.laf.panel.WebPanel;
+public class TvSerieFanartSlider extends AbstractSlider {
 
-public class TvSerieFanartSlider extends AbstractSlider implements HierarchyListener {
+	protected enum FanartType {
+		Banner(TvSerieFanart.Banner, Dimensions.getTvSerieFanartSliderBannerSize()),
+		Character(TvSerieFanart.Character, Dimensions.getTvSerieFanartSliderCharacterSize()),
+		Clearart(TvSerieFanart.Clearart, Dimensions.getTvSerieFanartSliderClearartSize()),
+		Fanart(TvSerieFanart.Fanart, Dimensions.getTvSerieFanartSliderFanartSize()),
+		Landscape(TvSerieFanart.Landscape, Dimensions.getTvSerieFanartSliderLandscapeSize()),
+		Logo(TvSerieFanart.Logo, Dimensions.getTvSerieFanartSliderLogoSize()),
+		Poster(TvSerieFanart.Poster, Dimensions.getTvSerieFanartSliderPosterSize());
 
-	private enum FanartType {
-		Banner("Banner", Dimensions.getTvSerieFanartSliderBannerSize()),
-		Character("Character", Dimensions.getTvSerieFanartSliderCharacterSize()),
-		Clearart("Clearart", Dimensions.getTvSerieFanartSliderClearartSize()),
-		Fanart("Fanart", Dimensions.getTvSerieFanartSliderFanartSize()),
-		Landscape("Landscape", Dimensions.getTvSerieFanartSliderLandscapeSize()),
-		Logo("Logo", Dimensions.getTvSerieFanartSliderLogoSize()),
-		Poster("Poster", Dimensions.getTvSerieFanartSliderPosterSize());
-
-		private final String name;
+		private final TvSerieFanart fanart;
 		private final Dimension size;
 		private ImageIcon voidImage;
 
-		private FanartType(String name, Dimension size) {
-			this.name = name;
+		private FanartType(TvSerieFanart fanart, Dimension size) {
+			this.fanart = fanart;
 			this.size = size;
 		}
+
+		protected TvSerieFanart getFanart() {
+			return this.fanart;
+		}
+		
+		protected Dimension getSize() {
+			return this.size;
+		}
+		
 	}
 
 	private static final long serialVersionUID = 3976307574433882162L;
 
 	private final TvSerieController controller;
-	private final EnumMap<FanartType, WebPanel> panes;
+	private final EnumMap<FanartType, SliderPane> panes;
 
 	protected TvSerieFanartSlider(TvSerieController controller) {
 		super();
@@ -50,86 +56,42 @@ public class TvSerieFanartSlider extends AbstractSlider implements HierarchyList
 		this.controller = controller;
 		this.panes = new EnumMap<>(FanartType.class);
 
-		addHierarchyListener(this);
-		
 		init();
 	}
 	
 	@Override
-	public void hierarchyChanged(HierarchyEvent event) {
-		if ((event.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) == HierarchyEvent.SHOWING_CHANGED && getParent().isShowing()) {
-			this.controller.loadLocalFanart(FanartType.Banner.size, 
-			                                FanartType.Character.size, 
-			                                FanartType.Clearart.size, 
-			                                FanartType.Fanart.size, 
-			                                FanartType.Landscape.size, 
-			                                FanartType.Logo.size, 
-			                                FanartType.Poster.size);
-		}
-	}
-
-	@Override
-	protected List<WebPanel> getPanes() {
+	protected List<SliderPane> getPanes() {
 		return new ArrayList<>(this.panes.values());
 	}
 	
-	protected void setFanart(Image banner, Image character, Image clearart, Image fanart, Image landscape, Image logo, Image poster) {
-		if (banner != null) {
-			((WebDecoratedImage)this.panes.get(FanartType.Banner).getComponent(0)).setIcon(new ImageIcon(banner), true);
-		}
-		if (character != null) {
-			((WebDecoratedImage)this.panes.get(FanartType.Character).getComponent(0)).setIcon(new ImageIcon(character), true);
-		}
-		if (clearart != null) {
-			((WebDecoratedImage)this.panes.get(FanartType.Clearart).getComponent(0)).setIcon(new ImageIcon(clearart), true);
-		}
-		if (fanart != null) {
-			((WebDecoratedImage)this.panes.get(FanartType.Fanart).getComponent(0)).setIcon(new ImageIcon(fanart), true);
-		}
-		if (landscape != null) {
-			((WebDecoratedImage)this.panes.get(FanartType.Landscape).getComponent(0)).setIcon(new ImageIcon(landscape), true);
-		}
-		if (logo != null) {
-			((WebDecoratedImage)this.panes.get(FanartType.Logo).getComponent(0)).setIcon(new ImageIcon(logo), true);
-		}
-		if (poster != null) {
-			((WebDecoratedImage)this.panes.get(FanartType.Poster).getComponent(0)).setIcon(new ImageIcon(poster), true);
+	protected void setFanart(TvSerieFanart fanart, Image image) {
+		if (image != null) {
+			for (FanartType fanartType : FanartType.values()) {
+				if (fanartType.fanart == fanart) {
+					((SliderPane)this.panes.get(fanartType)).setImage(SliderPane.makeImagePane(new ImageIcon(image), fanartType.size));
+					break;
+				}
+			}
 		}
 	}
 
 	private void init() {
 		setBackground(Colors.BACKGROUND_INFO);
 		
-		this.panes.put(FanartType.Banner, makeFanartPane(FanartType.Banner));
-		addPane(this.panes.get(FanartType.Banner));
-
-		this.panes.put(FanartType.Character, makeFanartPane(FanartType.Character));
-		addPane(this.panes.get(FanartType.Character));
-
-		this.panes.put(FanartType.Clearart, makeFanartPane(FanartType.Clearart));
-		addPane(this.panes.get(FanartType.Clearart));
-
-		this.panes.put(FanartType.Fanart, makeFanartPane(FanartType.Fanart));
-		addPane(this.panes.get(FanartType.Fanart));
-
-		this.panes.put(FanartType.Landscape, makeFanartPane(FanartType.Landscape));
-		addPane(this.panes.get(FanartType.Landscape));
-
-		this.panes.put(FanartType.Logo, makeFanartPane(FanartType.Logo));
-		addPane(this.panes.get(FanartType.Logo));
-
-		this.panes.put(FanartType.Poster, makeFanartPane(FanartType.Poster));
-		addPane(this.panes.get(FanartType.Poster));
+		for (FanartType fanart : FanartType.values()) {
+			this.panes.put(fanart, makeFanartPane(fanart));
+			addPane(this.panes.get(fanart));
+		}
 	}
 
-	private WebPanel makeFanartPane(FanartType fanartType) {
-		WebPanel result = null;
+	private SliderPane makeFanartPane(FanartType fanartType) {
+		SliderPane result = null;
 
 		if (fanartType.voidImage == null) {
 			fanartType.voidImage = UIUtils.makeEmptyIcon(fanartType.size, Colors.BACKGROUND_MISSING_IMAGE_ALPHA);
 		}
 
-		result = makeFanartPane(fanartType.voidImage, fanartType.size, fanartType.name);
+		result = new SliderPane(fanartType.voidImage, fanartType.size, makeTitlePane(fanartType.fanart.getName()));
 
 		return result;
 	}

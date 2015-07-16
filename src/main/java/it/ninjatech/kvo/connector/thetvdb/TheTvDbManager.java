@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.connector.thetvdb;
 
+import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbActors;
+import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbBanners;
 import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbLanguages;
 import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSerie;
 import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSeriesSearchResult;
@@ -121,6 +123,28 @@ public class TheTvDbManager {
 				get(TheTvDbTvSerie.class);
 
 		theTvDbTvSerie.fill(tvSerie);
+		
+		TheTvDbActors theTvDbActors = this.webResource.
+				path("/api").
+				path(String.format("/%s", this.apiKey)).
+				path("/series").
+				path(String.format("/%s", tvSerie.getProviderId())).
+				path("/actors.xml").
+				type(MediaType.TEXT_XML).
+				get(TheTvDbActors.class);
+		
+		theTvDbActors.fill(tvSerie);
+		
+		TheTvDbBanners theTvDbBanners = this.webResource.
+				path("/api").
+				path(String.format("/%s", this.apiKey)).
+				path("/series").
+				path(String.format("/%s", tvSerie.getProviderId())).
+				path("/banners.xml").
+				type(MediaType.TEXT_XML).
+				get(TheTvDbBanners.class);
+		
+		theTvDbBanners.fill(tvSerie);
 	}
 
 	public File getImage(String path) {
@@ -128,14 +152,6 @@ public class TheTvDbManager {
 				path("/banners").
 				path(String.format("/%s", path)).
 				get(File.class);
-	}
-
-	public void getBanners(TvSerie tvSerie) {
-		// TODO
-	}
-
-	public void getActors(TvSerie tvSerie) {
-		// TODO
 	}
 
 }

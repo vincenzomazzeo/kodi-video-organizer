@@ -28,7 +28,7 @@ public class AsyncHandler<Job extends AsyncJob> implements Runnable {
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								jobWrapper.getListener().notify(jobWrapper.getId(), jobWrapper.getJob());
+								jobWrapper.getListener().notify(jobWrapper.getId(), (AsyncJob)jobWrapper.getJob());
 							}
 						});
 					}
@@ -39,7 +39,7 @@ public class AsyncHandler<Job extends AsyncJob> implements Runnable {
 		}
 	}
 
-	protected void submitJob(String id, Job job, AsyncJobListener<Job> listener) {
+	protected void submitJob(String id, Job job, AsyncJobListener listener) {
 		this.activeJobs.add(id);
 		this.jobs.offer(new AsyncJobWrapper<Job>(id, job, listener));
 	}

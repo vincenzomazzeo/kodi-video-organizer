@@ -2,24 +2,20 @@ package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.transictioneffect.HorizontalScrollTransictionEffect;
 import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
-import com.alee.extended.image.WebDecoratedImage;
 import com.alee.extended.image.WebDecoratedImageStyle;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.painter.BorderPainter;
@@ -33,37 +29,25 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 	private static final long serialVersionUID = -2999333376641121483L;
 	private static final int HGAP = 20;
 	
-	protected static WebPanel makeFanartPane(ImageIcon voidImage, Dimension size, String title) {
-		WebPanel result = new WebPanel(new VerticalFlowLayout(0, 0));
+	protected static WebPanel makeTitlePane(String title) {
+		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		
 		result.setOpaque(false);
 
-		WebDecoratedImage image = new WebDecoratedImage(voidImage);
-		result.add(image);
-		image.setMinimumSize(size);
-		image.setShadeWidth(5);
-		image.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		image.setDrawGlassLayer(false);
-
-		result.add(UIUtils.makeVerticalFillerPane(10, false));
-
-		WebPanel namePane = new WebPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		result.add(namePane);
-		namePane.setOpaque(false);
-
-		WebLabel name = new WebLabel(title);
-		namePane.add(name);
+		WebLabel titleL = new WebLabel(title);
+		result.add(titleL);
 		BorderPainter<WebLabel> borderPainter = new BorderPainter<>();
 		borderPainter.setRound(10);
 		borderPainter.setWidth(1);
 		borderPainter.setColor(WebDecoratedImageStyle.borderColor);
-		name.setPainter(new WebLabelPainter<>(borderPainter));
-		name.setPreferredWidth(100);
-		name.setMargin(2);
-		name.setHorizontalAlignment(SwingConstants.CENTER);
-		name.setForeground(Colors.FOREGROUND_STANDARD);
-		name.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		name.setDrawShade(true);
-
+		titleL.setPainter(new WebLabelPainter<>(borderPainter));
+		titleL.setPreferredWidth(100);
+		titleL.setMargin(2);
+		titleL.setHorizontalAlignment(SwingConstants.CENTER);
+		titleL.setForeground(Colors.FOREGROUND_STANDARD);
+		titleL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		titleL.setDrawShade(true);
+		
 		return result;
 	}
 	
@@ -77,7 +61,7 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 		init();
 	}
 	
-	protected abstract List<WebPanel> getPanes();
+	protected abstract List<SliderPane> getPanes();
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -85,7 +69,7 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 		if (source == this.left) {
 			final Rectangle visibleRect = this.slider.getViewport().getViewRect();
 
-			List<WebPanel> panes = getPanes();
+			List<SliderPane> panes = getPanes();
 			for (int i =  panes.size() - 1; i >= 0; i--) {
 				WebPanel pane = panes.get(i);
 				Rectangle paneBounds = pane.getBounds();
@@ -101,7 +85,7 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 			final Rectangle visibleRect = this.slider.getViewport().getViewRect();
 			int viewportVisibleRightMargin = visibleRect.x + visibleRect.width;
 
-			for (WebPanel pane : getPanes()) {
+			for (SliderPane pane : getPanes()) {
 				Rectangle paneBounds = pane.getBounds();
 				if ((paneBounds.x + paneBounds.width) > viewportVisibleRightMargin) {
 					visibleRect.x = paneBounds.x + paneBounds.width - visibleRect.x - visibleRect.width + HGAP - 1;
@@ -113,7 +97,7 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 		}
 	}
 
-	protected void addPane(WebPanel pane) {
+	protected void addPane(SliderPane pane) {
 		((WebPanel)this.slider.getViewport().getView()).add(pane);
 	}
 	
@@ -142,7 +126,7 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 		this.right.setFocusable(false);
 		this.right.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-		WebPanel viewport = new WebPanel(new FlowLayout(FlowLayout.LEFT, HGAP, 10));
+		WebPanel viewport = new WebPanel(new FlowLayout(FlowLayout.CENTER, HGAP, 10));
 		viewport.setBackground(Colors.BACKGROUND_INFO);
 
 		this.slider = new WebScrollPane(viewport, false, false);

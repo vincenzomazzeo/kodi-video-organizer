@@ -13,7 +13,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -58,15 +57,32 @@ public class TvSerieView extends WebPanel implements MouseListener {
 
 	private final TvSerieController controller;
 	private WebPopOver plotPopOver;
+	private WebPanel titlePane;
+	private WebImage language;
+	private WebLabel title;
+	private WebLabel status;
+	private WebPanel ratingPane;
+	private WebLabel rating;
+	private WebLabel ratingCount;
+	private WebPanel genresPane;
+	private WebLabel genres;
+	private WebPanel infoPane;
+	private WebLabel firstAired;
+	private WebLabel network;
+	private WebImage contentRating;
+	private WebLinkLabel imdb;
+	private WebImage plot;
 	private TvSerieFanartSlider fanartSlider;
+	private TvSerieSeasonSlider seasonSlider;
+	private TvSerieActorSlider actorSlider;
 
-	protected TvSerieView(TvSerieController controller, TvSeriePathEntity tvSeriePathEntity) {
+	protected TvSerieView(TvSerieController controller) {
 		super();
 
 		this.controller = controller;
 
-		init(tvSeriePathEntity);
-		initPlotPopOver(tvSeriePathEntity);
+		init();
+		initPlotPopOver();
 	}
 
 	@Override
@@ -91,37 +107,110 @@ public class TvSerieView extends WebPanel implements MouseListener {
 	@Override
 	public void mouseExited(MouseEvent event) {
 	}
-	
-	protected void setFanart(Image banner, Image character, Image clearart, Image fanart, Image landscape, Image logo, Image poster) {
-		this.fanartSlider.setFanart(banner, character, clearart, fanart, landscape, logo, poster);
+
+	protected void fill(TvSeriePathEntity tvSeriePathEntity) {
+		// Title
+		String status = TvSerieUtils.getStatus(tvSeriePathEntity);
+		String rating = TvSerieUtils.getRating(tvSeriePathEntity);
+		String ratingCount = TvSerieUtils.getRatingCount(tvSeriePathEntity);
+
+		this.titlePane.removeAll();
+
+		this.language.setIcon(tvSeriePathEntity.getTvSerie().getLanguage().getLanguageFlag());
+		this.titlePane.add(this.language);
+		this.title.setText(TvSerieUtils.getTitle(tvSeriePathEntity));
+		this.titlePane.add(this.title);
+		if (StringUtils.isNotEmpty(status)) {
+			this.status.setText(String.format("(%s)", status));
+			this.titlePane.add(this.status);
+		}
+		if (StringUtils.isNotEmpty(rating)) {
+			this.rating.setText(rating);
+			this.titlePane.add(ratingPane);
+			if (StringUtils.isNotEmpty(ratingCount)) {
+				this.ratingCount.setText(ratingCount);
+			}
+		}
+
+		// Genres
+		this.genres.setText(TvSerieUtils.getGenre(tvSeriePathEntity));
+
+		// Info
+		String firstAired = TvSerieUtils.getFirstAired(tvSeriePathEntity);
+		String network = TvSerieUtils.getNetwork(tvSeriePathEntity);
+		String contentRating = TvSerieUtils.getContentRating(tvSeriePathEntity);
+		String imdbId = TvSerieUtils.getImdbId(tvSeriePathEntity);
+		String overview = TvSerieUtils.getOverview(tvSeriePathEntity);
+
+		this.infoPane.removeAll();
+
+		if (StringUtils.isNotBlank(firstAired)) {
+			this.firstAired.setText(String.format("First Aired: %s", firstAired));
+			this.infoPane.add(this.firstAired);
+		}
+		if (StringUtils.isNotBlank(network)) {
+			this.network.setText(String.format("Network: %s", network));
+			this.infoPane.add(this.network);
+		}
+		if (StringUtils.isNotBlank(contentRating)) {
+			this.contentRating.setIcon(UIUtils.getContentRatingWallIcon(contentRating));
+			this.infoPane.add(this.contentRating);
+		}
+		if (StringUtils.isNotBlank(imdbId)) {
+			this.imdb.setIcon(ImageRetriever.retrieveWallIMDb());
+			this.infoPane.add(this.imdb);
+			this.imdb.setLink(String.format("http://www.imdb.com/title/%s", imdbId), false);
+		}
+		if (StringUtils.isNotBlank(overview)) {
+			((WebTextArea)((WebScrollPane)this.plotPopOver.getContentPane().getComponent(0)).getViewport().getView()).setText(overview);
+			this.infoPane.add(this.plot);
+		}
 	}
-	
-	private void init(TvSeriePathEntity tvSeriePathEntity) {
+
+	protected TvSerieFanartSlider getFanartSlider() {
+		return this.fanartSlider;
+	}
+
+	protected TvSerieSeasonSlider getSeasonSlider() {
+		return this.seasonSlider;
+	}
+
+	protected TvSerieActorSlider getActorSlider() {
+		return this.actorSlider;
+	}
+
+	private void init() {
 		setLayout(new VerticalFlowLayout());
 
 		setBackground(Colors.BACKGROUND_INFO);
 		setPreferredWidth(0);
 
 		this.fanartSlider = new TvSerieFanartSlider(this.controller);
-		
-		add(makeTitlePane(tvSeriePathEntity));
-		add(makeGenresPane(tvSeriePathEntity));
-		add(makeInfoPane(tvSeriePathEntity));
+		this.seasonSlider = new TvSerieSeasonSlider(this.controller);
+		this.actorSlider = new TvSerieActorSlider(this.controller);
+
+		makeTitlePane();
+		makeGenresPane();
+		makeInfoPane();
+
+		add(this.titlePane);
+		add(this.genresPane);
+		add(this.infoPane);
 		add(WebSeparator.createHorizontal());
 		add(makeSliderPane("Fanarts", this.fanartSlider));
 		add(WebSeparator.createHorizontal());
-		add(makeSliderPane("Seasons", new TvSerieSeasonSlider()));
+		add(makeSliderPane("Seasons", this.seasonSlider));
 		add(WebSeparator.createHorizontal());
-		add(makeSliderPane("Actors", new TvSerieActorSlider()));
+		add(makeSliderPane("Actors", this.actorSlider));
 	}
 
-	private void initPlotPopOver(TvSeriePathEntity tvSeriePathEntity) {
+	private void initPlotPopOver() {
 		this.plotPopOver = new WebPopOver(UI.get());
 		this.plotPopOver.setMargin(2);
 		this.plotPopOver.setMovable(false);
 		this.plotPopOver.setLayout(new BorderLayout());
 
-		WebTextArea plot = new WebTextArea(TvSerieUtils.getOverview(tvSeriePathEntity));
+		WebTextArea plot = new WebTextArea();
 		plot.setLineWrap(true);
 		plot.setWrapStyleWord(true);
 		plot.setEditable(false);
@@ -137,129 +226,87 @@ public class TvSerieView extends WebPanel implements MouseListener {
 		this.plotPopOver.add(scrollPane, BorderLayout.CENTER);
 	}
 
-	private WebPanel makeTitlePane(TvSeriePathEntity tvSeriePathEntity) {
-		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+	private void makeTitlePane() {
+		this.titlePane = new WebPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+		this.titlePane.setBackground(Colors.BACKGROUND_INFO);
 
-		result.setBackground(Colors.BACKGROUND_INFO);
+		this.language = new WebImage();
 
-		String status = TvSerieUtils.getStatus(tvSeriePathEntity);
-		String rating = TvSerieUtils.getRating(tvSeriePathEntity);
-		String ratingCount = TvSerieUtils.getRatingCount(tvSeriePathEntity);
+		this.title = new WebLabel();
+		this.title.setMargin(2, 10, 5, 10);
+		this.title.setFontSize(30);
+		this.title.setForeground(Colors.FOREGROUND_TITLE);
+		this.title.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
+		this.title.setDrawShade(true);
 
-		WebImage languageI = new WebImage(TvSerieUtils.getLanguage(tvSeriePathEntity).getLanguageFlag());
-		result.add(languageI);
+		this.status = new WebLabel();
+		this.status.setFontSize(20);
+		this.status.setForeground(Colors.FOREGROUND_STANDARD);
+		this.status.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		this.status.setDrawShade(true);
 
-		WebLabel titleL = new WebLabel(TvSerieUtils.getTitle(tvSeriePathEntity));
-		result.add(titleL);
-		titleL.setMargin(2, 10, 5, 10);
-		titleL.setFontSize(30);
-		titleL.setForeground(Colors.FOREGROUND_TITLE);
-		titleL.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
-		titleL.setDrawShade(true);
+		this.ratingPane = new WebPanel(new VerticalFlowLayout());
+		this.ratingPane.setOpaque(false);
 
-		if (StringUtils.isNotEmpty(status)) {
-			WebLabel statusL = new WebLabel(String.format("(%s)", status));
-			result.add(statusL);
-			statusL.setFontSize(20);
-			statusL.setForeground(Colors.FOREGROUND_STANDARD);
-			statusL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-			statusL.setDrawShade(true);
-		}
+		WebImage star = new WebImage(ImageRetriever.retrieveWallStar());
 
-		if (StringUtils.isNotEmpty(rating)) {
-			WebPanel ratingPane = new WebPanel(new VerticalFlowLayout());
-			result.add(ratingPane);
-			ratingPane.setOpaque(false);
+		this.rating = new WebLabel();
+		this.rating.setFontSize(14);
+		this.rating.setForeground(Colors.FOREGROUND_STANDARD);
+		this.rating.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		this.rating.setDrawShade(true);
 
-			WebImage star = new WebImage(ImageRetriever.retrieveWallStar());
+		WebOverlay starOverlay = new WebOverlay(star, this.rating, SwingConstants.CENTER, SwingConstants.CENTER);
+		this.ratingPane.add(starOverlay);
+		starOverlay.setBackground(Colors.TRANSPARENT);
 
-			WebLabel ratingL = new WebLabel(rating);
-			ratingL.setFontSize(14);
-			ratingL.setForeground(Colors.FOREGROUND_STANDARD);
-			ratingL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-			ratingL.setDrawShade(true);
-
-			WebOverlay starOverlay = new WebOverlay(star, ratingL, SwingConstants.CENTER, SwingConstants.CENTER);
-			ratingPane.add(starOverlay);
-			starOverlay.setBackground(Colors.TRANSPARENT);
-
-			if (StringUtils.isNotEmpty(ratingCount)) {
-				WebLabel ratingCountL = new WebLabel(ratingCount);
-				ratingPane.add(ratingCountL);
-				ratingCountL.setHorizontalAlignment(SwingConstants.CENTER);
-				ratingCountL.setFontSize(10);
-				ratingCountL.setForeground(Colors.FOREGROUND_STANDARD);
-				ratingCountL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-				ratingCountL.setDrawShade(true);
-			}
-		}
-
-		return result;
+		this.ratingCount = new WebLabel();
+		this.ratingPane.add(this.ratingCount);
+		this.ratingCount.setHorizontalAlignment(SwingConstants.CENTER);
+		this.ratingCount.setFontSize(10);
+		this.ratingCount.setForeground(Colors.FOREGROUND_STANDARD);
+		this.ratingCount.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		this.ratingCount.setDrawShade(true);
 	}
 
-	private WebPanel makeGenresPane(TvSeriePathEntity tvSeriePathEntity) {
-		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+	private void makeGenresPane() {
+		this.genresPane = new WebPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		this.genresPane.setBackground(Colors.BACKGROUND_INFO);
 
-		result.setBackground(Colors.BACKGROUND_INFO);
-
-		WebLabel genresL = new WebLabel(TvSerieUtils.getGenre(tvSeriePathEntity));
-		result.add(genresL);
-		genresL.setMargin(0, 5, 0, 5);
-		genresL.setFontSize(14);
-		genresL.setForeground(Colors.FOREGROUND_STANDARD);
-		genresL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		genresL.setDrawShade(true);
-
-		return result;
+		this.genres = new WebLabel();
+		this.genresPane.add(this.genres);
+		this.genres.setMargin(0, 5, 0, 5);
+		this.genres.setFontSize(14);
+		this.genres.setForeground(Colors.FOREGROUND_STANDARD);
+		this.genres.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		this.genres.setDrawShade(true);
 	}
 
-	private WebPanel makeInfoPane(TvSeriePathEntity tvSeriePathEntity) {
-		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+	private WebPanel makeInfoPane() {
+		this.infoPane = new WebPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+		this.infoPane.setBackground(Colors.BACKGROUND_INFO);
 
-		result.setBackground(Colors.BACKGROUND_INFO);
+		this.firstAired = new WebLabel();
+		this.firstAired.setFontSize(12);
+		this.firstAired.setForeground(Colors.FOREGROUND_STANDARD);
+		this.firstAired.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		this.firstAired.setDrawShade(true);
 
-		String firstAired = TvSerieUtils.getFirstAired(tvSeriePathEntity);
-		String network = TvSerieUtils.getNetwork(tvSeriePathEntity);
-		String contentRating = TvSerieUtils.getContentRating(tvSeriePathEntity);
-		String imdbId = TvSerieUtils.getImdbId(tvSeriePathEntity);
+		this.network = new WebLabel();
+		this.network.setFontSize(12);
+		this.network.setForeground(Colors.FOREGROUND_STANDARD);
+		this.network.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		this.network.setDrawShade(true);
 
-		if (StringUtils.isNotBlank(firstAired)) {
-			WebLabel firstAiredL = new WebLabel(String.format("First Aired: %s", firstAired));
-			result.add(firstAiredL);
-			firstAiredL.setFontSize(12);
-			firstAiredL.setForeground(Colors.FOREGROUND_STANDARD);
-			firstAiredL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-			firstAiredL.setDrawShade(true);
-		}
+		this.contentRating = new WebImage();
 
-		if (StringUtils.isNotBlank(network)) {
-			WebLabel networkL = new WebLabel(String.format("Network: %s", network));
-			result.add(networkL);
-			networkL.setFontSize(12);
-			networkL.setForeground(Colors.FOREGROUND_STANDARD);
-			networkL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-			networkL.setDrawShade(true);
-		}
+		this.imdb = new WebLinkLabel();
 
-		if (StringUtils.isNotBlank(contentRating)) {
-			WebImage contentRatingI = new WebImage(UIUtils.getContentRatingWallIcon(contentRating));
-			result.add(contentRatingI);
-		}
+		this.plot = new WebImage(ImageRetriever.retrieveWallBaloon());
+		this.plot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		this.plot.addMouseListener(this);
 
-		if (StringUtils.isNotBlank(imdbId)) {
-			WebLinkLabel imdbL = new WebLinkLabel(ImageRetriever.retrieveWallIMDb());
-			result.add(imdbL);
-			imdbL.setLink(String.format("http://www.imdb.com/title/%s", imdbId), false);
-		}
-
-		if (StringUtils.isNotBlank(TvSerieUtils.getOverview(tvSeriePathEntity))) {
-			WebImage plotI = new WebImage(ImageRetriever.retrieveWallBaloon());
-			result.add(plotI);
-			plotI.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			plotI.addMouseListener(this);
-		}
-
-		return result;
+		return this.infoPane;
 	}
 
 }

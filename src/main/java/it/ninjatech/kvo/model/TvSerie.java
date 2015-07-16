@@ -1,7 +1,15 @@
 package it.ninjatech.kvo.model;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.UUID;
 
 public class TvSerie {
@@ -22,16 +30,63 @@ public class TvSerie {
 	private String fanart;
 	private String poster;
 	private String imdbId;
+	private final Map<Integer, TvSerieSeason> seasons;
+	private final SortedSet<TvSerieActor> actors;
+	private final EnumMap<TvSerieImage.Type, Set<TvSerieImage>> images;
 
 	public TvSerie(String id, String providerId, String name, EnhancedLocale language) {
 		this.id = id;
 		this.providerId = providerId;
 		this.name = name;
 		this.language = language;
+		this.seasons = new TreeMap<>();
+		this.actors = new TreeSet<>();
+		this.images = new EnumMap<>(TvSerieImage.Type.class);
 	}
 
 	public TvSerie(String providerId, String name, EnhancedLocale language) {
 		this(UUID.randomUUID().toString(), providerId, name, language);
+	}
+	
+	public void addEpisode(Integer seasonNumber, TvSerieEpisode episode) {
+		TvSerieSeason season = this.seasons.get(seasonNumber);
+		if (season == null) {
+			season = new TvSerieSeason(seasonNumber);
+			this.seasons.put(seasonNumber, season);
+		}
+		season.addEpisode(episode);
+	}
+	
+	public void addActor(String name, String role, String path, Integer sortOrder) {
+		this.actors.add(new TvSerieActor(name, role, path, sortOrder));
+	}
+	
+	public void addImage(String path, String type, Integer season, BigDecimal rating, String ratingCount) {
+		TvSerieImage image = new TvSerieImage(path, type, season, rating, ratingCount);
+		
+		if (image.getType() == TvSerieImage.Type.Season) {
+			this.seasons.get(image.getSeason()).addImage(image);
+		}
+		else {
+			Set<TvSerieImage> images = this.images.get(image.getType());
+			if (images == null) {
+				images = new TreeSet<>(TvSerieImage.makeRatingComparator());
+				this.images.put(image.getType(), images);
+			}
+			images.add(image);
+		}
+	}
+	
+	public int seasonCount() {
+		return this.seasons.size();
+	}
+	
+	public Set<Integer> getSeasonNumbers() {
+		return Collections.unmodifiableSortedSet((SortedSet<Integer>)this.seasons.keySet());
+	}
+	
+	public Set<TvSerieActor> getActors() {
+		return Collections.unmodifiableSortedSet(this.actors);
 	}
 
 	public String getId() {

@@ -12,6 +12,8 @@ import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -19,7 +21,7 @@ import java.io.File;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.scroll.WebScrollPane;
 
-public class TvSerieWall extends WebFrame implements WindowListener {
+public class TvSerieWall extends WebFrame implements WindowListener, HierarchyListener {
 
 	private static final long serialVersionUID = 4530104483604809939L;
 
@@ -30,8 +32,8 @@ public class TvSerieWall extends WebFrame implements WindowListener {
 		EnhancedLocaleMap.init();
 		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
 		
-//		TvSerie tvSerie = new TvSerie("121361", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
-		TvSerie tvSerie = new TvSerie("72158", "One Tree Hill", EnhancedLocaleMap.getByLanguage("it"));
+		TvSerie tvSerie = new TvSerie("121361", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
+//		TvSerie tvSerie = new TvSerie("72158", "One Tree Hill", EnhancedLocaleMap.getByLanguage("it"));
 		TheTvDbManager.getInstance().getData(tvSerie);
 		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("/Users/Shared/Well/Multimedia/Video/TV Series")) ;
 		tvSeriesPathEntity.addTvSerie(new File("/Users/Shared/Well/Multimedia/Video/TV Series/One Tree Hill"));
@@ -43,8 +45,15 @@ public class TvSerieWall extends WebFrame implements WindowListener {
 		tvSerieWall.setVisible(true);
 	}
 	
+	private final TvSeriePathEntity tvSeriePathEntity;
+	private TvSerieController controller;
+	
 	private TvSerieWall(TvSeriePathEntity tvSeriePathEntity) {
 		super();
+		
+		this.tvSeriePathEntity = tvSeriePathEntity;
+		
+		addHierarchyListener(this);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addWindowListener(this);
@@ -57,8 +66,8 @@ public class TvSerieWall extends WebFrame implements WindowListener {
 	private void init(TvSeriePathEntity tvSeriePathEntity) {
 		setLayout(new BorderLayout());
 		
-		TvSerieController controller = new TvSerieController(tvSeriePathEntity);
-		WebScrollPane pane = new WebScrollPane(controller.getView());
+		this.controller = new TvSerieController();
+		WebScrollPane pane = new WebScrollPane(this.controller.getView());
 		
 		add(pane, BorderLayout.CENTER);
 	}
@@ -90,6 +99,13 @@ public class TvSerieWall extends WebFrame implements WindowListener {
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
+	}
+	
+	@Override
+	public void hierarchyChanged(HierarchyEvent event) {
+		if ((event.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) == HierarchyEvent.SHOWING_CHANGED && isShowing()) {
+			this.controller.showTvSerie(this.tvSeriePathEntity);
+		}
 	}
 	
 }

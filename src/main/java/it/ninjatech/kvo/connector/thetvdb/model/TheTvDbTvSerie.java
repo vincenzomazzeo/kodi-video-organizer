@@ -3,6 +3,7 @@ package it.ninjatech.kvo.connector.thetvdb.model;
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbDateAdapter;
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbPipeAdapter;
 import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.math.BigDecimal;
@@ -28,7 +29,10 @@ public class TheTvDbTvSerie {
 	
 	public void fill(TvSerie tvSerie) {
 		this.base.fill(tvSerie);
-		// TODO gestire data
+
+		for (TheTvDbEpisode episode : this.episodes) {
+			episode.fill(tvSerie);
+		}
 	}
 	
 	protected TheTvDbBase getBase() {
@@ -270,17 +274,28 @@ public class TheTvDbTvSerie {
 		@XmlElement(name = "Writer")
 		@XmlJavaTypeAdapter(TheTvDbPipeAdapter.class)
 		private List<String> writers;
-		@XmlElement(name = "airsafter_season")
-		private Integer airsAfterSeason;
-		@XmlElement(name = "airsbefore_episode")
-		private Integer airsBeforeEpisode;
-		@XmlElement(name = "airsbefore_season")
-		private Integer airsBeforeSeason;
 		@XmlElement(name = "filename")
 		private String artwork;
 		
 		protected TheTvDbEpisode() {}
 
+		protected void fill(TvSerie tvSerie) {
+			TvSerieEpisode episode = new TvSerieEpisode(String.valueOf(this.id), this.number, EnhancedLocaleMap.getByLanguage(this.language));
+			tvSerie.addEpisode(Integer.valueOf(this.seasonNumber), episode);
+			
+			episode.setDvdNumber(this.dvdNumber);
+			episode.setDirectors(this.directors);
+			episode.setName(this.name);
+			episode.setFirstAired(this.firstAired);
+			episode.setGuestStars(this.guestStarts);
+			episode.setImdbId(this.imdbId);
+			episode.setOverview(this.overview);
+			episode.setRating(this.rating != null ? this.rating.toString() : null);
+			episode.setRatingCount(this.ratingCount != null ? this.ratingCount.toString() : null);
+			episode.setWriters(this.writers);
+			episode.setArtwork(this.artwork);
+		}
+		
 		protected Integer getId() {
 			return this.id;
 		}
@@ -391,30 +406,6 @@ public class TheTvDbTvSerie {
 
 		protected void setWriters(List<String> writers) {
 			this.writers = writers;
-		}
-
-		protected Integer getAirsAfterSeason() {
-			return this.airsAfterSeason;
-		}
-
-		protected void setAirsAfterSeason(Integer airsAfterSeason) {
-			this.airsAfterSeason = airsAfterSeason;
-		}
-
-		protected Integer getAirsBeforeEpisode() {
-			return this.airsBeforeEpisode;
-		}
-
-		protected void setAirsBeforeEpisode(Integer airsBeforeEpisode) {
-			this.airsBeforeEpisode = airsBeforeEpisode;
-		}
-
-		protected Integer getAirsBeforeSeason() {
-			return this.airsBeforeSeason;
-		}
-
-		protected void setAirsBeforeSeason(Integer airsBeforeSeason) {
-			this.airsBeforeSeason = airsBeforeSeason;
 		}
 
 		protected String getArtwork() {

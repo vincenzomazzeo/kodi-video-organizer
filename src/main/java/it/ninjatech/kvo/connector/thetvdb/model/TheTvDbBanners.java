@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.connector.thetvdb.model;
 
+import it.ninjatech.kvo.model.TvSerie;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -16,6 +18,12 @@ public class TheTvDbBanners {
 	private List<TheTvDbBanner> banners;
 	
 	protected TheTvDbBanners() {}
+	
+	public void fill(TvSerie tvSerie) {
+		for (TheTvDbBanner banner : this.banners) {
+			banner.fill(tvSerie);
+		}
+	}
 	
 	protected List<TheTvDbBanner> getBanners() {
 		return this.banners;
@@ -53,6 +61,10 @@ public class TheTvDbBanners {
 		
 		protected TheTvDbBanner() {}
 
+		protected void fill(TvSerie tvSerie) {
+			tvSerie.addImage(this.bannerPath, this.type, this.season, this.rating, this.ratingCount != null ? this.ratingCount.toString() : null);
+		}
+		
 		protected String getBannerPath() {
 			return this.bannerPath;
 		}
