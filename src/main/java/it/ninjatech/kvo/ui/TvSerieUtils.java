@@ -2,6 +2,8 @@ package it.ninjatech.kvo.ui;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.model.TvSerieFanart;
+import it.ninjatech.kvo.model.TvSerieImage;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
@@ -9,7 +11,9 @@ import it.ninjatech.kvo.worker.TvSerieFetcher;
 import it.ninjatech.kvo.worker.TvSerieFinder;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -131,6 +135,22 @@ public final class TvSerieUtils {
 	
 	public static String getImdbId(TvSeriePathEntity tvSeriePathEntity) {
 		return tvSeriePathEntity.getTvSerie() != null && StringUtils.isNotBlank(tvSeriePathEntity.getTvSerie().getImdbId()) ? tvSeriePathEntity.getTvSerie().getImdbId() : "";
+	}
+	
+	public static boolean hasExtraFanarts(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().hasExtraFanarts() : false;
+	}
+	
+	public static Set<String> getExtraFanarts(TvSeriePathEntity tvSeriePathEntity) {
+		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().getExtraFanarts() : Collections.<String>emptySet();
+	}
+	
+	public static Set<TvSerieImage> getTheTvDbFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
+		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().getTheTvDbFanart(fanart) : Collections.<TvSerieImage>emptySet();
+	}
+	
+	public static Set<TvSerieImage> getFanarttvFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
+		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().getFanarttvFanart(fanart) : Collections.<TvSerieImage>emptySet();
 	}
 
 	private TvSerieUtils() {

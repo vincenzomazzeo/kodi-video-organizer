@@ -24,7 +24,7 @@ public abstract class AbstractTvSerieImageLoaderAsyncJob extends AsyncJob {
 		Cache, Directory, Remote;		
 	}
 	
-	private final String id;
+	protected final String id;
 	private final EnumSet<LoadType> loadSequence;
 	
 	protected AbstractTvSerieImageLoaderAsyncJob(String id, EnumSet<LoadType> loadSequence) {
@@ -32,6 +32,10 @@ public abstract class AbstractTvSerieImageLoaderAsyncJob extends AsyncJob {
 		this.loadSequence = loadSequence;
 	}
 	
+	public String getId() {
+		return this.id;
+	}
+
 	protected Image getImage(String directory, String name, String cacheName, String remoteName, Dimension size) throws IOException {
 		Image result = null;
 		

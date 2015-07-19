@@ -19,7 +19,7 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 	private final ExplorerTvSerieModel model;
 	private final ExplorerTvSerieView view;
 	private final Map<String, TileStatus> tiles;
-	
+
 	public ExplorerTvSerieController() {
 		this.model = new ExplorerTvSerieModel();
 		this.view = new ExplorerTvSerieView(this, this.model);
@@ -30,26 +30,28 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 	public void notify(String id, AsyncJob job) {
 		System.out.printf("-> notify %s\n", id);
 		TileStatus tileStatus = this.tiles.get(id);
-		tileStatus.alreadyLoaded = true;
-		if (job.getException() != null) {
-			UI.get().notifyException(job.getException());
-		}
-		else {
-			tileStatus.tile.setImages(((TvSerieTileImagesAsyncJob)job).getFanart(), ((TvSerieTileImagesAsyncJob)job).getPoster());
+		if (tileStatus != null) {
+			tileStatus.alreadyLoaded = true;
+			if (job.getException() != null) {
+				UI.get().notifyException(job.getException());
+			}
+			else {
+				tileStatus.tile.setImages(((TvSerieTileImagesAsyncJob)job).getFanart(), ((TvSerieTileImagesAsyncJob)job).getPoster());
+			}
 		}
 	}
-	
+
 	public ExplorerTvSerieView getView() {
 		return this.view;
 	}
-	
+
 	public void addTile(TvSeriePathEntity tvSeriePathEntity) {
 		this.model.addTile(tvSeriePathEntity);
 	}
-	
+
 	protected void handleStateChanged() {
 		Set<String> tilesToRemove = new HashSet<>(this.tiles.keySet());
-		
+
 		List<ExplorerTvSerieTileView> tiles = this.view.getVisibleTiles();
 		for (ExplorerTvSerieTileView tile : tiles) {
 			TvSeriePathEntity tvSeriePathEntity = tile.getValue();
@@ -65,7 +67,7 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 				tilesToRemove.remove(jobId);
 			}
 		}
-		
+
 		for (String tileToRemove : tilesToRemove) {
 			TileStatus tileStatus = this.tiles.remove(tileToRemove);
 			if (tileStatus.alreadyLoaded) {
@@ -76,17 +78,17 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 			}
 		}
 	}
-	
+
 	private static class TileStatus {
-		
+
 		private final ExplorerTvSerieTileView tile;
 		private boolean alreadyLoaded;
-		
+
 		private TileStatus(ExplorerTvSerieTileView tile) {
 			this.tile = tile;
 			this.alreadyLoaded = false;
 		}
-		
+
 	}
 
 }

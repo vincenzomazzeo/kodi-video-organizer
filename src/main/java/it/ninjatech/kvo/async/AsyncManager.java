@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.async;
 
 import it.ninjatech.kvo.async.job.AbstractTvSerieImageLoaderAsyncJob;
-import it.ninjatech.kvo.async.job.TvSerieActorsAsyncJob;
+import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 
@@ -63,7 +63,7 @@ public class AsyncManager {
 		this.tvSerieImageLoaderHandler.removeJob(id);
 	}
 	
-	public void submit(String id, TvSerieActorsAsyncJob job, AsyncJobListener listener) {
+	public void submit(String id, TvSerieCacheRemoteImageAsyncJob job, AsyncJobListener listener) {
 		System.out.printf("-> submit actors %s\n", id);
 		this.tvSerieImageLoaderHandler.submitJob(id, job, listener);
 	}

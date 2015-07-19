@@ -7,6 +7,7 @@ import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class TheTvDbTvSerie {
 		
 		protected TheTvDbBase() {}
 
-		protected void fill(TvSerie tvSerie) {
+		private void fill(TvSerie tvSerie) {
 			tvSerie.setName(this.name);
 			tvSerie.setLanguage(EnhancedLocaleMap.getByLanguage(this.language));
 			tvSerie.setFirstAired(this.firstAired);
@@ -100,7 +101,7 @@ public class TheTvDbTvSerie {
 			tvSerie.setGenres(this.genres);
 			tvSerie.setNetwork(this.network);
 			tvSerie.setOverview(this.overview);
-			tvSerie.setRating(this.rating != null ? this.rating.toString() : null);
+			tvSerie.setRating(this.rating != null ? this.rating.setScale(1, RoundingMode.HALF_UP).toString() : null);
 			tvSerie.setRatingCount(this.ratingCount != null ? this.ratingCount.toString() : null);
 			tvSerie.setStatus(this.status);
 			tvSerie.setBanner(this.banner);

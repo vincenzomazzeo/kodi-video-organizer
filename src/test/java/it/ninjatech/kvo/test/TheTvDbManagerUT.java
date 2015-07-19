@@ -45,7 +45,7 @@ public class TheTvDbManagerUT {
 		SettingsHandler.init();
 		EnhancedLocaleMap.init();
 		
-		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
+		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApiKey());
 
 		connector = TheTvDbManager.getInstance();
     }
@@ -56,7 +56,7 @@ public class TheTvDbManagerUT {
 		
 		assertThat(check).isNull();
 		
-		check = TheTvDbManager.getInstance().checkApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
+		check = TheTvDbManager.getInstance().checkApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApiKey());
 		
 		assertThat(check).isNotEmpty();
 	}

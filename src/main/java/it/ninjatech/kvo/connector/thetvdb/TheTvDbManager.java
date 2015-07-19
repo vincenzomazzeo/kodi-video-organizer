@@ -21,6 +21,8 @@ import com.sun.jersey.api.client.WebResource;
 
 public class TheTvDbManager {
 
+	public static final String BASE_URL = "http://thetvdb.com";
+	
 	private static TheTvDbManager self;
 
 	public static TheTvDbManager getInstance() {
@@ -28,18 +30,24 @@ public class TheTvDbManager {
 	}
 
 	private final WebResource webResource;
+	private boolean enabled;
 	private boolean active;
 	private String apiKey;
 	private List<EnhancedLocale> languages;
 
 	private TheTvDbManager() {
-		this.webResource = Client.create().resource("http://thetvdb.com");
+		this.webResource = Client.create().resource(BASE_URL);
+		this.enabled = false;
 		this.active = false;
 		this.languages = null;
 	}
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
 	public boolean isActive() {
-		return this.active;
+		return this.enabled && this.active;
 	}
 
 	public List<EnhancedLocale> getLanguages() {

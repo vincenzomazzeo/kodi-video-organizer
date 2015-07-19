@@ -46,7 +46,7 @@ public class TheTvDbActors {
 		
 		protected TheTvDbActor() {}
 
-		protected void fill(TvSerie tvSerie) {
+		private void fill(TvSerie tvSerie) {
 			tvSerie.addActor(this.realName, this.roleName, this.path, this.sortOrder);
 		}
 		

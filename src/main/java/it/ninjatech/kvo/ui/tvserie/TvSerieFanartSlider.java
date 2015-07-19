@@ -9,22 +9,29 @@ import it.ninjatech.kvo.ui.component.SliderPane;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
-public class TvSerieFanartSlider extends AbstractSlider {
+import com.alee.managers.language.data.TooltipWay;
+import com.alee.managers.tooltip.TooltipManager;
+
+public class TvSerieFanartSlider extends AbstractSlider implements MouseListener {
 
 	protected enum FanartType {
-		Banner(TvSerieFanart.Banner, Dimensions.getTvSerieFanartSliderBannerSize()),
-		Character(TvSerieFanart.Character, Dimensions.getTvSerieFanartSliderCharacterSize()),
-		Clearart(TvSerieFanart.Clearart, Dimensions.getTvSerieFanartSliderClearartSize()),
-		Fanart(TvSerieFanart.Fanart, Dimensions.getTvSerieFanartSliderFanartSize()),
-		Landscape(TvSerieFanart.Landscape, Dimensions.getTvSerieFanartSliderLandscapeSize()),
-		Logo(TvSerieFanart.Logo, Dimensions.getTvSerieFanartSliderLogoSize()),
-		Poster(TvSerieFanart.Poster, Dimensions.getTvSerieFanartSliderPosterSize());
+		Banner(TvSerieFanart.Banner, Dimensions.getTvSerieFanartSliderSize(TvSerieFanart.Banner)),
+		Character(TvSerieFanart.Character, Dimensions.getTvSerieFanartSliderSize(TvSerieFanart.Character)),
+		Clearart(TvSerieFanart.Clearart, Dimensions.getTvSerieFanartSliderSize(TvSerieFanart.Clearart)),
+		Fanart(TvSerieFanart.Fanart, Dimensions.getTvSerieFanartSliderSize(TvSerieFanart.Fanart)),
+		Landscape(TvSerieFanart.Landscape, Dimensions.getTvSerieFanartSliderSize(TvSerieFanart.Landscape)),
+		Logo(TvSerieFanart.Logo, Dimensions.getTvSerieFanartSliderSize(TvSerieFanart.Logo)),
+		Poster(TvSerieFanart.Poster, Dimensions.getTvSerieFanartSliderSize(TvSerieFanart.Poster));
 
 		private final TvSerieFanart fanart;
 		private final Dimension size;
@@ -60,6 +67,34 @@ public class TvSerieFanartSlider extends AbstractSlider {
 	}
 	
 	@Override
+	public void mouseClicked(MouseEvent event) {
+		if (SwingUtilities.isLeftMouseButton(event)) {
+			if (event.getClickCount() == 1) {
+				
+			}
+			else if (event.getClickCount() == 2) {
+				this.controller.notifyFanartDoubleClick((FanartType)((SliderPane)event.getSource()).getData());
+			}
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent event) {
+	}
+	
+	@Override
 	protected List<SliderPane> getPanes() {
 		return new ArrayList<>(this.panes.values());
 	}
@@ -68,7 +103,10 @@ public class TvSerieFanartSlider extends AbstractSlider {
 		if (image != null) {
 			for (FanartType fanartType : FanartType.values()) {
 				if (fanartType.fanart == fanart) {
-					((SliderPane)this.panes.get(fanartType)).setImage(SliderPane.makeImagePane(new ImageIcon(image), fanartType.size));
+					SliderPane pane = (SliderPane)this.panes.get(fanartType);
+					pane.setImage(SliderPane.makeImagePane(new ImageIcon(image), fanartType.size));
+					TooltipManager.removeTooltips(pane);
+					TooltipManager.addTooltip(pane, null, "<html><div text-align='center'>Single click to search for more<br />Double click for full size image</div></html>", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 					break;
 				}
 			}
@@ -92,6 +130,9 @@ public class TvSerieFanartSlider extends AbstractSlider {
 		}
 
 		result = new SliderPane(fanartType.voidImage, fanartType.size, makeTitlePane(fanartType.fanart.getName()));
+		result.setData(fanartType);
+		result.addMouseListener(this);
+		TooltipManager.addTooltip(result, null, "Single click to search for more", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 
 		return result;
 	}

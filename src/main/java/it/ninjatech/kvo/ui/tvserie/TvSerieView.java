@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.tvserie;
 
+import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
@@ -72,6 +73,7 @@ public class TvSerieView extends WebPanel implements MouseListener {
 	private WebImage contentRating;
 	private WebLinkLabel imdb;
 	private WebImage plot;
+	private WebImage extrafanarts;
 	private TvSerieFanartSlider fanartSlider;
 	private TvSerieSeasonSlider seasonSlider;
 	private TvSerieActorSlider actorSlider;
@@ -88,7 +90,13 @@ public class TvSerieView extends WebPanel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1) {
-			this.plotPopOver.show((Component)event.getSource());
+			Object source = event.getSource();
+			if (source == this.plot) {
+				this.plotPopOver.show((Component)event.getSource());
+			}
+			else if (source == this.extrafanarts) {
+				this.controller.notifyExtraFanartsClick();
+			}
 		}
 	}
 
@@ -156,14 +164,17 @@ public class TvSerieView extends WebPanel implements MouseListener {
 			this.contentRating.setIcon(UIUtils.getContentRatingWallIcon(contentRating));
 			this.infoPane.add(this.contentRating);
 		}
-		if (StringUtils.isNotBlank(imdbId)) {
+		if (StringUtils.isNotBlank(imdbId) && ImdbManager.getInstance().isEnabled()) {
 			this.imdb.setIcon(ImageRetriever.retrieveWallIMDb());
 			this.infoPane.add(this.imdb);
-			this.imdb.setLink(String.format("http://www.imdb.com/title/%s", imdbId), false);
+			this.imdb.setLink(ImdbManager.getTitleUrl(imdbId), false);
 		}
 		if (StringUtils.isNotBlank(overview)) {
 			((WebTextArea)((WebScrollPane)this.plotPopOver.getContentPane().getComponent(0)).getViewport().getView()).setText(overview);
 			this.infoPane.add(this.plot);
+		}
+		if(TvSerieUtils.hasExtraFanarts(tvSeriePathEntity)) {
+			this.infoPane.add(this.extrafanarts);
 		}
 	}
 
@@ -301,10 +312,17 @@ public class TvSerieView extends WebPanel implements MouseListener {
 		this.contentRating = new WebImage();
 
 		this.imdb = new WebLinkLabel();
+		this.imdb.setToolTipText("Find out more on IMDb");
 
 		this.plot = new WebImage(ImageRetriever.retrieveWallBaloon());
 		this.plot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		this.plot.addMouseListener(this);
+		this.plot.setToolTipText("Overview");
+		
+		this.extrafanarts = new WebImage(ImageRetriever.retrieveWallExtraFanarts());
+		this.extrafanarts.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		this.extrafanarts.addMouseListener(this);
+		this.extrafanarts.setToolTipText("Extra Fanarts");
 
 		return this.infoPane;
 	}

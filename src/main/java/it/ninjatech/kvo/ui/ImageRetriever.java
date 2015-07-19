@@ -20,10 +20,12 @@ public final class ImageRetriever {
 		ContentRating_TVY("TV-Y.png"),
 		ContentRating_TVY7("TV-Y7.png"),
 		ExceptionConsole("exception_console.png"),
+		ExtraFanarts("extra_fanarts.png"),
+		Fanarttv_Logo("fanarttv_logo.png"),
 		Folder("folder.png"),
 		Folder_Movies("folder_movies.png"),
 		Folder_TvSeries("folder_tvseries.png"),
-		IMDb("imdb.png"),
+		IMDb_Logo("imdb_logo.png"),
 		Loading("loading.gif"),
 		Scrapers_Settings("scrapers_settings.png"),
 		Star("star.png"),
@@ -43,15 +45,18 @@ public final class ImageRetriever {
 	private static final int EXPLORER_TREE_ICON_SIZE = 16;
 	private static final int EXPLORER_TREE_MENU_ICON_SIZE = 50;
 	private static final int EXPLORER_TREE_TAB_ICON_SIZE = 32;
+	private static final int FANART_CHOICE_LOGO_SIZE = 100;
+	private static final int FANARTTV_LOGO_SIZE = 285;
+	private static final int IMDB_LOGO_SIZE = 119;
 	private static final int MENU_BAR_BUTTON_SIZE = 40;
 	private static final int THE_TV_DB_LOGO_SIZE = 300;
 	private static final int WALL_ARROR_SIZE = 32;
 	private static final int WALL_BALOON_SIZE = 30;
 	private static final int WALL_CONTENT_RATING_SIZE = 20;
+	private static final int WALL_EXTRA_FANARTS_SIZE = 25;
 	private static final int WALL_IMDB_SIZE = 20;
 	private static final int WALL_STAR_SIZE = 40;
 	
-	private static ImageIcon apikey;
 	private static ImageIcon explorerTilePosterTvSerie;
 	private static ImageIcon explorerTreeFolder;
 	private static ImageIcon explorerTreeFolderMovies;
@@ -63,7 +68,6 @@ public final class ImageRetriever {
 	private static ImageIcon explorerTreeFolderTvSeriesTab;
 	private static ImageIcon explorerTreeTvSerie;
 	private static ImageIcon loading;
-	private static ImageIcon theTvDbLogo;
 	private static ImageIcon toolBarExceptionConsole;
 	private static ImageIcon toolBarScrapersSettings;
 	private static ImageIcon wallArrowLeft;
@@ -75,15 +79,12 @@ public final class ImageRetriever {
 	private static ImageIcon wallContentRatingTVPG;
 	private static ImageIcon wallContentRatingTVY;
 	private static ImageIcon wallContentRatingTVY7;
+	private static ImageIcon wallExtraFanarts;
 	private static ImageIcon wallIMDb;
 	private static ImageIcon wallStar;
 	
 	public static ImageIcon retrieveApikey() {
-		if (apikey == null) {
-			apikey = retrieveAndScaleImage(ImageName.Apikey, APIKEY_SIZE);
-		}
-		
-		return apikey;
+		return retrieveAndScaleImage(ImageName.Apikey, APIKEY_SIZE);
 	}
 	
 	public static ImageIcon retrieveExplorerTilePosterTvSerie() {
@@ -166,6 +167,22 @@ public final class ImageRetriever {
 		return explorerTreeTvSerie;
 	}
 	
+	public static ImageIcon retrieveFanartChoiceFanarttvLogo() {
+		return retrieveAndScaleImageByWidth(ImageName.Fanarttv_Logo, FANART_CHOICE_LOGO_SIZE);
+	
+	}
+	public static ImageIcon retrieveFanartChoiceTheTvDbLogo() {
+		return retrieveAndScaleImageByWidth(ImageName.TheTVDB_Logo, FANART_CHOICE_LOGO_SIZE);
+	}
+	
+	public static ImageIcon retrieveFanarttvLogo() {
+		return retrieveAndScaleImageByWidth(ImageName.Fanarttv_Logo, FANARTTV_LOGO_SIZE);
+	}
+	
+	public static ImageIcon retrieveImdbLogo() {
+		return retrieveAndScaleImageByWidth(ImageName.IMDb_Logo, IMDB_LOGO_SIZE);
+	}
+	
 	public static ImageIcon retrieveLoading() {
 		if (loading == null) {
 			loading = retrieveImage(ImageName.Loading);
@@ -175,11 +192,7 @@ public final class ImageRetriever {
 	}
 	
 	public static ImageIcon retrieveTheTvDbLogo() {
-		if (theTvDbLogo == null) {
-			theTvDbLogo = retrieveAndScaleImageByWidth(ImageName.TheTVDB_Logo, THE_TV_DB_LOGO_SIZE);
-		}
-		
-		return theTvDbLogo;
+		return retrieveAndScaleImageByWidth(ImageName.TheTVDB_Logo, THE_TV_DB_LOGO_SIZE);
 	}
 	
 	public static ImageIcon retrieveToolBarExceptionConsole() {
@@ -270,9 +283,17 @@ public final class ImageRetriever {
 		return wallContentRatingTVY7;
 	}
 	
+	public static ImageIcon retrieveWallExtraFanarts() {
+		if (wallExtraFanarts == null) {
+			wallExtraFanarts = retrieveAndScaleImage(ImageName.ExtraFanarts, WALL_EXTRA_FANARTS_SIZE);
+		}
+		
+		return wallExtraFanarts;
+	}
+	
 	public static ImageIcon retrieveWallIMDb() {
 		if (wallIMDb == null) {
-			wallIMDb = retrieveAndScaleImageByHeight(ImageName.IMDb, WALL_IMDB_SIZE);
+			wallIMDb = retrieveAndScaleImageByHeight(ImageName.IMDb_Logo, WALL_IMDB_SIZE);
 		}
 		
 		return wallIMDb;

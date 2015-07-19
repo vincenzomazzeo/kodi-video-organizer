@@ -40,6 +40,9 @@ public class SettingsHandler {
 			this.settings = new Settings();
 			this.settings.setLastMoviesRootParent(FileUtils.getUserHome());
 			this.settings.setLastTvSeriesRootParent(FileUtils.getUserHome());
+			this.settings.setTheTvDbEnabled(false);
+			this.settings.setFanarttvEnabled(false);
+			this.settings.setImdbEnabled(true);
 			store();
 		}
 		else {

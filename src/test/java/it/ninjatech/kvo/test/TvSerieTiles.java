@@ -29,7 +29,7 @@ public class TvSerieTiles extends WebFrame {
 		SettingsHandler.init();
 		AsyncManager.init();
 		EnhancedLocaleMap.init();
-		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
+		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApiKey());
 		
 		List<Data> datas = new ArrayList<>();
 		datas.add(new Data("121361", "Il Trono di Spade"));

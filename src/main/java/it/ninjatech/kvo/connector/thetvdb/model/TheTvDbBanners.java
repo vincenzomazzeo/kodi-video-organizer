@@ -1,6 +1,8 @@
 package it.ninjatech.kvo.connector.thetvdb.model;
 
+import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -61,8 +63,17 @@ public class TheTvDbBanners {
 		
 		protected TheTvDbBanner() {}
 
-		protected void fill(TvSerie tvSerie) {
-			tvSerie.addImage(this.bannerPath, this.type, this.season, this.rating, this.ratingCount != null ? this.ratingCount.toString() : null);
+		private void fill(TvSerie tvSerie) {
+			String ratingCount = (this.ratingCount != null && !this.ratingCount.equals(0)) ? this.ratingCount.toString() : null;
+			EnhancedLocale language = this.language != null ? EnhancedLocaleMap.getByLanguage(this.language) : EnhancedLocaleMap.getEmptyLocale();
+			
+			TheTvDbBannerType type = TheTvDbBannerType.parse(this.type);
+			if (type == TheTvDbBannerType.Season) {
+				tvSerie.addTheTvDbSeasonImage(this.bannerPath, this.season, this.rating, ratingCount, language);
+			}
+			else {
+				tvSerie.addTheTvDbFanart(type.getFanart(), this.bannerPath, this.rating, ratingCount, language);
+			}
 		}
 		
 		protected String getBannerPath() {

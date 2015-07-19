@@ -10,21 +10,27 @@ import it.ninjatech.kvo.ui.component.SliderPane;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.alee.extended.image.WebDecoratedImageStyle;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.painter.BorderPainter;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
+import com.alee.managers.language.data.TooltipWay;
+import com.alee.managers.tooltip.TooltipManager;
 
-public class TvSerieActorSlider extends AbstractSlider {
+public class TvSerieActorSlider extends AbstractSlider implements MouseListener {
 
 	private static final long serialVersionUID = 8890476225892576613L;
 
@@ -45,6 +51,29 @@ public class TvSerieActorSlider extends AbstractSlider {
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent event) {
+		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 2) {
+			this.controller.notifyActorDoubleClick((TvSerieActor)((SliderPane)event.getSource()).getData());
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent event) {
+	}
+
+	@Override
 	protected List<SliderPane> getPanes() {
 		return new ArrayList<>(this.panes.values());
 	}
@@ -62,7 +91,11 @@ public class TvSerieActorSlider extends AbstractSlider {
 	}
 	
 	protected void setActor(TvSerieActor actor, Image image) {
-		((SliderPane)this.panes.get(actor)).setImage(SliderPane.makeImagePane(new ImageIcon(image), this.size));
+		if (image != null) {
+			SliderPane pane = (SliderPane)this.panes.get(actor);
+			pane.setImage(SliderPane.makeImagePane(new ImageIcon(image), this.size));
+			TooltipManager.addTooltip(pane, null, "Double click for full size image", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
+		}
 	}
 
 	private void init() {
@@ -77,7 +110,9 @@ public class TvSerieActorSlider extends AbstractSlider {
 		}
 
 		result = new SliderPane(voidImage, this.size, makeTitlePane(actor));
-
+		result.setData(actor);
+		result.addMouseListener(this);
+		
 		return result;
 	}
 	

@@ -1,7 +1,10 @@
 package it.ninjatech.kvo.ui;
 
 import it.ninjatech.kvo.async.AsyncManager;
+import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
+import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
+import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
@@ -119,6 +122,8 @@ public class Loader extends WebFrame {
 			
 			notifyUpdate("Reading settings", 10);
 			SettingsHandler.init();
+			
+			Settings settings = SettingsHandler.getInstance().getSettings();
 
 			notifyUpdate("Initializing Transiction Effect Handler", 11);
 			TransictionEffectExecutor.init();
@@ -132,10 +137,17 @@ public class Loader extends WebFrame {
 			notifyUpdate("Loading enhanced locale map", 50);
 			EnhancedLocaleMap.init();
 
-			if (StringUtils.isNotBlank(SettingsHandler.getInstance().getSettings().getTheTvDbApikey())) {
+			if (StringUtils.isNotBlank(settings.getTheTvDbApiKey()) && settings.getTheTvDbEnabled()) {
 				notifyUpdate("Contacting TheTVDB", 70);
-				TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApikey());
+				TheTvDbManager.getInstance().setApiKey(settings.getTheTvDbApiKey());
 			}
+			
+			if (StringUtils.isNotBlank(settings.getFanarttvApiKey()) && settings.getFanarttvEnabled()) {
+				notifyUpdate("Contacting Fanart.tv", 85);
+				FanarttvManager.getInstance().setApiKey(settings.getFanarttvApiKey());
+			}
+			
+			ImdbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getImdbEnabled());
 			
 			notifyUpdate("Done", 100);
 

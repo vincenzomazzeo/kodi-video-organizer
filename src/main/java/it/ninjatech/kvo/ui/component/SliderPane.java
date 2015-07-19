@@ -29,6 +29,7 @@ public class SliderPane extends WebPanel {
 	}
 	
 	private ComponentTransition transition;
+	private Object data;
 	
 	public SliderPane(ImageIcon voidImage, Dimension size, WebPanel titlePane) {
 		super(new VerticalFlowLayout(0, 0));
@@ -48,6 +49,14 @@ public class SliderPane extends WebPanel {
 	
 	public void setImage(WebDecoratedImage image) {
 		this.transition.performTransition(image);
+	}
+
+	public Object getData() {
+		return this.data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
 	}
 	
 }

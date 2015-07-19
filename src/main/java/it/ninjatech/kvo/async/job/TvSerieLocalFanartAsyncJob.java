@@ -31,14 +31,6 @@ public class TvSerieLocalFanartAsyncJob extends AbstractTvSerieImageLoaderAsyncJ
 			System.out.printf("-> executing local fanart %s\n", this.tvSeriePathEntity.getId());
 			
 			this.image = getImage(this.tvSeriePathEntity.getPath(), this.fanart.getFilename(), null, null, this.size);
-			
-//			File image = new File(this.tvSeriePathEntity.getPath(), this.fanart.getFilename());
-//			if (image.exists()) {
-//				System.out.printf("-> [%s] image %s found in directory\n", this.tvSeriePathEntity.getId(), this.fanart.getName());
-//				this.image = ImageIO.read(image);
-//				
-//				this.image = this.image.getScaledInstance(this.size.width, this.size.height, Image.SCALE_SMOOTH);
-//			}
 		}
 		catch (Exception e) {
 			this.exception = e;

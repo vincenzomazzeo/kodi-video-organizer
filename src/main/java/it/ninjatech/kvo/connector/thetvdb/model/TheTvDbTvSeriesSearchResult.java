@@ -60,7 +60,7 @@ public class TheTvDbTvSeriesSearchResult {
 		protected TheTvDbTvSerie() {
 		}
 
-		protected TvSerie toTvSerie() {
+		private TvSerie toTvSerie() {
 			TvSerie result = new TvSerie(String.valueOf(this.id), this.name, EnhancedLocaleMap.getByLanguage(this.language));
 			result.setFirstAired(this.firstAired);
 

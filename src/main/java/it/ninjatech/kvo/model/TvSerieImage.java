@@ -1,38 +1,11 @@
 package it.ninjatech.kvo.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.UUID;
 
 public class TvSerieImage {
-
-	public enum Type {
-		
-		Fanart("fanart"),
-		Poster("poster"),
-		Season("season"),
-		Series("series");
-		
-		private final String value;
-		
-		private Type(String value) {
-			this.value = value;
-		}
-		
-		private static Type parse(String value) {
-			Type result = null;
-			
-			for (Type type : Type.values()) {
-				if (type.value.equalsIgnoreCase(value)) {
-					result = type;
-					break;
-				}
-			}
-			
-			return result;
-		}
-		
-	}
 
 	public static Comparator<TvSerieImage> makeRatingComparator() {
 		return new Comparator<TvSerieImage>() {
@@ -59,18 +32,16 @@ public class TvSerieImage {
 	
 	private final String id;
 	private final String path;
-	private final Type type;
-	private final Integer season;
 	private final BigDecimal rating;
 	private final String ratingCount;
+	private final EnhancedLocale language;
 	
-	protected TvSerieImage(String path, String type, Integer season, BigDecimal rating, String ratingCount) {
+	protected TvSerieImage(String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
 		this.id = UUID.randomUUID().toString();
 		this.path = path;
-		this.type = Type.parse(type);
-		this.season = season;
 		this.rating = rating;
 		this.ratingCount = ratingCount;
+		this.language = language;
 	}
 
 	@Override
@@ -99,24 +70,24 @@ public class TvSerieImage {
 		return true;
 	}
 
+	public String getId() {
+		return this.id;
+	}
+
 	public String getPath() {
 		return this.path;
 	}
 
-	public Type getType() {
-		return this.type;
-	}
-
-	public Integer getSeason() {
-		return this.season;
-	}
-
 	public String getRating() {
-		return this.rating != null ? this.rating.toString() : null;
+		return this.rating != null ? this.rating.setScale(1, RoundingMode.HALF_UP).toString() : null;
 	}
 
 	public String getRatingCount() {
 		return this.ratingCount;
+	}
+
+	public EnhancedLocale getLanguage() {
+		return this.language;
 	}
 	
 }

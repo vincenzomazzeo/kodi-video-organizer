@@ -13,12 +13,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 import com.alee.extended.image.WebDecoratedImageStyle;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.painter.BorderPainter;
+import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
@@ -51,8 +51,8 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 		return result;
 	}
 	
-	private JButton left;
-	private JButton right;
+	private WebButton left;
+	private WebButton right;
 	private WebScrollPane slider;
 
 	protected AbstractSlider() {
@@ -105,24 +105,22 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 		WebPanel leftPane = new WebPanel(new VerticalFlowLayout(VerticalFlowLayout.MIDDLE));
 		add(leftPane, BorderLayout.WEST);
 		leftPane.setOpaque(false);
-		this.left = new JButton(ImageRetriever.retrieveWallArrowLeft());
+		this.left = new WebButton(ImageRetriever.retrieveWallArrowLeft());
 		leftPane.add(this.left);
+		this.left.setUndecorated(true);
 		this.left.addActionListener(this);
 		this.left.setOpaque(false);
-		this.left.setContentAreaFilled(false);
-		this.left.setBorderPainted(false);
 		this.left.setFocusable(false);
 		this.left.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		WebPanel rightPane = new WebPanel(new VerticalFlowLayout(VerticalFlowLayout.MIDDLE));
 		add(rightPane, BorderLayout.EAST);
 		rightPane.setOpaque(false);
-		this.right = new JButton(ImageRetriever.retrieveWallArrowRight());
+		this.right = new WebButton(ImageRetriever.retrieveWallArrowRight());
 		rightPane.add(this.right);
+		this.right.setUndecorated(true);
 		this.right.addActionListener(this);
 		this.right.setOpaque(false);
-		this.right.setContentAreaFilled(false);
-		this.right.setBorderPainted(false);
 		this.right.setFocusable(false);
 		this.right.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 

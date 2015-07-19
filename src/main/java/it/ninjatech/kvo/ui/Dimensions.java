@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.ui;
 
+import it.ninjatech.kvo.model.TvSerieFanart;
+
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.math.BigDecimal;
@@ -9,10 +11,13 @@ import com.alee.utils.SystemUtils;
 
 public final class Dimensions {
 
+	public static final Dimension ACTOR_FULL_SIZE = new Dimension(300, 450);
+	
 	private static final int HD_WIDTH = 1920;
 	private static final int HD_HEIGHT = 1080;
 	private static final BigDecimal _16_9 = new BigDecimal("1.7777");
 	private static final BigDecimal _4_3 = new BigDecimal("1.3333");
+	private static final int TV_SERIE_WALL_IMAGE_MAX_HEIGHT = 130;
 
 	private static Dimension startupSize;
 	private static Dimension explorerTileSize;
@@ -92,40 +97,25 @@ public final class Dimensions {
 		return getExplorerTileSize().height / 4;
 	}
 
-	public static Dimension getTvSerieFanartSliderBannerSize() {
-		return getTvSerieFanartSize(50, 1000, 185);
-	}
-	
-	public static Dimension getTvSerieFanartSliderCharacterSize() {
-		return getTvSerieFanartSize(130, 512, 512);
-	}
-	
-	public static Dimension getTvSerieFanartSliderClearartSize() {
-		return getTvSerieFanartSize(130, 500, 281);
-	}
-	
-	public static Dimension getTvSerieFanartSliderFanartSize() {
-		return getTvSerieFanartSize(130, 1920, 1080);
-	}
-	
-	public static Dimension getTvSerieFanartSliderLandscapeSize() {
-		return getTvSerieFanartSize(130, 500, 281);
-	}
-	
-	public static Dimension getTvSerieFanartSliderLogoSize() {
-		return getTvSerieFanartSize(75, 400, 155);
-	}
-	
-	public static Dimension getTvSerieFanartSliderPosterSize() {
-		return getTvSerieFanartSize(130, 1000, 1426);
+	public static Dimension getTvSerieFanartSliderSize(TvSerieFanart fanart) {
+		return getTvSerieFanartSize(fanart.getSliderHeight(), fanart.getRealSize().width, fanart.getRealSize().height);
 	}
 	
 	public static Dimension getTvSerieSeasonSliderSize() {
-		return getTvSerieFanartSize(130, 400, 578);
+		return getTvSerieFanartSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, 400, 578);
 	}
 	
 	public static Dimension getTvSerieActorSliderSize() {
-		return getTvSerieFanartSize(130, 300, 450);
+		return getTvSerieFanartSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, ACTOR_FULL_SIZE.width, ACTOR_FULL_SIZE.height);
+	}
+	
+	public static Dimension getTvSerieFanartChooserSize(TvSerieFanart fanart) {
+		Dimension result = new Dimension();
+		
+		result.height = fanart.getChooserHeight();
+		result.width = result.height * fanart.getRealSize().width / fanart.getRealSize().height;
+		
+		return result;
 	}
 	
 	private static Dimension getTvSerieFanartSize(int preferredHeight, int realWidth, int realHeight) {

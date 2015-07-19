@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +33,9 @@ public class TvSerie {
 	private String imdbId;
 	private final Map<Integer, TvSerieSeason> seasons;
 	private final SortedSet<TvSerieActor> actors;
-	private final EnumMap<TvSerieImage.Type, Set<TvSerieImage>> images;
+	private final EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> theTvDbFanarts;
+	private final EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> fanarttvFanarts;
+	private final Set<String> extraFanarts;
 
 	public TvSerie(String id, String providerId, String name, EnhancedLocale language) {
 		this.id = id;
@@ -41,7 +44,9 @@ public class TvSerie {
 		this.language = language;
 		this.seasons = new TreeMap<>();
 		this.actors = new TreeSet<>();
-		this.images = new EnumMap<>(TvSerieImage.Type.class);
+		this.theTvDbFanarts = new EnumMap<>(TvSerieFanart.class);
+		this.fanarttvFanarts = new EnumMap<>(TvSerieFanart.class);
+		this.extraFanarts = new HashSet<>();
 	}
 
 	public TvSerie(String providerId, String name, EnhancedLocale language) {
@@ -61,20 +66,50 @@ public class TvSerie {
 		this.actors.add(new TvSerieActor(name, role, path, sortOrder));
 	}
 	
-	public void addImage(String path, String type, Integer season, BigDecimal rating, String ratingCount) {
-		TvSerieImage image = new TvSerieImage(path, type, season, rating, ratingCount);
+	public void addTheTvDbFanart(TvSerieFanart type, String path, BigDecimal rating, String ratingCount, EnhancedLocale lanaguage) {
+		TvSerieImage fanart = new TvSerieImage(path, rating, ratingCount, lanaguage);
 		
-		if (image.getType() == TvSerieImage.Type.Season) {
-			this.seasons.get(image.getSeason()).addImage(image);
+		SortedSet<TvSerieImage> fanarts = this.theTvDbFanarts.get(type);
+		if (fanarts == null) {
+			fanarts = new TreeSet<>(TvSerieImage.makeRatingComparator());
+			this.theTvDbFanarts.put(type, fanarts);
 		}
-		else {
-			Set<TvSerieImage> images = this.images.get(image.getType());
-			if (images == null) {
-				images = new TreeSet<>(TvSerieImage.makeRatingComparator());
-				this.images.put(image.getType(), images);
-			}
-			images.add(image);
+		
+		fanarts.add(fanart);
+	}
+	
+	public void addFanarttvFanart(TvSerieFanart type, String path, Integer likes, EnhancedLocale lanaguage) {
+		TvSerieImage fanart = new TvSerieImage(path, likes != null ? new BigDecimal(likes) : null, null, lanaguage);
+		
+		SortedSet<TvSerieImage> fanarts = this.fanarttvFanarts.get(type);
+		if (fanarts == null) {
+			fanarts = new TreeSet<>(TvSerieImage.makeRatingComparator());
+			this.fanarttvFanarts.put(type, fanarts);
 		}
+		
+		fanarts.add(fanart);
+	}
+	
+	public void addTheTvDbSeasonImage(String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale lanaguage) {
+		TvSerieSeason tvSerieSeason = this.seasons.get(season);
+		if (tvSerieSeason != null) {
+			tvSerieSeason.addTheTvDbImage(new TvSerieSeasonImage(path, season, rating, ratingCount, lanaguage));
+		}
+	}
+	
+	public void addFanarttvSeasonImage(String path, Integer season, Integer likes, EnhancedLocale lanaguage) {
+		TvSerieSeason tvSerieSeason = this.seasons.get(season);
+		if (tvSerieSeason != null) {
+			tvSerieSeason.addFanarttvImage(new TvSerieSeasonImage(path, season, likes != null ? new BigDecimal(likes) : null, null, lanaguage));
+		}
+	}
+	
+	public Set<TvSerieImage> getTheTvDbFanart(TvSerieFanart type) {
+		return this.theTvDbFanarts.containsKey(type) ? Collections.unmodifiableSortedSet(this.theTvDbFanarts.get(type)) : Collections.<TvSerieImage>emptySet();
+	}
+	
+	public Set<TvSerieImage> getFanarttvFanart(TvSerieFanart type) {
+		return this.fanarttvFanarts.containsKey(type) ? Collections.unmodifiableSortedSet(this.fanarttvFanarts.get(type)) : Collections.<TvSerieImage>emptySet();
 	}
 	
 	public int seasonCount() {
@@ -85,8 +120,24 @@ public class TvSerie {
 		return Collections.unmodifiableSortedSet((SortedSet<Integer>)this.seasons.keySet());
 	}
 	
+	public Set<TvSerieSeason> getSeasons() {
+		return Collections.unmodifiableSortedSet(new TreeSet<TvSerieSeason>(this.seasons.values()));
+	}
+	
 	public Set<TvSerieActor> getActors() {
 		return Collections.unmodifiableSortedSet(this.actors);
+	}
+	
+	public void addExtrafanart(String extrafanart) {
+		this.extraFanarts.add(extrafanart);
+	}
+	
+	public boolean hasExtraFanarts() {
+		return !this.extraFanarts.isEmpty();
+	}
+	
+	public Set<String> getExtraFanarts() {
+		return Collections.unmodifiableSet(this.extraFanarts);
 	}
 
 	public String getId() {
