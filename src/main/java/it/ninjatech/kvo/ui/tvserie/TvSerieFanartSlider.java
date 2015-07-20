@@ -70,7 +70,7 @@ public class TvSerieFanartSlider extends AbstractSlider implements MouseListener
 	public void mouseClicked(MouseEvent event) {
 		if (SwingUtilities.isLeftMouseButton(event)) {
 			if (event.getClickCount() == 1) {
-				
+				this.controller.notifyFanartSingleClick((FanartType)((SliderPane)event.getSource()).getData());
 			}
 			else if (event.getClickCount() == 2) {
 				this.controller.notifyFanartDoubleClick((FanartType)((SliderPane)event.getSource()).getData());

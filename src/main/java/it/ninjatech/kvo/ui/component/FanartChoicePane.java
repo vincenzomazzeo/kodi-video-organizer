@@ -24,13 +24,7 @@ import com.alee.extended.image.WebImage;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.panel.WebOverlay;
 import com.alee.extended.transition.ComponentTransition;
-import com.alee.extended.transition.effects.DefaultTransitionEffect;
-import com.alee.extended.transition.effects.blocks.BlocksTransitionEffect;
-import com.alee.extended.transition.effects.curtain.CurtainSlideDirection;
-import com.alee.extended.transition.effects.curtain.CurtainTransitionEffect;
-import com.alee.extended.transition.effects.curtain.CurtainType;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
-import com.alee.extended.transition.effects.slide.SlideTransitionEffect;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.managers.language.data.TooltipWay;
@@ -57,23 +51,19 @@ public class FanartChoicePane extends WebPanel implements MouseListener {
 	}
 
 	private final FanartChoicePaneListener listener;
-	private final boolean chosen;
 	private Object data;
 	private ComponentTransition imageTransition;
-	private ComponentTransition languageTransition;
-	private ComponentTransition logoTransition;
 	private WebLabel ratingCount;
 	private WebLabel rating;
 
-	public FanartChoicePane(Object data, FanartChoicePaneListener listener, boolean chosen,  
+	public FanartChoicePane(Object data, FanartChoicePaneListener listener,  
 	                        ImageIcon image, EnhancedLocale language, ImageIcon logo, String rating, String ratingCount) {
 		super(new VerticalFlowLayout());
 
 		this.data = data;
 		this.listener = listener;
-		this.chosen = chosen;
 
-		init(image, language, logo, rating, ratingCount, chosen);
+		init(image, language, logo, rating, ratingCount);
 	}
 
 	@Override
@@ -108,59 +98,16 @@ public class FanartChoicePane extends WebPanel implements MouseListener {
 		return this.data;
 	}
 	
-	public void setPane(Object data, Image image, EnhancedLocale language, ImageIcon logo, String rating, String ratingCount) {
-		this.data = data;
-		String tooltip = this.chosen ?
-				"<html><div text-align='center'>Double click for full size image</div></html>" :
-				"<html><div text-align='center'>Single click to select<br />Double click for full size image</div></html>";
-		this.imageTransition.performTransition(makeImage(new ImageIcon(image), this, tooltip));
-		this.languageTransition.performTransition(new WebImage(language.getLanguageFlag()));
-		this.logoTransition.performTransition(new WebImage(logo));
-		if (StringUtils.isNotBlank(rating)) {
-			this.rating.setText(rating);
-		}
-		else {
-			this.rating.setText(null);
-		}
-		if (StringUtils.isNotBlank(ratingCount)) {
-			this.ratingCount.setForeground(Colors.FOREGROUND_STANDARD);
-			this.ratingCount.setText(ratingCount);
-			this.ratingCount.setDrawShade(true);
-		}
-		else {
-			this.ratingCount.setForeground(Colors.TRANSPARENT);
-			this.ratingCount.setText("0");
-			this.ratingCount.setDrawShade(false);
-		}
-	}
-	
-	public Image getImage() {
-		return ((WebDecoratedImage)this.imageTransition.getComponent(0)).getIcon().getImage();
-	}
-	
 	public void setImage(Image image) {
 		if (image != null) {
-			String tooltip = this.chosen ?
-					"<html><div text-align='center'>Double click for full size image</div></html>" :
-					"<html><div text-align='center'>Single click to select<br />Double click for full size image</div></html>";
-			this.imageTransition.performTransition(makeImage(new ImageIcon(image), this, tooltip));
+			this.imageTransition.performTransition(makeImage(new ImageIcon(image), this, "<html><div text-align='center'>Single click to select<br />Double click for full size image</div></html>"));
 		}
 	}
 
-	private void init(ImageIcon image, EnhancedLocale language, ImageIcon logo, String rating, String ratingCount, boolean chosen) {
+	private void init(ImageIcon image, EnhancedLocale language, ImageIcon logo, String rating, String ratingCount) {
 		setOpaque(false);
 
-		DefaultTransitionEffect effect = null;
-		if (chosen) {
-			effect = new CurtainTransitionEffect();
-			((CurtainTransitionEffect)effect).setType(CurtainType.slide);
-			((CurtainTransitionEffect)effect).setSpeed(30);
-			((CurtainTransitionEffect)effect).setSlideDirection(CurtainSlideDirection.both);
-		}
-		else {
-			effect = new FadeTransitionEffect();
-		}
-		this.imageTransition = new ComponentTransition(makeImage(image, this, null), effect);
+		this.imageTransition = new ComponentTransition(makeImage(image, this, null), new FadeTransitionEffect());
 		add(this.imageTransition);
 		this.imageTransition.setOpaque(false);
 
@@ -177,10 +124,7 @@ public class FanartChoicePane extends WebPanel implements MouseListener {
 		bottomPane.add(bottomCenterPane, BorderLayout.CENTER);
 		bottomCenterPane.setOpaque(false);
 
-		WebImage languageC = new WebImage(language.getLanguageFlag());
-		this.languageTransition = new ComponentTransition(languageC, new SlideTransitionEffect());
-		bottomCenterPane.add(this.languageTransition);
-		this.languageTransition.setOpaque(false);
+		bottomCenterPane.add(new WebImage(language.getLanguageFlag()));
 
 		WebPanel ratingPane = new WebPanel(new VerticalFlowLayout());
 		bottomCenterPane.add(ratingPane);
@@ -219,10 +163,7 @@ public class FanartChoicePane extends WebPanel implements MouseListener {
 		bottomPane.add(bottomRightPane, BorderLayout.EAST);
 		bottomRightPane.setOpaque(false);
 
-		WebImage logoC = new WebImage(logo);
-		this.logoTransition = new ComponentTransition(logoC, new BlocksTransitionEffect());
-		bottomRightPane.add(this.logoTransition, BorderLayout.NORTH);
-		this.logoTransition.setOpaque(false);
+		bottomRightPane.add(new WebImage(logo), BorderLayout.NORTH);
 
 		SwingUtils.equalizeComponentsWidths(bottomLeftPane, bottomRightPane);
 	}

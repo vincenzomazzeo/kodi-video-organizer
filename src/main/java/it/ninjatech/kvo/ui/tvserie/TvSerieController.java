@@ -53,7 +53,7 @@ public class TvSerieController implements AsyncJobListener {
 			}
 		}
 	}
-	
+
 	public TvSerieView getView() {
 		return this.view;
 	}
@@ -69,16 +69,16 @@ public class TvSerieController implements AsyncJobListener {
 			TvSerieLocalFanartAsyncJob job = new TvSerieLocalFanartAsyncJob(tvSeriePathEntity, fanart.getFanart(), fanart.getSize());
 			AsyncManager.getInstance().submit(String.format("%s_%s", tvSeriePathEntity.getId(), fanart), job, this);
 		}
-		
+
 		// TODO replace with local images
-//		Dimension seasonSize = this.view.getSeasonSlider().getSeasonSize();
-//		for (TvSerieSeason season : tvSeriePathEntity.getTvSerie().getSeasons()) {
-//			TvSerieImage image = season.getImage();
-//			if (image != null) {
-//				TvSerieSeasonImageAsyncJob job = new TvSerieSeasonImageAsyncJob(season, seasonSize);
-//				AsyncManager.getInstance().submit(season.getId(), job, this);
-//			}
-//		}
+// Dimension seasonSize = this.view.getSeasonSlider().getSeasonSize();
+// for (TvSerieSeason season : tvSeriePathEntity.getTvSerie().getSeasons()) {
+// TvSerieImage image = season.getImage();
+// if (image != null) {
+// TvSerieSeasonImageAsyncJob job = new TvSerieSeasonImageAsyncJob(season, seasonSize);
+// AsyncManager.getInstance().submit(season.getId(), job, this);
+// }
+// }
 
 		Dimension actorSize = this.view.getActorSlider().getActorSize();
 		for (TvSerieActor actor : tvSeriePathEntity.getTvSerie().getActors()) {
@@ -86,13 +86,13 @@ public class TvSerieController implements AsyncJobListener {
 			AsyncManager.getInstance().submit(actor.getId(), job, this);
 		}
 	}
-	
+
 	protected void notifyExtraFanartsClick() {
 		ExtraFanartsGalleryCreator creator = new ExtraFanartsGalleryCreator(TvSerieUtils.getTitle(this.tvSeriePathEntity), TvSerieUtils.getExtraFanarts(this.tvSeriePathEntity));
 		DeterminateProgressDialogWorker<ImageGallery> progressWorker = new DeterminateProgressDialogWorker<>(creator, TvSerieUtils.getTitle(this.tvSeriePathEntity));
-		
+
 		ImageGallery result = null;
-		
+
 		progressWorker.start();
 		try {
 			result = progressWorker.get();
@@ -100,23 +100,37 @@ public class TvSerieController implements AsyncJobListener {
 		catch (Exception e) {
 			UI.get().notifyException(e);
 		}
-		
+
 		if (result != null) {
 			result.setVisible(true);
 		}
 	}
-	
-	protected void notifyFanartDoubleClick(FanartType fanartType) {
-		ImageFullWorker worker = new ImageFullWorker(this.tvSeriePathEntity.getPath(), fanartType.getFanart().getFilename());
-		UIUtils.showTvSerieFanartFull(worker, fanartType.getFanart());
+
+	protected void notifyFanartSingleClick(FanartType fanart) {
+		if (TvSerieUtils.hasFanarts(this.tvSeriePathEntity, fanart.getFanart())) {
+			TvSerieFanartChoiceController controller = new TvSerieFanartChoiceController(this.tvSeriePathEntity, fanart.getFanart());
+			controller.start();
+			controller.getView().setVisible(true);
+
+			TvSerieLocalFanartAsyncJob job = new TvSerieLocalFanartAsyncJob(this.tvSeriePathEntity, fanart.getFanart(), fanart.getSize());
+			AsyncManager.getInstance().submit(String.format("%s_%s", this.tvSeriePathEntity.getId(), fanart), job, this);
+		}
+		else {
+			WebOptionPane.showMessageDialog(UI.get(), String.format("No %s fanart found. Try to refresh TV Serie.", fanart.getFanart().getName()));
+		}
 	}
-	
+
+	protected void notifyFanartDoubleClick(FanartType fanart) {
+		ImageFullWorker worker = new ImageFullWorker(this.tvSeriePathEntity.getPath(), fanart.getFanart().getFilename());
+		UIUtils.showTvSerieFanartFull(worker, fanart.getFanart());
+	}
+
 	protected void notifyActorDoubleClick(TvSerieActor actor) {
 		ActorFullWorker worker = new ActorFullWorker(actor.getId(), actor.getName());
 		IndeterminateProgressDialogWorker<ActorFullWorker.ActorFullWorkerResult> progressWorker = new IndeterminateProgressDialogWorker<>(worker, actor.getName());
-		
+
 		ActorFullWorker.ActorFullWorkerResult result = null;
-		
+
 		progressWorker.start();
 		try {
 			result = progressWorker.get();
@@ -124,7 +138,7 @@ public class TvSerieController implements AsyncJobListener {
 		catch (Exception e) {
 			UI.get().notifyException(e);
 		}
-		
+
 		if (result != null && (result.getImage() != null || StringUtils.isNotBlank(result.getImdbId()))) {
 			ActorFullImagePane pane = new ActorFullImagePane(result.getImage(), result.getImdbId());
 			FullImageDialog dialog = new FullImageDialog(pane, actor.getName());

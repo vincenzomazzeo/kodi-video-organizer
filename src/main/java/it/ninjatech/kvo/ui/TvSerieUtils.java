@@ -152,6 +152,10 @@ public final class TvSerieUtils {
 	public static Set<TvSerieImage> getFanarttvFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
 		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().getFanarttvFanart(fanart) : Collections.<TvSerieImage>emptySet();
 	}
+	
+	public static boolean hasFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
+		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().hasFanarts(fanart) : false;
+	}
 
 	private TvSerieUtils() {
 	}
