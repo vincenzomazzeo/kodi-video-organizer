@@ -1,8 +1,15 @@
 package it.ninjatech.kvo.ui;
 
+import it.ninjatech.kvo.model.TvSerieFanart;
+import it.ninjatech.kvo.ui.component.FullImageDialog;
+import it.ninjatech.kvo.ui.component.SimpleFullImagePane;
+import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
+import it.ninjatech.kvo.worker.AbstractWorker;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
@@ -66,6 +73,24 @@ public final class UIUtils {
 		result = new ImageIcon(bufferedImage);
 		
 		return result;
+	}
+	
+	public static void showTvSerieFanartFull(AbstractWorker<Image> worker, TvSerieFanart fanart) {
+		IndeterminateProgressDialogWorker<Image> progressWorker = new IndeterminateProgressDialogWorker<>(worker, fanart.getName());
+		
+		Image result = null;
+		progressWorker.start();
+		try {
+			result = progressWorker.get();
+		}
+		catch (Exception e) {
+			UI.get().notifyException(e);
+		}
+		
+		if (result != null) {
+			FullImageDialog dialog = new FullImageDialog(new SimpleFullImagePane(result), fanart.getName());
+			dialog.setVisible(true);
+		}
 	}
 	
 	private UIUtils() {}

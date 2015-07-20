@@ -64,12 +64,12 @@ public class AsyncManager {
 	}
 	
 	public void submit(String id, TvSerieCacheRemoteImageAsyncJob job, AsyncJobListener listener) {
-		System.out.printf("-> submit actors %s\n", id);
+		System.out.printf("-> submit cache-remote image %s\n", id);
 		this.tvSerieImageLoaderHandler.submitJob(id, job, listener);
 	}
 	
-	public void cancelTvSerieActorsAsyncJob(String id) {
-		System.out.printf("-> cancel actors %s\n", id);
+	public void cancelTvSerieCacheRemoteImageAsyncJob(String id) {
+		System.out.printf("-> cancel cache-remote image %s\n", id);
 		this.tvSerieImageLoaderHandler.removeJob(id);
 	}
 	

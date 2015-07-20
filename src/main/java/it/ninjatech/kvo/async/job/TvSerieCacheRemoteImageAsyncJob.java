@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.async.job;
 
+import it.ninjatech.kvo.model.TvSerieImageProvider;
+
 import java.awt.Dimension;
 import java.awt.Image;
 import java.util.EnumSet;
@@ -13,8 +15,8 @@ public class TvSerieCacheRemoteImageAsyncJob extends AbstractTvSerieImageLoaderA
 	
 	private Image image;
 	
-	public TvSerieCacheRemoteImageAsyncJob(String id, String path, Dimension size) {
-		super(id, EnumSet.of(LoadType.Cache, LoadType.Remote));
+	public TvSerieCacheRemoteImageAsyncJob(String id, TvSerieImageProvider provider, String path, Dimension size) {
+		super(id, EnumSet.of(LoadType.Cache, LoadType.Remote), provider);
 		
 		this.path = path;
 		this.size = size;

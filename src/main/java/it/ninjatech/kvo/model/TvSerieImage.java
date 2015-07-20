@@ -31,13 +31,15 @@ public class TvSerieImage {
 	}
 	
 	private final String id;
+	private final TvSerieImageProvider provider;
 	private final String path;
 	private final BigDecimal rating;
 	private final String ratingCount;
 	private final EnhancedLocale language;
 	
-	protected TvSerieImage(String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
+	protected TvSerieImage(TvSerieImageProvider provider, String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
 		this.id = UUID.randomUUID().toString();
+		this.provider = provider;
 		this.path = path;
 		this.rating = rating;
 		this.ratingCount = ratingCount;
@@ -72,6 +74,10 @@ public class TvSerieImage {
 
 	public String getId() {
 		return this.id;
+	}
+
+	public TvSerieImageProvider getProvider() {
+		return this.provider;
 	}
 
 	public String getPath() {

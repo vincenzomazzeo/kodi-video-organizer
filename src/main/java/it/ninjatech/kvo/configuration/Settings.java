@@ -13,7 +13,7 @@ public class Settings {
 	private static final String LAST_MOVIES_ROOT_PARENT = "lastMoviesRootParent";
 	private static final String LAST_TV_SERIES_ROOT_PARENT = "lastTvSeriesRootParent";
 	private static final String THE_TV_DB_ENABLED = "theTvDbEnabled";
-	private static final String THE_TV_DB_API_KEY = "theTvDbApikey";
+	private static final String THE_TV_DB_API_KEY = "theTvDbApiKey";
 	private static final String THE_TV_DB_PREFERRED_LANGUAGE = "theTvDbPreferredLanguage";
 	private static final String FANARTTV_ENABLED = "fanarttvEnabled";
 	private static final String FANARTTV_API_KEY = "fanarttvApiKey";

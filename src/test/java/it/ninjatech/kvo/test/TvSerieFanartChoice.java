@@ -14,7 +14,6 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieFanartChoiceController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -23,7 +22,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.scroll.WebScrollPane;
 
-public class TvSerieFanartChoice extends WebFrame implements WindowListener {
+public class TvSerieFanartChoice /*extends WebFrame implements WindowListener*/ {
 
 	private static final long serialVersionUID = 2497031401907408168L;
 
@@ -44,16 +43,23 @@ public class TvSerieFanartChoice extends WebFrame implements WindowListener {
 		TvSerie tvSerie = new TvSerie("75682", "Bones", EnhancedLocaleMap.getByLanguage("it"));
 		TheTvDbManager.getInstance().getData(tvSerie);
 		FanarttvManager.getInstance().getData(tvSerie);
-		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("/Users/Shared/Well/Multimedia/Video/TV Series")) ;
-		tvSeriesPathEntity.addTvSerie(new File("/Users/Shared/Well/Multimedia/Video/TV Series/Bones"));
+//		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("/Users/Shared/Well/Multimedia/Video/TV Series")) ;
+//		tvSeriesPathEntity.addTvSerie(new File("/Users/Shared/Well/Multimedia/Video/TV Series/Bones"));
+		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("D:/GitHubRepository/Test")) ;
+		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Ciccio"));
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 		tvSeriePathEntity.setTvSerie(tvSerie);
 		
-		TvSerieFanartChoice vvSerieFanartChoice = new TvSerieFanartChoice(tvSeriePathEntity);
-		
-		vvSerieFanartChoice.setVisible(true);
+		TvSerieFanartChoiceController controller = new TvSerieFanartChoiceController(tvSeriePathEntity, TvSerieFanart.Fanart);
+		controller.start();
+		controller.getView().setVisible(true);
+		System.exit(0);
+//		TvSerieFanartChoice vvSerieFanartChoice = new TvSerieFanartChoice(tvSeriePathEntity);
+//		
+//		vvSerieFanartChoice.setVisible(true);
 	}
 	
+	/*
 	private TvSerieFanartChoice(TvSeriePathEntity tvSeriePathEntity) {
 		super();
 		
@@ -68,8 +74,9 @@ public class TvSerieFanartChoice extends WebFrame implements WindowListener {
 	private void init(TvSeriePathEntity tvSeriePathEntity) {
 		setLayout(new BorderLayout());
 		
-		TvSerieFanartChoiceController controller = new TvSerieFanartChoiceController(tvSeriePathEntity, TvSerieFanart.Poster);
+		TvSerieFanartChoiceController controller = new TvSerieFanartChoiceController(tvSeriePathEntity, TvSerieFanart.Fanart);
 		WebScrollPane pane = new WebScrollPane(controller.getView());
+		controller.start();
 		
 		add(pane, BorderLayout.CENTER);
 	}
@@ -102,5 +109,6 @@ public class TvSerieFanartChoice extends WebFrame implements WindowListener {
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 	}
+	*/
 	
 }

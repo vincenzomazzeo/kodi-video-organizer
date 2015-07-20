@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.connector.fanarttv;
 
+import java.io.File;
+
 import it.ninjatech.kvo.connector.fanarttv.model.FanarttvFanarts;
 import it.ninjatech.kvo.model.TvSerie;
 
@@ -86,6 +88,10 @@ public class FanarttvManager {
 				get(FanarttvFanarts.class);
 
 		fanarttvFanarts.fill(tvSerie);
+	}
+	
+	public File getImage(String path) {
+		return Client.create().resource(path).get(File.class);
 	}
 	
 }

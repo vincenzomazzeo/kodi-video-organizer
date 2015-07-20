@@ -7,15 +7,13 @@ import it.ninjatech.kvo.async.job.TvSerieActorImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieSeasonImageAsyncJob;
 import it.ninjatech.kvo.model.TvSerieActor;
-import it.ninjatech.kvo.model.TvSerieImage;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
-import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.ActorFullImagePane;
 import it.ninjatech.kvo.ui.component.FullImageDialog;
 import it.ninjatech.kvo.ui.component.ImageGallery;
-import it.ninjatech.kvo.ui.component.SimpleFullImagePane;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.tvserie.TvSerieFanartSlider.FanartType;
@@ -24,11 +22,9 @@ import it.ninjatech.kvo.worker.ActorFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
 
 import java.awt.Dimension;
-import java.awt.Image;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alee.extended.image.WebImage;
 import com.alee.laf.optionpane.WebOptionPane;
 
 public class TvSerieController implements AsyncJobListener {
@@ -111,22 +107,8 @@ public class TvSerieController implements AsyncJobListener {
 	}
 	
 	protected void notifyFanartDoubleClick(FanartType fanartType) {
-		ImageFullWorker worker = new ImageFullWorker(tvSeriePathEntity.getPath(), fanartType.getFanart().getFilename());
-		IndeterminateProgressDialogWorker<Image> progressWorker = new IndeterminateProgressDialogWorker<>(worker, fanartType.getFanart().getName());
-		
-		Image result = null;
-		progressWorker.start();
-		try {
-			result = progressWorker.get();
-		}
-		catch (Exception e) {
-			UI.get().notifyException(e);
-		}
-		
-		if (result != null) {
-			FullImageDialog dialog = new FullImageDialog(new SimpleFullImagePane(result), fanartType.getFanart().getName());
-			dialog.setVisible(true);
-		}
+		ImageFullWorker worker = new ImageFullWorker(this.tvSeriePathEntity.getPath(), fanartType.getFanart().getFilename());
+		UIUtils.showTvSerieFanartFull(worker, fanartType.getFanart());
 	}
 	
 	protected void notifyActorDoubleClick(TvSerieActor actor) {

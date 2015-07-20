@@ -45,7 +45,7 @@ public final class ImageRetriever {
 	private static final int EXPLORER_TREE_ICON_SIZE = 16;
 	private static final int EXPLORER_TREE_MENU_ICON_SIZE = 50;
 	private static final int EXPLORER_TREE_TAB_ICON_SIZE = 32;
-	private static final int FANART_CHOICE_LOGO_SIZE = 100;
+	private static final int FANART_CHOICE_LOGO_SIZE = 75;
 	private static final int FANARTTV_LOGO_SIZE = 285;
 	private static final int IMDB_LOGO_SIZE = 119;
 	private static final int MENU_BAR_BUTTON_SIZE = 40;

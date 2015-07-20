@@ -97,6 +97,14 @@ public final class Dimensions {
 		return getExplorerTileSize().height / 4;
 	}
 
+	public static int getFanartChoiceAvailableWidth() {
+		return getStartupSize().width / 5 * 4;
+	}
+	
+	public static int getFanartChoiceAvailableHeight() {
+		return getStartupSize().height / 8 * 7;
+	}
+	
 	public static Dimension getTvSerieFanartSliderSize(TvSerieFanart fanart) {
 		return getTvSerieFanartSize(fanart.getSliderHeight(), fanart.getRealSize().width, fanart.getRealSize().height);
 	}

@@ -18,7 +18,7 @@ public class TvSerieLocalFanartAsyncJob extends AbstractTvSerieImageLoaderAsyncJ
 	private Image image;
 	
 	public TvSerieLocalFanartAsyncJob(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart, Dimension size) {
-		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory));
+		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory), null);
 	
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.fanart = fanart;

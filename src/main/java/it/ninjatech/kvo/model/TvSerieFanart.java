@@ -10,7 +10,7 @@ public enum TvSerieFanart {
 	Fanart("Fanart", "fanart.jpg", new Dimension(1920, 1080), 130, 200),
 	Landscape("Landscape", "landscape.jpg", new Dimension(500, 281), 130, 200),
 	Logo("Logo", "logo.png", new Dimension(400, 155), 75, 200),
-	Poster("Poster", "poster.jpg", new Dimension(1000, 1426), 130, 450);
+	Poster("Poster", "poster.jpg", new Dimension(1000, 1426), 130, 350);
 	
 	private final String name;
 	private final String filename;

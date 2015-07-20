@@ -1,7 +1,9 @@
 package it.ninjatech.kvo.async.job;
 
 import it.ninjatech.kvo.async.AsyncJob;
+import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
+import it.ninjatech.kvo.model.TvSerieImageProvider;
 import it.ninjatech.kvo.util.Utils;
 
 import java.awt.Dimension;
@@ -26,10 +28,12 @@ public abstract class AbstractTvSerieImageLoaderAsyncJob extends AsyncJob {
 	
 	protected final String id;
 	private final EnumSet<LoadType> loadSequence;
+	private final TvSerieImageProvider provider;
 	
-	protected AbstractTvSerieImageLoaderAsyncJob(String id, EnumSet<LoadType> loadSequence) {
+	protected AbstractTvSerieImageLoaderAsyncJob(String id, EnumSet<LoadType> loadSequence, TvSerieImageProvider provider) {
 		this.id = id;
 		this.loadSequence = loadSequence;
+		this.provider = provider;
 	}
 	
 	public String getId() {
@@ -59,14 +63,20 @@ public abstract class AbstractTvSerieImageLoaderAsyncJob extends AsyncJob {
 				}
 				break;
 			case Remote:
-				if (TheTvDbManager.getInstance().isActive() && StringUtils.isNotBlank(remoteName)) {
+				if (this.provider == TvSerieImageProvider.Fanarttv && FanarttvManager.getInstance().isActive() && StringUtils.isNotBlank(remoteName)) {
+					image = FanarttvManager.getInstance().getImage(remoteName);
+					result = ImageIO.read(image);
+				}
+				else if (this.provider == TvSerieImageProvider.TheTvDb && TheTvDbManager.getInstance().isActive() && StringUtils.isNotBlank(remoteName)) {
 					image = TheTvDbManager.getInstance().getImage(remoteName);
 					result = ImageIO.read(image);
+				}
+				if (result != null) {
 					// Save in cache
 					image = new File(Utils.getCacheDirectory(), cacheName);
 					image.deleteOnExit();
 					ImageIO.write((BufferedImage)result, "jpg", image);
-					System.out.printf("-> [%s] image %s requested to remote host\n", this.id, remoteName);
+					System.out.printf("-> [%s] image %s requested to remote host (%s)\n", this.id, remoteName, this.provider);
 				}
 				break;
 			}

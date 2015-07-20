@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.async.job;
 
+import it.ninjatech.kvo.model.TvSerieImageProvider;
 import it.ninjatech.kvo.model.TvSerieSeason;
 
 import java.awt.Dimension;
@@ -10,9 +11,9 @@ public class TvSerieSeasonImageAsyncJob extends TvSerieCacheRemoteImageAsyncJob 
 
 	private final TvSerieSeason season;
 	
-	public TvSerieSeasonImageAsyncJob(TvSerieSeason season, Dimension size) {
+	public TvSerieSeasonImageAsyncJob(TvSerieSeason season, TvSerieImageProvider provider, Dimension size) {
 		// TODO fix
-		super(season.getId(), /*season.getImage().getPath()*/null, size);
+		super(season.getId(), provider, /*season.getImage().getPath()*/null, size);
 		
 		this.season = season;
 	}

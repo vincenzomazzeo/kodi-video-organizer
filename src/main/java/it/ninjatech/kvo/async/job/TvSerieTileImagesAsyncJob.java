@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.async.job;
 
+import it.ninjatech.kvo.model.TvSerieImageProvider;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 
 import java.awt.Dimension;
@@ -20,7 +21,7 @@ public class TvSerieTileImagesAsyncJob extends AbstractTvSerieImageLoaderAsyncJo
 	private Image poster;
 	
 	public TvSerieTileImagesAsyncJob(TvSeriePathEntity tvSeriePathEntity, Dimension tileSize, Dimension tilePosterSize) {
-		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory, LoadType.Cache, LoadType.Remote));
+		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory, LoadType.Cache, LoadType.Remote), TvSerieImageProvider.TheTvDb);
 
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.tileSize = tileSize;
