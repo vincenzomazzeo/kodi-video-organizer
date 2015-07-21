@@ -121,6 +121,9 @@ public class TvSerie {
 			EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> theTvDbFanarts = this.fanarts.get(TvSerieImageProvider.TheTvDb);
 			result = theTvDbFanarts.containsKey(type) ? Collections.unmodifiableSortedSet(theTvDbFanarts.get(type)) : Collections.<TvSerieImage> emptySet();
 		}
+		else {
+			result = Collections.emptySet();
+		}
 
 		return result;
 	}
@@ -131,6 +134,9 @@ public class TvSerie {
 		if (this.fanarts.containsKey(TvSerieImageProvider.Fanarttv)) {
 			EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> fanarttvFanarts = this.fanarts.get(TvSerieImageProvider.Fanarttv);
 			result = fanarttvFanarts.containsKey(type) ? Collections.unmodifiableSortedSet(fanarttvFanarts.get(type)) : Collections.<TvSerieImage> emptySet();
+		}
+		else {
+			result = Collections.emptySet();
 		}
 
 		return result;

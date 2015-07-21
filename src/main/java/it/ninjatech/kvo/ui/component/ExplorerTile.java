@@ -22,11 +22,12 @@ import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
 
 public class ExplorerTile extends WebPanel {
-
+	// TODO check memory leak solved
 	private static final long serialVersionUID = 4129515407391265281L;
 
 	private Image fanart;
 	private Image poster;
+	private WebLabel title;
 
 	public ExplorerTile(Image fanart, Image poster, String title, String year, String rate, String genre) {
 		super();
@@ -42,8 +43,9 @@ public class ExplorerTile extends WebPanel {
 
 		this.fanart = null;
 		this.poster = null;
+		TooltipManager.removeTooltips(this.title);
 	}
-
+	
 	private void init(String title, String year, String rate, String genre) {
 		Dimension size = Dimensions.getExplorerTileSize();
 		Dimension posterSize = Dimensions.getExplorerTilePosterSize();
@@ -92,14 +94,14 @@ public class ExplorerTile extends WebPanel {
 		infoTop.setOpaque(false);
 		infoTop.setPreferredSize(new Dimension(infoWidth, topHeight));
 
-		WebLabel titleL = new WebLabel(title);
-		infoTop.add(titleL, BorderLayout.CENTER);
-		TooltipManager.setTooltip(titleL, title, TooltipWay.up, 0);
-		titleL.setMargin(5);
-		titleL.setFontSize(16);
-		titleL.setForeground(Colors.FOREGROUND_TITLE);
-		titleL.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
-		titleL.setDrawShade(true);
+		this.title = new WebLabel(title);
+		infoTop.add(this.title, BorderLayout.CENTER);
+		TooltipManager.setTooltip(this.title, title, TooltipWay.up, 0);
+		this.title.setMargin(5);
+		this.title.setFontSize(16);
+		this.title.setForeground(Colors.FOREGROUND_TITLE);
+		this.title.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
+		this.title.setDrawShade(true);
 
 		WebLabel yearL = new WebLabel(year);
 		infoTop.add(yearL, BorderLayout.EAST);

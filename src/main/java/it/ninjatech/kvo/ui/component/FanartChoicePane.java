@@ -100,8 +100,13 @@ public class FanartChoicePane extends WebPanel implements MouseListener {
 	
 	public void setImage(Image image) {
 		if (image != null) {
-			this.imageTransition.performTransition(makeImage(new ImageIcon(image), this, "<html><div text-align='center'>Single click to select<br />Double click for full size image</div></html>"));
+			removeTooltip();
+			this.imageTransition.performTransition(makeImage(new ImageIcon(image), this, "<html><div align='center'>Single click to select<br />Double click for full size image</div></html>"));
 		}
+	}
+	
+	public void dispose() {
+		removeTooltip();
 	}
 
 	private void init(ImageIcon image, EnhancedLocale language, ImageIcon logo, String rating, String ratingCount) {
@@ -168,6 +173,13 @@ public class FanartChoicePane extends WebPanel implements MouseListener {
 		SwingUtils.equalizeComponentsWidths(bottomLeftPane, bottomRightPane);
 	}
 
+	private void removeTooltip() {
+		WebDecoratedImage content = (WebDecoratedImage)this.imageTransition.getContent();
+		if (content != null) {
+			TooltipManager.removeTooltips(content);
+		}
+	}
+	
 	public static interface FanartChoicePaneListener {
 		
 		public void fanartChoicePaneSingleClick(FanartChoicePane pane);

@@ -97,6 +97,13 @@ public class TvSerieActorSlider extends AbstractSlider implements MouseListener 
 			TooltipManager.addTooltip(pane, null, "Double click for full size image", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 		}
 	}
+	
+	// Check memory leak solved
+	protected void dispose() {
+		for (SliderPane pane : this.panes.values()) {
+			TooltipManager.removeTooltips(pane);
+		}
+	}
 
 	private void init() {
 		setBackground(Colors.BACKGROUND_INFO);

@@ -60,6 +60,9 @@ public class TvSerieSeasonSlider extends AbstractSlider {
 		}
 	}
 	
+	protected void dispose() {
+	}
+	
 	private void init() {
 		setBackground(Colors.BACKGROUND_INFO);
 	}

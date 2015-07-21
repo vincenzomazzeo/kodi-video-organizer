@@ -7,7 +7,6 @@ import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsController;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsView;
-import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import com.alee.laf.WebLookAndFeel;
@@ -18,7 +17,6 @@ public class DialogLauncher {
 	public static void main(String[] args) throws Exception {
 		WebLookAndFeel.install();
 		SettingsHandler.init();
-		TransictionEffectExecutor.init();
 		AsyncManager.init();
 		EnhancedLocaleMap.init();
 		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApiKey());

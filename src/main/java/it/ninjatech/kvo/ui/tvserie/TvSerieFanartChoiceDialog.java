@@ -55,6 +55,7 @@ public class TvSerieFanartChoiceDialog extends WebDialog implements FanartChoice
 		this.providerLogos.put(TvSerieImageProvider.TheTvDb, ImageRetriever.retrieveFanartChoiceTheTvDbLogo());
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		addWindowListener(this);
 		
 		init();
 		
@@ -84,6 +85,12 @@ public class TvSerieFanartChoiceDialog extends WebDialog implements FanartChoice
 
 	@Override
 	public void windowClosing(WindowEvent event) {
+		for (FanartChoicePane pane : this.panes.values()) {
+			pane.dispose();
+		}
+		this.providerLogos.clear();
+		this.panes.clear();
+		this.voidImage = null;
 		this.controller.notifyClosing();
 	}
 

@@ -8,7 +8,6 @@ import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
-import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.AbstractWorker;
@@ -125,9 +124,6 @@ public class Loader extends WebFrame {
 			
 			Settings settings = SettingsHandler.getInstance().getSettings();
 
-			notifyUpdate("Initializing Transiction Effect Handler", 11);
-			TransictionEffectExecutor.init();
-			
 			notifyUpdate("Initializing Async Manager", 15);
 			AsyncManager.init();
 			

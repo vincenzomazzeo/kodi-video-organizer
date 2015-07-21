@@ -2,8 +2,6 @@ package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.transictioneffect.HorizontalScrollTransictionEffect;
-import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -23,6 +21,7 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.managers.style.skin.web.WebLabelPainter;
+import com.alee.utils.SwingUtils;
 
 public abstract class AbstractSlider extends WebPanel implements ActionListener {
 
@@ -74,9 +73,8 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 				WebPanel pane = panes.get(i);
 				Rectangle paneBounds = pane.getBounds();
 				if (paneBounds.x < visibleRect.x) {
-					visibleRect.x = -(visibleRect.x - paneBounds.x + HGAP - 1);
-					HorizontalScrollTransictionEffect transictionEffect = new HorizontalScrollTransictionEffect(this.slider, visibleRect.x);
-					TransictionEffectExecutor.getInstance().execute(transictionEffect);
+					visibleRect.x -= visibleRect.x - paneBounds.x + HGAP;
+					SwingUtils.scrollSmoothly(this.slider, visibleRect.x, visibleRect.y);
 					break;
 				}
 			}
@@ -88,9 +86,11 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 			for (SliderPane pane : getPanes()) {
 				Rectangle paneBounds = pane.getBounds();
 				if ((paneBounds.x + paneBounds.width) > viewportVisibleRightMargin) {
-					visibleRect.x = paneBounds.x + paneBounds.width - visibleRect.x - visibleRect.width + HGAP - 1;
-					HorizontalScrollTransictionEffect transictionEffect = new HorizontalScrollTransictionEffect(this.slider, visibleRect.x);
-					TransictionEffectExecutor.getInstance().execute(transictionEffect);
+					int visibleRectRightBound = visibleRect.x + visibleRect.width;
+					int paneVisibleWidth = visibleRectRightBound - paneBounds.x;
+					int paneInvisibleWidth = paneBounds.width - paneVisibleWidth;
+					visibleRect.x = visibleRectRightBound + paneInvisibleWidth + HGAP - visibleRect.width;
+					SwingUtils.scrollSmoothly(this.slider, visibleRect.x, visibleRect.y);
 					break;
 				}
 			}

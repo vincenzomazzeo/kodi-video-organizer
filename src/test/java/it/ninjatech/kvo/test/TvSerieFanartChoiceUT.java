@@ -9,27 +9,22 @@ import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
-import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 import it.ninjatech.kvo.ui.tvserie.TvSerieFanartChoiceController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
-import java.awt.BorderLayout;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
+import java.text.DecimalFormat;
 
 import com.alee.laf.WebLookAndFeel;
-import com.alee.laf.rootpane.WebFrame;
-import com.alee.laf.scroll.WebScrollPane;
 
-public class TvSerieFanartChoice /*extends WebFrame implements WindowListener*/ {
+public class TvSerieFanartChoiceUT {
 
 	private static final long serialVersionUID = 2497031401907408168L;
 
 	public static void main(String[] args) throws Exception {
+		printMemory("Start");
 		WebLookAndFeel.install();
 		SettingsHandler.init();
-		TransictionEffectExecutor.init();
 		AsyncManager.init();
 		EnhancedLocaleMap.init();
 		TheTvDbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getTheTvDbEnabled());
@@ -49,14 +44,79 @@ public class TvSerieFanartChoice /*extends WebFrame implements WindowListener*/ 
 		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Ciccio"));
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 		tvSeriePathEntity.setTvSerie(tvSerie);
+		printMemory("After");
 		
+		printMemory("Before controller");
 		TvSerieFanartChoiceController controller = new TvSerieFanartChoiceController(tvSeriePathEntity, TvSerieFanart.Fanart);
 		controller.start();
+		printMemory("After controller");
+		System.in.read();
+		System.in.read();
+		printMemory("After input");
 		controller.getView().setVisible(true);
+		printMemory("After visible");
+//		System.in.read();
+//		System.in.read();
+//		controller.getView().dispose();
+		printMemory("After dispose");
+		System.in.read();
+		System.in.read();
+		controller = null;
+		printMemory("After controller = null");
+		System.in.read();
+		System.in.read();
+		
+		System.out.println();
+		
+		printMemory("Before controller 2");
+		controller = new TvSerieFanartChoiceController(tvSeriePathEntity, TvSerieFanart.Banner);
+		controller.start();
+		printMemory("After controller 2");
+		System.in.read();
+		System.in.read();
+		printMemory("After input 2");
+		controller.getView().setVisible(true);
+		printMemory("After visible 2");
+//		System.in.read();
+//		System.in.read();
+//		controller.getView().dispose();
+		printMemory("After dispose 2");
+		System.in.read();
+		System.in.read();
+		controller = null;
+		printMemory("After controller 2 = null");
+		System.in.read();
+		System.in.read();
+		
 		System.exit(0);
+		
 //		TvSerieFanartChoice vvSerieFanartChoice = new TvSerieFanartChoice(tvSeriePathEntity);
 //		
 //		vvSerieFanartChoice.setVisible(true);
+	}
+	
+	private static long lastFree = 0l;
+	
+	public static void printMemory(String message) {
+		printMemory(message, true);
+	}
+	
+	public static void printMemory(String message, boolean gc) {
+		Runtime runtime = Runtime.getRuntime();
+		if (gc) {
+			runtime.gc();
+		}
+		DecimalFormat format = new DecimalFormat("###,###,###");
+		long total = runtime.totalMemory();
+		long max = runtime.totalMemory();
+		long free = runtime.freeMemory();
+		System.out.printf("[Total: %s - Max: %s - Occupied: %s - Delta: %s] - %s\n", 
+		                  format.format(total), 
+		                  format.format(max), 
+		                  format.format(total - free), 
+		                  format.format(lastFree - free), 
+		                  message);
+		lastFree = free;
 	}
 	
 	/*

@@ -60,6 +60,10 @@ public class TvSerieController implements AsyncJobListener {
 
 	public void showTvSerie(TvSeriePathEntity tvSeriePathEntity) {
 		// TODO gestire activation/deactivation
+		this.view.getFanartSlider().dispose();
+		this.view.getSeasonSlider().dispose();
+		this.view.getActorSlider().dispose();
+		
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.view.fill(tvSeriePathEntity);
 		this.view.getSeasonSlider().fill(tvSeriePathEntity);

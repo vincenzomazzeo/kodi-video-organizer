@@ -8,7 +8,6 @@ import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
-import it.ninjatech.kvo.ui.transictioneffect.TransictionEffectExecutor;
 import it.ninjatech.kvo.ui.tvserie.TvSerieController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
@@ -31,7 +30,6 @@ public class TvSerieWall extends WebFrame implements WindowListener, HierarchyLi
 	public static void main(String[] args) throws Exception {
 		WebLookAndFeel.install();
 		SettingsHandler.init();
-		TransictionEffectExecutor.init();
 		AsyncManager.init();
 		EnhancedLocaleMap.init();
 		TheTvDbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getTheTvDbEnabled());

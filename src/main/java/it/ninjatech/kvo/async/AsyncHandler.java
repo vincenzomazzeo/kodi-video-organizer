@@ -29,6 +29,7 @@ public class AsyncHandler<Job extends AsyncJob> implements Runnable {
 							@Override
 							public void run() {
 								jobWrapper.getListener().notify(jobWrapper.getId(), (AsyncJob)jobWrapper.getJob());
+								jobWrapper.clear();
 							}
 						});
 					}

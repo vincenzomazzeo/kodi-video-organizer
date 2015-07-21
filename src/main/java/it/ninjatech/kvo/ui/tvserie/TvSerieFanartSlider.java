@@ -106,10 +106,17 @@ public class TvSerieFanartSlider extends AbstractSlider implements MouseListener
 					SliderPane pane = (SliderPane)this.panes.get(fanartType);
 					pane.setImage(SliderPane.makeImagePane(new ImageIcon(image), fanartType.size));
 					TooltipManager.removeTooltips(pane);
-					TooltipManager.addTooltip(pane, null, "<html><div text-align='center'>Single click to search for more<br />Double click for full size image</div></html>", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
+					TooltipManager.addTooltip(pane, null, "<html><div align='center'>Single click to search for more<br />Double click for full size image</div></html>", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 					break;
 				}
 			}
+		}
+	}
+	
+	// Check memory leak solved
+	protected void dispose() {
+		for (SliderPane pane : this.panes.values()) {
+			TooltipManager.removeTooltips(pane);
 		}
 	}
 

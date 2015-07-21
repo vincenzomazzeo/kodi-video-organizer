@@ -36,7 +36,8 @@ public class TvSerieFanartChoiceController implements AsyncJobListener {
 	@Override
 	public void notify(String id, AsyncJob job) {
 		if (job.getException() != null) {
-			UI.get().notifyException(job.getException());
+//			UI.get().notifyException(job.getException());
+			job.getException().printStackTrace();
 		}
 		else {
 			if (this.fanartJobIds.remove(id)) {

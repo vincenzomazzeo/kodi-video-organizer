@@ -6,9 +6,9 @@ public class AsyncJobWrapper<Job extends AsyncJob> implements Serializable {
 
 	private static final long serialVersionUID = 5334631972867088301L;
 
-	private final String id;
-	private final Job job;
-	private final AsyncJobListener listener;
+	private String id;
+	private Job job;
+	private AsyncJobListener listener;
 	
 	public AsyncJobWrapper(String id, Job job, AsyncJobListener listener) {
 		this.id = id;
@@ -26,6 +26,12 @@ public class AsyncJobWrapper<Job extends AsyncJob> implements Serializable {
 
 	protected AsyncJobListener getListener() {
 		return this.listener;
+	}
+	
+	protected void clear() {
+		this.id = null;
+		this.job = null;
+		this.listener = null;
 	}
 	
 }
