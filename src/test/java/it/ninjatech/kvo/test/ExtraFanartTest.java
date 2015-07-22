@@ -10,18 +10,18 @@ import com.alee.extended.image.WebImageGallery;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.rootpane.WebFrame;
 
-public class ExtraFanart extends WebFrame {
+public class ExtraFanartTest extends WebFrame {
 
 	private static final long serialVersionUID = -7271692298261867823L;
 
 	public static void main(String[] args) throws Exception {
 		WebLookAndFeel.install();
 
-		ExtraFanart f = new ExtraFanart();
+		ExtraFanartTest f = new ExtraFanartTest();
 		f.setVisible(true);
 	}
 
-	private ExtraFanart() throws Exception {
+	private ExtraFanartTest() throws Exception {
 		super();
 
 		init();

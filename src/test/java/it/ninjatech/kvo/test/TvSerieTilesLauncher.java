@@ -21,7 +21,7 @@ import javax.swing.SwingUtilities;
 
 import com.alee.laf.rootpane.WebFrame;
 
-public class TvSerieTiles extends WebFrame {
+public class TvSerieTilesLauncher extends WebFrame {
 
 	private static final long serialVersionUID = 2234913674587205795L;
 
@@ -47,7 +47,7 @@ public class TvSerieTiles extends WebFrame {
 //		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 //		tvSeriePathEntity.setTvSerie(tvSerie);
 		
-		TvSerieTiles frame = new TvSerieTiles(/*tvSeriePathEntity*/);
+		TvSerieTilesLauncher frame = new TvSerieTilesLauncher(/*tvSeriePathEntity*/);
 		
 		frame.setVisible(true);
 		
@@ -58,7 +58,7 @@ public class TvSerieTiles extends WebFrame {
 	
 	private final ExplorerTvSerieController controller;
 	
-	private TvSerieTiles(/*TvSeriePathEntity tvSeriePathEntity*/) {
+	private TvSerieTilesLauncher(/*TvSeriePathEntity tvSeriePathEntity*/) {
 		super();
 		
 		this.controller = new ExplorerTvSerieController();

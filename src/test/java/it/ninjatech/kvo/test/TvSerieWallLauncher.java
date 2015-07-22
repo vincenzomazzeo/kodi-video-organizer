@@ -23,7 +23,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.scroll.WebScrollPane;
 
-public class TvSerieWall extends WebFrame implements WindowListener, HierarchyListener {
+public class TvSerieWallLauncher extends WebFrame implements WindowListener, HierarchyListener {
 
 	private static final long serialVersionUID = 4530104483604809939L;
 
@@ -49,7 +49,7 @@ public class TvSerieWall extends WebFrame implements WindowListener, HierarchyLi
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 		tvSeriePathEntity.setTvSerie(tvSerie);
 		
-		TvSerieWall tvSerieWall = new TvSerieWall(tvSeriePathEntity);
+		TvSerieWallLauncher tvSerieWall = new TvSerieWallLauncher(tvSeriePathEntity);
 		
 		tvSerieWall.setVisible(true);
 	}
@@ -57,7 +57,7 @@ public class TvSerieWall extends WebFrame implements WindowListener, HierarchyLi
 	private final TvSeriePathEntity tvSeriePathEntity;
 	private TvSerieController controller;
 	
-	private TvSerieWall(TvSeriePathEntity tvSeriePathEntity) {
+	private TvSerieWallLauncher(TvSeriePathEntity tvSeriePathEntity) {
 		super();
 		
 		this.tvSeriePathEntity = tvSeriePathEntity;

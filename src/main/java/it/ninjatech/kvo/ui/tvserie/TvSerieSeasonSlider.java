@@ -10,14 +10,17 @@ import it.ninjatech.kvo.ui.component.SliderPane;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
-public class TvSerieSeasonSlider extends AbstractSlider {
+public class TvSerieSeasonSlider extends AbstractSlider implements MouseListener {
 
 	private static final long serialVersionUID = 8674772929291186163L;
 
@@ -38,6 +41,29 @@ public class TvSerieSeasonSlider extends AbstractSlider {
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent event) {
+		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1) {
+			this.controller.notifySeasonSingleClick((TvSerieSeason)((SliderPane)event.getSource()).getData());
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent event) {
+	}
+	
+	@Override
 	protected List<SliderPane> getPanes() {
 		return new ArrayList<>(this.panes.values());
 	}
@@ -54,7 +80,7 @@ public class TvSerieSeasonSlider extends AbstractSlider {
 
 	protected void fill(TvSeriePathEntity tvSeriePathEntity) {
 		for (TvSerieSeason season : tvSeriePathEntity.getTvSerie().getSeasons()) {
-			SliderPane pane = makeSeasonPane(String.format("Season %d", season.getNumber()));
+			SliderPane pane = makeSeasonPane(season);
 			this.panes.put(season, pane);
 			addPane(pane);
 		}
@@ -67,14 +93,16 @@ public class TvSerieSeasonSlider extends AbstractSlider {
 		setBackground(Colors.BACKGROUND_INFO);
 	}
 	
-	private SliderPane makeSeasonPane(String name) {
+	private SliderPane makeSeasonPane(TvSerieSeason season) {
 		SliderPane result = null;
 
 		if (voidImage == null) {
 			voidImage = UIUtils.makeEmptyIcon(this.size, Colors.BACKGROUND_MISSING_IMAGE_ALPHA);
 		}
 
-		result = new SliderPane(voidImage, this.size, makeTitlePane(name));
+		result = new SliderPane(voidImage, this.size, makeTitlePane(String.format("Season %d", season.getNumber())));
+		result.setData(season);
+		result.addMouseListener(this);
 
 		return result;
 	}

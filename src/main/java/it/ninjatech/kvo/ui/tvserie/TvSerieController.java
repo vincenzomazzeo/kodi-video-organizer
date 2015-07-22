@@ -5,9 +5,10 @@ import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieActorImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
-import it.ninjatech.kvo.async.job.TvSerieSeasonImageAsyncJob;
+import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.model.TvSerieActor;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
@@ -45,8 +46,8 @@ public class TvSerieController implements AsyncJobListener {
 			if (job.getClass().equals(TvSerieLocalFanartAsyncJob.class)) {
 				this.view.getFanartSlider().setFanart(((TvSerieLocalFanartAsyncJob)job).getFanart(), ((TvSerieLocalFanartAsyncJob)job).getImage());
 			}
-			else if (job.getClass().equals(TvSerieSeasonImageAsyncJob.class)) {
-				this.view.getSeasonSlider().setSeason(((TvSerieSeasonImageAsyncJob)job).getSeason(), ((TvSerieSeasonImageAsyncJob)job).getImage());
+			else if (job.getClass().equals(TvSerieLocalSeasonImageAsyncJob.class)) {
+				this.view.getSeasonSlider().setSeason(((TvSerieLocalSeasonImageAsyncJob)job).getSeason(), ((TvSerieLocalSeasonImageAsyncJob)job).getImage());
 			}
 			else if (job.getClass().equals(TvSerieActorImageAsyncJob.class)) {
 				this.view.getActorSlider().setActor(((TvSerieActorImageAsyncJob)job).getActor(), ((TvSerieActorImageAsyncJob)job).getImage());
@@ -74,15 +75,11 @@ public class TvSerieController implements AsyncJobListener {
 			AsyncManager.getInstance().submit(String.format("%s_%s", tvSeriePathEntity.getId(), fanart), job, this);
 		}
 
-		// TODO replace with local images
-// Dimension seasonSize = this.view.getSeasonSlider().getSeasonSize();
-// for (TvSerieSeason season : tvSeriePathEntity.getTvSerie().getSeasons()) {
-// TvSerieImage image = season.getImage();
-// if (image != null) {
-// TvSerieSeasonImageAsyncJob job = new TvSerieSeasonImageAsyncJob(season, seasonSize);
-// AsyncManager.getInstance().submit(season.getId(), job, this);
-// }
-// }
+		Dimension seasonSize = this.view.getSeasonSlider().getSeasonSize();
+		for (TvSerieSeason season : tvSeriePathEntity.getTvSerie().getSeasons()) {
+			TvSerieLocalSeasonImageAsyncJob job = new TvSerieLocalSeasonImageAsyncJob(this.tvSeriePathEntity, season, seasonSize);
+			AsyncManager.getInstance().submit(season.getId(), job, this);
+		}
 
 		Dimension actorSize = this.view.getActorSlider().getActorSize();
 		for (TvSerieActor actor : tvSeriePathEntity.getTvSerie().getActors()) {
@@ -127,6 +124,12 @@ public class TvSerieController implements AsyncJobListener {
 	protected void notifyFanartDoubleClick(FanartType fanart) {
 		ImageFullWorker worker = new ImageFullWorker(this.tvSeriePathEntity.getPath(), fanart.getFanart().getFilename());
 		UIUtils.showTvSerieFanartFull(worker, fanart.getFanart());
+	}
+	
+	protected void notifySeasonSingleClick(TvSerieSeason season) {
+		// TODO check if it's complete
+		TvSerieSeasonController controller = new TvSerieSeasonController(this.tvSeriePathEntity, season);
+		controller.getView().setVisible(true);
 	}
 
 	protected void notifyActorDoubleClick(TvSerieActor actor) {

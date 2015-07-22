@@ -12,6 +12,8 @@ import com.alee.utils.SystemUtils;
 public final class Dimensions {
 
 	public static final Dimension ACTOR_FULL_SIZE = new Dimension(300, 450);
+	public static final Dimension SEASON_FULL_SIZE = new Dimension(400, 578);
+	public static final Dimension EPISODE_FULL_SIZE = new Dimension(400, 225);
 	
 	private static final int HD_WIDTH = 1920;
 	private static final int HD_HEIGHT = 1080;
@@ -105,16 +107,30 @@ public final class Dimensions {
 		return getStartupSize().height / 8 * 7;
 	}
 	
+	public static Dimension getTvSerieSeasonHandlerSize() {
+		Dimension result = new Dimension();
+		
+		Dimension startupSize = getStartupSize();
+		result.width = startupSize.width / 10 * 9;
+		result.height = startupSize.height / 10 * 9;
+		
+		return result;
+	}
+	
 	public static Dimension getTvSerieFanartSliderSize(TvSerieFanart fanart) {
 		return getTvSerieFanartSize(fanart.getSliderHeight(), fanart.getRealSize().width, fanart.getRealSize().height);
 	}
 	
 	public static Dimension getTvSerieSeasonSliderSize() {
-		return getTvSerieFanartSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, 400, 578);
+		return getTvSerieFanartSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
 	}
 	
 	public static Dimension getTvSerieActorSliderSize() {
 		return getTvSerieFanartSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, ACTOR_FULL_SIZE.width, ACTOR_FULL_SIZE.height);
+	}
+	
+	public static Dimension getTvSerieSeasonHandlerPosterSize() {
+		return getTvSerieFanartSize(100, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
 	}
 	
 	public static Dimension getTvSerieFanartChooserSize(TvSerieFanart fanart) {
@@ -122,6 +138,15 @@ public final class Dimensions {
 		
 		result.height = fanart.getChooserHeight();
 		result.width = result.height * fanart.getRealSize().width / fanart.getRealSize().height;
+		
+		return result;
+	}
+	
+	public static Dimension getTvSerieSeasonEpisodeImageSize() {
+		Dimension result = new Dimension();
+		
+		result.height = EPISODE_FULL_SIZE.height / 3;
+		result.width = EPISODE_FULL_SIZE.width / 3;
 		
 		return result;
 	}

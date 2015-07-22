@@ -3,6 +3,7 @@ package it.ninjatech.kvo.async;
 import it.ninjatech.kvo.async.job.AbstractTvSerieImageLoaderAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
+import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 
 import java.util.concurrent.ExecutorService;
@@ -60,6 +61,16 @@ public class AsyncManager {
 	
 	public void cancelTvSerieLocalFanartAsyncJob(String id) {
 		System.out.printf("-> cancel local fanart %s\n", id);
+		this.tvSerieImageLoaderHandler.removeJob(id);
+	}
+	
+	public void submit(String id, TvSerieLocalSeasonImageAsyncJob job, AsyncJobListener listener) {
+		System.out.printf("-> submit local season image %s\n", id);
+		this.tvSerieImageLoaderHandler.submitJob(id, job, listener);
+	}
+	
+	public void cancelTvSerieLocalSeasonImageAsyncJob(String id) {
+		System.out.printf("-> cancel local season image %s\n", id);
 		this.tvSerieImageLoaderHandler.removeJob(id);
 	}
 	

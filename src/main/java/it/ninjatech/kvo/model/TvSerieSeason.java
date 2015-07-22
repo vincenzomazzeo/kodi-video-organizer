@@ -1,6 +1,11 @@
 package it.ninjatech.kvo.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
@@ -8,9 +13,9 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 
 	private final String id;
 	private final Integer number;
-	private final Set<TvSerieEpisode> episodes;
-	private final Set<TvSerieSeasonImage> theTvDbImages;
-	private final Set<TvSerieSeasonImage> fanarttvImages;
+	private final SortedSet<TvSerieEpisode> episodes;
+	private final SortedSet<TvSerieSeasonImage> theTvDbImages;
+	private final SortedSet<TvSerieSeasonImage> fanarttvImages;
 	
 	protected TvSerieSeason(String id, Integer number) {
 		this.id = id;
@@ -69,6 +74,42 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	
 	public void addFanarttvImage(TvSerieSeasonImage image) {
 		this.fanarttvImages.add(image);
+	}
+	
+	public String getPosterFilename() {
+		String result = null;
+		
+		DecimalFormat df = new DecimalFormat("00");
+		result = String.format("season%s-poster.jpg", df.format(this.number));
+		
+		return result;
+	}
+	
+	public int episodeCount() {
+		return this.episodes.size();
+	}
+	
+	public Set<TvSerieEpisode> getEpisodes() {
+		return this.episodes.isEmpty() ? Collections.<TvSerieEpisode>emptySet() : Collections.unmodifiableSortedSet(this.episodes);
+	}
+	
+	public String getAverageRating() {
+		String result = null;	
+		
+		int count = 0;
+		BigDecimal averageRating = new BigDecimal("0");
+		for (TvSerieEpisode episode : this.episodes) {
+			BigDecimal episodeRating = episode.getRating();
+			if (episodeRating != null) {
+				count++;
+				averageRating = averageRating.add(episodeRating);
+			}
+		}
+		if (count > 0) {
+			result = averageRating.divide(new BigDecimal(count), 1, RoundingMode.HALF_UP).toString();
+		}
+		
+		return result;
 	}
 	
 	protected void addEpisode(TvSerieEpisode episode) {

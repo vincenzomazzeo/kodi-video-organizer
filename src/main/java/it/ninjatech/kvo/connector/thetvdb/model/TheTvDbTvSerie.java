@@ -291,8 +291,8 @@ public class TheTvDbTvSerie {
 			episode.setGuestStars(this.guestStarts);
 			episode.setImdbId(this.imdbId);
 			episode.setOverview(this.overview);
-			episode.setRating(this.rating != null ? this.rating.toString() : null);
-			episode.setRatingCount(this.ratingCount != null ? this.ratingCount.toString() : null);
+			episode.setRating(this.rating);
+			episode.setRatingCount(this.ratingCount);
 			episode.setWriters(this.writers);
 			episode.setArtwork(this.artwork);
 		}

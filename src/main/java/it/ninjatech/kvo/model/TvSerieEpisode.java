@@ -20,8 +20,8 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 	private List<String> guestStars;
 	private String imdbId;
 	private String overview;
-	private String rating;
-	private String ratingCount;
+	private BigDecimal rating;
+	private Integer ratingCount;
 	private List<String> writers;
 	private String artwork;
 	
@@ -123,19 +123,19 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 		this.overview = overview;
 	}
 
-	public String getRating() {
+	public BigDecimal getRating() {
 		return this.rating;
 	}
 
-	public void setRating(String rating) {
+	public void setRating(BigDecimal rating) {
 		this.rating = rating;
 	}
 
-	public String getRatingCount() {
+	public Integer getRatingCount() {
 		return this.ratingCount;
 	}
 
-	public void setRatingCount(String ratingCount) {
+	public void setRatingCount(Integer ratingCount) {
 		this.ratingCount = ratingCount;
 	}
 

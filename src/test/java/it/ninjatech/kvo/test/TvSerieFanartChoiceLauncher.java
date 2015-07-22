@@ -17,7 +17,7 @@ import java.text.DecimalFormat;
 
 import com.alee.laf.WebLookAndFeel;
 
-public class TvSerieFanartChoiceUT {
+public class TvSerieFanartChoiceLauncher {
 
 	private static final long serialVersionUID = 2497031401907408168L;
 
