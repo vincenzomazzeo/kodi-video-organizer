@@ -42,6 +42,7 @@ public final class ImageRetriever {
 	}
 
 	private static final int APIKEY_SIZE = 40;
+	public static final int EPISODE_TILE_VIDEO_FILE_SIZE = 40;
 	private static final int EXPLORER_TREE_ICON_SIZE = 16;
 	private static final int EXPLORER_TREE_MENU_ICON_SIZE = 50;
 	private static final int EXPLORER_TREE_TAB_ICON_SIZE = 32;
@@ -57,6 +58,7 @@ public final class ImageRetriever {
 	private static final int WALL_IMDB_SIZE = 20;
 	private static final int WALL_STAR_SIZE = 40;
 	
+	private static ImageIcon episodeTileVideoFile;
 	private static ImageIcon explorerTilePosterTvSerie;
 	private static ImageIcon explorerTreeFolder;
 	private static ImageIcon explorerTreeFolderMovies;
@@ -85,6 +87,14 @@ public final class ImageRetriever {
 	
 	public static ImageIcon retrieveApikey() {
 		return retrieveAndScaleImage(ImageName.Apikey, APIKEY_SIZE);
+	}
+	
+	public static ImageIcon retrieveEpisodeTileVideoFile() {
+		if (episodeTileVideoFile == null) {
+			episodeTileVideoFile = retrieveAndScaleImage(ImageName.TvSerie, EPISODE_TILE_VIDEO_FILE_SIZE);
+		}
+		
+		return episodeTileVideoFile;
 	}
 	
 	public static ImageIcon retrieveExplorerTilePosterTvSerie() {

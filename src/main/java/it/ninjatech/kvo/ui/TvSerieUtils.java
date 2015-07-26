@@ -2,6 +2,7 @@ package it.ninjatech.kvo.ui;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSerieImage;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
@@ -10,6 +11,7 @@ import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.worker.TvSerieFetcher;
 import it.ninjatech.kvo.worker.TvSerieFinder;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
@@ -138,11 +140,11 @@ public final class TvSerieUtils {
 	}
 	
 	public static boolean hasExtraFanarts(TvSeriePathEntity tvSeriePathEntity) {
-		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().hasExtraFanarts() : false;
+		return tvSeriePathEntity.hasExtraFanarts();
 	}
 	
 	public static Set<String> getExtraFanarts(TvSeriePathEntity tvSeriePathEntity) {
-		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().getExtraFanarts() : Collections.<String>emptySet();
+		return tvSeriePathEntity.getExtraFanarts();
 	}
 	
 	public static Set<TvSerieImage> getTheTvDbFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
@@ -155,6 +157,23 @@ public final class TvSerieUtils {
 	
 	public static boolean hasFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
 		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().hasFanarts(fanart) : false;
+	}
+	
+	public static String getEpisodeName(TvSerieEpisode episode) {
+		String result = null;
+		
+		DecimalFormat format = new DecimalFormat("00");
+		result = String.format("%s - %s", format.format(episode.getNumber()), episode.getName());
+		
+		return result;
+	}
+	
+	public static Set<String> getVideoFiles(TvSeriePathEntity tvSeriePathEntity, Integer season) {
+		return tvSeriePathEntity.getVideoFiles(season);
+	}
+	
+	public static Set<String> getSubtitleFiles(TvSeriePathEntity tvSeriePathEntity, Integer season) {
+		return tvSeriePathEntity.getSubtitleFiles(season);
 	}
 
 	private TvSerieUtils() {

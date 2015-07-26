@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +33,6 @@ public class TvSerie {
 	private final Map<Integer, TvSerieSeason> seasons;
 	private final SortedSet<TvSerieActor> actors;
 	private final EnumMap<TvSerieImageProvider, EnumMap<TvSerieFanart, SortedSet<TvSerieImage>>> fanarts;
-	private final Set<String> extraFanarts;
 
 	public TvSerie(String id, String providerId, String name, EnhancedLocale language) {
 		this.id = id;
@@ -44,7 +42,6 @@ public class TvSerie {
 		this.seasons = new TreeMap<>();
 		this.actors = new TreeSet<>();
 		this.fanarts = new EnumMap<>(TvSerieImageProvider.class);
-		this.extraFanarts = new HashSet<>();
 	}
 
 	public TvSerie(String providerId, String name, EnhancedLocale language) {
@@ -165,18 +162,6 @@ public class TvSerie {
 
 	public Set<TvSerieActor> getActors() {
 		return Collections.unmodifiableSortedSet(this.actors);
-	}
-
-	public void addExtrafanart(String extrafanart) {
-		this.extraFanarts.add(extrafanart);
-	}
-
-	public boolean hasExtraFanarts() {
-		return !this.extraFanarts.isEmpty();
-	}
-
-	public Set<String> getExtraFanarts() {
-		return Collections.unmodifiableSet(this.extraFanarts);
 	}
 
 	public String getId() {

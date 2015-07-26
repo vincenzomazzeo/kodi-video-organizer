@@ -496,7 +496,7 @@ public final class EnhancedLocaleMap {
 
 	}
 
-	private static final int FLAG_HEIGHT = 16;
+	public static final int FLAG_HEIGHT = 16;
 	private static final int FLAG_REAL_WIDTH = 32;
 	private static final int FLAG_REAL_HEIGHT = 24;
 	

@@ -3,6 +3,8 @@ package it.ninjatech.kvo.model;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 
 public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
@@ -11,6 +13,9 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 	private final String providerId;
 	private final Integer number;
 	private final EnhancedLocale language;
+	
+	private String filename;
+	private final Set<String> subtitleFilenames;
 	
 	private String seasonId;
 	private BigDecimal dvdNumber;
@@ -30,6 +35,7 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 		this.providerId = providerId;
 		this.number = number;
 		this.language = language;
+		this.subtitleFilenames = new TreeSet<>();
 	}
 	
 	public TvSerieEpisode(String providerId, Integer number, EnhancedLocale language) {
@@ -65,6 +71,38 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 	@Override
 	public int compareTo(TvSerieEpisode other) {
 		return this.number.compareTo(other.number);
+	}
+	
+	public String getId() {
+		return this.id;
+	}
+
+	public String getProviderId() {
+		return this.providerId;
+	}
+	
+	public Integer getNumber() {
+		return this.number;
+	}
+
+	public EnhancedLocale getLanguage() {
+		return this.language;
+	}
+
+	public String getFilename() {
+		return this.filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	
+	public String getSeasonId() {
+		return this.seasonId;
+	}
+
+	protected void setSeasonId(String seasonId) {
+		this.seasonId = seasonId;
 	}
 
 	public BigDecimal getDvdNumber() {
@@ -153,30 +191,6 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 
 	public void setArtwork(String artwork) {
 		this.artwork = artwork;
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public String getProviderId() {
-		return this.providerId;
-	}
-
-	public String getSeasonId() {
-		return this.seasonId;
-	}
-
-	public Integer getNumber() {
-		return this.number;
-	}
-
-	public EnhancedLocale getLanguage() {
-		return this.language;
-	}
-
-	protected void setSeasonId(String seasonId) {
-		this.seasonId = seasonId;
 	}
 
 }
