@@ -20,14 +20,14 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.table.renderers.WebTableCellRenderer;
 
-public class TvSerieSearchMultiResultView extends WebDialog implements MouseListener {
+public class TvSerieSearchMultiResultDialog extends WebDialog implements MouseListener {
 
 	private static final long serialVersionUID = -5826369642058899605L;
 
 	private final TvSerieSearchMultiResultController controller;
 	private WebTable table;
 
-	protected TvSerieSearchMultiResultView(TvSerieSearchMultiResultController controller, List<TvSerie> tvSeries) {
+	protected TvSerieSearchMultiResultDialog(TvSerieSearchMultiResultController controller, List<TvSerie> tvSeries) {
 		super(UI.get(), "TV Serie Search Multi Result", true);
 
 		this.controller = controller;

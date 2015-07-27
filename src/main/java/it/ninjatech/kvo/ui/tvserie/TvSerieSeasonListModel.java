@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.tvserie;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,13 @@ public class TvSerieSeasonListModel extends AbstractListModel<String> {
 	@Override
 	public String getElementAt(int index) {
 		return this.data.get(index);
+	}
+	
+	protected void addElement(String element) {
+		this.data.add(element);
+		Collections.sort(this.data);
+		int index = this.data.indexOf(element);
+		fireIntervalAdded(this, index, index);
 	}
 	
 	protected void removeElement(String element) {

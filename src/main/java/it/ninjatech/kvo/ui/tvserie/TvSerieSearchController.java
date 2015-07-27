@@ -11,11 +11,11 @@ import org.apache.commons.lang3.StringUtils;
 
 public class TvSerieSearchController {
 
-	private final TvSerieSearchView view;
+	private final TvSerieSearchDialog view;
 	private final TvSerieSearchListener listener;
 
 	public TvSerieSearchController(TvSerieSearchListener listener) {
-		this.view = new TvSerieSearchView(this);
+		this.view = new TvSerieSearchDialog(this);
 		this.listener = listener;
 
 		List<EnhancedLocale> languages = new ArrayList<>();
@@ -24,7 +24,7 @@ public class TvSerieSearchController {
 		this.view.setLanguages(languages);
 	}
 
-	public TvSerieSearchView getView() {
+	public TvSerieSearchDialog getView() {
 		return this.view;
 	}
 

@@ -8,15 +8,15 @@ public class TvSerieSearchMultiResultController {
 
 	private final List<TvSerie> tvSeries;
 	private final TvSerieSearchMultiResultListener listener;
-	private final TvSerieSearchMultiResultView view;
+	private final TvSerieSearchMultiResultDialog view;
 
 	public TvSerieSearchMultiResultController(List<TvSerie> tvSeries, TvSerieSearchMultiResultListener listener) {
 		this.tvSeries = tvSeries;
 		this.listener = listener;
-		this.view = new TvSerieSearchMultiResultView(this, this.tvSeries);
+		this.view = new TvSerieSearchMultiResultDialog(this, this.tvSeries);
 	}
 	
-	public TvSerieSearchMultiResultView getView() {
+	public TvSerieSearchMultiResultDialog getView() {
 		return this.view;
 	}
 	

@@ -4,6 +4,7 @@ import it.ninjatech.kvo.async.AsyncJob;
 import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
+import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
@@ -34,7 +35,7 @@ public class TvSerieSeasonController implements AsyncJobListener {
 	private final TvSerieSeasonListModel subtitleFileListModel;
 	private final TvSerieSeasonDialog view;
 	private final Map<TvSerieEpisode, String> videoEpisodeMap;
-	private final Map<TvSerieEpisode, Set<String>> subtitleEpisodeMap;
+	private final Map<TvSerieEpisode, Map<EnhancedLocale, Set<String>>> subtitleEpisodeMap;
 	
 	public TvSerieSeasonController(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season) {
 		this.tvSeriePathEntity = tvSeriePathEntity;
@@ -71,6 +72,13 @@ public class TvSerieSeasonController implements AsyncJobListener {
 	
 	protected void notifyClosing() {
 		
+	}
+	
+	protected void notifyVideoFileRightClick(TvSerieEpisode episode, TvSerieEpisodeTile tile) {
+		String filename = this.videoEpisodeMap.remove(episode);
+		this.videoFileListModel.addElement(filename);
+		
+		tile.clearVideoFile();
 	}
 	
 	protected EpisodeTileDropTransferHandler makeEpisodeTileDropTransferHandler(TvSerieEpisode episode, TvSerieEpisodeTile tile) {
@@ -146,10 +154,16 @@ public class TvSerieSeasonController implements AsyncJobListener {
 				String filename = (String)support.getTransferable().getTransferData(support.getDataFlavors()[0]);
 				if (support.getDataFlavors()[0].getHumanPresentableName().equals(VIDEO_FILE_DATA_FLAVOR.getHumanPresentableName())) {
 					this.controller.videoEpisodeMap.put(this.episode, filename);
-					this.tile.setVideoFile();
+					this.tile.setVideoFile(filename, true);
 				}
 				else if (support.getDataFlavors()[0].getHumanPresentableName().equals(SUBTITLE_FILE_DATA_FLAVOR.getHumanPresentableName())) {
-					// TODO gestione popup per scelta lingua
+					TvSerieEpisodeSubtitleDialog dialog = new TvSerieEpisodeSubtitleDialog();
+					dialog.setVisible(true);
+					result = dialog.isConfirmed();
+					if (result) {
+						EnhancedLocale language = dialog.getLanguage();
+						this.tile.addLanguage(language, filename, true);
+					}
 				}
 			}
 			catch (UnsupportedFlavorException | IOException e) {

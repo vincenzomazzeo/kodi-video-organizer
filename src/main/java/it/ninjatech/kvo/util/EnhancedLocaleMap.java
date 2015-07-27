@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -417,7 +419,7 @@ public final class EnhancedLocaleMap {
 		PR("pr", "Puerto Rico", FlagCoord.PR, "en", "English", FlagCoord.GB, false),
 		PS("ps", "Palestine, State of", FlagCoord.PS, "ar", "Arabic", FlagCoord.AE, false),
 		PT("pt", "Portugal", FlagCoord.PT, "pt", "Portuguese", FlagCoord.PT, true),
-		PW("pw", "Palau", FlagCoord.PW, "pau", null, FlagCoord.PW, true),
+		PW("pw", "Palau", FlagCoord.PW, "pau", "Palauan", FlagCoord.PW, true),
 		PY("py", "Paraguay", FlagCoord.PY, "es", "Spanish", FlagCoord.ES, false),
 		QA("qa", "Qatar", FlagCoord.QA, "ar", "Arabic", FlagCoord.AE, false),
 		RE("re", "Réunion", FlagCoord.RE, "fr", "French", FlagCoord.FR, false),
@@ -548,6 +550,14 @@ public final class EnhancedLocaleMap {
 
 	public static EnhancedLocale getByLanguage(String language) {
 		return byLanguage.get(language.toLowerCase());
+	}
+	
+	public static Set<EnhancedLocale> getLanguages() {
+		Set<EnhancedLocale> result = new TreeSet<>(EnhancedLocale.languageComparator());
+		
+		result.addAll(byLanguage.values());
+		
+		return result;
 	}
 	
 	private static ImageIcon getFlag(BufferedImage flags, FlagCoord flagCoord) {

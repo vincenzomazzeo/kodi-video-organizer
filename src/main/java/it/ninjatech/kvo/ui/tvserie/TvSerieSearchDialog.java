@@ -21,17 +21,17 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.text.WebTextField;
 
-public class TvSerieSearchView extends WebDialog implements ActionListener {
+public class TvSerieSearchDialog extends WebDialog implements ActionListener {
 
 	private static final long serialVersionUID = 5517804638406906373L;
 	
 	private final TvSerieSearchController controller;
 	private final WebPanel container;
-	private WebTextField searchF;
-	private WebComboBox languageCB;
-	private WebButton searchB;
+	private WebTextField search;
+	private WebComboBox language;
+	private WebButton startSearch;
 
-	protected TvSerieSearchView(TvSerieSearchController controller) {
+	protected TvSerieSearchDialog(TvSerieSearchController controller) {
 		super(UI.get(), "Search for TV Serie", true);
 
 		this.controller = controller;
@@ -52,18 +52,18 @@ public class TvSerieSearchView extends WebDialog implements ActionListener {
 	}
 
 	protected String getSearch() {
-		return this.searchF.getText();
+		return this.search.getText();
 	}
 	
 	protected EnhancedLocale getLanguage() {
-		return (EnhancedLocale)this.languageCB.getSelectedItem();
+		return (EnhancedLocale)this.language.getSelectedItem();
 	}
 	
 	@SuppressWarnings("unchecked")
 	protected void setLanguages(List<EnhancedLocale> languages) {
-		this.languageCB.removeAllItems();
+		this.language.removeAllItems();
 		for (EnhancedLocale language : languages) {
-			this.languageCB.addItem(language);
+			this.language.addItem(language);
 		}
 	}
 	
@@ -81,15 +81,15 @@ public class TvSerieSearchView extends WebDialog implements ActionListener {
 		WebLabel searchL = new WebLabel("Search");
 		searchL.setDrawShade(true);
 
-		this.searchF = new WebTextField(40);
+		this.search = new WebTextField(40);
 
 		WebLabel languageL = new WebLabel("Language");
 		languageL.setDrawShade(true);
 
-		this.languageCB = new WebComboBox();
-		this.languageCB.setRenderer(new EnhancedLocaleLanguageComboBoxCellRenderer());
+		this.language = new WebComboBox();
+		this.language.setRenderer(new EnhancedLocaleLanguageComboBoxCellRenderer());
 
-		result = new GroupPanel(false, UIUtils.makeVerticalFillerPane(20, true), searchL, this.searchF, UIUtils.makeVerticalFillerPane(20, true), languageL, this.languageCB, UIUtils.makeVerticalFillerPane(20, true));
+		result = new GroupPanel(false, UIUtils.makeVerticalFillerPane(20, true), searchL, this.search, UIUtils.makeVerticalFillerPane(20, true), languageL, this.language, UIUtils.makeVerticalFillerPane(20, true));
 		result.setMargin(10);
 
 		return result;
@@ -98,10 +98,10 @@ public class TvSerieSearchView extends WebDialog implements ActionListener {
 	private WebPanel makeButtonPane() {
 		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.RIGHT));
 		
-		this.searchB = WebButton.createWebButton(StyleConstants.smallRound, StyleConstants.shadeWidth, StyleConstants.innerShadeWidth, 0, false, false, false);
-		this.searchB.setText("Confirm");
-		this.searchB.addActionListener(this);
-		result.add(this.searchB);
+		this.startSearch = WebButton.createWebButton(StyleConstants.smallRound, StyleConstants.shadeWidth, StyleConstants.innerShadeWidth, 0, false, false, false);
+		this.startSearch.setText("Confirm");
+		this.startSearch.addActionListener(this);
+		result.add(this.startSearch);
 		
 		return result;
 	}

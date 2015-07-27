@@ -14,6 +14,7 @@ public final class Dimensions {
 	public static final Dimension ACTOR_FULL_SIZE = new Dimension(300, 450);
 	public static final Dimension SEASON_FULL_SIZE = new Dimension(400, 578);
 	public static final Dimension EPISODE_FULL_SIZE = new Dimension(400, 225);
+	public static final int SCROLL_BAR_WIDTH = 20;
 	
 	private static final int HD_WIDTH = 1920;
 	private static final int HD_HEIGHT = 1080;
