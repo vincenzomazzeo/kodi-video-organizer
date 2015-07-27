@@ -18,8 +18,12 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
@@ -34,6 +38,7 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.panel.WebOverlay;
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
+import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
 import com.alee.laf.panel.WebPanel;
@@ -44,7 +49,7 @@ import com.alee.laf.splitpane.WebSplitPane;
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
 
-public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
+public class TvSerieSeasonDialog extends WebDialog implements WindowListener, ActionListener {
 
 	private static final long serialVersionUID = -2012464643608233002L;
 
@@ -93,7 +98,11 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
 	}
 	
 	private final TvSerieSeasonController controller;
+	private final Map<String, TvSerieEpisodeTile> tileMap;
 	private Dimension seasonImageSize;
+	private Dimension episodeImageSize;
+	private WebButton confirm;
+	private WebButton cancel;
 	private ComponentTransition transition;
 	private WebList videoFileList;
 	private WebList subtitleFileList;
@@ -102,6 +111,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
 		super(UI.get(), String.format("%s - Season %s", TvSerieUtils.getTitle(tvSeriePathEntity), season.getNumber()), true);
 
 		this.controller = controller;
+		this.tileMap = new HashMap<>();
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addWindowListener(this);
@@ -118,8 +128,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent event) {
-		removeTooltip();
-		this.controller.notifyClosing();
+		this.controller.notifyCancel();
 	}
 
 	@Override
@@ -142,14 +151,41 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
 	public void windowDeactivated(WindowEvent event) {
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == this.confirm) {
+			this.controller.notifyConfirm();
+		}
+		else if (event.getSource() == this.cancel) {
+			this.controller.notifyCancel();
+		}
+	}
+
+	protected void destroy() {
+		removeTooltip();
+		for (TvSerieEpisodeTile tile : this.tileMap.values()) {
+			tile.dispose();
+		}
+	}
+	
 	protected Dimension getSeasonImageSize() {
 		return this.seasonImageSize;
+	}
+	
+	protected Dimension getEpisodeImageSize() {
+		return this.episodeImageSize;
 	}
 
 	protected void setSeasonImage(Image image) {
 		if (image != null) {
 			removeTooltip();
 			this.transition.performTransition(makeImagePane(new ImageIcon(image), this.seasonImageSize));
+		}
+	}
+	
+	protected void setEpisodeImage(String id, Image image) {
+		if (image != null) {
+			this.tileMap.get(id).setImage(image);
 		}
 	}
 
@@ -171,20 +207,25 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
 	}
 
 	private WebPanel makeHeaderPane(TvSerieSeason season) {
-		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.LEFT));
-
+		WebPanel result = new WebPanel(new BorderLayout());
+		
 		result.setOpaque(false);
-		result.setMargin(5, 10, 5, 10);
+		
+		WebPanel leftPane = new WebPanel(new FlowLayout(FlowLayout.LEFT));
+		result.add(leftPane, BorderLayout.WEST);
+
+		leftPane.setOpaque(false);
+		leftPane.setMargin(5, 10, 5, 10);
 
 		this.seasonImageSize = Dimensions.getTvSerieSeasonHandlerPosterSize();
 		ImageIcon voidImage = UIUtils.makeEmptyIcon(this.seasonImageSize, Colors.BACKGROUND_MISSING_IMAGE_ALPHA);
 		WebDecoratedImage image = makeImagePane(voidImage, this.seasonImageSize);
 		this.transition = new ComponentTransition(image, new FadeTransitionEffect());
-		result.add(this.transition);
+		leftPane.add(this.transition);
 		this.transition.setOpaque(false);
 
 		WebPanel dataPane = new WebPanel(new VerticalFlowLayout());
-		result.add(dataPane);
+		leftPane.add(dataPane);
 		dataPane.setOpaque(false);
 
 		WebPanel titlePane = new WebPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
@@ -218,6 +259,24 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
 		infoPane.add(starOverlay);
 		starOverlay.setBackground(Colors.TRANSPARENT);
 
+		WebPanel rightPane = new WebPanel(new FlowLayout(FlowLayout.RIGHT));
+		result.add(rightPane, BorderLayout.EAST);
+
+		rightPane.setOpaque(false);
+		rightPane.setMargin(5, 10, 5, 10);
+
+		this.confirm = new WebButton(ImageRetriever.retrieveTvSerieSeasonDialogConfirm());
+		this.confirm.setUndecorated(true);
+		this.confirm.addActionListener(this);
+		rightPane.add(this.confirm);
+		
+		rightPane.add(UIUtils.makeHorizontalFillerPane(10, false));
+		
+		this.cancel = new WebButton(ImageRetriever.retrieveTvSerieSeasonDialogCancel());
+		this.cancel.setUndecorated(true);
+		this.cancel.addActionListener(this);
+		rightPane.add(this.cancel);
+		
 		return result;
 	}
 
@@ -249,11 +308,13 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener {
 		content.setPreferredWidth(width);
 		content.setBackground(Colors.BACKGROUND_INFO);
 
-		Dimension episodeImageSize = Dimensions.getTvSerieSeasonEpisodeImageSize();
-		ImageIcon voidImage = UIUtils.makeEmptyIcon(episodeImageSize, Colors.BACKGROUND_MISSING_IMAGE_ALPHA);
+		this.episodeImageSize = Dimensions.getTvSerieSeasonEpisodeImageSize();
+		ImageIcon voidImage = UIUtils.makeEmptyIcon(this.episodeImageSize, Colors.BACKGROUND_MISSING_IMAGE_ALPHA);
 		ImageIcon voidVideoFileImage = UIUtils.makeEmptyIcon(new Dimension(ImageRetriever.EPISODE_TILE_VIDEO_FILE_SIZE, ImageRetriever.EPISODE_TILE_VIDEO_FILE_SIZE), Colors.BACKGROUND_INFO);
 		for (TvSerieEpisode episode : season.getEpisodes()) {
-			content.add(new TvSerieEpisodeTile(controller, episode, voidImage, voidVideoFileImage, width));
+			TvSerieEpisodeTile tile = new TvSerieEpisodeTile(this.controller, episode, voidImage, voidVideoFileImage, width);
+			this.tileMap.put(episode.getId(), tile);
+			content.add(tile);
 			content.add(WebSeparator.createHorizontal());
 		}
 

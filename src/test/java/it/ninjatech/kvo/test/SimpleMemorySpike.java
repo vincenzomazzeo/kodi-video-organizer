@@ -9,7 +9,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -28,8 +27,6 @@ import com.alee.managers.tooltip.TooltipManager;
 
 public class SimpleMemorySpike {
 
-	private static long lastFree = 0l;
-	
 	public static void main(String[] args) throws Exception {
 		WebLookAndFeel.install();
 		EnhancedLocaleMap.init();
@@ -55,9 +52,9 @@ public class SimpleMemorySpike {
 			wdi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			wdi.setDrawGlassLayer(false);
 			TooltipManager.addTooltip(wdi, null, "Test", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
-			printMemory(i + "");
+			MemoryUtils.printMemory(i + "");
 			TooltipManager.removeTooltips(wdi);
-			printMemory(i + "");
+			MemoryUtils.printMemory(i + "");
 		}
 		
 		System.in.read();
@@ -73,12 +70,12 @@ public class SimpleMemorySpike {
 		first.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		first.setDrawGlassLayer(false);
 		TooltipManager.addTooltip(first, null, "prova", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
-		printMemory("First");
+		MemoryUtils.printMemory("First");
 		
 		ComponentTransition imageTransition = new ComponentTransition(first, new FadeTransitionEffect());
 		content.add(imageTransition);
 		imageTransition.setOpaque(false);
-		printMemory("Transition");
+		MemoryUtils.printMemory("Transition");
 		
 		dialog.setVisible(true);
 		System.in.read();
@@ -90,7 +87,7 @@ public class SimpleMemorySpike {
 		second.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		second.setDrawGlassLayer(false);
 		TooltipManager.addTooltip(second, null, "prova", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
-		printMemory("Second");
+		MemoryUtils.printMemory("Second");
 		
 		imageTransition.performTransition(second);
 		
@@ -106,27 +103,12 @@ public class SimpleMemorySpike {
 		imageTransition = null;
 		image = null;
 		dialog.dispose();
-		printMemory("Dialog - dispose");
+		MemoryUtils.printMemory("Dialog - dispose");
 		System.in.read();
 		System.in.read();
 		System.out.println("End");
 		
 		System.exit(0);
-	}
-	
-	private static void printMemory(String message) {
-		Runtime runtime = Runtime.getRuntime();
-		DecimalFormat format = new DecimalFormat("###,###,###");
-		long total = runtime.totalMemory();
-		long max = runtime.totalMemory();
-		long free = runtime.freeMemory();
-		System.out.printf("[Total: %s - Max: %s - Occupied: %s - Delta: %s] - %s\n", 
-		                  format.format(total), 
-		                  format.format(max), 
-		                  format.format(total - free), 
-		                  format.format(lastFree - free), 
-		                  message);
-		lastFree = free;
 	}
 	
 }

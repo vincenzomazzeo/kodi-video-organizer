@@ -11,6 +11,7 @@ import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
 
 public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
-// TODO check memory leak
+
 	private static final long serialVersionUID = 5106725843208684939L;
 
 	private final TvSerieSeasonController controller;
@@ -63,7 +64,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 			}
 			else {
 				WebImage image = (WebImage)event.getSource();
-//				this.controller.notifyLanguageRightClick(image.getName());
+				this.controller.notifyLanguageRightClick(this.episode, this, image.getName());
 			}
 		}
 	}
@@ -84,6 +85,10 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 	public void mouseExited(MouseEvent event) {
 	}
 
+	protected void setImage(Image image) {
+		this.imageTransition.performTransition(new WebImage(image));
+	}
+	
 	protected void setVideoFile(String filename, boolean removable) {
 		String tooltip = String.format("<html><div align='center'>%s%s</div></html>", filename, removable ? "<br />Right click to remove" : "");
 		TooltipManager.addTooltip(this.videoFileTransition, null, tooltip, TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(1));
@@ -114,6 +119,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		WebPanel languagesPane = (WebPanel)this.languages.getViewport().getView();
 		languagesPane.add(image);
 		languagesPane.revalidate();
+		languagesPane.repaint();
 	}
 	
 	protected void removeLanguage(String filename) {
@@ -122,6 +128,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		WebPanel languagesPane = (WebPanel)this.languages.getViewport().getView();
 		languagesPane.remove(image);
 		languagesPane.revalidate();
+		languagesPane.repaint();
 	}
 	
 	protected void dispose() {

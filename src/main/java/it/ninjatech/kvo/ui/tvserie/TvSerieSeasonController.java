@@ -3,9 +3,11 @@ package it.ninjatech.kvo.ui.tvserie;
 import it.ninjatech.kvo.async.AsyncJob;
 import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
+import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
+import it.ninjatech.kvo.model.TvSerieImageProvider;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.TvSerieUtils;
@@ -17,26 +19,28 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.list.WebList;
 
 public class TvSerieSeasonController implements AsyncJobListener {
 
 	private static final DataFlavor VIDEO_FILE_DATA_FLAVOR = new DataFlavor(TvSerieSeasonController.class, "VideoFileDND");
 	private static final DataFlavor SUBTITLE_FILE_DATA_FLAVOR = new DataFlavor(TvSerieSeasonController.class, "SubtitleFileDND");
-	
+
 	private final TvSeriePathEntity tvSeriePathEntity;
 	private final TvSerieSeason season;
 	private final TvSerieSeasonListModel videoFileListModel;
 	private final TvSerieSeasonListModel subtitleFileListModel;
 	private final TvSerieSeasonDialog view;
 	private final Map<TvSerieEpisode, String> videoEpisodeMap;
-	private final Map<TvSerieEpisode, Map<EnhancedLocale, Set<String>>> subtitleEpisodeMap;
-	
+	private final Map<TvSerieEpisode, Map<String, EnhancedLocale>> subtitleEpisodeMap;
+
 	public TvSerieSeasonController(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season) {
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.season = season;
@@ -45,10 +49,8 @@ public class TvSerieSeasonController implements AsyncJobListener {
 		this.view = new TvSerieSeasonDialog(this, this.tvSeriePathEntity, this.season, this.videoFileListModel, this.subtitleFileListModel);
 		this.videoEpisodeMap = new HashMap<>();
 		this.subtitleEpisodeMap = new HashMap<>();
-		
-		System.out.println(VIDEO_FILE_DATA_FLAVOR.equals(SUBTITLE_FILE_DATA_FLAVOR));
 	}
-	
+
 	@Override
 	public void notify(String id, AsyncJob job) {
 		if (job.getException() != null) {
@@ -58,47 +60,74 @@ public class TvSerieSeasonController implements AsyncJobListener {
 			if (job.getClass().equals(TvSerieLocalSeasonImageAsyncJob.class)) {
 				this.view.setSeasonImage(((TvSerieLocalSeasonImageAsyncJob)job).getImage());
 			}
+			else if (job.getClass().equals(TvSerieCacheRemoteImageAsyncJob.class)) {
+				this.view.setEpisodeImage(id, ((TvSerieCacheRemoteImageAsyncJob)job).getImage());
+			}
 		}
 	}
-	
+
 	public TvSerieSeasonDialog getView() {
 		return this.view;
 	}
-	
+
 	public void start() {
 		TvSerieLocalSeasonImageAsyncJob job = new TvSerieLocalSeasonImageAsyncJob(this.tvSeriePathEntity, this.season, this.view.getSeasonImageSize());
 		AsyncManager.getInstance().submit(this.season.getId(), job, this);
-	}
-	
-	protected void notifyClosing() {
 		
+		for (TvSerieEpisode episode : this.season.getEpisodes()) {
+			if (StringUtils.isNotBlank(episode.getArtwork())) {
+				TvSerieCacheRemoteImageAsyncJob episodeImageJob = new TvSerieCacheRemoteImageAsyncJob(episode.getId(), TvSerieImageProvider.TheTvDb, episode.getArtwork(), this.view.getEpisodeImageSize());
+				AsyncManager.getInstance().submit(episode.getId(), episodeImageJob, this);
+			}
+		}
+	}
+
+	protected void notifyConfirm() {
+		this.view.setVisible(false);
+		this.view.destroy();
+		this.view.dispose();
+		
+		// TODO 
 	}
 	
+	protected void notifyCancel() {
+		this.view.setVisible(false);
+		this.view.destroy();
+		this.view.dispose();
+	}
+
 	protected void notifyVideoFileRightClick(TvSerieEpisode episode, TvSerieEpisodeTile tile) {
 		String filename = this.videoEpisodeMap.remove(episode);
 		this.videoFileListModel.addElement(filename);
-		
+
 		tile.clearVideoFile();
 	}
-	
+
+	protected void notifyLanguageRightClick(TvSerieEpisode episode, TvSerieEpisodeTile tile, String filename) {
+		this.subtitleEpisodeMap.get(episode).remove(filename);
+		this.subtitleFileListModel.addElement(filename);
+
+		tile.removeLanguage(filename);
+	}
+
 	protected EpisodeTileDropTransferHandler makeEpisodeTileDropTransferHandler(TvSerieEpisode episode, TvSerieEpisodeTile tile) {
 		return new EpisodeTileDropTransferHandler(this, episode, tile);
 	}
-	
+
 	protected VideoSubtitleTransferHandler makeVideoDragTransferHandler() {
 		return new VideoSubtitleTransferHandler(VIDEO_FILE_DATA_FLAVOR);
 	}
-	
+
 	protected VideoSubtitleTransferHandler makeSubtitleDragTransferHandler() {
 		return new VideoSubtitleTransferHandler(SUBTITLE_FILE_DATA_FLAVOR);
 	}
-	
+
 	protected static class VideoSubtitleTransferHandler extends TransferHandler {
 
 		private static final long serialVersionUID = 3329599794478692344L;
-		
+
 		private final DataFlavor dataFlavor;
-		
+
 		private VideoSubtitleTransferHandler(DataFlavor dataFlavor) {
 			this.dataFlavor = dataFlavor;
 		}
@@ -111,7 +140,7 @@ public class TvSerieSeasonController implements AsyncJobListener {
 		@Override
 		protected Transferable createTransferable(JComponent component) {
 			Transferable result = null;
-			
+
 			WebList source = (WebList)component;
 			result = new VideoSubtitleTransferable((String)source.getSelectedValue(), this.dataFlavor);
 
@@ -131,7 +160,7 @@ public class TvSerieSeasonController implements AsyncJobListener {
 		}
 
 	}
-	
+
 	protected static class EpisodeTileDropTransferHandler extends TransferHandler {
 
 		private static final long serialVersionUID = 9063205345756195612L;
@@ -139,17 +168,17 @@ public class TvSerieSeasonController implements AsyncJobListener {
 		private final TvSerieSeasonController controller;
 		private final TvSerieEpisode episode;
 		private final TvSerieEpisodeTile tile;
-		
+
 		private EpisodeTileDropTransferHandler(TvSerieSeasonController controller, TvSerieEpisode episode, TvSerieEpisodeTile tile) {
 			this.controller = controller;
 			this.episode = episode;
 			this.tile = tile;
 		}
-		
+
 		@Override
 		public boolean importData(TransferSupport support) {
 			boolean result = true;
-			
+
 			try {
 				String filename = (String)support.getTransferable().getTransferData(support.getDataFlavors()[0]);
 				if (support.getDataFlavors()[0].getHumanPresentableName().equals(VIDEO_FILE_DATA_FLAVOR.getHumanPresentableName())) {
@@ -157,47 +186,56 @@ public class TvSerieSeasonController implements AsyncJobListener {
 					this.tile.setVideoFile(filename, true);
 				}
 				else if (support.getDataFlavors()[0].getHumanPresentableName().equals(SUBTITLE_FILE_DATA_FLAVOR.getHumanPresentableName())) {
-					TvSerieEpisodeSubtitleDialog dialog = new TvSerieEpisodeSubtitleDialog();
+					boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
+					WebLookAndFeel.setDecorateDialogs(true);
+					TvSerieEpisodeSubtitleDialog dialog = new TvSerieEpisodeSubtitleDialog(this.episode, filename);
 					dialog.setVisible(true);
+					WebLookAndFeel.setDecorateDialogs(decorateFrames);
 					result = dialog.isConfirmed();
 					if (result) {
 						EnhancedLocale language = dialog.getLanguage();
 						this.tile.addLanguage(language, filename, true);
+						Map<String, EnhancedLocale> languages = this.controller.subtitleEpisodeMap.get(this.episode);
+						if (languages == null) {
+							languages = new HashMap<>();
+							this.controller.subtitleEpisodeMap.put(this.episode, languages);
+						}
+						languages.put(filename, language);
 					}
 				}
 			}
 			catch (UnsupportedFlavorException | IOException e) {
 			}
-			
+
 			return result;
 		}
 
 		@Override
 		public boolean canImport(TransferSupport support) {
 			boolean result = false;
-			
+
 			if (support.getDataFlavors()[0].getHumanPresentableName().equals(VIDEO_FILE_DATA_FLAVOR.getHumanPresentableName())) {
 				result = !this.controller.videoEpisodeMap.containsKey(this.episode);
 			}
 			else if (support.getDataFlavors()[0].getHumanPresentableName().equals(SUBTITLE_FILE_DATA_FLAVOR.getHumanPresentableName())) {
 				result = true;
 			}
-			
+
 			return result;
 		}
-		
+
 	}
-	
+
 	protected static class VideoSubtitleTransferable implements Transferable {
 
 		private final String value;
 		private final DataFlavor[] dataFlavor;
-		
+
 		private VideoSubtitleTransferable(String value, DataFlavor dataFlavor) {
 			this.value = value;
-			this.dataFlavor = new DataFlavor[] {dataFlavor};
+			this.dataFlavor = new DataFlavor[] { dataFlavor };
 		}
-		
+
 		@Override
 		public DataFlavor[] getTransferDataFlavors() {
 			return this.dataFlavor;
@@ -212,7 +250,7 @@ public class TvSerieSeasonController implements AsyncJobListener {
 		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
 			return this.value;
 		}
-		
+
 	}
-	
+
 }
