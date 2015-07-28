@@ -52,8 +52,8 @@ public class TvSerieActorSlider extends AbstractSlider implements MouseListener 
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 2) {
-			this.controller.notifyActorDoubleClick((TvSerieActor)((SliderPane)event.getSource()).getData());
+		if (SwingUtilities.isRightMouseButton(event)) {
+			this.controller.notifyActorRightClick((TvSerieActor)((SliderPane)event.getSource()).getData());
 		}
 	}
 
@@ -94,11 +94,11 @@ public class TvSerieActorSlider extends AbstractSlider implements MouseListener 
 		if (image != null) {
 			SliderPane pane = (SliderPane)this.panes.get(actor);
 			pane.setImage(SliderPane.makeImagePane(new ImageIcon(image), this.size));
-			TooltipManager.addTooltip(pane, null, "Double click for full size image", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
+			TooltipManager.addTooltip(pane, null, "Right click for full size image", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 		}
 	}
 	
-	// Check memory leak solved
+	// TODO Check memory leak solved
 	protected void dispose() {
 		for (SliderPane pane : this.panes.values()) {
 			TooltipManager.removeTooltips(pane);

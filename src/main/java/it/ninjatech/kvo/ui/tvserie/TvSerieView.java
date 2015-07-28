@@ -1,9 +1,13 @@
 package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
+import it.ninjatech.kvo.model.TvSerieActor;
+import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
@@ -14,6 +18,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -33,7 +38,7 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.separator.WebSeparator;
 import com.alee.laf.text.WebTextArea;
 
-public class TvSerieView extends WebPanel implements MouseListener {
+public class TvSerieView extends WebPanel implements MouseListener, TvSerieImageLoaderListener {
 
 	private static final long serialVersionUID = -8219959298613920784L;
 
@@ -114,6 +119,19 @@ public class TvSerieView extends WebPanel implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent event) {
+	}
+
+	@Override
+	public void notifyImageLoaded(String id, Image image, Object supportData) {
+		if (supportData.getClass().equals(TvSerieFanart.class)) {
+			this.fanartSlider.setFanart((TvSerieFanart)supportData, image);
+		}
+		else if (supportData.getClass().equals(TvSerieSeason.class)) {
+			this.seasonSlider.setSeason((TvSerieSeason)supportData, image);
+		}
+		else if (supportData.getClass().equals(TvSerieActor.class)) {
+			this.actorSlider.setActor((TvSerieActor)supportData, image);
+		}
 	}
 
 	protected void fill(TvSeriePathEntity tvSeriePathEntity) {
@@ -216,6 +234,7 @@ public class TvSerieView extends WebPanel implements MouseListener {
 	}
 
 	private void initPlotPopOver() {
+		// TODO sistemare: non si vede più
 		this.plotPopOver = new WebPopOver(UI.get());
 		this.plotPopOver.setMargin(2);
 		this.plotPopOver.setMovable(false);

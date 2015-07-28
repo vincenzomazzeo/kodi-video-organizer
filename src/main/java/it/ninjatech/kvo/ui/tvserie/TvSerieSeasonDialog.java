@@ -6,6 +6,7 @@ import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
@@ -20,6 +21,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.alee.extended.image.WebDecoratedImage;
 import com.alee.extended.image.WebImage;
@@ -38,6 +42,7 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.panel.WebOverlay;
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
+import com.alee.global.StyleConstants;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
@@ -49,7 +54,7 @@ import com.alee.laf.splitpane.WebSplitPane;
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
 
-public class TvSerieSeasonDialog extends WebDialog implements WindowListener, ActionListener {
+public class TvSerieSeasonDialog extends WebDialog implements WindowListener, ActionListener, MouseListener, TvSerieImageLoaderListener {
 
 	private static final long serialVersionUID = -2012464643608233002L;
 
@@ -60,7 +65,6 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		result.setShadeWidth(5);
 		result.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		result.setDrawGlassLayer(false);
-		TooltipManager.addTooltip(result, null, "<html><div align='center'>Single click to select<br />Double click for full size image</div></html>", TooltipWay.down, (int)TimeUnit.SECONDS.toMillis(2));
 
 		return result;
 	}
@@ -161,11 +165,51 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		}
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		if (SwingUtilities.isLeftMouseButton(event)) {
+			this.controller.notifySeasonLeftClick();
+		}
+		else if (SwingUtilities.isRightMouseButton(event)) {
+			this.controller.notifySeasonRightClick();
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent event) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent event) {
+	}
+
+	@Override
+	public void notifyImageLoaded(String id, Image image, Object supportData) {
+		if (this.tileMap.containsKey(id)) {
+			this.tileMap.get(id).setImage(image);
+		}
+		else {
+			TooltipManager.removeTooltips(this.transition);
+			this.transition.performTransition(makeImagePane(new ImageIcon(image), this.seasonImageSize));
+			TooltipManager.addTooltip(this.transition, null, "<html><div align='center'>Left click to change<br />Right click for full size image</html>", TooltipWay.down, (int)TimeUnit.SECONDS.toMillis(2));
+		}
+	}
+
 	protected void destroy() {
-		removeTooltip();
+		System.out.println("*** TvSerieSeasonDialog -> destory ***");
+		TooltipManager.removeTooltips(this.transition);
 		for (TvSerieEpisodeTile tile : this.tileMap.values()) {
 			tile.dispose();
 		}
+		this.tileMap.clear();
 	}
 	
 	protected Dimension getSeasonImageSize() {
@@ -174,19 +218,6 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	
 	protected Dimension getEpisodeImageSize() {
 		return this.episodeImageSize;
-	}
-
-	protected void setSeasonImage(Image image) {
-		if (image != null) {
-			removeTooltip();
-			this.transition.performTransition(makeImagePane(new ImageIcon(image), this.seasonImageSize));
-		}
-	}
-	
-	protected void setEpisodeImage(String id, Image image) {
-		if (image != null) {
-			this.tileMap.get(id).setImage(image);
-		}
 	}
 
 	private void init(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season, TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel) {
@@ -223,6 +254,11 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		this.transition = new ComponentTransition(image, new FadeTransitionEffect());
 		leftPane.add(this.transition);
 		this.transition.setOpaque(false);
+		this.transition.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		if (season.hasImages()) {
+			TooltipManager.addTooltip(this.transition, null, "<html><div align='center'>Left click to change</html>", TooltipWay.down, (int)TimeUnit.SECONDS.toMillis(2));
+			this.transition.addMouseListener(this);
+		}
 
 		WebPanel dataPane = new WebPanel(new VerticalFlowLayout());
 		leftPane.add(dataPane);
@@ -265,15 +301,13 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		rightPane.setOpaque(false);
 		rightPane.setMargin(5, 10, 5, 10);
 
-		this.confirm = new WebButton(ImageRetriever.retrieveTvSerieSeasonDialogConfirm());
-		this.confirm.setUndecorated(true);
+		this.confirm = WebButton.createIconWebButton(ImageRetriever.retrieveTvSerieSeasonDialogConfirm(), StyleConstants.smallRound, true);
 		this.confirm.addActionListener(this);
 		rightPane.add(this.confirm);
 		
-		rightPane.add(UIUtils.makeHorizontalFillerPane(10, false));
+		rightPane.add(UIUtils.makeHorizontalFillerPane(5, false));
 		
-		this.cancel = new WebButton(ImageRetriever.retrieveTvSerieSeasonDialogCancel());
-		this.cancel.setUndecorated(true);
+		this.cancel = WebButton.createIconWebButton(ImageRetriever.retrieveTvSerieSeasonDialogCancel(), StyleConstants.smallRound, true);
 		this.cancel.addActionListener(this);
 		rightPane.add(this.cancel);
 		
@@ -342,13 +376,6 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		result.setOpaque(false);
 
 		return result;
-	}
-
-	private void removeTooltip() {
-		WebDecoratedImage content = (WebDecoratedImage)this.transition.getContent();
-		if (content != null) {
-			TooltipManager.removeTooltips(content);
-		}
 	}
 
 	private static class CellRenderer implements ListCellRenderer<String> {

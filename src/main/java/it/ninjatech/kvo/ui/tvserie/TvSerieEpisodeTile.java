@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.tvserie;
 
+import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.ui.Colors;
@@ -19,9 +20,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alee.extended.image.WebImage;
+import com.alee.extended.label.WebLinkLabel;
+import com.alee.extended.panel.WebOverlay;
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
 import com.alee.laf.label.WebLabel;
@@ -137,6 +143,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		for (WebImage image : this.languageMap.values()) {
 			TooltipManager.removeTooltips(image);
 		}
+		this.languageMap.clear();
 	}
 	
 	private void init(ImageIcon voidImage, int width) {
@@ -159,8 +166,20 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		innerPane.setOpaque(false);
 
 		this.imageTransition = new ComponentTransition(new WebImage(voidImage), new FadeTransitionEffect());
-		innerPane.add(this.imageTransition, BorderLayout.WEST);
 		this.imageTransition.setOpaque(false);
+		JComponent imageComponent = null;
+		if (StringUtils.isNotBlank(this.episode.getImdbId())) {
+			WebLinkLabel imdbLink = new WebLinkLabel();
+			imdbLink.setToolTipText("Find out more on IMDb");
+			imdbLink.setIcon(ImageRetriever.retrieveWallIMDb());
+			imdbLink.setLink(ImdbManager.getTitleUrl(this.episode.getImdbId()), false);
+			imageComponent = new WebOverlay(this.imageTransition, imdbLink, SwingUtilities.RIGHT, SwingUtilities.BOTTOM);
+			imageComponent.setBackground(Colors.TRANSPARENT);
+		}
+		else {
+			imageComponent = this.imageTransition;
+		}
+		innerPane.add(imageComponent, BorderLayout.WEST);
 		
 		WebPanel innerRightPane = new WebPanel(new BorderLayout());
 		innerPane.add(innerRightPane, BorderLayout.CENTER);

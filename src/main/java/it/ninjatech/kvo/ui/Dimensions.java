@@ -100,11 +100,11 @@ public final class Dimensions {
 		return getExplorerTileSize().height / 4;
 	}
 
-	public static int getFanartChoiceAvailableWidth() {
+	public static int getImageChoiceAvailableWidth() {
 		return getStartupSize().width / 5 * 4;
 	}
 	
-	public static int getFanartChoiceAvailableHeight() {
+	public static int getImageChoiceAvailableHeight() {
 		return getStartupSize().height / 8 * 7;
 	}
 	
@@ -119,19 +119,19 @@ public final class Dimensions {
 	}
 	
 	public static Dimension getTvSerieFanartSliderSize(TvSerieFanart fanart) {
-		return getTvSerieFanartSize(fanart.getSliderHeight(), fanart.getRealSize().width, fanart.getRealSize().height);
+		return getTvSerieImageSize(fanart.getSliderHeight(), fanart.getRealSize().width, fanart.getRealSize().height);
 	}
 	
 	public static Dimension getTvSerieSeasonSliderSize() {
-		return getTvSerieFanartSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
+		return getTvSerieImageSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
 	}
 	
 	public static Dimension getTvSerieActorSliderSize() {
-		return getTvSerieFanartSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, ACTOR_FULL_SIZE.width, ACTOR_FULL_SIZE.height);
+		return getTvSerieImageSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, ACTOR_FULL_SIZE.width, ACTOR_FULL_SIZE.height);
 	}
 	
 	public static Dimension getTvSerieSeasonHandlerPosterSize() {
-		return getTvSerieFanartSize(100, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
+		return getTvSerieImageSize(100, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
 	}
 	
 	public static Dimension getTvSerieFanartChooserSize(TvSerieFanart fanart) {
@@ -143,6 +143,10 @@ public final class Dimensions {
 		return result;
 	}
 	
+	public static Dimension getTvSerieSeasonChooserSize() {
+		return getTvSerieImageSize(200, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
+	}
+	
 	public static Dimension getTvSerieSeasonEpisodeImageSize() {
 		Dimension result = new Dimension();
 		
@@ -152,7 +156,7 @@ public final class Dimensions {
 		return result;
 	}
 	
-	private static Dimension getTvSerieFanartSize(int preferredHeight, int realWidth, int realHeight) {
+	private static Dimension getTvSerieImageSize(int preferredHeight, int realWidth, int realHeight) {
 		Dimension result = new Dimension();
 		
 		Dimension startupSize = getStartupSize();

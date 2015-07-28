@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.test;
+package it.ninjatech.kvo.util;
 
 import java.text.DecimalFormat;
 

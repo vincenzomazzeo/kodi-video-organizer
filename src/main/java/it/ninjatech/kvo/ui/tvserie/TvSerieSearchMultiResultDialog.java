@@ -21,7 +21,7 @@ import com.alee.laf.table.WebTable;
 import com.alee.laf.table.renderers.WebTableCellRenderer;
 
 public class TvSerieSearchMultiResultDialog extends WebDialog implements MouseListener {
-
+	// TODO sistemare con nuove dialog (vedi TvSerieEpisodeSubtitleDialog)
 	private static final long serialVersionUID = -5826369642058899605L;
 
 	private final TvSerieSearchMultiResultController controller;

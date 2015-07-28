@@ -69,12 +69,10 @@ public class TvSerieFanartSlider extends AbstractSlider implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		if (SwingUtilities.isLeftMouseButton(event)) {
-			if (event.getClickCount() == 1) {
-				this.controller.notifyFanartSingleClick((FanartType)((SliderPane)event.getSource()).getData());
-			}
-			else if (event.getClickCount() == 2) {
-				this.controller.notifyFanartDoubleClick((FanartType)((SliderPane)event.getSource()).getData());
-			}
+			this.controller.notifyFanartLeftClick((FanartType)((SliderPane)event.getSource()).getData());
+		}
+		else if (SwingUtilities.isRightMouseButton(event)) {
+			this.controller.notifyFanartRightClick((FanartType)((SliderPane)event.getSource()).getData());
 		}
 	}
 
@@ -106,14 +104,14 @@ public class TvSerieFanartSlider extends AbstractSlider implements MouseListener
 					SliderPane pane = (SliderPane)this.panes.get(fanartType);
 					pane.setImage(SliderPane.makeImagePane(new ImageIcon(image), fanartType.size));
 					TooltipManager.removeTooltips(pane);
-					TooltipManager.addTooltip(pane, null, "<html><div align='center'>Single click to search for more<br />Double click for full size image</div></html>", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
+					TooltipManager.addTooltip(pane, null, "<html><div align='center'>Left click to search for more<br />Right click for full size image</div></html>", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 					break;
 				}
 			}
 		}
 	}
 	
-	// Check memory leak solved
+	// TODO Check memory leak solved
 	protected void dispose() {
 		for (SliderPane pane : this.panes.values()) {
 			TooltipManager.removeTooltips(pane);
@@ -139,7 +137,7 @@ public class TvSerieFanartSlider extends AbstractSlider implements MouseListener
 		result = new SliderPane(fanartType.voidImage, fanartType.size, makeTitlePane(fanartType.fanart.getName()));
 		result.setData(fanartType);
 		result.addMouseListener(this);
-		TooltipManager.addTooltip(result, null, "Single click to search for more", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
+		TooltipManager.addTooltip(result, null, "Left click to search for more", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 
 		return result;
 	}

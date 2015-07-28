@@ -18,7 +18,7 @@ public class TvSerieLocalSeasonImageAsyncJob extends AbstractTvSerieImageLoaderA
 	private Image image;
 	
 	public TvSerieLocalSeasonImageAsyncJob(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season, Dimension size) {
-		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory), null);
+		super(season.getId(), EnumSet.of(LoadType.Directory), null);
 	
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.season = season;

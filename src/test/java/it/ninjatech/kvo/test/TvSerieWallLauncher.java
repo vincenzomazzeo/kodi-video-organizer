@@ -10,6 +10,7 @@ import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.tvserie.TvSerieController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.MemoryUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,14 +21,15 @@ import java.awt.event.WindowListener;
 import java.io.File;
 
 import com.alee.laf.WebLookAndFeel;
-import com.alee.laf.rootpane.WebFrame;
+import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 
-public class TvSerieWallLauncher extends WebFrame implements WindowListener, HierarchyListener {
+public class TvSerieWallLauncher extends WebDialog implements WindowListener, HierarchyListener {
 
 	private static final long serialVersionUID = 4530104483604809939L;
 
 	public static void main(String[] args) throws Exception {
+		MemoryUtils.printMemory("Start");
 		WebLookAndFeel.install();
 		SettingsHandler.init();
 		AsyncManager.init();
@@ -48,10 +50,14 @@ public class TvSerieWallLauncher extends WebFrame implements WindowListener, Hie
 		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Ciccio"));
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 		tvSeriePathEntity.setTvSerie(tvSerie);
+		MemoryUtils.printMemory("After start");
 		
 		TvSerieWallLauncher tvSerieWall = new TvSerieWallLauncher(tvSeriePathEntity);
-		
+		MemoryUtils.printMemory("Opening");
 		tvSerieWall.setVisible(true);
+		MemoryUtils.printMemory("Closing");
+		
+		System.exit(0);
 	}
 	
 	private final TvSeriePathEntity tvSeriePathEntity;
@@ -59,6 +65,8 @@ public class TvSerieWallLauncher extends WebFrame implements WindowListener, Hie
 	
 	private TvSerieWallLauncher(TvSeriePathEntity tvSeriePathEntity) {
 		super();
+		
+		setModal(true);
 		
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.EnumMap;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -14,15 +16,13 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	private final String id;
 	private final Integer number;
 	private final SortedSet<TvSerieEpisode> episodes;
-	private final SortedSet<TvSerieSeasonImage> theTvDbImages;
-	private final SortedSet<TvSerieSeasonImage> fanarttvImages;
+	private final EnumMap<TvSerieImageProvider, SortedSet<TvSerieSeasonImage>> images;
 	
 	protected TvSerieSeason(String id, Integer number) {
 		this.id = id;
 		this.number = number;
 		this.episodes = new TreeSet<>();
-		this.theTvDbImages = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
-		this.fanarttvImages = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
+		this.images = new EnumMap<>(TvSerieImageProvider.class);
 	}
 	
 	protected TvSerieSeason(Integer number) {
@@ -68,12 +68,39 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 		return this.number;
 	}
 	
-	public void addTheTvDbImage(TvSerieSeasonImage image) {
-		this.theTvDbImages.add(image);
+	public void addTheTvDbImage(String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale lanaguage) {
+		SortedSet<TvSerieSeasonImage> images = this.images.get(TvSerieImageProvider.TheTvDb);
+		if (images == null) {
+			images = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
+			this.images.put(TvSerieImageProvider.TheTvDb, images);
+		}
+		images.add(new TvSerieSeasonImage(TvSerieImageProvider.TheTvDb, path, season, rating, ratingCount, lanaguage));
 	}
 	
-	public void addFanarttvImage(TvSerieSeasonImage image) {
-		this.fanarttvImages.add(image);
+	public void addFanarttvImage(String path, Integer season, Integer likes, EnhancedLocale lanaguage) {
+		SortedSet<TvSerieSeasonImage> images = this.images.get(TvSerieImageProvider.Fanarttv);
+		if (images == null) {
+			images = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
+			this.images.put(TvSerieImageProvider.Fanarttv, images);
+		}
+		images.add(new TvSerieSeasonImage(TvSerieImageProvider.Fanarttv, path, season, likes != null ? new BigDecimal(likes) : null, null, lanaguage));
+	}
+	
+	public boolean hasImages() {
+		return !this.images.isEmpty();
+	}
+	
+	public Set<TvSerieSeasonImage> getImages() {
+		Set<TvSerieSeasonImage> result = new LinkedHashSet<>();
+		
+		if (this.images.containsKey(TvSerieImageProvider.TheTvDb)) {
+			result.addAll(this.images.get(TvSerieImageProvider.TheTvDb));
+		}
+		if (this.images.containsKey(TvSerieImageProvider.Fanarttv)) {
+			result.addAll(this.images.get(TvSerieImageProvider.Fanarttv));
+		}
+		
+		return result;
 	}
 	
 	public String getPosterFilename() {

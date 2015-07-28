@@ -6,6 +6,7 @@ import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSerieImage;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.worker.TvSerieFetcher;
@@ -13,7 +14,7 @@ import it.ninjatech.kvo.worker.TvSerieFinder;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -147,12 +148,15 @@ public final class TvSerieUtils {
 		return tvSeriePathEntity.getExtraFanarts();
 	}
 	
-	public static Set<TvSerieImage> getTheTvDbFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
-		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().getTheTvDbFanart(fanart) : Collections.<TvSerieImage>emptySet();
-	}
-	
-	public static Set<TvSerieImage> getFanarttvFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
-		return tvSeriePathEntity.getTvSerie() != null ? tvSeriePathEntity.getTvSerie().getFanarttvFanart(fanart) : Collections.<TvSerieImage>emptySet();
+	public static Set<TvSerieImage> getFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
+		Set<TvSerieImage> result = new LinkedHashSet<>();
+		
+		if (tvSeriePathEntity.getTvSerie() != null) {
+			result.addAll(tvSeriePathEntity.getTvSerie().getTheTvDbFanart(fanart));
+			result.addAll(tvSeriePathEntity.getTvSerie().getFanarttvFanart(fanart));
+		}
+		
+		return result;
 	}
 	
 	public static boolean hasFanarts(TvSeriePathEntity tvSeriePathEntity, TvSerieFanart fanart) {
@@ -174,6 +178,15 @@ public final class TvSerieUtils {
 	
 	public static Set<String> getSubtitleFiles(TvSeriePathEntity tvSeriePathEntity, Integer season) {
 		return tvSeriePathEntity.getSubtitleFiles(season);
+	}
+	
+	public static String getSeasonName(TvSerieSeason season) {
+		String result = null;
+		
+		DecimalFormat format = new DecimalFormat("00"); 
+		result = String.format("Season %s", format.format(season.getNumber()));
+		
+		return result;
 	}
 
 	private TvSerieUtils() {

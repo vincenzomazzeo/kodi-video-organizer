@@ -19,7 +19,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
-
+// TODO aggiungere tooltip
 public class TvSerieSeasonSlider extends AbstractSlider implements MouseListener {
 
 	private static final long serialVersionUID = 8674772929291186163L;
@@ -42,8 +42,11 @@ public class TvSerieSeasonSlider extends AbstractSlider implements MouseListener
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		if (SwingUtilities.isLeftMouseButton(event) && event.getClickCount() == 1) {
-			this.controller.notifySeasonSingleClick((TvSerieSeason)((SliderPane)event.getSource()).getData());
+		if (SwingUtilities.isLeftMouseButton(event)) {
+			this.controller.notifySeasonLeftClick((TvSerieSeason)((SliderPane)event.getSource()).getData());
+		}
+		else if (SwingUtilities.isRightMouseButton(event)) {
+			this.controller.notifySeasonRightClick((TvSerieSeason)((SliderPane)event.getSource()).getData());
 		}
 	}
 

@@ -6,6 +6,7 @@ import javax.swing.JComponent;
 
 import com.alee.laf.rootpane.WebDialog;
 
+// TODO modificare con nuovi dialog
 public class FullImageDialog extends WebDialog {
 
 	private static final long serialVersionUID = 8261555653260314181L;

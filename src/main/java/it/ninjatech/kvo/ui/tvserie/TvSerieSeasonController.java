@@ -1,34 +1,42 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.async.AsyncJob;
-import it.ninjatech.kvo.async.AsyncJobListener;
-import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
+import it.ninjatech.kvo.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieImageProvider;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.model.TvSerieSeasonImage;
+import it.ninjatech.kvo.ui.Dimensions;
+import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.TvSerieUtils;
-import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.UIUtils;
+import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
+import it.ninjatech.kvo.util.MemoryUtils;
+import it.ninjatech.kvo.util.Utils;
+import it.ninjatech.kvo.worker.CachedImageFullWorker;
+import it.ninjatech.kvo.worker.ImageFullWorker;
 
+import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.list.WebList;
 
-public class TvSerieSeasonController implements AsyncJobListener {
+public class TvSerieSeasonController implements ImageChoiceController {
 
 	private static final DataFlavor VIDEO_FILE_DATA_FLAVOR = new DataFlavor(TvSerieSeasonController.class, "VideoFileDND");
 	private static final DataFlavor SUBTITLE_FILE_DATA_FLAVOR = new DataFlavor(TvSerieSeasonController.class, "SubtitleFileDND");
@@ -40,6 +48,9 @@ public class TvSerieSeasonController implements AsyncJobListener {
 	private final TvSerieSeasonDialog view;
 	private final Map<TvSerieEpisode, String> videoEpisodeMap;
 	private final Map<TvSerieEpisode, Map<String, EnhancedLocale>> subtitleEpisodeMap;
+	private final TvSerieImageLoaderAsyncJobHandler mainJobHandler;
+	private final TvSerieImageLoaderAsyncJobHandler imageChoiceJobHandler;
+	private File currentSeasonImage;
 
 	public TvSerieSeasonController(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season) {
 		this.tvSeriePathEntity = tvSeriePathEntity;
@@ -49,21 +60,27 @@ public class TvSerieSeasonController implements AsyncJobListener {
 		this.view = new TvSerieSeasonDialog(this, this.tvSeriePathEntity, this.season, this.videoFileListModel, this.subtitleFileListModel);
 		this.videoEpisodeMap = new HashMap<>();
 		this.subtitleEpisodeMap = new HashMap<>();
+		this.mainJobHandler = new TvSerieImageLoaderAsyncJobHandler();
+		this.imageChoiceJobHandler = new TvSerieImageLoaderAsyncJobHandler();
+		this.currentSeasonImage = new File(this.tvSeriePathEntity.getPath(), this.season.getPosterFilename());
 	}
 
 	@Override
-	public void notify(String id, AsyncJob job) {
-		if (job.getException() != null) {
-			UI.get().notifyException(job.getException());
-		}
-		else {
-			if (job.getClass().equals(TvSerieLocalSeasonImageAsyncJob.class)) {
-				this.view.setSeasonImage(((TvSerieLocalSeasonImageAsyncJob)job).getImage());
-			}
-			else if (job.getClass().equals(TvSerieCacheRemoteImageAsyncJob.class)) {
-				this.view.setEpisodeImage(id, ((TvSerieCacheRemoteImageAsyncJob)job).getImage());
-			}
-		}
+	public void notifyClosing(String id) {
+		this.imageChoiceJobHandler.cancelAll();
+	}
+
+	@Override
+	public void notifyImageLeftClick(String id, AbstractTvSerieImage image) {
+		this.currentSeasonImage = new File(Utils.getCacheDirectory(), image.getId());
+		TvSerieCacheRemoteImageAsyncJob job = new TvSerieCacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), this.view.getSeasonImageSize());
+		this.mainJobHandler.handle(job, this.view);
+	}
+
+	@Override
+	public void notifyImageRightClick(String id, AbstractTvSerieImage image) {
+		CachedImageFullWorker worker = new CachedImageFullWorker(image.getId());
+		UIUtils.showFullImage(worker, "Loading season image", TvSerieUtils.getSeasonName(this.season));
 	}
 
 	public TvSerieSeasonDialog getView() {
@@ -72,28 +89,55 @@ public class TvSerieSeasonController implements AsyncJobListener {
 
 	public void start() {
 		TvSerieLocalSeasonImageAsyncJob job = new TvSerieLocalSeasonImageAsyncJob(this.tvSeriePathEntity, this.season, this.view.getSeasonImageSize());
-		AsyncManager.getInstance().submit(this.season.getId(), job, this);
-		
+		this.mainJobHandler.handle(job, this.view);
+
 		for (TvSerieEpisode episode : this.season.getEpisodes()) {
 			if (StringUtils.isNotBlank(episode.getArtwork())) {
 				TvSerieCacheRemoteImageAsyncJob episodeImageJob = new TvSerieCacheRemoteImageAsyncJob(episode.getId(), TvSerieImageProvider.TheTvDb, episode.getArtwork(), this.view.getEpisodeImageSize());
-				AsyncManager.getInstance().submit(episode.getId(), episodeImageJob, this);
+				this.mainJobHandler.handle(episodeImageJob, this.view);
 			}
 		}
 	}
 
 	protected void notifyConfirm() {
+		this.mainJobHandler.cancelAll();
+		
+		this.view.setVisible(false);
+		this.view.destroy();
+		this.view.dispose();
+
+		// TODO
+		
+		destroy();
+	}
+
+	protected void notifyCancel() {
+		this.mainJobHandler.cancelAll();
+		
 		this.view.setVisible(false);
 		this.view.destroy();
 		this.view.dispose();
 		
-		// TODO 
+		destroy();
 	}
 	
-	protected void notifyCancel() {
-		this.view.setVisible(false);
-		this.view.destroy();
-		this.view.dispose();
+	protected void notifySeasonLeftClick() {
+		MemoryUtils.printMemory("Before season choice");
+		Set<TvSerieSeasonImage> images = this.season.getImages();
+		Dimension imageSize = Dimensions.getTvSerieSeasonChooserSize();
+		TvSerieImageChoiceDialog<TvSerieSeasonImage> dialog = new TvSerieImageChoiceDialog<>("", this, TvSerieUtils.getSeasonName(this.season), images, imageSize);
+		for (TvSerieSeasonImage image : images) {
+			TvSerieCacheRemoteImageAsyncJob job = new TvSerieCacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
+			this.imageChoiceJobHandler.handle(job, dialog);
+		}
+		
+		dialog.setVisible(true);
+		MemoryUtils.printMemory("After season choice");
+	}
+
+	protected void notifySeasonRightClick() {
+		ImageFullWorker worker = new ImageFullWorker(this.currentSeasonImage.getParent(), this.currentSeasonImage.getName());
+		UIUtils.showFullImage(worker, "Loading season image", TvSerieUtils.getSeasonName(this.season));
 	}
 
 	protected void notifyVideoFileRightClick(TvSerieEpisode episode, TvSerieEpisodeTile tile) {
@@ -120,6 +164,11 @@ public class TvSerieSeasonController implements AsyncJobListener {
 
 	protected VideoSubtitleTransferHandler makeSubtitleDragTransferHandler() {
 		return new VideoSubtitleTransferHandler(SUBTITLE_FILE_DATA_FLAVOR);
+	}
+	
+	private void destroy() {
+		this.videoEpisodeMap.clear();
+		this.subtitleEpisodeMap.clear();
 	}
 
 	protected static class VideoSubtitleTransferHandler extends TransferHandler {
@@ -186,11 +235,7 @@ public class TvSerieSeasonController implements AsyncJobListener {
 					this.tile.setVideoFile(filename, true);
 				}
 				else if (support.getDataFlavors()[0].getHumanPresentableName().equals(SUBTITLE_FILE_DATA_FLAVOR.getHumanPresentableName())) {
-					boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
-					WebLookAndFeel.setDecorateDialogs(true);
-					TvSerieEpisodeSubtitleDialog dialog = new TvSerieEpisodeSubtitleDialog(this.episode, filename);
-					dialog.setVisible(true);
-					WebLookAndFeel.setDecorateDialogs(decorateFrames);
+					TvSerieEpisodeSubtitleDialog dialog = TvSerieEpisodeSubtitleDialog.make(this.episode, filename);
 					result = dialog.isConfirmed();
 					if (result) {
 						EnhancedLocale language = dialog.getLanguage();

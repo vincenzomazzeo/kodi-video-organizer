@@ -1,14 +1,16 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.async.AsyncJob;
-import it.ninjatech.kvo.async.AsyncJobListener;
-import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieActorImageAsyncJob;
+import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
+import it.ninjatech.kvo.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.model.TvSerieActor;
+import it.ninjatech.kvo.model.TvSerieImage;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.ui.Dimensions;
+import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
@@ -18,41 +20,61 @@ import it.ninjatech.kvo.ui.component.ImageGallery;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.tvserie.TvSerieFanartSlider.FanartType;
+import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
 import it.ninjatech.kvo.ui.worker.ExtraFanartsGalleryCreator;
+import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.worker.ActorFullWorker;
+import it.ninjatech.kvo.worker.CachedFanartCopyWorker;
+import it.ninjatech.kvo.worker.CachedImageFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
 
 import java.awt.Dimension;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.alee.laf.optionpane.WebOptionPane;
 
-public class TvSerieController implements AsyncJobListener {
+public class TvSerieController implements ImageChoiceController {
 
 	private final TvSerieView view;
+	private final TvSerieImageLoaderAsyncJobHandler mainJobHandler;
+	private final TvSerieImageLoaderAsyncJobHandler fanartChoiceJobHandler;
 	private TvSeriePathEntity tvSeriePathEntity;
+	private FanartType workingFanart;
 
 	public TvSerieController() {
 		this.view = new TvSerieView(this);
+		this.mainJobHandler = new TvSerieImageLoaderAsyncJobHandler();
+		this.fanartChoiceJobHandler = new TvSerieImageLoaderAsyncJobHandler();
 	}
 
 	@Override
-	public void notify(String id, AsyncJob job) {
-		if (job.getException() != null) {
-			UI.get().notifyException(job.getException());
+	public void notifyClosing(String id) {
+		this.fanartChoiceJobHandler.cancelAll();
+	}
+
+	@Override
+	public void notifyImageLeftClick(String id, AbstractTvSerieImage image) {
+		CachedFanartCopyWorker worker = new CachedFanartCopyWorker(image.getId(), this.tvSeriePathEntity.getPath(), this.workingFanart.getFanart());
+		IndeterminateProgressDialogWorker<Boolean> progressWorker = new IndeterminateProgressDialogWorker<>(worker, this.workingFanart.getFanart().getName());
+		
+		progressWorker.start();
+		try {
+			progressWorker.get();
 		}
-		else {
-			if (job.getClass().equals(TvSerieLocalFanartAsyncJob.class)) {
-				this.view.getFanartSlider().setFanart(((TvSerieLocalFanartAsyncJob)job).getFanart(), ((TvSerieLocalFanartAsyncJob)job).getImage());
-			}
-			else if (job.getClass().equals(TvSerieLocalSeasonImageAsyncJob.class)) {
-				this.view.getSeasonSlider().setSeason(((TvSerieLocalSeasonImageAsyncJob)job).getSeason(), ((TvSerieLocalSeasonImageAsyncJob)job).getImage());
-			}
-			else if (job.getClass().equals(TvSerieActorImageAsyncJob.class)) {
-				this.view.getActorSlider().setActor(((TvSerieActorImageAsyncJob)job).getActor(), ((TvSerieActorImageAsyncJob)job).getImage());
-			}
+		catch (Exception e) {
+			UI.get().notifyException(e);
 		}
+		
+		TvSerieLocalFanartAsyncJob job = new TvSerieLocalFanartAsyncJob(this.tvSeriePathEntity, this.workingFanart.getFanart(), this.workingFanart.getSize());
+		this.mainJobHandler.handle(job, this.view);
+	}
+
+	@Override
+	public void notifyImageRightClick(String id, AbstractTvSerieImage image) {
+		CachedImageFullWorker worker = new CachedImageFullWorker(image.getId());
+		UIUtils.showFullImage(worker, image.getId(), image.getId());
 	}
 
 	public TvSerieView getView() {
@@ -60,7 +82,8 @@ public class TvSerieController implements AsyncJobListener {
 	}
 
 	public void showTvSerie(TvSeriePathEntity tvSeriePathEntity) {
-		// TODO gestire activation/deactivation
+		this.mainJobHandler.cancelAll();
+		
 		this.view.getFanartSlider().dispose();
 		this.view.getSeasonSlider().dispose();
 		this.view.getActorSlider().dispose();
@@ -72,19 +95,19 @@ public class TvSerieController implements AsyncJobListener {
 
 		for (TvSerieFanartSlider.FanartType fanart : TvSerieFanartSlider.FanartType.values()) {
 			TvSerieLocalFanartAsyncJob job = new TvSerieLocalFanartAsyncJob(tvSeriePathEntity, fanart.getFanart(), fanart.getSize());
-			AsyncManager.getInstance().submit(String.format("%s_%s", tvSeriePathEntity.getId(), fanart), job, this);
+			this.mainJobHandler.handle(job, this.view);
 		}
 
 		Dimension seasonSize = this.view.getSeasonSlider().getSeasonSize();
 		for (TvSerieSeason season : tvSeriePathEntity.getTvSerie().getSeasons()) {
 			TvSerieLocalSeasonImageAsyncJob job = new TvSerieLocalSeasonImageAsyncJob(this.tvSeriePathEntity, season, seasonSize);
-			AsyncManager.getInstance().submit(season.getId(), job, this);
+			this.mainJobHandler.handle(job, this.view);
 		}
 
 		Dimension actorSize = this.view.getActorSlider().getActorSize();
 		for (TvSerieActor actor : tvSeriePathEntity.getTvSerie().getActors()) {
 			TvSerieActorImageAsyncJob job = new TvSerieActorImageAsyncJob(actor, actorSize);
-			AsyncManager.getInstance().submit(actor.getId(), job, this);
+			this.mainJobHandler.handle(job, this.view);
 		}
 	}
 
@@ -107,32 +130,44 @@ public class TvSerieController implements AsyncJobListener {
 		}
 	}
 
-	protected void notifyFanartSingleClick(FanartType fanart) {
+	protected void notifyFanartLeftClick(FanartType fanart) {
 		if (TvSerieUtils.hasFanarts(this.tvSeriePathEntity, fanart.getFanart())) {
-			TvSerieFanartChoiceController controller = new TvSerieFanartChoiceController(this.tvSeriePathEntity, fanart.getFanart());
-			controller.start();
-			controller.getView().setVisible(true);
-
-			TvSerieLocalFanartAsyncJob job = new TvSerieLocalFanartAsyncJob(this.tvSeriePathEntity, fanart.getFanart(), fanart.getSize());
-			AsyncManager.getInstance().submit(String.format("%s_%s", this.tvSeriePathEntity.getId(), fanart), job, this);
+			this.workingFanart = fanart;
+			Set<TvSerieImage> images = TvSerieUtils.getFanarts(this.tvSeriePathEntity, fanart.getFanart());
+			Dimension imageSize = Dimensions.getTvSerieFanartChooserSize(fanart.getFanart());
+			TvSerieImageChoiceDialog<TvSerieImage> dialog = new TvSerieImageChoiceDialog<>("", this, String.format("%s - %s", TvSerieUtils.getTitle(this.tvSeriePathEntity), fanart.getFanart().getName()), images, imageSize);
+			for (TvSerieImage image : images) {
+				TvSerieCacheRemoteImageAsyncJob job = new TvSerieCacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
+				this.fanartChoiceJobHandler.handle(job, dialog);
+			}
+			dialog.setVisible(true);
+			this.workingFanart = null;
 		}
 		else {
 			WebOptionPane.showMessageDialog(UI.get(), String.format("No %s fanart found. Try to refresh TV Serie.", fanart.getFanart().getName()));
 		}
 	}
 
-	protected void notifyFanartDoubleClick(FanartType fanart) {
+	protected void notifyFanartRightClick(FanartType fanart) {
 		ImageFullWorker worker = new ImageFullWorker(this.tvSeriePathEntity.getPath(), fanart.getFanart().getFilename());
-		UIUtils.showTvSerieFanartFull(worker, fanart.getFanart());
+		UIUtils.showFullImage(worker, fanart.getFanart().getName(), fanart.getFanart().getName());
 	}
 	
-	protected void notifySeasonSingleClick(TvSerieSeason season) {
+	protected void notifySeasonLeftClick(TvSerieSeason season) {
 		// TODO check if it's complete
+		MemoryUtils.printMemory("Before Season - Controller");
 		TvSerieSeasonController controller = new TvSerieSeasonController(this.tvSeriePathEntity, season);
+		controller.start();
+		MemoryUtils.printMemory("Before Season - Controller started");
 		controller.getView().setVisible(true);
+		MemoryUtils.printMemory("After Season");
+	}
+	
+	protected void notifySeasonRightClick(TvSerieSeason season) {
+		// TODO
 	}
 
-	protected void notifyActorDoubleClick(TvSerieActor actor) {
+	protected void notifyActorRightClick(TvSerieActor actor) {
 		ActorFullWorker worker = new ActorFullWorker(actor.getId(), actor.getName());
 		IndeterminateProgressDialogWorker<ActorFullWorker.ActorFullWorkerResult> progressWorker = new IndeterminateProgressDialogWorker<>(worker, actor.getName());
 

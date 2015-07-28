@@ -18,6 +18,8 @@ import java.awt.event.ActionListener;
 import javax.swing.SwingConstants;
 
 import com.alee.extended.panel.GroupPanel;
+import com.alee.global.StyleConstants;
+import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
@@ -26,6 +28,18 @@ import com.alee.laf.rootpane.WebDialog;
 
 public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionListener {
 
+	public static TvSerieEpisodeSubtitleDialog make(TvSerieEpisode episode, String filename) {
+		TvSerieEpisodeSubtitleDialog result = null;
+		
+		boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
+		WebLookAndFeel.setDecorateDialogs(true);
+		result = new TvSerieEpisodeSubtitleDialog(episode, filename);
+		result.setVisible(true);
+		WebLookAndFeel.setDecorateDialogs(decorateFrames);
+		
+		return result;
+	}
+	
 	private static final long serialVersionUID = -5542722467275102344L;
 
 	private WebComboBox language;
@@ -34,7 +48,7 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 	private boolean confirmed;
 
 	@SuppressWarnings("unchecked")
-	protected TvSerieEpisodeSubtitleDialog(TvSerieEpisode episode, String filename) {
+	private TvSerieEpisodeSubtitleDialog(TvSerieEpisode episode, String filename) {
 		super(UI.get(), "Episode Subtitle", true);
 
 		setIconImage(ImageRetriever.retrieveExplorerTreeTvSerie().getImage());
@@ -124,15 +138,13 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 
 		result.setOpaque(false);
 
-		this.confirm = new WebButton(ImageRetriever.retrieveDialogOk());
-		this.confirm.setUndecorated(true);
+		this.confirm = WebButton.createIconWebButton(ImageRetriever.retrieveDialogOk(), StyleConstants.smallRound, true);
 		this.confirm.addActionListener(this);
 		result.add(this.confirm);
 		
-		result.add(UIUtils.makeHorizontalFillerPane(10, false));
+		result.add(UIUtils.makeHorizontalFillerPane(5, false));
 		
-		this.cancel = new WebButton(ImageRetriever.retrieveDialogCancel());
-		this.cancel.setUndecorated(true);
+		this.cancel = WebButton.createIconWebButton(ImageRetriever.retrieveDialogCancel(), StyleConstants.smallRound, true);
 		this.cancel.addActionListener(this);
 		result.add(this.cancel);
 

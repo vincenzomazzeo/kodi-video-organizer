@@ -100,14 +100,14 @@ public class TvSerie {
 	public void addTheTvDbSeasonImage(String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale lanaguage) {
 		TvSerieSeason tvSerieSeason = this.seasons.get(season);
 		if (tvSerieSeason != null) {
-			tvSerieSeason.addTheTvDbImage(new TvSerieSeasonImage(path, season, rating, ratingCount, lanaguage));
+			tvSerieSeason.addTheTvDbImage(path, season, rating, ratingCount, lanaguage);
 		}
 	}
 
 	public void addFanarttvSeasonImage(String path, Integer season, Integer likes, EnhancedLocale lanaguage) {
 		TvSerieSeason tvSerieSeason = this.seasons.get(season);
 		if (tvSerieSeason != null) {
-			tvSerieSeason.addFanarttvImage(new TvSerieSeasonImage(path, season, likes != null ? new BigDecimal(likes) : null, null, lanaguage));
+			tvSerieSeason.addFanarttvImage(path, season, likes, lanaguage);
 		}
 	}
 

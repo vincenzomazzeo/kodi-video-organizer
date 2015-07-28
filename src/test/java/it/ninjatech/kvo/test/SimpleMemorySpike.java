@@ -4,6 +4,7 @@ import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.MemoryUtils;
 
 import java.awt.Cursor;
 import java.awt.Dimension;

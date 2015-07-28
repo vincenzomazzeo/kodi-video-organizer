@@ -51,7 +51,7 @@ public abstract class AbstractTvSerieImageLoaderAsyncJob extends AsyncJob {
 			case Cache:
 				image = new File(Utils.getCacheDirectory(), cacheName);
 				if (image.exists()) {
-					System.out.printf("-> [%s] image %s found in cache\n", this.id, name);
+					System.out.printf("-> [%s] image %s found in cache\n", this.id, cacheName);
 					result = ImageIO.read(image);
 				}
 				break;
