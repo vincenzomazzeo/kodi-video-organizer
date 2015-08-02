@@ -29,7 +29,8 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
-
+//TODO UIUtils
+// TODO sistemare con abstractimageslider
 public class TvSerieActorSlider extends AbstractSlider implements MouseListener {
 
 	private static final long serialVersionUID = 8890476225892576613L;
@@ -45,7 +46,7 @@ public class TvSerieActorSlider extends AbstractSlider implements MouseListener 
 
 		this.controller = controller;
 		this.panes = new LinkedHashMap<>();
-		this.size = Dimensions.getTvSerieActorSliderSize();
+		this.size = Dimensions.getActorSliderSize();
 
 		init();
 	}
@@ -93,7 +94,7 @@ public class TvSerieActorSlider extends AbstractSlider implements MouseListener 
 	protected void setActor(TvSerieActor actor, Image image) {
 		if (image != null) {
 			SliderPane pane = (SliderPane)this.panes.get(actor);
-			pane.setImage(SliderPane.makeImagePane(new ImageIcon(image), this.size));
+			pane.setImage(UIUtils.makeImagePane(new ImageIcon(image), this.size));
 			TooltipManager.addTooltip(pane, null, "Right click for full size image", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 		}
 	}

@@ -16,13 +16,13 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	private final String id;
 	private final Integer number;
 	private final SortedSet<TvSerieEpisode> episodes;
-	private final EnumMap<TvSerieImageProvider, SortedSet<TvSerieSeasonImage>> images;
+	private final EnumMap<ImageProvider, SortedSet<TvSerieSeasonImage>> images;
 	
 	protected TvSerieSeason(String id, Integer number) {
 		this.id = id;
 		this.number = number;
 		this.episodes = new TreeSet<>();
-		this.images = new EnumMap<>(TvSerieImageProvider.class);
+		this.images = new EnumMap<>(ImageProvider.class);
 	}
 	
 	protected TvSerieSeason(Integer number) {
@@ -69,21 +69,21 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	}
 	
 	public void addTheTvDbImage(String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale lanaguage) {
-		SortedSet<TvSerieSeasonImage> images = this.images.get(TvSerieImageProvider.TheTvDb);
+		SortedSet<TvSerieSeasonImage> images = this.images.get(ImageProvider.TheTvDb);
 		if (images == null) {
 			images = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
-			this.images.put(TvSerieImageProvider.TheTvDb, images);
+			this.images.put(ImageProvider.TheTvDb, images);
 		}
-		images.add(new TvSerieSeasonImage(TvSerieImageProvider.TheTvDb, path, season, rating, ratingCount, lanaguage));
+		images.add(new TvSerieSeasonImage(ImageProvider.TheTvDb, path, season, rating, ratingCount, lanaguage));
 	}
 	
 	public void addFanarttvImage(String path, Integer season, Integer likes, EnhancedLocale lanaguage) {
-		SortedSet<TvSerieSeasonImage> images = this.images.get(TvSerieImageProvider.Fanarttv);
+		SortedSet<TvSerieSeasonImage> images = this.images.get(ImageProvider.Fanarttv);
 		if (images == null) {
 			images = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
-			this.images.put(TvSerieImageProvider.Fanarttv, images);
+			this.images.put(ImageProvider.Fanarttv, images);
 		}
-		images.add(new TvSerieSeasonImage(TvSerieImageProvider.Fanarttv, path, season, likes != null ? new BigDecimal(likes) : null, null, lanaguage));
+		images.add(new TvSerieSeasonImage(ImageProvider.Fanarttv, path, season, likes != null ? new BigDecimal(likes) : null, null, lanaguage));
 	}
 	
 	public boolean hasImages() {
@@ -93,11 +93,11 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	public Set<TvSerieSeasonImage> getImages() {
 		Set<TvSerieSeasonImage> result = new LinkedHashSet<>();
 		
-		if (this.images.containsKey(TvSerieImageProvider.TheTvDb)) {
-			result.addAll(this.images.get(TvSerieImageProvider.TheTvDb));
+		if (this.images.containsKey(ImageProvider.TheTvDb)) {
+			result.addAll(this.images.get(ImageProvider.TheTvDb));
 		}
-		if (this.images.containsKey(TvSerieImageProvider.Fanarttv)) {
-			result.addAll(this.images.get(TvSerieImageProvider.Fanarttv));
+		if (this.images.containsKey(ImageProvider.Fanarttv)) {
+			result.addAll(this.images.get(ImageProvider.Fanarttv));
 		}
 		
 		return result;
@@ -112,7 +112,7 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 		return result;
 	}
 	
-	public int episodeCount() {
+	public int getEpisodeCount() {
 		return this.episodes.size();
 	}
 	

@@ -3,7 +3,7 @@ package it.ninjatech.kvo.ui.progressdialogworker;
 import it.ninjatech.kvo.worker.AbstractWorker;
 
 import java.util.List;
-
+//TODO UIUtils - new style
 public class DeterminateProgressDialogWorker<T> extends AbstractProgressDialogWorker<T> {
 
 	public DeterminateProgressDialogWorker(AbstractWorker<T> worker, String title) {

@@ -12,6 +12,7 @@ import com.alee.utils.SystemUtils;
 public final class Dimensions {
 
 	public static final Dimension ACTOR_FULL_SIZE = new Dimension(300, 450);
+	public static final Dimension PERSON_FULL_SIZE = new Dimension(214, 317);
 	public static final Dimension SEASON_FULL_SIZE = new Dimension(400, 578);
 	public static final Dimension EPISODE_FULL_SIZE = new Dimension(400, 225);
 	public static final int SCROLL_BAR_WIDTH = 20;
@@ -20,7 +21,7 @@ public final class Dimensions {
 	private static final int HD_HEIGHT = 1080;
 	private static final BigDecimal _16_9 = new BigDecimal("1.7777");
 	private static final BigDecimal _4_3 = new BigDecimal("1.3333");
-	private static final int TV_SERIE_WALL_IMAGE_MAX_HEIGHT = 130;
+	private static final int SLIDER_IMAGE_MAX_HEIGHT = 130;
 
 	private static Dimension startupSize;
 	private static Dimension explorerTileSize;
@@ -107,6 +108,14 @@ public final class Dimensions {
 	public static int getImageChoiceAvailableHeight() {
 		return getStartupSize().height / 8 * 7;
 	}
+
+	public static Dimension getActorSliderSize() {
+		return getTvSerieImageSize(SLIDER_IMAGE_MAX_HEIGHT, ACTOR_FULL_SIZE.width, ACTOR_FULL_SIZE.height);
+	}
+	
+	public static Dimension getPersonSliderSize() {
+		return getTvSerieImageSize(SLIDER_IMAGE_MAX_HEIGHT, PERSON_FULL_SIZE.width, PERSON_FULL_SIZE.height);
+	}
 	
 	public static Dimension getTvSerieSeasonHandlerSize() {
 		Dimension result = new Dimension();
@@ -123,15 +132,29 @@ public final class Dimensions {
 	}
 	
 	public static Dimension getTvSerieSeasonSliderSize() {
-		return getTvSerieImageSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
-	}
-	
-	public static Dimension getTvSerieActorSliderSize() {
-		return getTvSerieImageSize(TV_SERIE_WALL_IMAGE_MAX_HEIGHT, ACTOR_FULL_SIZE.width, ACTOR_FULL_SIZE.height);
+		return getTvSerieImageSize(SLIDER_IMAGE_MAX_HEIGHT, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
 	}
 	
 	public static Dimension getTvSerieSeasonHandlerPosterSize() {
 		return getTvSerieImageSize(100, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
+	}
+	
+	public static Dimension getTvSerieSeasonHandlerEpisodeImageSize() {
+		Dimension result = new Dimension();
+		
+		result.height = EPISODE_FULL_SIZE.height / 3;
+		result.width = EPISODE_FULL_SIZE.width / 3;
+		
+		return result;
+	}
+	
+	public static Dimension getTvSerieEpisodeImageSize() {
+		Dimension result = new Dimension();
+		
+		result.height = EPISODE_FULL_SIZE.height / 2;
+		result.width = EPISODE_FULL_SIZE.width / 2;
+		
+		return result;
 	}
 	
 	public static Dimension getTvSerieFanartChooserSize(TvSerieFanart fanart) {
@@ -145,15 +168,6 @@ public final class Dimensions {
 	
 	public static Dimension getTvSerieSeasonChooserSize() {
 		return getTvSerieImageSize(200, SEASON_FULL_SIZE.width, SEASON_FULL_SIZE.height);
-	}
-	
-	public static Dimension getTvSerieSeasonEpisodeImageSize() {
-		Dimension result = new Dimension();
-		
-		result.height = EPISODE_FULL_SIZE.height / 3;
-		result.width = EPISODE_FULL_SIZE.width / 3;
-		
-		return result;
 	}
 	
 	private static Dimension getTvSerieImageSize(int preferredHeight, int realWidth, int realHeight) {

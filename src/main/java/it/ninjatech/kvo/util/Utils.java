@@ -1,7 +1,11 @@
 package it.ninjatech.kvo.util;
 
+import it.ninjatech.kvo.model.EnhancedLocale;
+
 import java.io.File;
 import java.text.Normalizer;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.alee.utils.FileUtils;
 
@@ -33,6 +37,27 @@ public final class Utils {
 	    }
 	    
 	    return result;
+	}
+	
+	public static EnhancedLocale getLanguageFromSubtitleFile(String subtitleFile) {
+		EnhancedLocale result = EnhancedLocaleMap.getEmptyLocale();
+		
+		if (StringUtils.isNotBlank(subtitleFile)) {
+			int lastIndex = subtitleFile.lastIndexOf(".srt");
+			if (lastIndex != -1) {
+				subtitleFile = subtitleFile.substring(0, lastIndex);
+				lastIndex = subtitleFile.lastIndexOf('.');
+				if (lastIndex != -1 && lastIndex < (subtitleFile.length() - 2)) {
+					String language = subtitleFile.substring(lastIndex + 1);
+					result = EnhancedLocaleMap.getByLanguage(language);
+					if (result == null) {
+						result = EnhancedLocaleMap.getEmptyLocale();
+					}
+				}
+			}
+		}
+		
+		return result;
 	}
 	
 	private Utils() {}

@@ -31,13 +31,13 @@ public abstract class AbstractTvSerieImage {
 	}
 	
 	private final String id;
-	private final TvSerieImageProvider provider;
+	private final ImageProvider provider;
 	private final String path;
 	private final BigDecimal rating;
 	private final String ratingCount;
 	private final EnhancedLocale language;
 	
-	protected AbstractTvSerieImage(TvSerieImageProvider provider, String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
+	protected AbstractTvSerieImage(ImageProvider provider, String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
 		this.id = UUID.randomUUID().toString();
 		this.provider = provider;
 		this.path = path;
@@ -76,7 +76,7 @@ public abstract class AbstractTvSerieImage {
 		return this.id;
 	}
 
-	public TvSerieImageProvider getProvider() {
+	public ImageProvider getProvider() {
 		return this.provider;
 	}
 

@@ -1,18 +1,20 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.Labels;
 import it.ninjatech.kvo.ui.TvSerieUtils;
+import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
@@ -73,6 +75,9 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 				this.controller.notifyLanguageRightClick(this.episode, this, image.getName());
 			}
 		}
+		else if (SwingUtilities.isLeftMouseButton(event)) {
+			this.controller.notifyEpisodeClick(this.episode);
+		}
 	}
 
 	@Override
@@ -96,8 +101,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 	}
 	
 	protected void setVideoFile(String filename, boolean removable) {
-		String tooltip = String.format("<html><div align='center'>%s%s</div></html>", filename, removable ? "<br />Right click to remove" : "");
-		TooltipManager.addTooltip(this.videoFileTransition, null, tooltip, TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(1));
+		TooltipManager.addTooltip(this.videoFileTransition, null, Labels.getTooltipTvSerieEpisodeTileVideoFile(filename, removable), TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(1));
 		if (removable) {
 			this.videoFileTransition.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			this.videoFileTransition.addMouseListener(this);
@@ -116,8 +120,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		WebImage image = new WebImage(language.getLanguageFlag());
 		this.languageMap.put(filename, image);
 		image.setName(filename);
-		String tooltip = String.format("<html><div align='center'>%s%s</div></html>", filename, removable ? "<br />Right click to remove" : "");
-		TooltipManager.addTooltip(image, null, tooltip, TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(1));
+		TooltipManager.addTooltip(image, null, Labels.getTooltipTvSerieEpisodeTileSubtitleFile(filename, removable), TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(1));
 		if (removable) {
 			image.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			image.addMouseListener(this);
@@ -137,7 +140,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		languagesPane.repaint();
 	}
 	
-	protected void dispose() {
+	protected void destroy() {
 		TooltipManager.removeTooltips(this.title);
 		TooltipManager.removeTooltips(this.videoFileTransition);
 		for (WebImage image : this.languageMap.values()) {
@@ -150,29 +153,21 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		setLayout(new BorderLayout());
 		setOpaque(false);
 		
-		this.title = new WebLabel(TvSerieUtils.getEpisodeName(this.episode));
+		this.title = UIUtils.makeStandardLabel(TvSerieUtils.getEpisodeName(this.episode), 14, new Insets(5, 5, 5, 5));
 		add(this.title, BorderLayout.NORTH);
 		this.title.setPreferredWidth(width - 10);
-		this.title.setMargin(5, 5, 5, 5);
-		this.title.setFontSize(14);
-		this.title.setForeground(Colors.FOREGROUND_STANDARD);
-		this.title.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		this.title.setDrawShade(true);
 		this.title.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		TooltipManager.addTooltip(this.title, null, "Click for detail", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(1));
+		this.title.addMouseListener(this);
+		TooltipManager.addTooltip(this.title, null, Labels.CLICK_FOR_DETAIL, TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(1));
 
-		WebPanel innerPane = new WebPanel(new BorderLayout(10, 0));
+		WebPanel innerPane = UIUtils.makeStandardPane(new BorderLayout(10, 0));
 		add(innerPane, BorderLayout.CENTER);
-		innerPane.setOpaque(false);
 
 		this.imageTransition = new ComponentTransition(new WebImage(voidImage), new FadeTransitionEffect());
 		this.imageTransition.setOpaque(false);
 		JComponent imageComponent = null;
 		if (StringUtils.isNotBlank(this.episode.getImdbId())) {
-			WebLinkLabel imdbLink = new WebLinkLabel();
-			imdbLink.setToolTipText("Find out more on IMDb");
-			imdbLink.setIcon(ImageRetriever.retrieveWallIMDb());
-			imdbLink.setLink(ImdbManager.getTitleUrl(this.episode.getImdbId()), false);
+			WebLinkLabel imdbLink = UIUtils.makeImdbLink(this.episode.getImdbId());
 			imageComponent = new WebOverlay(this.imageTransition, imdbLink, SwingUtilities.RIGHT, SwingUtilities.BOTTOM);
 			imageComponent.setBackground(Colors.TRANSPARENT);
 		}
@@ -181,26 +176,21 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener {
 		}
 		innerPane.add(imageComponent, BorderLayout.WEST);
 		
-		WebPanel innerRightPane = new WebPanel(new BorderLayout());
+		WebPanel innerRightPane = UIUtils.makeStandardPane(new BorderLayout());
 		innerPane.add(innerRightPane, BorderLayout.CENTER);
-		innerRightPane.setOpaque(false);
 		
-		WebPanel videoFileTransitionPane = new WebPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
+		WebPanel videoFileTransitionPane = UIUtils.makeStandardPane(new FlowLayout(FlowLayout.LEFT, 0, 5));
 		innerRightPane.add(videoFileTransitionPane, BorderLayout.NORTH);
-		videoFileTransitionPane.setOpaque(false);
 		this.videoFileTransition = new ComponentTransition(new WebImage(this.voidVideoFileImage), new FadeTransitionEffect());
 		videoFileTransitionPane.add(this.videoFileTransition);
 		this.videoFileTransition.setOpaque(false);
 		
-		WebPanel languagesPane = new WebPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		WebPanel languagesPane = UIUtils.makeStandardPane(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		languagesPane.setOpaque(true);
 		languagesPane.setBackground(Colors.BACKGROUND_INFO);
 		languagesPane.setPreferredHeight(EnhancedLocaleMap.FLAG_HEIGHT + Dimensions.SCROLL_BAR_WIDTH);
-		this.languages = new WebScrollPane(languagesPane, false, false);
+		this.languages = UIUtils.makeScrollPane(languagesPane, WebScrollPane.VERTICAL_SCROLLBAR_NEVER, WebScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		innerRightPane.add(this.languages, BorderLayout.CENTER);
-		this.languages.setVerticalScrollBarPolicy(WebScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		this.languages.setHorizontalScrollBarPolicy(WebScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		this.languages.getHorizontalScrollBar().setBlockIncrement(30);
-		this.languages.getHorizontalScrollBar().setUnitIncrement(30);
 	}
 	
 }

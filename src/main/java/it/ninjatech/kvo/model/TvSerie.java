@@ -32,7 +32,7 @@ public class TvSerie {
 	private String imdbId;
 	private final Map<Integer, TvSerieSeason> seasons;
 	private final SortedSet<TvSerieActor> actors;
-	private final EnumMap<TvSerieImageProvider, EnumMap<TvSerieFanart, SortedSet<TvSerieImage>>> fanarts;
+	private final EnumMap<ImageProvider, EnumMap<TvSerieFanart, SortedSet<TvSerieImage>>> fanarts;
 
 	public TvSerie(String id, String providerId, String name, EnhancedLocale language) {
 		this.id = id;
@@ -41,7 +41,7 @@ public class TvSerie {
 		this.language = language;
 		this.seasons = new TreeMap<>();
 		this.actors = new TreeSet<>();
-		this.fanarts = new EnumMap<>(TvSerieImageProvider.class);
+		this.fanarts = new EnumMap<>(ImageProvider.class);
 	}
 
 	public TvSerie(String providerId, String name, EnhancedLocale language) {
@@ -57,17 +57,17 @@ public class TvSerie {
 		season.addEpisode(episode);
 	}
 
-	public void addActor(String name, String role, String path, Integer sortOrder) {
-		this.actors.add(new TvSerieActor(name, role, path, sortOrder));
+	public void addActor(String name, String role, String imagePath, Integer sortOrder) {
+		this.actors.add(new TvSerieActor(name, role, imagePath, sortOrder));
 	}
 
 	public void addTheTvDbFanart(TvSerieFanart type, String path, BigDecimal rating, String ratingCount, EnhancedLocale lanaguage) {
-		TvSerieImage fanart = new TvSerieImage(TvSerieImageProvider.TheTvDb, path, rating, ratingCount, lanaguage);
+		TvSerieImage fanart = new TvSerieImage(ImageProvider.TheTvDb, path, rating, ratingCount, lanaguage);
 
-		EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> theTvDbFanarts = this.fanarts.get(TvSerieImageProvider.TheTvDb);
+		EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> theTvDbFanarts = this.fanarts.get(ImageProvider.TheTvDb);
 		if (theTvDbFanarts == null) {
 			theTvDbFanarts = new EnumMap<>(TvSerieFanart.class);
-			this.fanarts.put(TvSerieImageProvider.TheTvDb, theTvDbFanarts);
+			this.fanarts.put(ImageProvider.TheTvDb, theTvDbFanarts);
 		}
 
 		SortedSet<TvSerieImage> fanarts = theTvDbFanarts.get(type);
@@ -80,12 +80,12 @@ public class TvSerie {
 	}
 
 	public void addFanarttvFanart(TvSerieFanart type, String path, Integer likes, EnhancedLocale lanaguage) {
-		TvSerieImage fanart = new TvSerieImage(TvSerieImageProvider.Fanarttv, path, likes != null ? new BigDecimal(likes) : null, null, lanaguage);
+		TvSerieImage fanart = new TvSerieImage(ImageProvider.Fanarttv, path, likes != null ? new BigDecimal(likes) : null, null, lanaguage);
 
-		EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> fanarttvFanarts = this.fanarts.get(TvSerieImageProvider.Fanarttv);
+		EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> fanarttvFanarts = this.fanarts.get(ImageProvider.Fanarttv);
 		if (fanarttvFanarts == null) {
 			fanarttvFanarts = new EnumMap<>(TvSerieFanart.class);
-			this.fanarts.put(TvSerieImageProvider.Fanarttv, fanarttvFanarts);
+			this.fanarts.put(ImageProvider.Fanarttv, fanarttvFanarts);
 		}
 
 		SortedSet<TvSerieImage> fanarts = fanarttvFanarts.get(type);
@@ -114,8 +114,8 @@ public class TvSerie {
 	public Set<TvSerieImage> getTheTvDbFanart(TvSerieFanart type) {
 		Set<TvSerieImage> result = null;
 
-		if (this.fanarts.containsKey(TvSerieImageProvider.TheTvDb)) {
-			EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> theTvDbFanarts = this.fanarts.get(TvSerieImageProvider.TheTvDb);
+		if (this.fanarts.containsKey(ImageProvider.TheTvDb)) {
+			EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> theTvDbFanarts = this.fanarts.get(ImageProvider.TheTvDb);
 			result = theTvDbFanarts.containsKey(type) ? Collections.unmodifiableSortedSet(theTvDbFanarts.get(type)) : Collections.<TvSerieImage> emptySet();
 		}
 		else {
@@ -128,8 +128,8 @@ public class TvSerie {
 	public Set<TvSerieImage> getFanarttvFanart(TvSerieFanart type) {
 		Set<TvSerieImage> result = null;
 
-		if (this.fanarts.containsKey(TvSerieImageProvider.Fanarttv)) {
-			EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> fanarttvFanarts = this.fanarts.get(TvSerieImageProvider.Fanarttv);
+		if (this.fanarts.containsKey(ImageProvider.Fanarttv)) {
+			EnumMap<TvSerieFanart, SortedSet<TvSerieImage>> fanarttvFanarts = this.fanarts.get(ImageProvider.Fanarttv);
 			result = fanarttvFanarts.containsKey(type) ? Collections.unmodifiableSortedSet(fanarttvFanarts.get(type)) : Collections.<TvSerieImage> emptySet();
 		}
 		else {
@@ -142,8 +142,8 @@ public class TvSerie {
 	public boolean hasFanarts(TvSerieFanart type) {
 		boolean result = false;
 
-		result = (this.fanarts.containsKey(TvSerieImageProvider.Fanarttv) && this.fanarts.get(TvSerieImageProvider.Fanarttv).containsKey(type)) ||
-				 (this.fanarts.containsKey(TvSerieImageProvider.TheTvDb) && this.fanarts.get(TvSerieImageProvider.TheTvDb).containsKey(type));
+		result = (this.fanarts.containsKey(ImageProvider.Fanarttv) && this.fanarts.get(ImageProvider.Fanarttv).containsKey(type)) ||
+				 (this.fanarts.containsKey(ImageProvider.TheTvDb) && this.fanarts.get(ImageProvider.TheTvDb).containsKey(type));
 
 		return result;
 	}

@@ -14,6 +14,7 @@ public final class Colors {
 	public static final Color FOREGROUND_SHADE_STANDARD = Color.BLACK;
 	public static final Color FOREGROUND_ALTERNATIVE = new Color(121, 124, 127);
 	public static final Color FOREGROUND_SHADE_ALTERNATIVE = Color.BLACK;
+	public static final Color FOREGROUND_STANDARD_OPPOSITE = Color.BLACK;
 	
 	public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 	

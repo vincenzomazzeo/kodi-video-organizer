@@ -15,7 +15,7 @@ public class KodiVideoOrganizer {
 
 			@Override
 			public void run() {
-				WebLookAndFeel.install();
+			    WebLookAndFeel.install();
 				
 				Loader loader = new Loader();
 				loader.load();

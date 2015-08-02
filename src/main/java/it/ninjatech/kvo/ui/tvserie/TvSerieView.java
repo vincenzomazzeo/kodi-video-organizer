@@ -9,7 +9,6 @@ import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;
 import it.ninjatech.kvo.ui.TvSerieUtils;
-import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.AbstractSlider;
 
@@ -37,7 +36,7 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.separator.WebSeparator;
 import com.alee.laf.text.WebTextArea;
-
+//TODO UIUtils
 public class TvSerieView extends WebPanel implements MouseListener, TvSerieImageLoaderListener {
 
 	private static final long serialVersionUID = -8219959298613920784L;
@@ -235,7 +234,7 @@ public class TvSerieView extends WebPanel implements MouseListener, TvSerieImage
 
 	private void initPlotPopOver() {
 		// TODO sistemare: non si vede più
-		this.plotPopOver = new WebPopOver(UI.get());
+		this.plotPopOver = new WebPopOver(this);
 		this.plotPopOver.setMargin(2);
 		this.plotPopOver.setMovable(false);
 		this.plotPopOver.setLayout(new BorderLayout());

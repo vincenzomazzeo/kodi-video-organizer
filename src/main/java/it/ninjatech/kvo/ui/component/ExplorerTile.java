@@ -20,7 +20,7 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
-
+//TODO UIUtils
 public class ExplorerTile extends WebPanel {
 	// TODO check memory leak solved
 	private static final long serialVersionUID = 4129515407391265281L;

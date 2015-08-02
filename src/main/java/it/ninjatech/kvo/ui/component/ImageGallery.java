@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 import com.alee.extended.image.WebImageGallery;
 import com.alee.laf.rootpane.WebDialog;
-
+//TODO UIUtils
 public class ImageGallery extends WebDialog {
 
 	private static final long serialVersionUID = 1L;

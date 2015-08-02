@@ -2,12 +2,15 @@ package it.ninjatech.kvo.ui.settings;
 
 import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
+import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
+import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
-import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBoxCellRenderer;
+import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBox;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -17,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import com.alee.extended.button.WebSwitch;
@@ -24,27 +28,89 @@ import com.alee.extended.label.WebLinkLabel;
 import com.alee.extended.panel.GroupPanel;
 import com.alee.global.StyleConstants;
 import com.alee.laf.button.WebButton;
-import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.tabbedpane.TabbedPaneStyle;
 import com.alee.laf.tabbedpane.WebTabbedPane;
 import com.alee.laf.text.WebTextField;
-
+//TODO UIUtils - make apikey custom dialog
 public class ScrapersSettingsView extends WebDialog implements ActionListener, MouseListener {
 
+	private static WebPanel makeLogoPane(ImageIcon logoImage, String baseUrl) {
+		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		result.setOpaque(false);
+		WebLinkLabel logo = new WebLinkLabel(logoImage);
+		logo.setLink(baseUrl, false);
+		result.add(logo);
+		
+		return result;
+	}
+	
+	private static WebPanel makeLogoPane(String text, String baseUrl) {
+		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		result.setOpaque(false);
+		WebLinkLabel logo = new WebLinkLabel(text);
+		logo.setLink(baseUrl, false);
+		logo.setForeground(Colors.FOREGROUND_STANDARD);
+		logo.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		logo.setDrawShade(true);
+		logo.setFontSize(20);
+		result.add(logo);
+		
+		return result;
+	}
+	
+	private static WebLabel makeLabel(String label) {
+		WebLabel result = new WebLabel(label);
+		
+		result.setForeground(Colors.FOREGROUND_STANDARD);
+		result.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		result.setDrawShade(true);
+		
+		return result;
+	}
+	
+	private static WebPanel makeEnabledPane(WebSwitch enabledSwitch, ActionListener actionListener) {
+		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		result.setOpaque(false);
+		result.add(enabledSwitch);
+		enabledSwitch.addActionListener(actionListener);
+		enabledSwitch.getLeftComponent().setBackground(Colors.BACKGROUND_INFO);
+		enabledSwitch.getLeftComponent().setOpaque(true);
+		enabledSwitch.getLeftComponent().setForeground(Colors.FOREGROUND_STANDARD);
+		enabledSwitch.getLeftComponent().setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		enabledSwitch.getRightComponent().setBackground(Colors.BACKGROUND_INFO);
+		enabledSwitch.getRightComponent().setOpaque(true);
+		enabledSwitch.getRightComponent().setForeground(Colors.FOREGROUND_STANDARD);
+		enabledSwitch.getRightComponent().setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
+		
+		return result;
+	}
+	
+	private static void setApiKey(WebTextField apiKey, MouseListener mouseListener) {
+		apiKey.setEditable(false);
+		apiKey.addMouseListener(mouseListener);
+		apiKey.setBackground(Colors.BACKGROUND_INFO);
+		apiKey.setForeground(Colors.FOREGROUND_STANDARD);
+	}
+	
 	private static final long serialVersionUID = -5869048947514865726L;
 
 	private final ScrapersSettingsController controller;
 	private WebPanel container;
 	private WebSwitch theTvDbEnabled;
 	private WebTextField theTvDbApiKey;
-	private WebComboBox theTvDbPreferredLanguage;
+	private EnhancedLocaleLanguageComboBox theTvDbPreferredLanguage;
 	private WebSwitch fanarttvEnabled;
 	private WebTextField fanarttvApiKey;
+	private WebSwitch myApiFilmsEnabled;
 	private WebSwitch imdbEnabled;
 	private WebButton confirm;
+	private WebButton cancel;
 
 	protected ScrapersSettingsView(ScrapersSettingsController controller) {
 		super(UI.get(), "Scrapers Settings", true);
@@ -63,8 +129,11 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
-		if (source == confirm) {
+		if (event.getSource() == this.confirm) {
 			this.controller.notifyConfirm();
+		}
+		else if (event.getSource() == this.cancel) {
+			setVisible(false);
 		}
 		else if (source == this.theTvDbEnabled) {
 			handleTheTvDbEnabled();
@@ -102,7 +171,7 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 	@Override
 	public void mouseExited(MouseEvent event) {
 	}
-
+	
 	protected boolean isTheTvDbEnabled() {
 		return this.theTvDbEnabled.isSelected();
 	}
@@ -125,19 +194,15 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 	}
 
 	protected EnhancedLocale getTheTvDbLanguage() {
-		return (EnhancedLocale)this.theTvDbPreferredLanguage.getSelectedItem();
+		return this.theTvDbPreferredLanguage.getLanguage();
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void setTheTvDbLanguages(List<EnhancedLocale> languages) {
-		this.theTvDbPreferredLanguage.removeAllItems();
-		for (EnhancedLocale language : languages) {
-			this.theTvDbPreferredLanguage.addItem(language);
-		}
+		this.theTvDbPreferredLanguage.setLanguages(languages);
 	}
 
 	protected void selectTheTvDbLanguage(EnhancedLocale language) {
-		this.theTvDbPreferredLanguage.setSelectedItem(language);
+		this.theTvDbPreferredLanguage.setLanguage(language);
 	}
 
 	protected boolean isFanarttvEnabled() {
@@ -161,22 +226,35 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 		this.fanarttvApiKey.clear();
 	}
 	
+	public boolean isMyApiFilmsEnabled() {
+		return this.myApiFilmsEnabled.isSelected();
+	}
+
+	public void setMyApiFilmsEnabled(boolean enabled) {
+		this.myApiFilmsEnabled.setSelected(enabled);
+	}
+
 	protected boolean isImdbEnabled() {
 		return this.imdbEnabled.isSelected();
 	}
 	
 	protected void setImdbEnabled(boolean enabled) {
-		this.imdbEnabled.setSelected(true);
+		this.imdbEnabled.setSelected(enabled);
 	}
 
 	private void init() {
 		this.container = new WebPanel(new BorderLayout());
 		add(this.container);
+		
+		this.container.setBackground(Colors.BACKGROUND_INFO);
 
 		WebTabbedPane tabbedPane = new WebTabbedPane(WebTabbedPane.TOP, TabbedPaneStyle.attached);
 		tabbedPane.addTab("TheTVDB", makeTheTvDbPane());
 		tabbedPane.addTab("Fanart.tv", makeFanarttvPane());
+		tabbedPane.addTab("MyApiFilms", makeMyApiFilmsPane());
 		tabbedPane.addTab("IMDb", makeImdbPane());
+		tabbedPane.setBackground(Colors.BACKGROUND_INFO);
+		tabbedPane.setForeground(Colors.FOREGROUND_STANDARD_OPPOSITE);
 
 		this.container.add(tabbedPane, BorderLayout.CENTER);
 		this.container.add(makeButtonPane(), BorderLayout.SOUTH);
@@ -186,47 +264,42 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.RIGHT));
 
 		result.setOpaque(false);
-		
-		this.confirm = WebButton.createWebButton(StyleConstants.smallRound, StyleConstants.shadeWidth, StyleConstants.innerShadeWidth, 0, false, false, false);
-		this.confirm.setText("Confirm");
+
+		this.confirm = WebButton.createIconWebButton(ImageRetriever.retrieveDialogOk(), StyleConstants.smallRound, true);
 		this.confirm.addActionListener(this);
 		result.add(this.confirm);
+		
+		result.add(UIUtils.makeHorizontalFillerPane(5, false));
+		
+		this.cancel = WebButton.createIconWebButton(ImageRetriever.retrieveDialogCancel(), StyleConstants.smallRound, true);
+		this.cancel.addActionListener(this);
+		result.add(this.cancel);
 
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	private WebPanel makeTheTvDbPane() {
 		WebPanel result = null;
 		
-		WebPanel logoPane = new WebPanel(new FlowLayout(FlowLayout.LEFT));
-		WebLinkLabel logo = new WebLinkLabel(ImageRetriever.retrieveTheTvDbLogo());
-		logo.setLink(TheTvDbManager.BASE_URL, false);
-		logoPane.add(logo);
-
-		WebLabel enabledL = new WebLabel("Enabled");
-		enabledL.setDrawShade(true);
-		
-		WebPanel theTvDbEnabledPane = new WebPanel(new FlowLayout(FlowLayout.LEFT));
-		theTvDbEnabledPane.setOpaque(false);
 		this.theTvDbEnabled = new WebSwitch();
-		theTvDbEnabledPane.add(this.theTvDbEnabled);
-		this.theTvDbEnabled.addActionListener(this);
-		
-		WebLabel theTvDbApiKeyL = new WebLabel("API Key");
-		theTvDbApiKeyL.setDrawShade(true);
-
 		this.theTvDbApiKey = new WebTextField(40);
-		this.theTvDbApiKey.setEditable(false);
-		this.theTvDbApiKey.addMouseListener(this);
+		
+		WebPanel logoPane = makeLogoPane(ImageRetriever.retrieveTheTvDbLogo(), TheTvDbManager.BASE_URL);
+
+		WebLabel enabled = makeLabel("Enabled");
+		WebPanel enabledPane = makeEnabledPane(this.theTvDbEnabled, this); 
+		
+		WebLabel apiKey = makeLabel("API Key");
+		setApiKey(this.theTvDbApiKey, this);
 
 		WebLabel preferredLanguageL = new WebLabel("Preferred Language");
+		preferredLanguageL.setForeground(Colors.FOREGROUND_STANDARD);
+		preferredLanguageL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
 		preferredLanguageL.setDrawShade(true);
 
-		this.theTvDbPreferredLanguage = new WebComboBox();
-		this.theTvDbPreferredLanguage.setRenderer(new EnhancedLocaleLanguageComboBoxCellRenderer());
+		this.theTvDbPreferredLanguage = new EnhancedLocaleLanguageComboBox(EnhancedLocaleMap.getEmptyLocale());
 
-		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabledL, theTvDbEnabledPane, UIUtils.makeVerticalFillerPane(20, false), theTvDbApiKeyL, this.theTvDbApiKey, UIUtils.makeVerticalFillerPane(20, false), preferredLanguageL, this.theTvDbPreferredLanguage, UIUtils.makeVerticalFillerPane(20, false));
+		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false), apiKey, this.theTvDbApiKey, UIUtils.makeVerticalFillerPane(20, false), preferredLanguageL, this.theTvDbPreferredLanguage, UIUtils.makeVerticalFillerPane(20, false));
 		result.setMargin(10);
 		result.setOpaque(false);
 
@@ -236,29 +309,35 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 	private WebPanel makeFanarttvPane() {
 		WebPanel result = null;
 
-		WebPanel logoPane = new WebPanel(new FlowLayout(FlowLayout.LEFT));
-		logoPane.setOpaque(false);
-		WebLinkLabel logo = new WebLinkLabel(ImageRetriever.retrieveFanarttvLogo());
-		logo.setLink(FanarttvManager.BASE_URL, false);
-		logoPane.add(logo);
-
-		WebLabel enabledL = new WebLabel("Enabled");
-		enabledL.setDrawShade(true);
-		
-		WebPanel fanarttvEnabledPane = new WebPanel(new FlowLayout(FlowLayout.LEFT));
-		fanarttvEnabledPane.setOpaque(false);
 		this.fanarttvEnabled = new WebSwitch();
-		fanarttvEnabledPane.add(this.fanarttvEnabled);
-		this.fanarttvEnabled.addActionListener(this);
-		
-		WebLabel fanartApiKeyL = new WebLabel("API Key");
-		fanartApiKeyL.setDrawShade(true);
-
 		this.fanarttvApiKey = new WebTextField(40);
-		this.fanarttvApiKey.setEditable(false);
-		this.fanarttvApiKey.addMouseListener(this);
 		
-		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabledL, fanarttvEnabledPane, UIUtils.makeVerticalFillerPane(20, false), fanartApiKeyL, this.fanarttvApiKey, UIUtils.makeVerticalFillerPane(20, false));
+		WebPanel logoPane = makeLogoPane(ImageRetriever.retrieveFanarttvLogo(), FanarttvManager.BASE_URL);
+
+		WebLabel enabled = makeLabel("Enabled");
+		WebPanel enabledPane = makeEnabledPane(this.fanarttvEnabled, this);
+		
+		WebLabel apiKey = makeLabel("API Key");
+		setApiKey(this.fanarttvApiKey, this);
+
+		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false), apiKey, this.fanarttvApiKey, UIUtils.makeVerticalFillerPane(20, false));
+		result.setMargin(10);
+		result.setOpaque(false);
+		
+		return result;
+	}
+	
+	private WebPanel makeMyApiFilmsPane() {
+		WebPanel result = null;
+		
+		this.myApiFilmsEnabled = new WebSwitch();
+		
+		WebPanel logoPane = makeLogoPane("My Api Films", MyApiFilmsManager.BASE_URL);
+		
+		WebLabel enabled = makeLabel("Enabled");
+		WebPanel enabledPane = makeEnabledPane(this.myApiFilmsEnabled, this);
+		
+		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false));
 		result.setMargin(10);
 		result.setOpaque(false);
 		
@@ -268,21 +347,14 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 	private WebPanel makeImdbPane() {
 		WebPanel result = null;
 
-		WebPanel logoPane = new WebPanel(new FlowLayout(FlowLayout.LEFT));
-		logoPane.setOpaque(false);
-		WebLinkLabel logo = new WebLinkLabel(ImageRetriever.retrieveImdbLogo());
-		logo.setLink(ImdbManager.BASE_URL, false);
-		logoPane.add(logo);
-
-		WebLabel enabledL = new WebLabel("Enabled");
-		enabledL.setDrawShade(true);
-		
-		WebPanel imdbEnabledPane = new WebPanel(new FlowLayout(FlowLayout.LEFT));
-		imdbEnabledPane.setOpaque(false);
 		this.imdbEnabled = new WebSwitch();
-		imdbEnabledPane.add(this.imdbEnabled);
 		
-		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabledL, imdbEnabledPane, UIUtils.makeVerticalFillerPane(20, false));
+		WebPanel logoPane = makeLogoPane(ImageRetriever.retrieveImdbLogo(), ImdbManager.BASE_URL);
+
+		WebLabel enabled = makeLabel("Enabled");
+		WebPanel enabledPane = makeEnabledPane(this.imdbEnabled, this);
+		
+		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false));
 		result.setMargin(10);
 		result.setOpaque(false);
 

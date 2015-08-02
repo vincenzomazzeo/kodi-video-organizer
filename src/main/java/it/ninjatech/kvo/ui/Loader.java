@@ -5,10 +5,12 @@ import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
+import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.PeopleManager;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.AbstractWorker;
 import it.ninjatech.kvo.worker.WorkerProgressListener;
@@ -127,6 +129,9 @@ public class Loader extends WebFrame {
 			notifyUpdate("Initializing Async Manager", 15);
 			AsyncManager.init();
 			
+			notifyUpdate("Initializing People Manager", 18);
+			PeopleManager.init();
+			
 			notifyUpdate("Connecting to DB", 20);
 			ConnectionHandler.init();
 
@@ -144,6 +149,8 @@ public class Loader extends WebFrame {
 			}
 			
 			ImdbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getImdbEnabled());
+			
+			MyApiFilmsManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getMyApiFilmsEnabled());
 			
 			notifyUpdate("Done", 100);
 

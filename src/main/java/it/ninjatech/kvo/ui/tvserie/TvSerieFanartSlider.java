@@ -21,7 +21,8 @@ import javax.swing.SwingUtilities;
 
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
-
+//TODO UIUtils
+//TODO sistemare con abstractimageslider
 public class TvSerieFanartSlider extends AbstractSlider implements MouseListener {
 
 	protected enum FanartType {
@@ -102,7 +103,7 @@ public class TvSerieFanartSlider extends AbstractSlider implements MouseListener
 			for (FanartType fanartType : FanartType.values()) {
 				if (fanartType.fanart == fanart) {
 					SliderPane pane = (SliderPane)this.panes.get(fanartType);
-					pane.setImage(SliderPane.makeImagePane(new ImageIcon(image), fanartType.size));
+					pane.setImage(UIUtils.makeImagePane(new ImageIcon(image), fanartType.size));
 					TooltipManager.removeTooltips(pane);
 					TooltipManager.addTooltip(pane, null, "<html><div align='center'>Left click to search for more<br />Right click for full size image</div></html>", TooltipWay.up, (int)TimeUnit.SECONDS.toMillis(2));
 					break;

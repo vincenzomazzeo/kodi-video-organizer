@@ -4,6 +4,7 @@ import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
+import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.ui.ImageRetriever;
@@ -44,6 +45,8 @@ public class ScrapersSettingsController {
 		}
 		
 		this.view.setImdbEnabled(settings.getImdbEnabled());
+		
+		this.view.setMyApiFilmsEnabled(settings.getMyApiFilmsEnabled());
 	}
 
 	public ScrapersSettingsView getView() {
@@ -53,7 +56,8 @@ public class ScrapersSettingsController {
 	protected void notifyConfirm() {
 		ConfirmWorker confirmWorker = new ConfirmWorker(this.view.isTheTvDbEnabled(), this.view.getTheTvDbApiKey(), this.view.getTheTvDbLanguage(),
 		                                                this.view.isFanarttvEnabled(), this.view.getFanarttvApiKey(),
-		                                                this.view.isImdbEnabled());
+		                                                this.view.isImdbEnabled(),
+		                                                this.view.isMyApiFilmsEnabled());
 
 		new IndeterminateProgressDialogWorker<>(confirmWorker, "Storing Scrapers Settings").start();
 
@@ -161,16 +165,19 @@ public class ScrapersSettingsController {
 		private final boolean fanarttvEnabled;
 		private final String fanarttvApiKey;
 		private final boolean imdbEnabled;
+		private final boolean myApiFilmsEnabled;
 
 		protected ConfirmWorker(boolean theTvDbEnabled, String theTvDbApiKey, EnhancedLocale theTvDbPreferredLanguage,
 		                        boolean fanarttvEnabled, String fanarttvApiKey,
-		                        boolean imdbEnabled) {
+		                        boolean imdbEnabled, 
+		                        boolean myApiFilmsEnabled) {
 			this.theTvDbEnabled = theTvDbEnabled;
 			this.theTvDbApiKey = theTvDbApiKey;
 			this.theTvDbPreferredLanguage = theTvDbPreferredLanguage;
 			this.fanarttvEnabled = fanarttvEnabled;
 			this.fanarttvApiKey = fanarttvApiKey;
 			this.imdbEnabled = imdbEnabled;
+			this.myApiFilmsEnabled = myApiFilmsEnabled;
 		}
 
 		@Override
@@ -206,6 +213,9 @@ public class ScrapersSettingsController {
 			settings.setImdbEnabled(this.imdbEnabled);
 			ImdbManager.getInstance().setEnabled(this.imdbEnabled);
 
+			settings.setMyApiFilmsEnabled(this.myApiFilmsEnabled);
+			MyApiFilmsManager.getInstance().setEnabled(this.myApiFilmsEnabled);
+			
 			SettingsHandler.getInstance().store();
 
 			return null;

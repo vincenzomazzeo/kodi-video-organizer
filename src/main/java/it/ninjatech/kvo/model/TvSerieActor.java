@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.model;
 
+import it.ninjatech.kvo.util.PeopleManager;
+
 import java.util.UUID;
 
 public class TvSerieActor implements Comparable<TvSerieActor> {
@@ -7,15 +9,17 @@ public class TvSerieActor implements Comparable<TvSerieActor> {
 	private final String id;
 	private final String name;
 	private final String role;
-	private final String path;
+	private final String imagePath;
 	private final Integer sortOrder;
 	
-	protected TvSerieActor(String name, String role, String path, Integer sortOrder) {
+	protected TvSerieActor(String name, String role, String imagePath, Integer sortOrder) {
 		this.id = UUID.randomUUID().toString();
 		this.name = name;
 		this.role = role;
-		this.path = path;
+		this.imagePath = imagePath;
 		this.sortOrder = sortOrder;
+		
+		PeopleManager.getInstance().addTvSerieActor(this);
 	}
 
 	@Override
@@ -80,8 +84,8 @@ public class TvSerieActor implements Comparable<TvSerieActor> {
 		return this.role;
 	}
 
-	public String getPath() {
-		return this.path;
+	public String getImagePath() {
+		return this.imagePath;
 	}
 
 	public Integer getSortOrder() {

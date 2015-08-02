@@ -1,7 +1,8 @@
 package it.ninjatech.kvo.async;
 
-import it.ninjatech.kvo.async.job.AbstractTvSerieImageLoaderAsyncJob;
-import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
+import it.ninjatech.kvo.async.job.AbstractImageLoaderAsyncJob;
+import it.ninjatech.kvo.async.job.CacheRemoteImageAsyncJob;
+import it.ninjatech.kvo.async.job.PersonAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
@@ -34,14 +35,17 @@ public class AsyncManager {
 	}
 
 	private final ExecutorService executor;
-	private final AsyncHandler<AbstractTvSerieImageLoaderAsyncJob> tvSerieImageLoaderHandler;
+	private final AsyncHandler<AbstractImageLoaderAsyncJob> tvSerieImageLoaderHandler;
+	private final AsyncHandler<PersonAsyncJob> personHandler;
 	
 	private AsyncManager() {
-		this.executor = Executors.newFixedThreadPool(1);
+		this.executor = Executors.newFixedThreadPool(2);
 		
 		this.tvSerieImageLoaderHandler = new AsyncHandler<>();
+		this.personHandler = new AsyncHandler<>();
 		
 		this.executor.submit(this.tvSerieImageLoaderHandler);
+		this.executor.submit(this.personHandler);
 	}
 	
 	public void submit(String id, TvSerieTileImagesAsyncJob job, AsyncJobListener listener) {
@@ -74,7 +78,7 @@ public class AsyncManager {
 		this.tvSerieImageLoaderHandler.removeJob(id);
 	}
 	
-	public void submit(String id, TvSerieCacheRemoteImageAsyncJob job, AsyncJobListener listener) {
+	public void submit(String id, CacheRemoteImageAsyncJob job, AsyncJobListener listener) {
 		System.out.printf("-> submit cache-remote image %s\n", id);
 		this.tvSerieImageLoaderHandler.submitJob(id, job, listener);
 	}
@@ -82,6 +86,16 @@ public class AsyncManager {
 	public void cancelTvSerieCacheRemoteImageAsyncJob(String id) {
 		System.out.printf("-> cancel cache-remote image %s\n", id);
 		this.tvSerieImageLoaderHandler.removeJob(id);
+	}
+	
+	public void submit(String id, PersonAsyncJob job, AsyncJobListener listener) {
+		System.out.printf("-> submit person %s\n", id);
+		this.personHandler.submitJob(id, job, listener);
+	}
+	
+	public void cancelPersonAsyncJob(String id) {
+		System.out.printf("-> cancel person %s\n", id);
+		this.personHandler.removeJob(id);
 	}
 	
 }

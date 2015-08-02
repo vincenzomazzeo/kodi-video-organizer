@@ -5,7 +5,7 @@ import it.ninjatech.kvo.ui.UI;
 import javax.swing.JComponent;
 
 import com.alee.laf.rootpane.WebDialog;
-
+//TODO UIUtils
 // TODO modificare con nuovi dialog
 public class FullImageDialog extends WebDialog {
 

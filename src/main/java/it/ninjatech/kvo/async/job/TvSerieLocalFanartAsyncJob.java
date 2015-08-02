@@ -7,7 +7,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.util.EnumSet;
 
-public class TvSerieLocalFanartAsyncJob extends AbstractTvSerieImageLoaderAsyncJob {
+public class TvSerieLocalFanartAsyncJob extends AbstractImageLoaderAsyncJob {
 
 	private static final long serialVersionUID = 1042321164421715360L;
 	

@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
+import it.ninjatech.kvo.ui.Colors;
 
 import java.awt.Component;
 
@@ -8,7 +9,7 @@ import javax.swing.JList;
 
 import com.alee.laf.combobox.WebComboBoxCellRenderer;
 import com.alee.laf.combobox.WebComboBoxElement;
-
+//TODO UIUtils
 public class EnhancedLocaleLanguageComboBoxCellRenderer extends WebComboBoxCellRenderer {
 
 	@Override
@@ -20,6 +21,9 @@ public class EnhancedLocaleLanguageComboBoxCellRenderer extends WebComboBoxCellR
 
 			result.setIcon(enhancedLocale.getLanguageFlag());
 			result.setText(enhancedLocale.getLanguage());
+			result.setOpaque(true);
+			result.setBackground(Colors.BACKGROUND_INFO);
+			result.setForeground((cellHasFocus || isSelected) ? Colors.FOREGROUND_STANDARD_OPPOSITE : Colors.FOREGROUND_STANDARD);
 		}
 
 		return result;

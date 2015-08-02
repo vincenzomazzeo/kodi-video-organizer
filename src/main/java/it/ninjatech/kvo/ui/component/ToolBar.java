@@ -20,7 +20,7 @@ import com.alee.laf.toolbar.WebToolBar;
 import com.alee.managers.notification.NotificationManager;
 import com.alee.managers.notification.NotificationOption;
 import com.alee.managers.tooltip.TooltipManager;
-
+//TODO UIUtils
 public class ToolBar extends WebToolBar implements ActionListener {
 
 	private static final long serialVersionUID = -2693914047879971469L;

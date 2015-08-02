@@ -4,6 +4,7 @@ import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
+import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsController;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsView;
@@ -22,6 +23,7 @@ public class DialogLauncher {
 		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApiKey());
 		FanarttvManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getFanarttvApiKey());
 		ImdbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getImdbEnabled());
+		MyApiFilmsManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getMyApiFilmsEnabled());
 		
 		ScrapersSettingsController controller = new ScrapersSettingsController();
 		ScrapersSettingsView view = controller.getView();

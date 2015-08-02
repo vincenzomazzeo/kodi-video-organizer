@@ -97,6 +97,15 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 		this.filename = filename;
 	}
 	
+	public Set<String> getSubtitleFilenames() {
+		return this.subtitleFilenames;
+	}
+	
+	public void setSubtitleFilenames(Set<String> subtitleFilenames) {
+		this.subtitleFilenames.clear();
+		this.subtitleFilenames.addAll(subtitleFilenames);
+	}
+
 	public String getSeasonId() {
 		return this.seasonId;
 	}

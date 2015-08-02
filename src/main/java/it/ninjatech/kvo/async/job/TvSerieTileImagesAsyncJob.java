@@ -1,13 +1,13 @@
 package it.ninjatech.kvo.async.job;
 
-import it.ninjatech.kvo.model.TvSerieImageProvider;
+import it.ninjatech.kvo.model.ImageProvider;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 
 import java.awt.Dimension;
 import java.awt.Image;
 import java.util.EnumSet;
 
-public class TvSerieTileImagesAsyncJob extends AbstractTvSerieImageLoaderAsyncJob {
+public class TvSerieTileImagesAsyncJob extends AbstractImageLoaderAsyncJob {
 
 	private static final long serialVersionUID = 3590654815985906200L;
 	private static final String FANTART = "fanart.jpg";
@@ -21,7 +21,7 @@ public class TvSerieTileImagesAsyncJob extends AbstractTvSerieImageLoaderAsyncJo
 	private Image poster;
 	
 	public TvSerieTileImagesAsyncJob(TvSeriePathEntity tvSeriePathEntity, Dimension tileSize, Dimension tilePosterSize) {
-		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory, LoadType.Cache, LoadType.Remote), TvSerieImageProvider.TheTvDb);
+		super(tvSeriePathEntity.getId(), EnumSet.of(LoadType.Directory, LoadType.Cache, LoadType.Remote), ImageProvider.TheTvDb);
 
 		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.tileSize = tileSize;

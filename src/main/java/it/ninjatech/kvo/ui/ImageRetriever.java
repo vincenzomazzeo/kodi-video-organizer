@@ -14,6 +14,7 @@ public final class ImageRetriever {
 		ArrowRight("arrow_right.png"),
 		Baloon("baloon.png"),
 		Cancel("cancel.png"),
+		ComboboxArrow("combobox_arrow.png"),
 		ContentRating_TV14("TV-14.png"),
 		ContentRating_TVG("TV-G.png"),
 		ContentRating_TVMA("TV-MA.png"),
@@ -44,8 +45,10 @@ public final class ImageRetriever {
 	}
 
 	private static final int APIKEY_SIZE = 40;
+	private static final int COMBOBOX_ARROW_SIZE = 16;
 	private static final int DIALOG_BUTTON_SIZE = 32;
-	public static final int EPISODE_TILE_VIDEO_FILE_SIZE = 40;
+	public static final int EPISODE_TILE_VIDEO_FILE_ICON_SIZE = 40;
+	private static final int EPISODE_VIDEO_FILE_ICON_SIZE = 20;
 	private static final int EXPLORER_TREE_ICON_SIZE = 16;
 	private static final int EXPLORER_TREE_MENU_ICON_SIZE = 50;
 	private static final int EXPLORER_TREE_TAB_ICON_SIZE = 32;
@@ -62,6 +65,7 @@ public final class ImageRetriever {
 	private static final int WALL_STAR_SIZE = 40;
 
 	private static ImageIcon episodeTileVideoFile;
+	private static ImageIcon episodeVideoFile;
 	private static ImageIcon explorerTilePosterTvSerie;
 	private static ImageIcon explorerTreeFolder;
 	private static ImageIcon explorerTreeFolderMovies;
@@ -90,6 +94,10 @@ public final class ImageRetriever {
 		return retrieveAndScaleImage(ImageName.Apikey, APIKEY_SIZE);
 	}
 
+	public static ImageIcon retrieveComboboxArrow() {
+		return retrieveAndScaleImage(ImageName.ComboboxArrow, COMBOBOX_ARROW_SIZE);
+	}
+	
 	public static ImageIcon retrieveDialogCancel() {
 		return retrieveAndScaleImage(ImageName.Cancel, DIALOG_BUTTON_SIZE);
 	}
@@ -100,10 +108,18 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveEpisodeTileVideoFile() {
 		if (episodeTileVideoFile == null) {
-			episodeTileVideoFile = retrieveAndScaleImage(ImageName.TvSerie, EPISODE_TILE_VIDEO_FILE_SIZE);
+			episodeTileVideoFile = retrieveAndScaleImage(ImageName.TvSerie, EPISODE_TILE_VIDEO_FILE_ICON_SIZE);
 		}
 
 		return episodeTileVideoFile;
+	}
+	
+	public static ImageIcon retrieveEpisodeVideoFile() {
+		if (episodeVideoFile == null) {
+			episodeVideoFile = retrieveAndScaleImage(ImageName.TvSerie, EPISODE_VIDEO_FILE_ICON_SIZE);
+		}
+		
+		return episodeVideoFile;
 	}
 
 	public static ImageIcon retrieveExplorerTilePosterTvSerie() {

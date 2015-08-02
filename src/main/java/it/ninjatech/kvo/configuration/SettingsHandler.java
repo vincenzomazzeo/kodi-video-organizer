@@ -43,6 +43,7 @@ public class SettingsHandler {
 			this.settings.setTheTvDbEnabled(false);
 			this.settings.setFanarttvEnabled(false);
 			this.settings.setImdbEnabled(true);
+			this.settings.setMyApiFilmsEnabled(true);
 			store();
 		}
 		else {

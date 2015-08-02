@@ -36,7 +36,7 @@ public class TheTvDbActors {
 	protected static class TheTvDbActor {
 
 		@XmlElement(name = "Image")
-		private String path;
+		private String imagePath;
 		@XmlElement(name = "Name")
 		private String realName;
 		@XmlElement(name = "Role")
@@ -47,15 +47,15 @@ public class TheTvDbActors {
 		protected TheTvDbActor() {}
 
 		private void fill(TvSerie tvSerie) {
-			tvSerie.addActor(this.realName, this.roleName, this.path, this.sortOrder);
+			tvSerie.addActor(this.realName, this.roleName, this.imagePath, this.sortOrder);
 		}
 		
-		protected String getPath() {
-			return this.path;
+		protected String getImagePath() {
+			return this.imagePath;
 		}
 
-		protected void setPath(String path) {
-			this.path = path;
+		protected void setImagePath(String imagePath) {
+			this.imagePath = imagePath;
 		}
 
 		protected String getRealName() {

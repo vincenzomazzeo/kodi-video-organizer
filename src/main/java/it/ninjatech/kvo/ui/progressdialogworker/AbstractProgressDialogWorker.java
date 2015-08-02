@@ -9,7 +9,7 @@ import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 
 import com.alee.extended.window.WebProgressDialog;
-
+//TODO UIUtils - new style
 public abstract class AbstractProgressDialogWorker<T> extends SwingWorker<T, Progress> implements WorkerProgressListener {
 
 	private final AbstractWorker<T> worker;

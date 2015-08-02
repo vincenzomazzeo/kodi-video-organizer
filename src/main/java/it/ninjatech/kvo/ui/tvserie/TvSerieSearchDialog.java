@@ -20,7 +20,7 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.text.WebTextField;
-
+//TODO UIUtils - new style
 public class TvSerieSearchDialog extends WebDialog implements ActionListener {
 // TODO sistemare con nuove dialog (vedi TvSerieEpisodeSubtitleDialog)
 	private static final long serialVersionUID = 5517804638406906373L;

@@ -3,11 +3,11 @@ package it.ninjatech.kvo.ui;
 import it.ninjatech.kvo.async.AsyncJob;
 import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
-import it.ninjatech.kvo.async.job.AbstractTvSerieImageLoaderAsyncJob;
-import it.ninjatech.kvo.async.job.TvSerieActorImageAsyncJob;
-import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
+import it.ninjatech.kvo.async.job.CacheRemoteImageAsyncJob;
+import it.ninjatech.kvo.async.job.PersonAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
+import it.ninjatech.kvo.model.TvSerieActor;
 
 import java.awt.Image;
 import java.util.ArrayList;
@@ -37,16 +37,17 @@ public class TvSerieImageLoaderAsyncJobHandler implements AsyncJobListener {
 					image = ((TvSerieLocalSeasonImageAsyncJob)job).getImage();
 					supportData = ((TvSerieLocalSeasonImageAsyncJob)job).getSeason();
 				}
-				else if (job.getClass().equals(TvSerieCacheRemoteImageAsyncJob.class)) {
-					image = ((TvSerieCacheRemoteImageAsyncJob)job).getImage();
+				else if (job.getClass().equals(CacheRemoteImageAsyncJob.class)) {
+					image = ((CacheRemoteImageAsyncJob)job).getImage();
+					supportData = jobInfo.supportData;
 				}
 				else if (job.getClass().equals(TvSerieLocalFanartAsyncJob.class)) {
 					image = ((TvSerieLocalFanartAsyncJob)job).getImage();
 					supportData = ((TvSerieLocalFanartAsyncJob)job).getFanart();
 				}
-				else if (job.getClass().equals(TvSerieActorImageAsyncJob.class)) {
-					image = ((TvSerieActorImageAsyncJob)job).getImage();
-					supportData = ((TvSerieActorImageAsyncJob)job).getActor();
+				else if (job.getClass().equals(PersonAsyncJob.class)) {
+					image = ((PersonAsyncJob)job).getImage();
+					supportData = jobInfo.supportData;
 				}
 				else {
 					throw new RuntimeException(String.format("Unexpected Job type: %s", job.getClass()));
@@ -59,22 +60,31 @@ public class TvSerieImageLoaderAsyncJobHandler implements AsyncJobListener {
 	}
 
 	public void handle(TvSerieLocalSeasonImageAsyncJob job, TvSerieImageLoaderListener listener) {
-		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass()));
+		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass(), null));
 		AsyncManager.getInstance().submit(job.getId(), job, this);
 	}
 	
-	public void handle(TvSerieCacheRemoteImageAsyncJob job, TvSerieImageLoaderListener listener) {
-		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass()));
+	public void handle(CacheRemoteImageAsyncJob job, TvSerieImageLoaderListener listener, Object supportData) {
+		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass(), supportData));
 		AsyncManager.getInstance().submit(job.getId(), job, this);
+	}
+	
+	public void handle(CacheRemoteImageAsyncJob job, TvSerieImageLoaderListener listener) {
+		handle(job, listener, null);
 	}
 	
 	public void handle(TvSerieLocalFanartAsyncJob job, TvSerieImageLoaderListener listener) {
-		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass()));
+		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass(), null));
 		AsyncManager.getInstance().submit(job.getId(), job, this);
 	}
 	
-	public void handle(TvSerieActorImageAsyncJob job, TvSerieImageLoaderListener listener) {
-		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass()));
+	public void handle(PersonAsyncJob job, TvSerieImageLoaderListener listener, TvSerieActor actor) {
+		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass(), actor));
+		AsyncManager.getInstance().submit(job.getId(), job, this);
+	}
+	
+	public void handle(PersonAsyncJob job, TvSerieImageLoaderListener listener, String supportData) {
+		this.jobMap.put(job.getId(), new JobInfo(job.getId(), listener, job.getClass(), supportData));
 		AsyncManager.getInstance().submit(job.getId(), job, this);
 	}
 	
@@ -85,8 +95,11 @@ public class TvSerieImageLoaderAsyncJobHandler implements AsyncJobListener {
 			if (job.jobClass.equals(TvSerieLocalSeasonImageAsyncJob.class)) {
 				AsyncManager.getInstance().cancelTvSerieLocalSeasonImageAsyncJob(job.id);
 			}
-			else if (job.jobClass.equals(TvSerieCacheRemoteImageAsyncJob.class)) {
+			else if (job.jobClass.equals(CacheRemoteImageAsyncJob.class)) {
 				AsyncManager.getInstance().cancelTvSerieCacheRemoteImageAsyncJob(job.id);
+			}
+			else if (job.jobClass.equals(PersonAsyncJob.class)) {
+				AsyncManager.getInstance().cancelPersonAsyncJob(job.id);
 			}
 		}
 	}
@@ -101,12 +114,14 @@ public class TvSerieImageLoaderAsyncJobHandler implements AsyncJobListener {
 		
 		private final String id;
 		private final TvSerieImageLoaderListener listener;
-		private final Class<? extends AbstractTvSerieImageLoaderAsyncJob> jobClass;
+		private final Class<? extends AsyncJob> jobClass;
+		private final Object supportData;
 		
-		private JobInfo(String id, TvSerieImageLoaderListener listener, Class<? extends AbstractTvSerieImageLoaderAsyncJob> jobClass) {
+		private JobInfo(String id, TvSerieImageLoaderListener listener, Class<? extends AsyncJob> jobClass, Object supportData) {
 			this.id = id;
 			this.listener = listener;
 			this.jobClass = jobClass;
+			this.supportData = supportData;
 		}
 		
 	}

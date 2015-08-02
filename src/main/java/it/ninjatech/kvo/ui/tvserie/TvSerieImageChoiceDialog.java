@@ -2,7 +2,7 @@ package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.model.TvSerieImageProvider;
+import it.ninjatech.kvo.model.ImageProvider;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
@@ -43,7 +43,7 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
 import com.alee.utils.SwingUtils;
-
+//TODO UIUtils
 public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends WebDialog implements WindowListener, TvSerieImageLoaderListener {
 
 	private static WebOverlay makeImage(ImageIcon image, ImageIcon logo) {
@@ -70,7 +70,7 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 	private final ImageChoiceController controller;
 	private final Set<I> images;
 	private final Dimension imageSize;
-	private final Map<TvSerieImageProvider, ImageIcon> providerLogos;
+	private final Map<ImageProvider, ImageIcon> providerLogos;
 	private final Map<String, ImageChoicePane<I>> panes;
 	private ImageIcon voidImage;
 
@@ -81,11 +81,11 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 		this.controller = controller;
 		this.images = images;
 		this.imageSize = imageSize;
-		this.providerLogos = new EnumMap<>(TvSerieImageProvider.class);
+		this.providerLogos = new EnumMap<>(ImageProvider.class);
 		this.panes = new HashMap<>();
 
-		this.providerLogos.put(TvSerieImageProvider.Fanarttv, ImageRetriever.retrieveFanartChoiceFanarttvLogo());
-		this.providerLogos.put(TvSerieImageProvider.TheTvDb, ImageRetriever.retrieveFanartChoiceTheTvDbLogo());
+		this.providerLogos.put(ImageProvider.Fanarttv, ImageRetriever.retrieveFanartChoiceFanarttvLogo());
+		this.providerLogos.put(ImageProvider.TheTvDb, ImageRetriever.retrieveFanartChoiceTheTvDbLogo());
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addWindowListener(this);

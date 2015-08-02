@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.async.job.TvSerieActorImageAsyncJob;
-import it.ninjatech.kvo.async.job.TvSerieCacheRemoteImageAsyncJob;
+import it.ninjatech.kvo.async.job.CacheRemoteImageAsyncJob;
+import it.ninjatech.kvo.async.job.PersonAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.model.AbstractTvSerieImage;
@@ -14,8 +14,6 @@ import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
-import it.ninjatech.kvo.ui.component.ActorFullImagePane;
-import it.ninjatech.kvo.ui.component.FullImageDialog;
 import it.ninjatech.kvo.ui.component.ImageGallery;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
@@ -23,15 +21,12 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieFanartSlider.FanartType;
 import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
 import it.ninjatech.kvo.ui.worker.ExtraFanartsGalleryCreator;
 import it.ninjatech.kvo.util.MemoryUtils;
-import it.ninjatech.kvo.worker.ActorFullWorker;
 import it.ninjatech.kvo.worker.CachedFanartCopyWorker;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
 
 import java.awt.Dimension;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.alee.laf.optionpane.WebOptionPane;
 
@@ -106,8 +101,8 @@ public class TvSerieController implements ImageChoiceController {
 
 		Dimension actorSize = this.view.getActorSlider().getActorSize();
 		for (TvSerieActor actor : tvSeriePathEntity.getTvSerie().getActors()) {
-			TvSerieActorImageAsyncJob job = new TvSerieActorImageAsyncJob(actor, actorSize);
-			this.mainJobHandler.handle(job, this.view);
+			PersonAsyncJob job = new PersonAsyncJob(actor.getId(), actor.getName(), actorSize);
+			this.mainJobHandler.handle(job, this.view, actor);
 		}
 	}
 
@@ -137,7 +132,7 @@ public class TvSerieController implements ImageChoiceController {
 			Dimension imageSize = Dimensions.getTvSerieFanartChooserSize(fanart.getFanart());
 			TvSerieImageChoiceDialog<TvSerieImage> dialog = new TvSerieImageChoiceDialog<>("", this, String.format("%s - %s", TvSerieUtils.getTitle(this.tvSeriePathEntity), fanart.getFanart().getName()), images, imageSize);
 			for (TvSerieImage image : images) {
-				TvSerieCacheRemoteImageAsyncJob job = new TvSerieCacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
+				CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
 				this.fanartChoiceJobHandler.handle(job, dialog);
 			}
 			dialog.setVisible(true);
@@ -168,27 +163,7 @@ public class TvSerieController implements ImageChoiceController {
 	}
 
 	protected void notifyActorRightClick(TvSerieActor actor) {
-		ActorFullWorker worker = new ActorFullWorker(actor.getId(), actor.getName());
-		IndeterminateProgressDialogWorker<ActorFullWorker.ActorFullWorkerResult> progressWorker = new IndeterminateProgressDialogWorker<>(worker, actor.getName());
-
-		ActorFullWorker.ActorFullWorkerResult result = null;
-
-		progressWorker.start();
-		try {
-			result = progressWorker.get();
-		}
-		catch (Exception e) {
-			UI.get().notifyException(e);
-		}
-
-		if (result != null && (result.getImage() != null || StringUtils.isNotBlank(result.getImdbId()))) {
-			ActorFullImagePane pane = new ActorFullImagePane(result.getImage(), result.getImdbId());
-			FullImageDialog dialog = new FullImageDialog(pane, actor.getName());
-			dialog.setVisible(true);
-		}
-		else {
-			WebOptionPane.showMessageDialog(UI.get(), "Neither image nor IMDB link available for this actor");
-		}
+		UIUtils.showPersonFullImage(actor.getName());
 	}
 
 }

@@ -17,12 +17,12 @@ import com.alee.extended.image.WebImage;
 import com.alee.extended.label.WebLinkLabel;
 import com.alee.extended.panel.WebOverlay;
 import com.alee.laf.panel.WebPanel;
-
-public class ActorFullImagePane extends WebPanel {
+//TODO UIUtils
+public class PersonFullImagePane extends WebPanel {
 
 	private static final long serialVersionUID = -4595757402190395567L;
 
-	public ActorFullImagePane(Image image, String imdbId) {
+	public PersonFullImagePane(Image image, String imdbId) {
 		super(new BorderLayout());
 
 		init(image, imdbId);

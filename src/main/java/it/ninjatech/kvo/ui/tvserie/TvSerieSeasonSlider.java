@@ -20,6 +20,8 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 // TODO aggiungere tooltip
+//TODO UIUtils
+//TODO sistemare con abstractimageslider
 public class TvSerieSeasonSlider extends AbstractSlider implements MouseListener {
 
 	private static final long serialVersionUID = 8674772929291186163L;
@@ -77,7 +79,7 @@ public class TvSerieSeasonSlider extends AbstractSlider implements MouseListener
 	
 	protected void setSeason(TvSerieSeason season, Image image) {
 		if (image != null) {
-			((SliderPane)this.panes.get(season)).setImage(SliderPane.makeImagePane(new ImageIcon(image), this.size));
+			((SliderPane)this.panes.get(season)).setImage(UIUtils.makeImagePane(new ImageIcon(image), this.size));
 		}
 	}
 
