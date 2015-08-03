@@ -76,19 +76,19 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	}
 
 	@Override
-	public void notifyClosing(String id) {
-		notifyCancel();
+	public void notifyImageChoiceClosing(String id) {
+		this.imageChoiceJobHandler.cancelAll();
 	}
 
 	@Override
-	public void notifyImageLeftClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceLeftClick(String id, AbstractTvSerieImage image) {
 		this.currentSeasonImage = new File(Utils.getCacheDirectory(), image.getId());
 		CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), this.view.getSeasonImageSize());
 		this.mainJobHandler.handle(job, this.view);
 	}
 
 	@Override
-	public void notifyImageRightClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceRightClick(String id, AbstractTvSerieImage image) {
 		CachedImageFullWorker worker = new CachedImageFullWorker(image.getId());
 		UIUtils.showFullImage(worker, Labels.LOADING_SEASON_IMAGE, Labels.getTvSerieSeason(this.season));
 	}

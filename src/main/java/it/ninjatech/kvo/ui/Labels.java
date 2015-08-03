@@ -20,6 +20,7 @@ public final class Labels {
 	public static final String TOOLTIP_IMAGE_CHANGE_FULL = "<html><div align='center'>Left click to change<br />Right click for full size image</div></html>";
 	public static final String TOOLTIP_IMAGE_CHANGE = "<html><div align='center'>Left click to change</div></html>";
 	public static final String TOOLTIP_IMAGE_FULL = "<html><div align='center'>Right click for full size image</div></html>";
+	public static final String TOOLTIP_IMAGE_SELECT_FULL = "<html><div align='center'>Left click to select<br />Right click for full size image</div></html>";
 	
 	public static String getTvSerieTitleSeason(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season) {
 		return String.format("%s - Season %s", TvSerieUtils.getTitle(tvSeriePathEntity), season.getNumber());

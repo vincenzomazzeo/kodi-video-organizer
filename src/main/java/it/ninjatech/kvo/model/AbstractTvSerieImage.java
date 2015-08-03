@@ -15,7 +15,7 @@ public abstract class AbstractTvSerieImage {
 				int result = 0;
 				
 				if (first.rating != null && second.rating != null) {
-					return first.rating.compareTo(second.rating);
+					return second.rating.compareTo(first.rating);
 				}
 				else if (first.rating != null) {
 					result = -1;

@@ -45,12 +45,12 @@ public class TvSerieController implements ImageChoiceController {
 	}
 
 	@Override
-	public void notifyClosing(String id) {
+	public void notifyImageChoiceClosing(String id) {
 		this.fanartChoiceJobHandler.cancelAll();
 	}
 
 	@Override
-	public void notifyImageLeftClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceLeftClick(String id, AbstractTvSerieImage image) {
 		CachedFanartCopyWorker worker = new CachedFanartCopyWorker(image.getId(), this.tvSeriePathEntity.getPath(), this.workingFanart.getFanart());
 		IndeterminateProgressDialogWorker<Boolean> progressWorker = new IndeterminateProgressDialogWorker<>(worker, this.workingFanart.getFanart().getName());
 		
@@ -67,7 +67,7 @@ public class TvSerieController implements ImageChoiceController {
 	}
 
 	@Override
-	public void notifyImageRightClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceRightClick(String id, AbstractTvSerieImage image) {
 		CachedImageFullWorker worker = new CachedImageFullWorker(image.getId());
 		UIUtils.showFullImage(worker, image.getId(), image.getId());
 	}
