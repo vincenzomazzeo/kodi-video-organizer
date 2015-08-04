@@ -38,6 +38,7 @@ import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.panel.WebOverlay;
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
+import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
@@ -46,8 +47,23 @@ import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
 import com.alee.utils.SwingUtils;
 
-public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends WebDialog implements WindowListener, TvSerieImageLoaderListener {
+public class TvSerieImageChoiceDialog extends WebDialog implements WindowListener, TvSerieImageLoaderListener {
 
+	private static TvSerieImageChoiceDialog self;
+	
+	public static TvSerieImageChoiceDialog getInstance(ImageChoiceController controller, String title, Set<? extends AbstractTvSerieImage> images, Dimension imageSize) {
+		if (self == null) {
+			boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
+			WebLookAndFeel.setDecorateDialogs(true);
+			self = new TvSerieImageChoiceDialog();
+			WebLookAndFeel.setDecorateDialogs(decorateFrames);
+		}
+		
+		self.set(controller, title, images, imageSize);
+		
+		return self;
+	}
+	
 	private static WebOverlay makeImage(ImageIcon image, ImageIcon logo) {
 		WebOverlay result = null; 
 		
@@ -63,34 +79,24 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 
 	private static final long serialVersionUID = 8622387193399679715L;
 
-	private final String id;
-	private final ImageChoiceController controller;
-	private final Set<I> images;
-	private final Dimension imageSize;
 	private final Map<ImageProvider, ImageIcon> providerLogos;
-	private final Map<String, ImageChoicePane<I>> panes;
+	private final Map<String, ImageChoicePane> panes;
+	private ImageChoiceController controller;
+	private Set<? extends AbstractTvSerieImage> images;
+	private Dimension imageSize;
 	private ImageIcon voidImage;
 
-	protected TvSerieImageChoiceDialog(String id, ImageChoiceController controller, String title, Set<I> images, Dimension imageSize) {
-		super(UI.get(), title, true);
+	private TvSerieImageChoiceDialog() {
+		super(UI.get(), true);
 
-		this.id = id;
-		this.controller = controller;
-		this.images = images;
-		this.imageSize = imageSize;
 		this.providerLogos = new EnumMap<>(ImageProvider.class);
 		this.panes = new HashMap<>();
-
+		
 		this.providerLogos.put(ImageProvider.Fanarttv, ImageRetriever.retrieveFanartChoiceFanarttvLogo());
 		this.providerLogos.put(ImageProvider.TheTvDb, ImageRetriever.retrieveFanartChoiceTheTvDbLogo());
 
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		addWindowListener(this);
-
-		init();
-
-		pack();
-		setLocationRelativeTo(UI.get());
 	}
 
 	@Override
@@ -99,7 +105,7 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 
 	@Override
 	public void windowClosing(WindowEvent event) {
-		destroy();
+		release();
 	}
 
 	@Override
@@ -127,18 +133,30 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 		this.panes.get(id).setImage(image);
 	}
 
-	private void destroy() {
-		System.out.println("*** TvSerieImageChoiceDialog -> destroy ***");
-		MemoryUtils.printMemory("Before TvSerieImageChoiceDialog destroy");
-		this.controller.notifyImageChoiceClosing(this.id);
-		for (ImageChoicePane<I> pane : this.panes.values()) {
+	public void release() {
+		System.out.println("*** TvSerieImageChoiceDialog -> release ***");
+		MemoryUtils.printMemory("Before TvSerieImageChoiceDialog release");
+		this.controller.notifyImageChoiceClosing();
+		for (ImageChoicePane pane : this.panes.values()) {
 			pane.destroy();
 		}
-		this.providerLogos.clear();
 		this.panes.clear();
 		this.voidImage = null;
 		setContentPane(new WebPanel());
-		MemoryUtils.printMemory("After TvSerieImageChoiceDialog destroy");
+		MemoryUtils.printMemory("After TvSerieImageChoiceDialog release");
+	}
+
+	private void set(ImageChoiceController controller, String title, Set<? extends AbstractTvSerieImage> images, Dimension imageSize) {
+		setTitle(title);
+		
+		this.controller = controller;
+		this.images = images;
+		this.imageSize = imageSize;
+		
+		init();
+
+		pack();
+		setLocationRelativeTo(UI.get());
 	}
 	
 	private void init() {
@@ -172,8 +190,8 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 		}
 
 		int i = 0;
-		for (I image : this.images) {
-			ImageChoicePane<I> pane = new ImageChoicePane<>(this, image, image.getLanguage(), image.getRating(), image.getRatingCount());
+		for (AbstractTvSerieImage image : this.images) {
+			ImageChoicePane pane = new ImageChoicePane(this, image, image.getLanguage(), image.getRating(), image.getRatingCount());
 			panels[i++ % paneCount].add(pane);
 			this.panes.put(image.getId(), pane);
 		}
@@ -183,17 +201,17 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 		return result;
 	}
 
-	private static class ImageChoicePane<I extends AbstractTvSerieImage> extends WebPanel implements MouseListener {
+	private static class ImageChoicePane extends WebPanel implements MouseListener {
 
 		private static final long serialVersionUID = 8567489733354643481L;
 
-		private final TvSerieImageChoiceDialog<I> owner;
-		private final I image;
+		private final TvSerieImageChoiceDialog owner;
+		private final AbstractTvSerieImage image;
 		private ComponentTransition imageTransition;
 		private WebLabel ratingCount;
 		private WebLabel rating;
 
-		public ImageChoicePane(TvSerieImageChoiceDialog<I> owner, I image,
+		public ImageChoicePane(TvSerieImageChoiceDialog owner, AbstractTvSerieImage image,
 							   EnhancedLocale language, String rating, String ratingCount) {
 			super(new VerticalFlowLayout());
 
@@ -206,13 +224,12 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 		@Override
 		public void mouseClicked(MouseEvent event) {
 			if (SwingUtilities.isLeftMouseButton(event)) {
-				this.owner.controller.notifyImageChoiceLeftClick(this.owner.id, this.image);
+				this.owner.controller.notifyImageChoiceLeftClick(this.image);
 				this.owner.setVisible(false);
-				this.owner.destroy();
-				this.owner.dispose();
+				this.owner.release();
 			}
 			else if (SwingUtilities.isRightMouseButton(event)) {
-				this.owner.controller.notifyImageChoiceRightClick(this.owner.id, this.image);
+				this.owner.controller.notifyImageChoiceRightClick(this.image);
 			}
 		}
 
@@ -276,11 +293,11 @@ public class TvSerieImageChoiceDialog<I extends AbstractTvSerieImage> extends We
 
 	public static interface ImageChoiceController {
 
-		public void notifyImageChoiceClosing(String id);
+		public void notifyImageChoiceClosing();
 
-		public void notifyImageChoiceLeftClick(String id, AbstractTvSerieImage image);
+		public void notifyImageChoiceLeftClick(AbstractTvSerieImage image);
 
-		public void notifyImageChoiceRightClick(String id, AbstractTvSerieImage image);
+		public void notifyImageChoiceRightClick(AbstractTvSerieImage image);
 
 	}
 

@@ -8,8 +8,12 @@ public final class Labels {
 	public static final String CLICK_FOR_DETAIL = "Click for detail";
 	public static final String CLICK_TO_OPEN_IN_SYSTEM_EXPLORER = "Open in System Explorer";
 	public static final String DIRECTORS = "Directors";
+	public static final String EXCEPTION_CONSOLE = "Exception Console";
+	public static final String FILENAME = "Filename";
 	public static final String GUEST_STARS = "Guest Stars";
 	public static final String IMDB = "Find out more on IMDb";
+	public static final String LANGUAGE = "Language";
+	public static final String SCRAPERS_SETTINGS = "Scrapers Settings";
 	public static final String SUBTITLE_FILES = "Subtitle Files";
 	public static final String VIDEO_FILES = "Video Files";
 	public static final String WRITERS = "Writers";

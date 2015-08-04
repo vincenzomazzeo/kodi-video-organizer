@@ -45,12 +45,12 @@ public class TvSerieController implements ImageChoiceController {
 	}
 
 	@Override
-	public void notifyImageChoiceClosing(String id) {
+	public void notifyImageChoiceClosing() {
 		this.fanartChoiceJobHandler.cancelAll();
 	}
 
 	@Override
-	public void notifyImageChoiceLeftClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceLeftClick(AbstractTvSerieImage image) {
 		CachedFanartCopyWorker worker = new CachedFanartCopyWorker(image.getId(), this.tvSeriePathEntity.getPath(), this.workingFanart.getFanart());
 		IndeterminateProgressDialogWorker<Boolean> progressWorker = new IndeterminateProgressDialogWorker<>(worker, this.workingFanart.getFanart().getName());
 		
@@ -67,7 +67,7 @@ public class TvSerieController implements ImageChoiceController {
 	}
 
 	@Override
-	public void notifyImageChoiceRightClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceRightClick(AbstractTvSerieImage image) {
 		CachedImageFullWorker worker = new CachedImageFullWorker(image.getId());
 		UIUtils.showFullImage(worker, image.getId(), image.getId());
 	}
@@ -122,6 +122,7 @@ public class TvSerieController implements ImageChoiceController {
 
 		if (result != null) {
 			result.setVisible(true);
+			result.release();
 		}
 	}
 
@@ -130,7 +131,7 @@ public class TvSerieController implements ImageChoiceController {
 			this.workingFanart = fanart;
 			Set<TvSerieImage> images = TvSerieUtils.getFanarts(this.tvSeriePathEntity, fanart.getFanart());
 			Dimension imageSize = Dimensions.getTvSerieFanartChooserSize(fanart.getFanart());
-			TvSerieImageChoiceDialog<TvSerieImage> dialog = new TvSerieImageChoiceDialog<>("", this, String.format("%s - %s", TvSerieUtils.getTitle(this.tvSeriePathEntity), fanart.getFanart().getName()), images, imageSize);
+			TvSerieImageChoiceDialog dialog = TvSerieImageChoiceDialog.getInstance(this, String.format("%s - %s", TvSerieUtils.getTitle(this.tvSeriePathEntity), fanart.getFanart().getName()), images, imageSize);
 			for (TvSerieImage image : images) {
 				CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
 				this.fanartChoiceJobHandler.handle(job, dialog);

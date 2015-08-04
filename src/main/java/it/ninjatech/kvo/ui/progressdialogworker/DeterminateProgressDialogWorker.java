@@ -3,26 +3,28 @@ package it.ninjatech.kvo.ui.progressdialogworker;
 import it.ninjatech.kvo.worker.AbstractWorker;
 
 import java.util.List;
-//TODO UIUtils - new style
+
 public class DeterminateProgressDialogWorker<T> extends AbstractProgressDialogWorker<T> {
 
 	public DeterminateProgressDialogWorker(AbstractWorker<T> worker, String title) {
 		super(worker, title);
+		
+		progress.getProgressBar().setIndeterminate(false);
 	}
 	
 	@Override
 	protected void process(List<Progress> chunks) {
 		for (Progress chunk : chunks) {
 			if (chunk.getMessage() != null) {
-				this.progress.setText(chunk.getMessage());
+				progress.setText(chunk.getMessage());
 			}
 			switch (chunk.getType()) {
 			case Init:
-				this.progress.setMaximum(chunk.getValue() == null || chunk.getValue().equals(0) ? 1 : chunk.getValue());
+				progress.setMaximum(chunk.getValue() == null || chunk.getValue().equals(0) ? 1 : chunk.getValue());
 				break;
 			case Update:
 				if (chunk.getValue() != null) {
-					this.progress.setProgress(chunk.getValue());
+					progress.setProgress(chunk.getValue());
 				}
 				break;
 			}

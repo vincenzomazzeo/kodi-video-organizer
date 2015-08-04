@@ -67,7 +67,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		this.videoFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getVideoFiles(this.tvSeriePathEntity, this.season.getNumber()));
 		this.subtitleFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getSubtitleFiles(this.tvSeriePathEntity, this.season.getNumber()));
 		this.episodeController = new TvSerieEpisodeController();
-		this.view = new TvSerieSeasonDialog(this, this.tvSeriePathEntity, this.season, this.videoFileListModel, this.subtitleFileListModel, Desktop.isDesktopSupported(), Desktop.isDesktopSupported() && TvSerieUtils.existsLocalSeason(tvSeriePathEntity, season));
+		this.view = TvSerieSeasonDialog.getInstance(this, this.tvSeriePathEntity, this.season, this.videoFileListModel, this.subtitleFileListModel, Desktop.isDesktopSupported(), Desktop.isDesktopSupported() && TvSerieUtils.existsLocalSeason(tvSeriePathEntity, season));
 		this.videoEpisodeMap = new HashMap<>();
 		this.subtitleEpisodeMap = new HashMap<>();
 		this.mainJobHandler = new TvSerieImageLoaderAsyncJobHandler();
@@ -76,19 +76,19 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	}
 
 	@Override
-	public void notifyImageChoiceClosing(String id) {
+	public void notifyImageChoiceClosing() {
 		this.imageChoiceJobHandler.cancelAll();
 	}
 
 	@Override
-	public void notifyImageChoiceLeftClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceLeftClick(AbstractTvSerieImage image) {
 		this.currentSeasonImage = new File(Utils.getCacheDirectory(), image.getId());
 		CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), this.view.getSeasonImageSize());
 		this.mainJobHandler.handle(job, this.view);
 	}
 
 	@Override
-	public void notifyImageChoiceRightClick(String id, AbstractTvSerieImage image) {
+	public void notifyImageChoiceRightClick(AbstractTvSerieImage image) {
 		CachedImageFullWorker worker = new CachedImageFullWorker(image.getId());
 		UIUtils.showFullImage(worker, Labels.LOADING_SEASON_IMAGE, Labels.getTvSerieSeason(this.season));
 	}
@@ -143,7 +143,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		MemoryUtils.printMemory("Before season choice");
 		Set<TvSerieSeasonImage> images = this.season.getImages();
 		Dimension imageSize = Dimensions.getTvSerieSeasonChooserSize();
-		TvSerieImageChoiceDialog<TvSerieSeasonImage> dialog = new TvSerieImageChoiceDialog<>("", this, Labels.getTvSerieSeason(this.season), images, imageSize);
+		TvSerieImageChoiceDialog dialog = TvSerieImageChoiceDialog.getInstance(this, Labels.getTvSerieSeason(this.season), images, imageSize);
 		for (TvSerieSeasonImage image : images) {
 			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
 			this.imageChoiceJobHandler.handle(job, dialog);
@@ -209,7 +209,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		this.subtitleEpisodeMap.clear();
 
 		this.view.setVisible(false);
-		this.view.destroy();
+		this.view.release();
 		this.view.dispose();
 	}
 
@@ -315,7 +315,8 @@ public class TvSerieSeasonController implements ImageChoiceController {
 					}
 				}
 				else if (support.getDataFlavors()[0].getHumanPresentableName().equals(SUBTITLE_FILE_DATA_FLAVOR.getHumanPresentableName())) {
-					TvSerieEpisodeSubtitleDialog dialog = TvSerieEpisodeSubtitleDialog.make(this.episode, filename);
+					TvSerieEpisodeSubtitleDialog dialog = TvSerieEpisodeSubtitleDialog.getInstance(this.episode, filename);
+					dialog.setVisible(true);
 					result = dialog.isConfirmed();
 					if (result) {
 						EnhancedLocale language = dialog.getLanguage();
@@ -330,6 +331,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 							this.controller.episodeController.notifySubtitleFileAdded(filename, language);
 						}
 					}
+					dialog.release();
 				}
 			}
 			catch (UnsupportedFlavorException | IOException e) {

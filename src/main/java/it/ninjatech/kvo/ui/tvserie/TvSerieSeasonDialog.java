@@ -13,6 +13,7 @@ import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSeasonController.TvSerieSeasonListModel;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSeasonController.VideoSubtitleTransferHandler;
+import it.ninjatech.kvo.util.MemoryUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -48,6 +49,7 @@ import com.alee.extended.image.WebImage;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
+import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
@@ -63,6 +65,23 @@ import com.alee.utils.SwingUtils;
 public class TvSerieSeasonDialog extends WebDialog implements WindowListener, ActionListener, MouseListener, TvSerieImageLoaderListener {
 
 	private static final long serialVersionUID = -2012464643608233002L;
+	private static TvSerieSeasonDialog self;
+
+	protected static TvSerieSeasonDialog getInstance(TvSerieSeasonController controller, TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season,
+													 TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel,
+													 boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
+		if (self == null) {
+			boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
+			WebLookAndFeel.setDecorateDialogs(true);
+			self = new TvSerieSeasonDialog();
+			self.setShowCloseButton(false);
+			WebLookAndFeel.setDecorateDialogs(decorateFrames);
+		}
+
+		self.set(controller, tvSeriePathEntity, season, videoFileListModel, subtitleFileListModel, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
+
+		return self;
+	}
 
 	private static WebPanel makeTvSerieTitlePane(TvSeriePathEntity tvSeriePathEntity, WebLabel tvSerieTitle) {
 		WebPanel result = null;
@@ -108,8 +127,8 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		return result;
 	}
 
-	private final TvSerieSeasonController controller;
 	private final Map<String, TvSerieEpisodeTile> tileMap;
+	private TvSerieSeasonController controller;
 	private WebLabel tvSerieTitle;
 	private WebLabel tvSerieSeasonTitle;
 	private Dimension seasonImageSize;
@@ -121,16 +140,21 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	private WebList subtitleFileList;
 	private ComponentTransition detailTransition;
 
-	protected TvSerieSeasonDialog(TvSerieSeasonController controller, TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season,
-								  TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel, 
-								  boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
-		super(UI.get(), Labels.getTvSerieTitleSeason(tvSeriePathEntity, season), true);
+	private TvSerieSeasonDialog() {
+		super(UI.get(), true);
 
-		this.controller = controller;
 		this.tileMap = new HashMap<>();
 
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		addWindowListener(this);
+	}
+
+	private void set(TvSerieSeasonController controller, TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season,
+					 TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel,
+					 boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
+		setTitle(Labels.getTvSerieTitleSeason(tvSeriePathEntity, season));
+
+		this.controller = controller;
 
 		init(tvSeriePathEntity, season, videoFileListModel, subtitleFileListModel, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
 
@@ -223,8 +247,9 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		}
 	}
 
-	protected void destroy() {
-		System.out.println("*** TvSerieSeasonDialog -> destroy ***");
+	protected void release() {
+		System.out.println("*** TvSerieSeasonDialog -> release ***");
+		MemoryUtils.printMemory("Before TvSerieSeasonDialog release");
 		TooltipManager.removeTooltips(this.seasonImageTransition);
 		TooltipManager.removeTooltips(this.tvSerieTitle);
 		TooltipManager.removeTooltips(this.tvSerieSeasonTitle);
@@ -232,6 +257,8 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 			tile.destroy();
 		}
 		this.tileMap.clear();
+		setContentPane(new WebPanel());
+		MemoryUtils.printMemory("After TvSerieSeasonDialog release");
 	}
 
 	protected Dimension getSeasonImageSize() {
@@ -307,12 +334,12 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 			TooltipManager.addTooltip(this.tvSerieTitle, null, Labels.CLICK_TO_OPEN_IN_SYSTEM_EXPLORER, TooltipWay.down, (int)TimeUnit.SECONDS.toMillis(2));
 			this.tvSerieTitle.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
-		if (addTvSerieSeasonTitleClick) {	
+		if (addTvSerieSeasonTitleClick) {
 			this.tvSerieSeasonTitle.addMouseListener(this);
 			TooltipManager.addTooltip(this.tvSerieSeasonTitle, null, Labels.CLICK_TO_OPEN_IN_SYSTEM_EXPLORER, TooltipWay.down, (int)TimeUnit.SECONDS.toMillis(2));
 			this.tvSerieSeasonTitle.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
-		
+
 		return result;
 	}
 

@@ -18,7 +18,7 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebTextArea;
-//TODO UIUtils - new style
+//TODO UIUtils - new style - dialog memory leak
 public class ExceptionConsoleView extends WebDialog implements CollapsiblePaneListener {
 
 	private static final long serialVersionUID = 4772626517954754101L;

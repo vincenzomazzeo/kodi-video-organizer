@@ -2,8 +2,8 @@ package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.awt.BorderLayout;
@@ -20,7 +20,6 @@ import javax.swing.event.ListSelectionListener;
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.painter.BorderPainter;
 import com.alee.extended.window.WebPopOver;
-import com.alee.global.StyleConstants;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
@@ -28,7 +27,6 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.separator.WebSeparator;
 
-// TODO UIUtils
 public class EnhancedLocaleLanguageComboBox extends WebPanel implements ListSelectionListener, FocusListener {
 
 	private static final long serialVersionUID = 1214907204033728747L;
@@ -42,12 +40,9 @@ public class EnhancedLocaleLanguageComboBox extends WebPanel implements ListSele
 		list.setListData(languages);
 		list.addListSelectionListener(listener);
 
-		result = new WebScrollPane(list, false, false);
+		result = UIUtils.makeScrollPane(list, WebScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, WebScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		result.setPreferredWidth(width);
 		result.setPreferredHeight(height);
-		result.setHorizontalScrollBarPolicy(WebScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		result.getVerticalScrollBar().setBlockIncrement(30);
-		result.getVerticalScrollBar().setUnitIncrement(30);
 
 		return result;
 	}
@@ -181,13 +176,10 @@ public class EnhancedLocaleLanguageComboBox extends WebPanel implements ListSele
 		borderPainter.setMargin(2, 5, 2, 2);
 		setPainter(borderPainter);
 
-		this.value = new WebLabel();
+		this.value = UIUtils.makeStandardLabel("", null, null);
 		add(this.value, BorderLayout.CENTER);
-		this.value.setForeground(Colors.FOREGROUND_STANDARD);
-		this.value.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		this.value.setDrawShade(true);
 
-		this.expand = WebButton.createIconWebButton(ImageRetriever.retrieveComboboxArrow(), StyleConstants.smallRound, true);
+		this.expand = UIUtils.makeButton(ImageRetriever.retrieveComboboxArrow(), null);
 		add(this.expand, BorderLayout.EAST);
 		this.expand.addFocusListener(this);
 	}

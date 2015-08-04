@@ -9,7 +9,7 @@ import javax.swing.JList;
 
 import com.alee.laf.combobox.WebComboBoxCellRenderer;
 import com.alee.laf.combobox.WebComboBoxElement;
-//TODO UIUtils
+
 public class EnhancedLocaleLanguageComboBoxCellRenderer extends WebComboBoxCellRenderer {
 
 	@Override

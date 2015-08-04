@@ -22,7 +22,7 @@ public class ExtraFanartsGalleryCreator extends AbstractWorker<ImageGallery> {
 	
 	@Override
 	public ImageGallery work() throws Exception {
-		ImageGallery result = new ImageGallery(this.name, 5);
+		ImageGallery result = ImageGallery.getInstance(this.name, 5);
 		
 		notifyInit("Loading Extra Fanarts", this.fanarts.size());
 		

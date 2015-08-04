@@ -12,20 +12,27 @@ import com.alee.extended.window.WebProgressDialog;
 //TODO UIUtils - new style
 public abstract class AbstractProgressDialogWorker<T> extends SwingWorker<T, Progress> implements WorkerProgressListener {
 
+	protected static WebProgressDialog progress;
+	
 	private final AbstractWorker<T> worker;
-	protected final WebProgressDialog progress;
 	
 	protected AbstractProgressDialogWorker(AbstractWorker<T> worker, String title) {
 		super();
 		
 		this.worker = worker;
-		this.progress = new WebProgressDialog(title);
+		if (progress == null) {
+			progress = new WebProgressDialog(title);
+		}
+		else {
+			progress.setTitle(title);
+		}
 		
 		this.worker.addWorkerProgressListener(this);
 		
-		this.progress.setModal(true);
-		this.progress.setAlwaysOnTop(true);
-		this.progress.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		progress.setModal(true);
+		progress.setAlwaysOnTop(true);
+		progress.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		progress.setShowCloseButton(false);
 	}
 	
 	@Override
@@ -45,8 +52,8 @@ public abstract class AbstractProgressDialogWorker<T> extends SwingWorker<T, Pro
 	protected void done() {
 		super.done();
 		
-		this.progress.setVisible(false);
-		this.progress.dispose();
+		progress.setVisible(false);
+		progress.dispose();
 	}
 
 	@Override
@@ -57,7 +64,7 @@ public abstract class AbstractProgressDialogWorker<T> extends SwingWorker<T, Pro
 	public void start() {
 		super.execute();
 		
-		this.progress.setVisible(true);
+		progress.setVisible(true);
 	}
 	
 }

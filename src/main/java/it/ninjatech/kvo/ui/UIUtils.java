@@ -47,25 +47,25 @@ public final class UIUtils {
 
 	public static WebPanel makeVerticalFillerPane(int height, boolean opaque) {
 		WebPanel result = new WebPanel();
-		
+
 		result.setPreferredHeight(height);
 		result.setOpaque(opaque);
-		
+
 		return result;
 	}
-	
+
 	public static WebPanel makeHorizontalFillerPane(int width, boolean opaque) {
 		WebPanel result = new WebPanel();
-		
+
 		result.setPreferredWidth(width);
 		result.setOpaque(opaque);
-		
+
 		return result;
 	}
-	
+
 	public static ImageIcon getContentRatingWallIcon(String contentRating) {
 		ImageIcon result = null;
-		
+
 		switch (contentRating) {
 		case "TV-14":
 			result = ImageRetriever.retrieveWallContentRatingTV14();
@@ -86,22 +86,22 @@ public final class UIUtils {
 			result = ImageRetriever.retrieveWallContentRatingTVY7();
 			break;
 		}
-		
+
 		return result;
 	}
-	
+
 	public static ImageIcon makeEmptyIcon(Dimension size, Color color) {
 		ImageIcon result = null;
-		
+
 		BufferedImage bufferedImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics graphics = bufferedImage.getGraphics();
 		graphics.setColor(color);
 		graphics.fillRect(0, 0, size.width, size.height);
 		result = new ImageIcon(bufferedImage);
-		
+
 		return result;
 	}
-	
+
 	public static void showFullImage(AbstractWorker<Image> worker, String loadingTitle, String imageTitle) {
 		IndeterminateProgressDialogWorker<Image> progressWorker = new IndeterminateProgressDialogWorker<>(worker, loadingTitle);
 
@@ -117,11 +117,12 @@ public final class UIUtils {
 
 		if (result != null) {
 			WebImage image = new WebImage(result);
-			FullImageDialog dialog = new FullImageDialog(image, imageTitle);
+			FullImageDialog dialog = FullImageDialog.getInstance(image, imageTitle);
 			dialog.setVisible(true);
+			dialog.release();
 		}
 	}
-	
+
 	public static void showPersonFullImage(String name) {
 		PersonFullWorker worker = new PersonFullWorker(name);
 		IndeterminateProgressDialogWorker<PersonFullWorker.PersonFullWorkerResult> progressWorker = new IndeterminateProgressDialogWorker<>(worker, name);
@@ -138,43 +139,44 @@ public final class UIUtils {
 
 		if (result != null && (result.getImage() != null || StringUtils.isNotBlank(result.getImdbId()))) {
 			PersonFullImagePane pane = new PersonFullImagePane(result.getImage(), result.getImdbId());
-			FullImageDialog dialog = new FullImageDialog(pane, name);
+			FullImageDialog dialog = FullImageDialog.getInstance(pane, name);
 			dialog.setVisible(true);
+			dialog.release();
 		}
 		else {
 			WebOptionPane.showMessageDialog(UI.get(), "Neither image nor IMDB link available for this actor");
 		}
 	}
-	
+
 	public static WebPanel makeRatingPane(WebLabel rating, WebLabel ratingCount) {
 		WebPanel result = new WebPanel(new VerticalFlowLayout());
-		
+
 		result.setOpaque(false);
-		
+
 		WebImage star = new WebImage(ImageRetriever.retrieveWallStar());
-		
+
 		rating.setFontSize(14);
 		rating.setForeground(Colors.FOREGROUND_STANDARD);
 		rating.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
 		rating.setDrawShade(true);
-		
+
 		WebOverlay starOverlay = new WebOverlay(star, rating, SwingConstants.CENTER, SwingConstants.CENTER);
 		result.add(starOverlay);
 		starOverlay.setBackground(Colors.TRANSPARENT);
-		
+
 		result.add(ratingCount);
 		ratingCount.setHorizontalAlignment(SwingConstants.CENTER);
 		ratingCount.setFontSize(10);
 		ratingCount.setForeground(Colors.FOREGROUND_STANDARD);
 		ratingCount.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
 		ratingCount.setDrawShade(true);
-		
+
 		return result;
 	}
-	
+
 	public static WebLabel makeTitleLabel(String title, Integer fontSize, Insets margin) {
 		WebLabel result = new WebLabel(title);
-		
+
 		if (margin != null) {
 			result.setMargin(margin);
 		}
@@ -182,13 +184,13 @@ public final class UIUtils {
 		result.setForeground(Colors.FOREGROUND_TITLE);
 		result.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
 		result.setDrawShade(true);
-		
+
 		return result;
 	}
-	
+
 	public static WebLabel makeStandardLabel(String title, Integer fontSize, Insets margin, BorderPainter<?> borderPainter) {
 		WebLabel result = new WebLabel(title);
-		
+
 		if (borderPainter != null) {
 			result.setPainter(new WebLabelPainter<>(borderPainter));
 		}
@@ -201,14 +203,14 @@ public final class UIUtils {
 		result.setForeground(Colors.FOREGROUND_STANDARD);
 		result.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
 		result.setDrawShade(true);
-		
+
 		return result;
 	}
-	
+
 	public static WebLabel makeStandardLabel(String title, Integer fontSize, Insets margin) {
 		return makeStandardLabel(title, fontSize, margin, null);
 	}
-	
+
 	public static WebDecoratedImage makeImagePane(ImageIcon image, Dimension size) {
 		WebDecoratedImage result = new WebDecoratedImage(image);
 
@@ -223,70 +225,70 @@ public final class UIUtils {
 	public static WebDecoratedImage makeImagePane(Image image, Dimension size) {
 		return makeImagePane(new ImageIcon(image), size);
 	}
-	
+
 	public static WebDecoratedImage makeImagePane(Dimension size) {
 		return makeImagePane(UIUtils.makeEmptyIcon(size, Colors.BACKGROUND_MISSING_IMAGE_ALPHA), size);
 	}
-	
+
 	public static ComponentTransition makeClickableTransition(Component view) {
-		ComponentTransition result =  new ComponentTransition(view, new FadeTransitionEffect());
-		
+		ComponentTransition result = new ComponentTransition(view, new FadeTransitionEffect());
+
 		result.setOpaque(false);
 		result.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
+
 		return result;
 	}
-	
+
 	public static WebPanel makeStandardPane(LayoutManager layoutManager) {
 		WebPanel result = new WebPanel(layoutManager);
-		
+
 		result.setOpaque(false);
-		
+
 		return result;
 	}
-	
+
 	public static WebPanel makeFlowLayoutPane(int align, int hgap, int vgap, Component... components) {
 		WebPanel result = makeStandardPane(new FlowLayout(align, hgap, vgap));
 
 		result.add(components);
-		
+
 		return result;
 	}
-	
+
 	public static WebPanel makeFlowLayoutPane(int align, int hgap, int vgap, List<Component> components) {
 		WebPanel result = makeStandardPane(new FlowLayout(align, hgap, vgap));
 
 		result.add(components);
-		
+
 		return result;
 	}
-	
+
 	public static WebButton makeButton(ImageIcon icon, ActionListener actionListener) {
 		WebButton result = WebButton.createIconWebButton(icon, StyleConstants.smallRound, true);
-		
+
 		if (actionListener != null) {
 			result.addActionListener(actionListener);
 		}
-		
+
 		return result;
 	}
-	
+
 	public static WebScrollPane makeScrollPane(Component view, int verticalScrollBarPolicy, int horizontalScrollBarPolicy) {
 		WebScrollPane result = new WebScrollPane(view, false, false);
-		
+
 		result.setVerticalScrollBarPolicy(verticalScrollBarPolicy);
 		result.getVerticalScrollBar().setBlockIncrement(30);
 		result.getVerticalScrollBar().setUnitIncrement(30);
 		result.setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
 		result.getHorizontalScrollBar().setBlockIncrement(30);
 		result.getHorizontalScrollBar().setUnitIncrement(30);
-		
+
 		return result;
 	}
-	
+
 	public static WebScrollPane makeTextArea(WebTextArea textArea) {
 		WebScrollPane result = null;
-		
+
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		textArea.setEditable(false);
@@ -295,10 +297,10 @@ public final class UIUtils {
 		textArea.setForeground(Colors.FOREGROUND_STANDARD);
 
 		result = makeScrollPane(textArea, WebScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, WebScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
+
 		return result;
 	}
-	
+
 	public static WebPanel makeSliderPane(String title, AbstractSlider slider) {
 		WebPanel result = makeStandardPane(new VerticalFlowLayout(0, 0));
 
@@ -310,17 +312,50 @@ public final class UIUtils {
 
 		return result;
 	}
-	
+
 	public static WebLinkLabel makeImdbLink(String link) {
 		WebLinkLabel result = new WebLinkLabel();
-		
+
 		result.setToolTipText(Labels.IMDB);
 		result.setIcon(ImageRetriever.retrieveWallIMDb());
 		result.setLink(ImdbManager.getTitleUrl(link), false);
-		
+
 		return result;
 	}
-	
-	private UIUtils() {}
-	
+
+	public static WebPanel makeConfirmCancelButtonPane(WebButton confirm, WebButton cancel, ActionListener actionListener) {
+		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.RIGHT));
+
+		result.setOpaque(false);
+
+		confirm.setRound(StyleConstants.smallRound);
+		confirm.setShadeWidth(StyleConstants.shadeWidth);
+		confirm.setInnerShadeWidth(StyleConstants.innerShadeWidth);
+		confirm.setLeftRightSpacing(0);
+		confirm.setRolloverDecoratedOnly(true);
+		confirm.setUndecorated(StyleConstants.undecorated);
+		confirm.setDrawFocus(true);
+		confirm.setIcon(ImageRetriever.retrieveDialogOk());
+		confirm.addActionListener(actionListener);
+		result.add(confirm);
+
+		result.add(UIUtils.makeHorizontalFillerPane(5, false));
+
+		cancel.setRound(StyleConstants.smallRound);
+		cancel.setShadeWidth(StyleConstants.shadeWidth);
+		cancel.setInnerShadeWidth(StyleConstants.innerShadeWidth);
+		cancel.setLeftRightSpacing(0);
+		cancel.setRolloverDecoratedOnly(true);
+		cancel.setUndecorated(StyleConstants.undecorated);
+		cancel.setDrawFocus(true);
+		cancel.setIcon(ImageRetriever.retrieveDialogCancel());
+		cancel.addActionListener(actionListener);
+		result.add(cancel);
+
+		return result;
+	}
+
+	private UIUtils() {
+	}
+
 }

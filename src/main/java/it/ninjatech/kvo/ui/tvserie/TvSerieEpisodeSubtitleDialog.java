@@ -4,38 +4,42 @@ import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.Labels;
 import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBox;
+import it.ninjatech.kvo.util.MemoryUtils;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.SwingConstants;
 
 import com.alee.extended.panel.GroupPanel;
-import com.alee.global.StyleConstants;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
-//TODO UIUtils
+
 public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionListener {
 
-	public static TvSerieEpisodeSubtitleDialog make(TvSerieEpisode episode, String filename) {
-		TvSerieEpisodeSubtitleDialog result = null;
+	private static TvSerieEpisodeSubtitleDialog self;
+	
+	public static TvSerieEpisodeSubtitleDialog getInstance(TvSerieEpisode episode, String filename) {
+		if (self == null) {
+			boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
+			WebLookAndFeel.setDecorateDialogs(true);
+			self = new TvSerieEpisodeSubtitleDialog();
+			self.setShowCloseButton(false);
+			WebLookAndFeel.setDecorateDialogs(decorateFrames);
+		}
 		
-		boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
-		WebLookAndFeel.setDecorateDialogs(true);
-		result = new TvSerieEpisodeSubtitleDialog(episode, filename);
-		result.setVisible(true);
-		WebLookAndFeel.setDecorateDialogs(decorateFrames);
-		
-		return result;
+		self.set(episode, filename);
+
+		return self;
 	}
 	
 	private static final long serialVersionUID = -5542722467275102344L;
@@ -45,16 +49,13 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 	private WebButton cancel;
 	private boolean confirmed;
 
-	private TvSerieEpisodeSubtitleDialog(TvSerieEpisode episode, String filename) {
+	private TvSerieEpisodeSubtitleDialog() {
 		super(UI.get(), "Episode Subtitle", true);
 
 		setIconImage(ImageRetriever.retrieveExplorerTreeTvSerie().getImage());
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-		init(episode, filename);
 		setResizable(false);
-		pack();
-		setLocationRelativeTo(getOwner());
 	}
 
 	@Override
@@ -68,12 +69,25 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 		}
 	}
 
+	public void release() {
+		System.out.println("*** TvSerieEpisodeSubtitleDialog -> release ***");
+		MemoryUtils.printMemory("Before TvSerieEpisodeSubtitleDialog release");
+		setContentPane(new WebPanel());
+		MemoryUtils.printMemory("After TvSerieEpisodeSubtitleDialog release");
+	}
+	
 	protected boolean isConfirmed() {
 		return this.confirmed;
 	}
 
 	protected EnhancedLocale getLanguage() {
 		return this.language.getLanguage();
+	}
+	
+	private void set(TvSerieEpisode episode, String filename) {
+		init(episode, filename);
+		pack();
+		setLocationRelativeTo(getOwner());
 	}
 
 	private void init(TvSerieEpisode episode, String filename) {
@@ -82,34 +96,23 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 		setContentPane(contentPane);
 		contentPane.setBackground(Colors.BACKGROUND_INFO);
 
+		this.confirm = new WebButton();
+		this.cancel = new WebButton();
+		
 		contentPane.add(makeBodyPane(episode, filename), BorderLayout.CENTER);
-		contentPane.add(makeButtonPane(), BorderLayout.SOUTH);
+		contentPane.add(UIUtils.makeConfirmCancelButtonPane(this.confirm, this.cancel, this), BorderLayout.SOUTH);
 	}
 
 	private WebPanel makeBodyPane(TvSerieEpisode episode, String filename) {
 		WebPanel result = null;
 
-		WebLabel episodeL = new WebLabel(TvSerieUtils.getEpisodeName(episode));
-		episodeL.setForeground(Colors.FOREGROUND_TITLE);
-		episodeL.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
-		episodeL.setDrawShade(true);
-		episodeL.setFontSize(16);
+		WebLabel episodeL = UIUtils.makeTitleLabel(TvSerieUtils.getEpisodeName(episode), 16, null);
 		episodeL.setHorizontalAlignment(SwingConstants.CENTER);
 
-		WebLabel filenameLabel = new WebLabel("Filename");
-		filenameLabel.setForeground(Colors.FOREGROUND_STANDARD);
-		filenameLabel.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		filenameLabel.setDrawShade(true);
-		WebLabel filenameL = new WebLabel(filename);
-		filenameL.setForeground(Colors.FOREGROUND_STANDARD);
-		filenameL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		filenameL.setDrawShade(true);
-		filenameL.setFontSize(14);
+		WebLabel filenameLabel = UIUtils.makeStandardLabel(Labels.FILENAME, null, null);
+		WebLabel filenameL = UIUtils.makeStandardLabel(filename, 14, null);
 
-		WebLabel languageL = new WebLabel("Language");
-		languageL.setForeground(Colors.FOREGROUND_STANDARD);
-		languageL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		languageL.setDrawShade(true);
+		WebLabel languageL = UIUtils.makeStandardLabel(Labels.LANGUAGE, null, null);
 
 		this.language = new EnhancedLocaleLanguageComboBox();
 		this.language.setPreferredWidth(300);
@@ -125,22 +128,22 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 		return result;
 	}
 
-	private WebPanel makeButtonPane() {
-		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.RIGHT));
-
-		result.setOpaque(false);
-
-		this.confirm = WebButton.createIconWebButton(ImageRetriever.retrieveDialogOk(), StyleConstants.smallRound, true);
-		this.confirm.addActionListener(this);
-		result.add(this.confirm);
-		
-		result.add(UIUtils.makeHorizontalFillerPane(5, false));
-		
-		this.cancel = WebButton.createIconWebButton(ImageRetriever.retrieveDialogCancel(), StyleConstants.smallRound, true);
-		this.cancel.addActionListener(this);
-		result.add(this.cancel);
-
-		return result;
-	}
+//	private WebPanel makeButtonPane() {
+//		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.RIGHT));
+//
+//		result.setOpaque(false);
+//
+//		this.confirm = WebButton.createIconWebButton(ImageRetriever.retrieveDialogOk(), StyleConstants.smallRound, true);
+//		this.confirm.addActionListener(this);
+//		result.add(this.confirm);
+//		
+//		result.add(UIUtils.makeHorizontalFillerPane(5, false));
+//		
+//		this.cancel = WebButton.createIconWebButton(ImageRetriever.retrieveDialogCancel(), StyleConstants.smallRound, true);
+//		this.cancel.addActionListener(this);
+//		result.add(this.cancel);
+//
+//		return result;
+//	}
 
 }
