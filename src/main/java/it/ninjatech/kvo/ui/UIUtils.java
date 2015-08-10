@@ -5,6 +5,7 @@ import it.ninjatech.kvo.ui.component.AbstractSlider;
 import it.ninjatech.kvo.ui.component.FullImageDialog;
 import it.ninjatech.kvo.ui.component.PersonFullImagePane;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
+import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.worker.AbstractWorker;
 import it.ninjatech.kvo.worker.PersonFullWorker;
 
@@ -103,18 +104,7 @@ public final class UIUtils {
 	}
 
 	public static void showFullImage(AbstractWorker<Image> worker, String loadingTitle, String imageTitle) {
-		IndeterminateProgressDialogWorker<Image> progressWorker = new IndeterminateProgressDialogWorker<>(worker, loadingTitle);
-
-		Image result = null;
-
-		progressWorker.start();
-		try {
-			result = progressWorker.get();
-		}
-		catch (Exception e) {
-			UI.get().notifyException(e);
-		}
-
+		Image result = IndeterminateProgressDialogWorker.show(worker, loadingTitle);
 		if (result != null) {
 			WebImage image = new WebImage(result);
 			FullImageDialog dialog = FullImageDialog.getInstance(image, imageTitle);
@@ -125,18 +115,7 @@ public final class UIUtils {
 
 	public static void showPersonFullImage(String name) {
 		PersonFullWorker worker = new PersonFullWorker(name);
-		IndeterminateProgressDialogWorker<PersonFullWorker.PersonFullWorkerResult> progressWorker = new IndeterminateProgressDialogWorker<>(worker, name);
-
-		PersonFullWorker.PersonFullWorkerResult result = null;
-
-		progressWorker.start();
-		try {
-			result = progressWorker.get();
-		}
-		catch (Exception e) {
-			UI.get().notifyException(e);
-		}
-
+		PersonFullWorker.PersonFullWorkerResult result = IndeterminateProgressDialogWorker.show(worker, name);
 		if (result != null && (result.getImage() != null || StringUtils.isNotBlank(result.getImdbId()))) {
 			PersonFullImagePane pane = new PersonFullImagePane(result.getImage(), result.getImdbId());
 			FullImageDialog dialog = FullImageDialog.getInstance(pane, name);
@@ -144,7 +123,7 @@ public final class UIUtils {
 			dialog.release();
 		}
 		else {
-			WebOptionPane.showMessageDialog(UI.get(), "Neither image nor IMDB link available for this actor");
+			WebOptionPane.showMessageDialog(UI.get(), Labels.NEITHER_IMAGE_NOR_IMDB);
 		}
 	}
 
@@ -188,17 +167,20 @@ public final class UIUtils {
 		return result;
 	}
 
-	public static WebLabel makeStandardLabel(String title, Integer fontSize, Insets margin, BorderPainter<?> borderPainter) {
+	public static WebLabel makeStandardLabel(String title, Integer fontSize, Insets margin, Integer align, BorderPainter<?> borderPainter) {
 		WebLabel result = new WebLabel(title);
 
 		if (borderPainter != null) {
 			result.setPainter(new WebLabelPainter<>(borderPainter));
 		}
+		if (fontSize != null) {
+			result.setFontSize(fontSize);
+		}
 		if (margin != null) {
 			result.setMargin(margin);
 		}
-		if (fontSize != null) {
-			result.setFontSize(fontSize);
+		if (align != null) {
+			result.setHorizontalAlignment(align);
 		}
 		result.setForeground(Colors.FOREGROUND_STANDARD);
 		result.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
@@ -207,8 +189,8 @@ public final class UIUtils {
 		return result;
 	}
 
-	public static WebLabel makeStandardLabel(String title, Integer fontSize, Insets margin) {
-		return makeStandardLabel(title, fontSize, margin, null);
+	public static WebLabel makeStandardLabel(String title, Integer fontSize, Insets margin, Integer align) {
+		return makeStandardLabel(title, fontSize, margin, align, null);
 	}
 
 	public static WebDecoratedImage makeImagePane(ImageIcon image, Dimension size) {
@@ -304,7 +286,7 @@ public final class UIUtils {
 	public static WebPanel makeSliderPane(String title, AbstractSlider slider) {
 		WebPanel result = makeStandardPane(new VerticalFlowLayout(0, 0));
 
-		WebLabel titleL = makeStandardLabel(title, 20, new Insets(5, 0, 2, 0));
+		WebLabel titleL = makeStandardLabel(title, 20, new Insets(5, 0, 2, 0), null);
 		result.add(titleL);
 		titleL.setHorizontalAlignment(SwingConstants.CENTER);
 

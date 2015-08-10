@@ -1,6 +1,8 @@
 package it.ninjatech.kvo.worker;
 
-import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -20,36 +22,36 @@ public class TvSerieFileScanner extends AbstractWorker<Void> {
 	                                                                                                   "mpeg", "mpe", "mpv", "m2v", "svi", "3gp", "3g2",
 	                                                                                                   "mxf", "roq", "nsv"}));
 	
-	private final TvSeriePathEntity tvSeriePathEntity;
+	private final TvSerie tvSerie;
 
-	public TvSerieFileScanner(TvSeriePathEntity tvSeriePathEntity) {
-		this.tvSeriePathEntity = tvSeriePathEntity;
+	public TvSerieFileScanner(TvSerie tvSerie) {
+		this.tvSerie = tvSerie;
 	}
 
 	@Override
 	public Void work() throws Exception {
-		File root = new File(this.tvSeriePathEntity.getPath());
+		File root = new File(this.tvSerie.getTvSeriePathEntity().getPath());
 		File[] files = root.listFiles(new TvSerieFileFilter());
 
 		notifyInit("", files.length);
 
 		for (int i = 0; i < files.length; i++) {
 			String fileName = files[i].getName();
-			if (fileName.equalsIgnoreCase("extrafanart")) {
-				notifyUpdate("Scanning Extrafanarts", null);
-				this.tvSeriePathEntity.setExtraFanarts(new TreeSet<>(Arrays.asList(files[i].list(new ExtrafanartFilenameFilter()))));
+			if (fileName.equalsIgnoreCase(TvSerieUtils.EXTRAFANART)) {
+				notifyUpdate(Labels.SCANNING_EXTRAFANARTS, null);
+				this.tvSerie.getTvSeriePathEntity().setExtraFanarts(new TreeSet<>(Arrays.asList(files[i].list(new ExtrafanartFilenameFilter()))));
 			}
-			else if (StringUtils.startsWithIgnoreCase(fileName, "season")) {
-				notifyUpdate(String.format("Scanning %s", fileName), null);
+			else if (StringUtils.startsWithIgnoreCase(fileName, TvSerieUtils.SEASON)) {
+				notifyUpdate(Labels.getScanning(fileName), null);
 				fileName = StringUtils.normalizeSpace(fileName);
 				Integer number = Integer.valueOf(fileName.substring(fileName.lastIndexOf(' ') + 1));
 				String[] videoFiles = files[i].list(new SeasonVideoFilenameFilter());
 				if (videoFiles.length > 0) {
-					this.tvSeriePathEntity.setVideoFiles(number, new TreeSet<>(Arrays.asList(videoFiles)));
+					this.tvSerie.getTvSeriePathEntity().setVideoFiles(number, new TreeSet<>(Arrays.asList(videoFiles)));
 				}
 				String[] subtitleFiles = files[i].list(new SeasonSubtitleFilenameFilter());
 				if (subtitleFiles.length > 0) {
-					this.tvSeriePathEntity.setSubtitleFiles(number, new TreeSet<>(Arrays.asList(subtitleFiles)));
+					this.tvSerie.getTvSeriePathEntity().setSubtitleFiles(number, new TreeSet<>(Arrays.asList(subtitleFiles)));
 				}
 			}
 			notifyUpdate(null, i + 1);
@@ -65,7 +67,7 @@ public class TvSerieFileScanner extends AbstractWorker<Void> {
 			boolean result = false;
 
 			if (pathname.isDirectory()) {
-				result = pathname.getName().equalsIgnoreCase("extrafanart") || StringUtils.startsWithIgnoreCase(pathname.getName(), "season");
+				result = pathname.getName().equalsIgnoreCase(TvSerieUtils.EXTRAFANART) || StringUtils.startsWithIgnoreCase(pathname.getName(), TvSerieUtils.SEASON);
 			}
 
 			return result;

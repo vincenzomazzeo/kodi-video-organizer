@@ -5,6 +5,7 @@ import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.ImageProvider;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.Utils;
 
 import java.awt.Dimension;
@@ -52,14 +53,14 @@ public abstract class AbstractImageLoaderAsyncJob extends AsyncJob {
 			case Cache:
 				image = new File(Utils.getCacheDirectory(), cacheName);
 				if (image.exists()) {
-					System.out.printf("-> [%s] image %s found in cache\n", this.id, cacheName);
+					Logger.log("-> [%s] image %s found in cache\n", this.id, cacheName);
 					result = ImageIO.read(image);
 				}
 				break;
 			case Directory:
 				image = new File(directory, name);
 				if (image.exists()) {
-					System.out.printf("-> [%s] image %s found in directory\n", this.id, name);
+					Logger.log("-> [%s] image %s found in directory\n", this.id, name);
 					result = ImageIO.read(image);
 				}
 				break;
@@ -83,7 +84,7 @@ public abstract class AbstractImageLoaderAsyncJob extends AsyncJob {
 					image = new File(Utils.getCacheDirectory(), cacheName);
 					image.deleteOnExit();
 					ImageIO.write((BufferedImage)result, "jpg", image);
-					System.out.printf("-> [%s] image %s requested to remote host (%s)\n", this.id, remoteName, this.provider);
+					Logger.log("-> [%s] image %s requested to remote host (%s)\n", this.id, remoteName, this.provider);
 				}
 				break;
 			}

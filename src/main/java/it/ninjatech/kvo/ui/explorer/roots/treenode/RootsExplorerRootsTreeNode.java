@@ -5,6 +5,7 @@ import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
+import it.ninjatech.kvo.util.Labels;
 
 import java.util.Collections;
 
@@ -20,7 +21,7 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 	
 	@Override
 	public String toString() {
-		return "Roots";
+		return Labels.ROOTS;
 	}
 	
 	@Override

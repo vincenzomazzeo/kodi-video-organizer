@@ -5,6 +5,7 @@ import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractFsExplorerRootsTreeNo
 import it.ninjatech.kvo.ui.explorer.roots.treenode.FsDirectoryExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.FsFileExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
+import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.worker.AbstractWorker;
 
 import java.io.File;
@@ -22,13 +23,8 @@ public class ExplorerRootsFsScanner {
 	}
 	
 	public void scan() {
-		String title = String.format("Scanning %s", this.label);
-		
 		Scanner scanner = new Scanner(this.root, this.parent);
-		
-		IndeterminateProgressDialogWorker<Void> worker = new IndeterminateProgressDialogWorker<>(scanner, title);
-		
-		worker.start();
+		IndeterminateProgressDialogWorker.show(scanner, Labels.getScanning(this.label));
 	}
 	
 	private static final class Scanner extends AbstractWorker<Void> {

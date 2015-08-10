@@ -5,12 +5,11 @@ import it.ninjatech.kvo.async.job.PersonAsyncJob;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.ImageProvider;
 import it.ninjatech.kvo.model.TvSerieEpisode;
-import it.ninjatech.kvo.model.TvSerieSeason;
-import it.ninjatech.kvo.ui.Labels;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
-import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.AbstractImageSlider.ImageSliderListener;
+import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.TvSerieUtils;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 
@@ -43,11 +42,11 @@ public class TvSerieEpisodeController implements ImageSliderListener {
 	}
 	
 	@Override
-	public void notifyLeftClick(String id, Object data) {
+	public void notifyImageSliderLeftClick(String id, Object data) {
 	}
 
 	@Override
-	public void notifyRightClick(String id, Object data) {
+	public void notifyImageSliderRightClick(String id, Object data) {
 		UIUtils.showPersonFullImage((String)data);
 	}
 
@@ -55,13 +54,13 @@ public class TvSerieEpisodeController implements ImageSliderListener {
 		return this.view;
 	}
 	
-	public void showTvSerieEpisode(TvSerieEpisode tvSerieEpisode, TvSerieSeason tvSerieSeason, String videoFile, Map<String, EnhancedLocale> subtitleFiles) {
+	public void showTvSerieEpisode(TvSerieEpisode tvSerieEpisode, String videoFile, Map<String, EnhancedLocale> subtitleFiles) {
 		this.mainJobHandler.cancelAll();
 		this.view.destroy();
 		
 		this.tvSerieEpisode = tvSerieEpisode;
 		
-		this.view.fill(tvSerieEpisode, tvSerieSeason);
+		this.view.fill(tvSerieEpisode);
 		
 		if (StringUtils.isNotBlank(tvSerieEpisode.getArtwork())) {
 			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(tvSerieEpisode.getId(), ImageProvider.TheTvDb, tvSerieEpisode.getArtwork(), this.view.getArtworkSize());

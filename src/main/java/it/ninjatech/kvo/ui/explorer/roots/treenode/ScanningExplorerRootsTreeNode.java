@@ -2,6 +2,7 @@ package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
+import it.ninjatech.kvo.util.Labels;
 
 import javax.swing.Icon;
 
@@ -15,7 +16,7 @@ public class ScanningExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode
 	
 	@Override
 	public String toString() {
-		return "scanning...";
+		return Labels.SCANNING.toLowerCase();
 	}
 	
 	@Override

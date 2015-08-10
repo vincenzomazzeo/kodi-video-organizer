@@ -7,6 +7,7 @@ import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
@@ -48,11 +49,15 @@ public class TvSerieSeasonLauncher {
 //		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Ciccio"));
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 		tvSeriePathEntity.setTvSerie(tvSerie);
-		(new TvSerieFileScanner(tvSeriePathEntity)).work();
+		(new TvSerieFileScanner(tvSerie)).work();
 		MemoryUtils.printMemory("After start");
 		
 		List<TvSerieSeason> seasons = new ArrayList<>(tvSerie.getSeasons());
-		TvSerieSeasonController controller = new TvSerieSeasonController(tvSeriePathEntity, seasons.get(3));
+		TvSerieSeason season = seasons.get(3);
+		TvSerieEpisode episode = season.getEpisodes().iterator().next();
+		episode.setFilename("1.avi");
+		episode.addSubtitleFilename("Arrow - 01 - Calma apparente.en.srt");
+		TvSerieSeasonController controller = new TvSerieSeasonController(season);
 		controller.start();
 		MemoryUtils.printMemory("Controller started");
 		controller.getView().setVisible(true);

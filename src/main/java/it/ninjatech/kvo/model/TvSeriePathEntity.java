@@ -65,16 +65,45 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		return Collections.unmodifiableSortedSet(this.extraFanarts);
 	}
 	
-	public Set<String> getVideoFiles(Integer season) {
-		return this.videoFiles.containsKey(season) ? Collections.unmodifiableSortedSet(this.videoFiles.get(season)) : Collections.<String>emptySet();
+	public Set<String> getVideoFilesNotReferenced(Integer season) {
+		Set<String> result = new TreeSet<>();
+		
+		if (this.videoFiles.containsKey(season)) {
+			result.addAll(this.videoFiles.get(season));
+			
+			TvSerieSeason tvSerieSeason = this.tvSerie.getSeason(season);
+			if (tvSerieSeason != null) {
+				for (TvSerieEpisode episode : tvSerieSeason.getEpisodes()) {
+					if (episode.getFilename() != null) {
+						result.remove(episode.getFilename());
+					}
+				}
+			}
+		}
+		
+		return result;
 	}
 	
-	public Set<String> getSubtitleFiles(Integer season) {
-		return this.subtitleFiles.containsKey(season) ? Collections.unmodifiableSortedSet(this.subtitleFiles.get(season)) : Collections.<String>emptySet();
+	public Set<String> getSubtitleFilesNotReferenced(Integer season) {
+		Set<String> result = new TreeSet<>();
+		
+		if (this.subtitleFiles.containsKey(season)) {
+			result.addAll(this.subtitleFiles.get(season));
+			
+			TvSerieSeason tvSerieSeason = this.tvSerie.getSeason(season);
+			if (tvSerieSeason != null) {
+				for (TvSerieEpisode episode : tvSerieSeason.getEpisodes()) {
+					result.removeAll(episode.getSubtitleFilenames());
+				}
+			}
+		}
+		
+		return result;
 	}
 
 	public void setTvSerie(TvSerie tvSerie) {
 		this.tvSerie = tvSerie;
+		this.tvSerie.setTvSeriePathEntity(this);
 	}
 
 }

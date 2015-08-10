@@ -4,6 +4,7 @@ import it.ninjatech.kvo.KodiVideoOrganizer;
 import it.ninjatech.kvo.ui.component.ToolBar;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleController;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -35,7 +36,7 @@ public class UI extends WebFrame implements WindowListener {
 	private ToolBar toolBar;
 
 	private UI() {
-		super("Kodi Video Organizer");
+		super(Labels.APPLICATION_TITLE);
 
 		this.exceptionController = new ExceptionConsoleController();
 		this.explorerControler = new ExplorerController();

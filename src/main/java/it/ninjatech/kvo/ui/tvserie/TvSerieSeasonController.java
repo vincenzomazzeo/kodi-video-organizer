@@ -4,22 +4,23 @@ import it.ninjatech.kvo.async.job.CacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.ImageProvider;
-import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.model.TvSerieSeasonImage;
 import it.ninjatech.kvo.ui.Dimensions;
-import it.ninjatech.kvo.ui.Labels;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
-import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
+import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
+import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.MemoryUtils;
+import it.ninjatech.kvo.util.TvSerieUtils;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
+import it.ninjatech.kvo.worker.TvSerieSeasonWorker;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -48,7 +49,6 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	private static final DataFlavor VIDEO_FILE_DATA_FLAVOR = new DataFlavor(TvSerieSeasonController.class, "VideoFileDND");
 	private static final DataFlavor SUBTITLE_FILE_DATA_FLAVOR = new DataFlavor(TvSerieSeasonController.class, "SubtitleFileDND");
 
-	private final TvSeriePathEntity tvSeriePathEntity;
 	private final TvSerieSeason season;
 	private final TvSerieSeasonListModel videoFileListModel;
 	private final TvSerieSeasonListModel subtitleFileListModel;
@@ -60,19 +60,30 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	private final TvSerieImageLoaderAsyncJobHandler imageChoiceJobHandler;
 	private TvSerieEpisode selectedEpisodeView;
 	private File currentSeasonImage;
+	private boolean confirmed;
 
-	public TvSerieSeasonController(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season) {
-		this.tvSeriePathEntity = tvSeriePathEntity;
+	public TvSerieSeasonController(TvSerieSeason season) {
 		this.season = season;
-		this.videoFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getVideoFiles(this.tvSeriePathEntity, this.season.getNumber()));
-		this.subtitleFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getSubtitleFiles(this.tvSeriePathEntity, this.season.getNumber()));
+		this.videoFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getVideoFilesNotReferenced(this.season.getTvSerie().getTvSeriePathEntity(), this.season.getNumber()));
+		this.subtitleFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getSubtitleFilesNotReferenced(this.season.getTvSerie().getTvSeriePathEntity(), this.season.getNumber()));
 		this.episodeController = new TvSerieEpisodeController();
-		this.view = TvSerieSeasonDialog.getInstance(this, this.tvSeriePathEntity, this.season, this.videoFileListModel, this.subtitleFileListModel, Desktop.isDesktopSupported(), Desktop.isDesktopSupported() && TvSerieUtils.existsLocalSeason(tvSeriePathEntity, season));
+		this.view = TvSerieSeasonDialog.getInstance(this, this.season, this.videoFileListModel, this.subtitleFileListModel, Desktop.isDesktopSupported(), Desktop.isDesktopSupported() && TvSerieUtils.existsLocalSeason(season));
 		this.videoEpisodeMap = new HashMap<>();
 		this.subtitleEpisodeMap = new HashMap<>();
 		this.mainJobHandler = new TvSerieImageLoaderAsyncJobHandler();
 		this.imageChoiceJobHandler = new TvSerieImageLoaderAsyncJobHandler();
-		this.currentSeasonImage = new File(this.tvSeriePathEntity.getPath(), this.season.getPosterFilename());
+		this.currentSeasonImage = new File(this.season.getTvSerie().getTvSeriePathEntity().getPath(), TvSerieUtils.getSeasonPosterFilename(this.season));
+		this.confirmed = false;
+		
+		for (TvSerieEpisode episode : this.season.getEpisodes()) {
+			if (episode.getFilename() != null) {
+				this.view.setEpisodeVideoFile(episode, episode.getFilename());
+			}
+			for (String subtitleFilename : episode.getSubtitleFilenames()) {
+				EnhancedLocale language = Utils.getLanguageFromSubtitleFile(subtitleFilename);
+				this.view.addEpisodeSubtitle(episode, language, subtitleFilename);
+			}
+		}
 	}
 
 	@Override
@@ -98,7 +109,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	}
 
 	public void start() {
-		TvSerieLocalSeasonImageAsyncJob job = new TvSerieLocalSeasonImageAsyncJob(this.tvSeriePathEntity, this.season, this.view.getSeasonImageSize());
+		TvSerieLocalSeasonImageAsyncJob job = new TvSerieLocalSeasonImageAsyncJob(this.season, this.view.getSeasonImageSize());
 		this.mainJobHandler.handle(job, this.view);
 
 		for (TvSerieEpisode episode : this.season.getEpisodes()) {
@@ -109,19 +120,28 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		}
 	}
 
+	public boolean isConfirmed() {
+		return this.confirmed;
+	}
+
 	protected void notifyConfirm() {
-		// TODO
+		TvSerieSeasonWorker worker = new TvSerieSeasonWorker(this.season, this.videoEpisodeMap, this.subtitleEpisodeMap, this.currentSeasonImage);
+		DeterminateProgressDialogWorker.show(worker, Labels.SAVING_SEASON);
+		
+		this.confirmed = true;
 
 		destroy();
 	}
 
 	protected void notifyCancel() {
+		this.confirmed = false;
+		
 		destroy();
 	}
 
 	protected void notifyTvSerieTitleLeftClick() {
 		try {
-			File path = new File(this.tvSeriePathEntity.getPath());
+			File path = new File(this.season.getTvSerie().getTvSeriePathEntity().getPath());
 			Desktop.getDesktop().open(path);
 		}
 		catch (Exception e) {
@@ -131,7 +151,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 
 	protected void notifyTvSerieSeasonTitleLeftClick() {
 		try {
-			File path = TvSerieUtils.getLocalSeasonFile(this.tvSeriePathEntity, this.season);
+			File path = TvSerieUtils.getLocalSeasonPath(this.season);
 			Desktop.getDesktop().open(path);
 		}
 		catch (Exception e) {
@@ -177,14 +197,14 @@ public class TvSerieSeasonController implements ImageChoiceController {
 			this.episodeController.notifySubtitleFileRemove(filename);
 		}
 		
-		tile.removeLanguage(filename);
+		tile.removeSubtitle(filename);
 	}
 
 	protected void notifyEpisodeClick(TvSerieEpisode episode) {
 		if (this.selectedEpisodeView == null || !this.selectedEpisodeView.equals(episode)) {
 			MemoryUtils.printMemory("Before episode view");
 			this.selectedEpisodeView = episode;
-			this.episodeController.showTvSerieEpisode(episode, this.season, this.videoEpisodeMap.get(episode), this.subtitleEpisodeMap.get(episode));
+			this.episodeController.showTvSerieEpisode(episode, this.videoEpisodeMap.get(episode), this.subtitleEpisodeMap.get(episode));
 			this.view.setEpisodeView(this.episodeController.getView());
 			MemoryUtils.printMemory("After episode view");
 		}
@@ -320,7 +340,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 					result = dialog.isConfirmed();
 					if (result) {
 						EnhancedLocale language = dialog.getLanguage();
-						this.tile.addLanguage(language, filename, true);
+						this.tile.addSubtitle(language, filename, true);
 						Map<String, EnhancedLocale> languages = this.controller.subtitleEpisodeMap.get(this.episode);
 						if (languages == null) {
 							languages = new HashMap<>();
@@ -345,7 +365,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 			boolean result = false;
 
 			if (support.getDataFlavors()[0].getHumanPresentableName().equals(VIDEO_FILE_DATA_FLAVOR.getHumanPresentableName())) {
-				result = !this.controller.videoEpisodeMap.containsKey(this.episode);
+				result = this.episode.getFilename() == null && !this.controller.videoEpisodeMap.containsKey(this.episode);
 			}
 			else if (support.getDataFlavors()[0].getHumanPresentableName().equals(SUBTITLE_FILE_DATA_FLAVOR.getHumanPresentableName())) {
 				result = true;

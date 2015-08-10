@@ -6,7 +6,6 @@ import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.Type;
-import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
@@ -18,6 +17,8 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieSearchListener;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchMultiResultController;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchMultiResultListener;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class ExplorerRootsController {
 	private File showRootChooser(Type type, File lastRootParent) {
 		File result = null;
 
-		this.rootChooser.setTitle(String.format("Choose %s root", type.getPlural()));
+		this.rootChooser.setTitle(String.format(Labels.getChooseRoot(type.getPlural())));
 		this.rootChooser.setSelectedDirectory(lastRootParent);
 		this.rootChooser.setVisible(true);
 
@@ -138,7 +139,7 @@ public class ExplorerRootsController {
 
 		this.model.addRoot(scanner.scan());
 
-		NotificationManager.showNotification(String.format("<html>%s root <b>%s</b> added</html>", type.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
+		NotificationManager.showNotification(Labels.notificationRootAdded(type.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 	}
 
 	private static class TvSerieSearchHandler implements TvSerieSearchListener, TvSerieSearchMultiResultListener {
@@ -176,6 +177,7 @@ public class ExplorerRootsController {
 			if (tvSeries != null) {
 				if (tvSeries.isEmpty()) {
 					if (askOnEmpty) {
+						// TODO replace with custom dialog
 						if (WebOptionPane.showConfirmDialog(UI.get(), "No TV Serie found. Do you want to search again changing name or languange?",
 															"Confirm", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 							TvSerieSearchController controller = new TvSerieSearchController(this);
@@ -219,7 +221,7 @@ public class ExplorerRootsController {
 			tvSerie = TvSerieUtils.fetch(tvSerie);
 			if (tvSerie != null) {
 				this.node.getValue().setTvSerie(tvSerie);
-				NotificationManager.showNotification(UI.get(), String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
+				NotificationManager.showNotification(UI.get(), Labels.notificationTvSerieFetched(tvSerie.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 				this.parent.model.reload(this.node);
 				this.parent.parent.addTvSerieTile(this.node.getValue());
 			}

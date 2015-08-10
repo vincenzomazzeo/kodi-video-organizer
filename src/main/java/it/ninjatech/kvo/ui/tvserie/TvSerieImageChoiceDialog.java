@@ -6,10 +6,11 @@ import it.ninjatech.kvo.model.ImageProvider;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.Labels;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
+import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.MemoryUtils;
 
 import java.awt.Cursor;
@@ -134,7 +135,7 @@ public class TvSerieImageChoiceDialog extends WebDialog implements WindowListene
 	}
 
 	public void release() {
-		System.out.println("*** TvSerieImageChoiceDialog -> release ***");
+		Logger.log("*** TvSerieImageChoiceDialog -> release ***\n");
 		MemoryUtils.printMemory("Before TvSerieImageChoiceDialog release");
 		this.controller.notifyImageChoiceClosing();
 		for (ImageChoicePane pane : this.panes.values()) {

@@ -2,8 +2,8 @@ package it.ninjatech.kvo.ui.explorer.tvserie;
 
 import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.component.ExplorerTile;
+import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -39,9 +39,9 @@ public class ExplorerTvSerieTileView extends WebPanel {
 		if (fanart != null || poster != null) {
 			this.fullTile = new ExplorerTile(fanart, poster != null ? poster : ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
 											 TvSerieUtils.getTitle(this.value),
-											 TvSerieUtils.getYear(this.value),
-											 TvSerieUtils.getRate(this.value),
-											 TvSerieUtils.getGenre(this.value));
+											 TvSerieUtils.getYear(this.value.getTvSerie()),
+											 TvSerieUtils.getRate(this.value.getTvSerie()),
+											 TvSerieUtils.getGenre(this.value.getTvSerie()));
 			this.transition.performTransition(this.fullTile);
 		}
 	}
@@ -69,9 +69,9 @@ public class ExplorerTvSerieTileView extends WebPanel {
 
 		this.defaultTile = new ExplorerTile(null, ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
 											TvSerieUtils.getTitle(this.value),
-											TvSerieUtils.getYear(this.value),
-											TvSerieUtils.getRate(this.value),
-											TvSerieUtils.getGenre(this.value));
+											TvSerieUtils.getYear(this.value.getTvSerie()),
+											TvSerieUtils.getRate(this.value.getTvSerie()),
+											TvSerieUtils.getGenre(this.value.getTvSerie()));
 
 		this.transition = new ComponentTransition(this.defaultTile, new FadeTransitionEffect());
 		add(this.transition, BorderLayout.CENTER);

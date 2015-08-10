@@ -3,6 +3,7 @@ package it.ninjatech.kvo.ui.tvserie;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -28,7 +29,7 @@ public class TvSerieSearchMultiResultDialog extends WebDialog implements MouseLi
 	private WebTable table;
 
 	protected TvSerieSearchMultiResultDialog(TvSerieSearchMultiResultController controller, List<TvSerie> tvSeries) {
-		super(UI.get(), "TV Serie Search Multi Result", true);
+		super(UI.get(), Labels.TV_SERIE_SEARCH_MULTI_RESULT, true);
 
 		this.controller = controller;
 
@@ -67,7 +68,7 @@ public class TvSerieSearchMultiResultDialog extends WebDialog implements MouseLi
 	}
 
 	private void init(List<TvSerie> tvSeries) {
-		String[] headers = new String[] { "Title", "Language", "ID" };
+		String[] headers = new String[] { Labels.TITLE, Labels.LANGUAGE, Labels.ID };
 		Object[][] rows = new Object[tvSeries.size()][headers.length];
 
 		for (int i = 0, n = tvSeries.size(); i < n; i++) {

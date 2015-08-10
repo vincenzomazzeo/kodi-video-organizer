@@ -17,7 +17,7 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 	private String filename;
 	private final Set<String> subtitleFilenames;
 	
-	private String seasonId;
+	private TvSerieSeason season;
 	private BigDecimal dvdNumber;
 	private List<String> directors;
 	private String name;
@@ -89,6 +89,10 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 		return this.language;
 	}
 
+	public TvSerieSeason getSeason() {
+		return this.season;
+	}
+
 	public String getFilename() {
 		return this.filename;
 	}
@@ -105,13 +109,9 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 		this.subtitleFilenames.clear();
 		this.subtitleFilenames.addAll(subtitleFilenames);
 	}
-
-	public String getSeasonId() {
-		return this.seasonId;
-	}
-
-	protected void setSeasonId(String seasonId) {
-		this.seasonId = seasonId;
+	
+	public void addSubtitleFilename(String subtitleFilename) {
+		this.subtitleFilenames.add(subtitleFilename);
 	}
 
 	public BigDecimal getDvdNumber() {
@@ -200,6 +200,10 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 
 	public void setArtwork(String artwork) {
 		this.artwork = artwork;
+	}
+	
+	protected void setSeason(TvSerieSeason season) {
+		this.season = season;
 	}
 
 }

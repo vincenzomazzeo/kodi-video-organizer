@@ -11,6 +11,7 @@ import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBox;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -113,7 +114,7 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 	private WebButton cancel;
 
 	protected ScrapersSettingsView(ScrapersSettingsController controller) {
-		super(UI.get(), "Scrapers Settings", true);
+		super(UI.get(), Labels.SCRAPERS_SETTINGS, true);
 
 		this.controller = controller;
 
@@ -286,20 +287,25 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 		
 		WebPanel logoPane = makeLogoPane(ImageRetriever.retrieveTheTvDbLogo(), TheTvDbManager.BASE_URL);
 
-		WebLabel enabled = makeLabel("Enabled");
+		WebLabel enabled = makeLabel(Labels.ENABLED);
 		WebPanel enabledPane = makeEnabledPane(this.theTvDbEnabled, this); 
 		
-		WebLabel apiKey = makeLabel("API Key");
+		WebLabel apiKey = makeLabel(Labels.API_KEY);
 		setApiKey(this.theTvDbApiKey, this);
 
-		WebLabel preferredLanguageL = new WebLabel("Preferred Language");
+		WebLabel preferredLanguageL = new WebLabel(Labels.PREFERRED_LANGUAGE);
 		preferredLanguageL.setForeground(Colors.FOREGROUND_STANDARD);
 		preferredLanguageL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
 		preferredLanguageL.setDrawShade(true);
 
 		this.theTvDbPreferredLanguage = new EnhancedLocaleLanguageComboBox(EnhancedLocaleMap.getEmptyLocale());
 
-		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false), apiKey, this.theTvDbApiKey, UIUtils.makeVerticalFillerPane(20, false), preferredLanguageL, this.theTvDbPreferredLanguage, UIUtils.makeVerticalFillerPane(20, false));
+		result = new GroupPanel(false, 
+		                        logoPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false), apiKey, this.theTvDbApiKey, 
+		                        UIUtils.makeVerticalFillerPane(20, false), preferredLanguageL, this.theTvDbPreferredLanguage, 
+		                        UIUtils.makeVerticalFillerPane(20, false));
 		result.setMargin(10);
 		result.setOpaque(false);
 
@@ -314,13 +320,17 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 		
 		WebPanel logoPane = makeLogoPane(ImageRetriever.retrieveFanarttvLogo(), FanarttvManager.BASE_URL);
 
-		WebLabel enabled = makeLabel("Enabled");
+		WebLabel enabled = makeLabel(Labels.ENABLED);
 		WebPanel enabledPane = makeEnabledPane(this.fanarttvEnabled, this);
 		
-		WebLabel apiKey = makeLabel("API Key");
+		WebLabel apiKey = makeLabel(Labels.API_KEY);
 		setApiKey(this.fanarttvApiKey, this);
 
-		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false), apiKey, this.fanarttvApiKey, UIUtils.makeVerticalFillerPane(20, false));
+		result = new GroupPanel(false, 
+		                        logoPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false), apiKey, this.fanarttvApiKey, 
+		                        UIUtils.makeVerticalFillerPane(20, false));
 		result.setMargin(10);
 		result.setOpaque(false);
 		
@@ -334,10 +344,13 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 		
 		WebPanel logoPane = makeLogoPane("My Api Films", MyApiFilmsManager.BASE_URL);
 		
-		WebLabel enabled = makeLabel("Enabled");
+		WebLabel enabled = makeLabel(Labels.ENABLED);
 		WebPanel enabledPane = makeEnabledPane(this.myApiFilmsEnabled, this);
 		
-		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false));
+		result = new GroupPanel(false, 
+		                        logoPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false));
 		result.setMargin(10);
 		result.setOpaque(false);
 		
@@ -351,10 +364,13 @@ public class ScrapersSettingsView extends WebDialog implements ActionListener, M
 		
 		WebPanel logoPane = makeLogoPane(ImageRetriever.retrieveImdbLogo(), ImdbManager.BASE_URL);
 
-		WebLabel enabled = makeLabel("Enabled");
+		WebLabel enabled = makeLabel(Labels.ENABLED);
 		WebPanel enabledPane = makeEnabledPane(this.imdbEnabled, this);
 		
-		result = new GroupPanel(false, logoPane, UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, UIUtils.makeVerticalFillerPane(20, false));
+		result = new GroupPanel(false, 
+		                        logoPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false), enabled, enabledPane, 
+		                        UIUtils.makeVerticalFillerPane(20, false));
 		result.setMargin(10);
 		result.setOpaque(false);
 

@@ -16,6 +16,7 @@ public class TvSerie {
 
 	private final String id;
 	private final String providerId;
+	private TvSeriePathEntity tvSeriePathEntity;
 	private String name;
 	private EnhancedLocale language;
 	private Date firstAired;
@@ -48,10 +49,36 @@ public class TvSerie {
 		this(UUID.randomUUID().toString(), providerId, name, language);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TvSerie other = (TvSerie)obj;
+		if (this.id == null) {
+			if (other.id != null)
+				return false;
+		}
+		else if (!this.id.equals(other.id))
+			return false;
+		return true;
+	}
+
 	public void addEpisode(Integer seasonNumber, TvSerieEpisode episode) {
 		TvSerieSeason season = this.seasons.get(seasonNumber);
 		if (season == null) {
-			season = new TvSerieSeason(seasonNumber);
+			season = new TvSerieSeason(this, seasonNumber);
 			this.seasons.put(seasonNumber, season);
 		}
 		season.addEpisode(episode);
@@ -159,6 +186,10 @@ public class TvSerie {
 	public Set<TvSerieSeason> getSeasons() {
 		return Collections.unmodifiableSortedSet(new TreeSet<TvSerieSeason>(this.seasons.values()));
 	}
+	
+	public TvSerieSeason getSeason(Integer season) {
+		return this.seasons.get(season);
+	}
 
 	public Set<TvSerieActor> getActors() {
 		return Collections.unmodifiableSortedSet(this.actors);
@@ -170,6 +201,14 @@ public class TvSerie {
 
 	public String getProviderId() {
 		return this.providerId;
+	}
+
+	public TvSeriePathEntity getTvSeriePathEntity() {
+		return this.tvSeriePathEntity;
+	}
+
+	public void setTvSeriePathEntity(TvSeriePathEntity tvSeriePathEntity) {
+		this.tvSeriePathEntity = tvSeriePathEntity;
 	}
 
 	public String getName() {

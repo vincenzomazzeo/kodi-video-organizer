@@ -1,9 +1,9 @@
 package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.Labels;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleView;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsController;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.Color;
 import java.awt.ComponentOrientation;

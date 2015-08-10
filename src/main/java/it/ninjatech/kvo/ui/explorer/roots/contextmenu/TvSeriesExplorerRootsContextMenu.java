@@ -1,10 +1,11 @@
 package it.ninjatech.kvo.ui.explorer.roots.contextmenu;
 
-import java.awt.Desktop;
-
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.PathOpenExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
+import it.ninjatech.kvo.util.Labels;
+
+import java.awt.Desktop;
 
 import com.alee.laf.menu.WebMenuItem;
 
@@ -20,7 +21,7 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
 	protected void build() {
 		if (Desktop.isDesktopSupported()) {
 			// Open in System Explorer
-			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, "Open in System Explorer", null, this.node.getValue().getPath())));
+			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
 		}
 		
 		// Remove

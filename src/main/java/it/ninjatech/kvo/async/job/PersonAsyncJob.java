@@ -5,6 +5,7 @@ import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.myapifilms.model.MyApiFilmsPerson;
 import it.ninjatech.kvo.model.ImageProvider;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.PeopleManager;
 import it.ninjatech.kvo.util.PeopleManager.Person;
 
@@ -36,7 +37,7 @@ public class PersonAsyncJob extends AsyncJob {
 		// Check/Load IMDB ID
 		if (!person.isImdbIdNotFound() && StringUtils.isBlank(person.getImdbId())) {
 			if (ImdbManager.getInstance().isEnabled()) {
-				System.out.printf("-> searching for imdbId of person %s\n", this.name);
+				Logger.log("-> searching for imdbId of person %s\n", this.name);
 				this.imdbId = ImdbManager.getInstance().searchForActor(person.getName());
 				person.setImdbIdNotFound(StringUtils.isBlank(this.imdbId));
 				person.setImdbId(this.imdbId);
@@ -46,7 +47,7 @@ public class PersonAsyncJob extends AsyncJob {
 		// Check image
 		if (StringUtils.isNotBlank(person.getImdbId()) && person.getImageProvider() == ImageProvider.MyApiFilms && person.isImageDownloadable() && StringUtils.isBlank(person.getImagePath())) {
 			if (MyApiFilmsManager.getInstance().isEnabled()) {
-				System.out.printf("-> searching for image of person %s\n", this.name);
+				Logger.log("-> searching for image of person %s\n", this.name);
 				MyApiFilmsPerson myApiFilmsPerson = MyApiFilmsManager.getInstance().searchForPerson(person.getImdbId());
 				person.setImageDownloadable(myApiFilmsPerson != null && StringUtils.isNotBlank(myApiFilmsPerson.getUrlPhoto()));
 				person.setImagePath(myApiFilmsPerson.getUrlPhoto());

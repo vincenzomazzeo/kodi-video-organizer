@@ -64,7 +64,7 @@ public class TvSerieEpisodeWallLauncher extends WebDialog implements HierarchyLi
 		TvSerieEpisode episode = seasons.get(3).getEpisodes().iterator().next();
 		episode.setFilename("test");
 		episode.setSubtitleFilenames(new HashSet<String>(Arrays.asList("test.en.srt", "test.2.en.srt", "test.it.srt", "test.3.en.srt")));
-		TvSerieEpisodeWallLauncher wall = new TvSerieEpisodeWallLauncher(episode, seasons.get(3));
+		TvSerieEpisodeWallLauncher wall = new TvSerieEpisodeWallLauncher(episode);
 		MemoryUtils.printMemory("Opening");
 		wall.setVisible(true);
 		wall.controller.destroy();
@@ -73,17 +73,15 @@ public class TvSerieEpisodeWallLauncher extends WebDialog implements HierarchyLi
 		System.exit(0);
 	}
 	
-	private final TvSerieSeason season;
 	private final TvSerieEpisode episode;
 	private TvSerieEpisodeController controller;
 	
-	private TvSerieEpisodeWallLauncher(TvSerieEpisode episode, TvSerieSeason season) {
+	private TvSerieEpisodeWallLauncher(TvSerieEpisode episode) {
 		super();
 		
 		setModal(true);
 		
 		this.episode = episode;
-		this.season = season;
 		
 		addHierarchyListener(this);
 		
@@ -106,7 +104,7 @@ public class TvSerieEpisodeWallLauncher extends WebDialog implements HierarchyLi
 	@Override
 	public void hierarchyChanged(HierarchyEvent event) {
 		if ((event.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) == HierarchyEvent.SHOWING_CHANGED && isShowing()) {
-			this.controller.showTvSerieEpisode(this.episode, this.season, null, null);
+			this.controller.showTvSerieEpisode(this.episode, null, null);
 		}
 	}
 	

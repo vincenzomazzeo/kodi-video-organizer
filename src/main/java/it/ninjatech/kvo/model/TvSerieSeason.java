@@ -2,7 +2,6 @@ package it.ninjatech.kvo.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedHashSet;
@@ -13,20 +12,22 @@ import java.util.UUID;
 
 public class TvSerieSeason implements Comparable<TvSerieSeason> {
 
+	private final TvSerie tvSerie;
 	private final String id;
 	private final Integer number;
 	private final SortedSet<TvSerieEpisode> episodes;
 	private final EnumMap<ImageProvider, SortedSet<TvSerieSeasonImage>> images;
 	
-	protected TvSerieSeason(String id, Integer number) {
+	protected TvSerieSeason(TvSerie tvSerie, String id, Integer number) {
+		this.tvSerie = tvSerie;
 		this.id = id;
 		this.number = number;
 		this.episodes = new TreeSet<>();
 		this.images = new EnumMap<>(ImageProvider.class);
 	}
 	
-	protected TvSerieSeason(Integer number) {
-		this(UUID.randomUUID().toString(), number);
+	protected TvSerieSeason(TvSerie tvSerie, Integer number) {
+		this(tvSerie, UUID.randomUUID().toString(), number);
 	}
 	
 	@Override
@@ -58,6 +59,10 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	@Override
 	public int compareTo(TvSerieSeason other) {
 		return this.number.compareTo(other.number);
+	}
+
+	public TvSerie getTvSerie() {
+		return this.tvSerie;
 	}
 
 	public String getId() {
@@ -103,15 +108,6 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 		return result;
 	}
 	
-	public String getPosterFilename() {
-		String result = null;
-		
-		DecimalFormat df = new DecimalFormat("00");
-		result = String.format("season%s-poster.jpg", df.format(this.number));
-		
-		return result;
-	}
-	
 	public int getEpisodeCount() {
 		return this.episodes.size();
 	}
@@ -141,7 +137,7 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	
 	protected void addEpisode(TvSerieEpisode episode) {
 		this.episodes.add(episode);
-		episode.setSeasonId(this.id);
+		episode.setSeason(this);
 	}
 	
 }

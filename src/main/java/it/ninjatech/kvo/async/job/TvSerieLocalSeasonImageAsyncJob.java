@@ -1,7 +1,8 @@
 package it.ninjatech.kvo.async.job;
 
-import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.util.Logger;
+import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.Dimension;
 import java.awt.Image;
@@ -11,16 +12,14 @@ public class TvSerieLocalSeasonImageAsyncJob extends AbstractImageLoaderAsyncJob
 
 	private static final long serialVersionUID = 1042321164421715360L;
 	
-	private final TvSeriePathEntity tvSeriePathEntity;
 	private final TvSerieSeason season;
 	private final Dimension size;
 	
 	private Image image;
 	
-	public TvSerieLocalSeasonImageAsyncJob(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season, Dimension size) {
+	public TvSerieLocalSeasonImageAsyncJob(TvSerieSeason season, Dimension size) {
 		super(season.getId(), EnumSet.of(LoadType.Directory), null);
 	
-		this.tvSeriePathEntity = tvSeriePathEntity;
 		this.season = season;
 		this.size = size;
 	}
@@ -28,9 +27,9 @@ public class TvSerieLocalSeasonImageAsyncJob extends AbstractImageLoaderAsyncJob
 	@Override
 	protected void execute() {
 		try {
-			System.out.printf("-> executing local season %s\n", this.tvSeriePathEntity.getId());
+			Logger.log("-> executing local season %s\n", this.season.getTvSerie().getTvSeriePathEntity().getId());
 			
-			this.image = getImage(this.tvSeriePathEntity.getPath(), this.season.getPosterFilename(), null, null, this.size);
+			this.image = getImage(this.season.getTvSerie().getTvSeriePathEntity().getPath(), TvSerieUtils.getSeasonPosterFilename(this.season), null, null, this.size);
 		}
 		catch (Exception e) {
 			this.exception = e;

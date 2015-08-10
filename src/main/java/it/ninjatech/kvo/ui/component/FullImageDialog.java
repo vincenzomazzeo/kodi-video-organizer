@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.MemoryUtils;
 
 import javax.swing.JComponent;
@@ -35,7 +36,7 @@ public class FullImageDialog extends WebDialog {
 	}
 	
 	public void release() {
-		System.out.println("*** FullImageDialog -> release ***");
+		Logger.log("*** FullImageDialog -> release ***\n");
 		MemoryUtils.printMemory("Before FullImageDialog release");
 		setContentPane(new WebPanel());
 		MemoryUtils.printMemory("After FullImageDialog release");

@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.worker;
 
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.PeopleManager;
 import it.ninjatech.kvo.util.PeopleManager.Person;
 import it.ninjatech.kvo.util.Utils;
@@ -21,7 +22,7 @@ public class PersonFullWorker extends AbstractWorker<PersonFullWorker.PersonFull
 	public PersonFullWorkerResult work() throws Exception {
 		PersonFullWorkerResult result = null;
 		
-		System.out.printf("-> executing person full %s\n", this.name);
+		Logger.log("-> executing person full %s\n", this.name);
 		
 		Person person = PeopleManager.getInstance().getPerson(this.name);
 		

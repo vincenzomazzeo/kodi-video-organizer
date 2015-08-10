@@ -1,19 +1,21 @@
 package it.ninjatech.kvo.ui.tvserie;
 
+import it.ninjatech.kvo.model.EnhancedLocale;
+import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSerieEpisode;
-import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.Labels;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;
-import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSeasonController.TvSerieSeasonListModel;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSeasonController.VideoSubtitleTransferHandler;
+import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.MemoryUtils;
+import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -67,7 +69,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	private static final long serialVersionUID = -2012464643608233002L;
 	private static TvSerieSeasonDialog self;
 
-	protected static TvSerieSeasonDialog getInstance(TvSerieSeasonController controller, TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season,
+	protected static TvSerieSeasonDialog getInstance(TvSerieSeasonController controller, TvSerieSeason season,
 													 TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel,
 													 boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
 		if (self == null) {
@@ -78,24 +80,24 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 			WebLookAndFeel.setDecorateDialogs(decorateFrames);
 		}
 
-		self.set(controller, tvSeriePathEntity, season, videoFileListModel, subtitleFileListModel, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
+		self.set(controller, season, videoFileListModel, subtitleFileListModel, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
 
 		return self;
 	}
 
-	private static WebPanel makeTvSerieTitlePane(TvSeriePathEntity tvSeriePathEntity, WebLabel tvSerieTitle) {
+	private static WebPanel makeTvSerieTitlePane(TvSerie tvSerie, WebLabel tvSerieTitle) {
 		WebPanel result = null;
 
-		String tvSerieStatus = TvSerieUtils.getStatus(tvSeriePathEntity);
-		String tvSerieRating = TvSerieUtils.getRating(tvSeriePathEntity);
-		String tvSerieRatingCount = TvSerieUtils.getRatingCount(tvSeriePathEntity);
+		String tvSerieStatus = TvSerieUtils.getStatus(tvSerie);
+		String tvSerieRating = TvSerieUtils.getRating(tvSerie);
+		String tvSerieRatingCount = TvSerieUtils.getRatingCount(tvSerie);
 
 		List<Component> components = new ArrayList<>();
 
-		components.add(new WebImage(tvSeriePathEntity.getTvSerie().getLanguage().getLanguageFlag()));
+		components.add(new WebImage(tvSerie.getLanguage().getLanguageFlag()));
 		components.add(tvSerieTitle);
 		if (StringUtils.isNotEmpty(tvSerieStatus)) {
-			components.add(UIUtils.makeStandardLabel(String.format("(%s)", tvSerieStatus), 20, null));
+			components.add(UIUtils.makeStandardLabel(String.format("(%s)", tvSerieStatus), 20, null, null));
 		}
 		if (StringUtils.isNotEmpty(tvSerieRating)) {
 			components.add(UIUtils.makeRatingPane(new WebLabel(tvSerieRating), StringUtils.isNotEmpty(tvSerieRatingCount) ? new WebLabel(tvSerieRatingCount) : new WebLabel()));
@@ -110,10 +112,9 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	private static WebPanel makeFilesPane(WebList list, VideoSubtitleTransferHandler transferHandler, String title, int width) {
 		WebPanel result = UIUtils.makeStandardPane(new BorderLayout());
 
-		WebLabel titleL = UIUtils.makeStandardLabel(title, 20, new Insets(5, 5, 5, 5));
+		WebLabel titleL = UIUtils.makeStandardLabel(title, 20, new Insets(5, 5, 5, 5), SwingConstants.CENTER);
 		result.add(titleL, BorderLayout.NORTH);
 		titleL.setPreferredWidth(width - 10);
-		titleL.setHorizontalAlignment(SwingConstants.CENTER);
 
 		list.setBackground(Colors.BACKGROUND_INFO);
 		list.setCellRenderer(new CellRenderer());
@@ -149,14 +150,14 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		addWindowListener(this);
 	}
 
-	private void set(TvSerieSeasonController controller, TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season,
+	private void set(TvSerieSeasonController controller, TvSerieSeason season,
 					 TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel,
 					 boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
-		setTitle(Labels.getTvSerieTitleSeason(tvSeriePathEntity, season));
+		setTitle(Labels.getTvSerieTitleSeason(season));
 
 		this.controller = controller;
 
-		init(tvSeriePathEntity, season, videoFileListModel, subtitleFileListModel, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
+		init(season, videoFileListModel, subtitleFileListModel, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
 
 		pack();
 		setLocationRelativeTo(UI.get());
@@ -248,7 +249,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	}
 
 	protected void release() {
-		System.out.println("*** TvSerieSeasonDialog -> release ***");
+		Logger.log("*** TvSerieSeasonDialog -> release ***\n");
 		MemoryUtils.printMemory("Before TvSerieSeasonDialog release");
 		TooltipManager.removeTooltips(this.seasonImageTransition);
 		TooltipManager.removeTooltips(this.tvSerieTitle);
@@ -273,7 +274,17 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		this.detailTransition.performTransition(view);
 	}
 
-	private void init(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season, TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel, boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
+	protected void setEpisodeVideoFile(TvSerieEpisode episode, String filename) {
+		TvSerieEpisodeTile tile = this.tileMap.get(episode.getId());
+		tile.setVideoFile(filename, false);
+	}
+	
+	protected void addEpisodeSubtitle(TvSerieEpisode episode, EnhancedLocale language, String filename) {
+		TvSerieEpisodeTile tile = this.tileMap.get(episode.getId());
+		tile.addSubtitle(language, filename, false);
+	}
+	
+	private void init(TvSerieSeason season, TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel, boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
 		WebPanel content = new WebPanel(new VerticalFlowLayout());
 		setContentPane(content);
 
@@ -281,7 +292,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 
 		Dimension size = Dimensions.getTvSerieSeasonHandlerSize();
 		int contentPaneColumnWidth = size.width / 5;
-		WebPanel headerPane = makeHeaderPane(tvSeriePathEntity, season, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
+		WebPanel headerPane = makeHeaderPane(season, addTvSerieTitleClick, addTvSerieSeasonTitleClick);
 		WebSplitPane contentPane = makeContentPane(season, videoFileListModel, subtitleFileListModel, contentPaneColumnWidth);
 		contentPane.setPreferredSize(new Dimension(size.width, size.height - this.seasonImageSize.height - 20));
 
@@ -290,7 +301,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		content.add(contentPane);
 	}
 
-	private WebPanel makeHeaderPane(TvSeriePathEntity tvSeriePathEntity, TvSerieSeason season, boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
+	private WebPanel makeHeaderPane(TvSerieSeason season, boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
 		WebPanel result = UIUtils.makeStandardPane(new BorderLayout());
 
 		// Season title
@@ -307,7 +318,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		dataPane.add(UIUtils.makeFlowLayoutPane(FlowLayout.CENTER, 0, 0,
 												this.tvSerieSeasonTitle));
 		dataPane.add(UIUtils.makeFlowLayoutPane(FlowLayout.CENTER, 15, 0,
-												UIUtils.makeStandardLabel(Labels.getTvSerieSeasonEpisodeCount(season), 20, null),
+												UIUtils.makeStandardLabel(Labels.getTvSerieSeasonEpisodeCount(season), 20, null, null),
 												UIUtils.makeRatingPane(new WebLabel(season.getAverageRating()), new WebLabel())));
 
 		WebPanel leftPane = UIUtils.makeFlowLayoutPane(FlowLayout.LEFT, 5, 5,
@@ -317,8 +328,8 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		result.add(leftPane, BorderLayout.WEST);
 
 		// Serie title
-		this.tvSerieTitle = UIUtils.makeTitleLabel(TvSerieUtils.getTitle(tvSeriePathEntity), 30, new Insets(2, 10, 5, 10));
-		result.add(makeTvSerieTitlePane(tvSeriePathEntity, this.tvSerieTitle), BorderLayout.CENTER);
+		this.tvSerieTitle = UIUtils.makeTitleLabel(TvSerieUtils.getTitle(season.getTvSerie().getTvSeriePathEntity()), 30, new Insets(2, 10, 5, 10));
+		result.add(makeTvSerieTitlePane(season.getTvSerie(), this.tvSerieTitle), BorderLayout.CENTER);
 
 		// Buttons
 		this.confirm = UIUtils.makeButton(ImageRetriever.retrieveTvSerieSeasonDialogConfirm(), this);
@@ -408,7 +419,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 
 		@Override
 		public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
-			WebLabel result = UIUtils.makeStandardLabel(value, 14, new Insets(5, 5, 5, 5));
+			WebLabel result = UIUtils.makeStandardLabel(value, 14, new Insets(5, 5, 5, 5), null);
 
 			if (isSelected || cellHasFocus) {
 				result.setBackground(Colors.BACKGROUND_INFO);

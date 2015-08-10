@@ -1,9 +1,11 @@
 package it.ninjatech.kvo.model;
 
+import it.ninjatech.kvo.util.Labels;
+
 public enum Type {
 
-	Movie("Movie", "Movies"),
-	TvSerie("TV Serie", "TV Series");
+	Movie(Labels.MOVIE, Labels.MOVIES),
+	TvSerie(Labels.TV_SERIE, Labels.TV_SERIES);
 	
 	private final String singular;
 	private final String plural;

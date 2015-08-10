@@ -60,7 +60,7 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 			if (tileStatus == null) {
 				// Tile not visible
 				this.tiles.put(jobId, new TileStatus(tile));
-				TvSerieTileImagesAsyncJob job = new TvSerieTileImagesAsyncJob(tvSeriePathEntity, Dimensions.getExplorerTileSize(), Dimensions.getExplorerTilePosterSize());
+				TvSerieTileImagesAsyncJob job = new TvSerieTileImagesAsyncJob(tvSeriePathEntity.getTvSerie(), Dimensions.getExplorerTileSize(), Dimensions.getExplorerTilePosterSize());
 				AsyncManager.getInstance().submit(jobId, job, this);
 			}
 			else {

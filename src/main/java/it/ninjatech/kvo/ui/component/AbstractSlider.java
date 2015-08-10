@@ -36,10 +36,8 @@ public abstract class AbstractSlider extends WebPanel implements ActionListener 
 		borderPainter.setRound(10);
 		borderPainter.setWidth(1);
 		borderPainter.setColor(WebDecoratedImageStyle.borderColor);
-		WebLabel titleL = UIUtils.makeStandardLabel(title, null, new Insets(2, 2, 2, 2), borderPainter);
-		titleL.setHorizontalAlignment(SwingConstants.CENTER);
 
-		result = UIUtils.makeFlowLayoutPane(FlowLayout.CENTER, 0, 0, titleL);
+		result = UIUtils.makeFlowLayoutPane(FlowLayout.CENTER, 0, 0, UIUtils.makeStandardLabel(title, null, new Insets(2, 2, 2, 2), SwingConstants.CENTER, borderPainter));
 		
 		return result;
 	}

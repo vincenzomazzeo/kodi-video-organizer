@@ -176,7 +176,7 @@ public class EnhancedLocaleLanguageComboBox extends WebPanel implements ListSele
 		borderPainter.setMargin(2, 5, 2, 2);
 		setPainter(borderPainter);
 
-		this.value = UIUtils.makeStandardLabel("", null, null);
+		this.value = UIUtils.makeStandardLabel("", null, null, null);
 		add(this.value, BorderLayout.CENTER);
 
 		this.expand = UIUtils.makeButton(ImageRetriever.retrieveComboboxArrow(), null);

@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.configuration;
 
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.Utils;
 
 import java.io.File;
@@ -34,8 +35,7 @@ public class SettingsHandler {
 
 		if (!this.settingsFile.exists()) {
 			if (!this.settingsFile.createNewFile()) {
-				// TODO gestire?
-				throw new Exception("Failed to create settings file");
+				throw new Exception(Labels.FAILED_TO_CREATE_SETTINGS_FILE);
 			}
 			this.settings = new Settings();
 			this.settings.setLastMoviesRootParent(FileUtils.getUserHome());

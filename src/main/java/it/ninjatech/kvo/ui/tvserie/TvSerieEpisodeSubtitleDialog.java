@@ -4,12 +4,13 @@ import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.Labels;
-import it.ninjatech.kvo.ui.TvSerieUtils;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBox;
+import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.MemoryUtils;
+import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -50,7 +51,7 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 	private boolean confirmed;
 
 	private TvSerieEpisodeSubtitleDialog() {
-		super(UI.get(), "Episode Subtitle", true);
+		super(UI.get(), Labels.EPISODE_SUBTITLE, true);
 
 		setIconImage(ImageRetriever.retrieveExplorerTreeTvSerie().getImage());
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -70,7 +71,7 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 	}
 
 	public void release() {
-		System.out.println("*** TvSerieEpisodeSubtitleDialog -> release ***");
+		Logger.log("*** TvSerieEpisodeSubtitleDialog -> release ***\n");
 		MemoryUtils.printMemory("Before TvSerieEpisodeSubtitleDialog release");
 		setContentPane(new WebPanel());
 		MemoryUtils.printMemory("After TvSerieEpisodeSubtitleDialog release");
@@ -109,10 +110,10 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 		WebLabel episodeL = UIUtils.makeTitleLabel(TvSerieUtils.getEpisodeName(episode), 16, null);
 		episodeL.setHorizontalAlignment(SwingConstants.CENTER);
 
-		WebLabel filenameLabel = UIUtils.makeStandardLabel(Labels.FILENAME, null, null);
-		WebLabel filenameL = UIUtils.makeStandardLabel(filename, 14, null);
+		WebLabel filenameLabel = UIUtils.makeStandardLabel(Labels.FILENAME, null, null, null);
+		WebLabel filenameL = UIUtils.makeStandardLabel(filename, 14, null, null);
 
-		WebLabel languageL = UIUtils.makeStandardLabel(Labels.LANGUAGE, null, null);
+		WebLabel languageL = UIUtils.makeStandardLabel(Labels.LANGUAGE, null, null, null);
 
 		this.language = new EnhancedLocaleLanguageComboBox();
 		this.language.setPreferredWidth(300);
@@ -127,23 +128,5 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 
 		return result;
 	}
-
-//	private WebPanel makeButtonPane() {
-//		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.RIGHT));
-//
-//		result.setOpaque(false);
-//
-//		this.confirm = WebButton.createIconWebButton(ImageRetriever.retrieveDialogOk(), StyleConstants.smallRound, true);
-//		this.confirm.addActionListener(this);
-//		result.add(this.confirm);
-//		
-//		result.add(UIUtils.makeHorizontalFillerPane(5, false));
-//		
-//		this.cancel = WebButton.createIconWebButton(ImageRetriever.retrieveDialogCancel(), StyleConstants.smallRound, true);
-//		this.cancel.addActionListener(this);
-//		result.add(this.cancel);
-//
-//		return result;
-//	}
 
 }

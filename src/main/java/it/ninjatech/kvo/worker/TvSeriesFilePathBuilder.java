@@ -2,6 +2,7 @@ package it.ninjatech.kvo.worker;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.util.Labels;
 
 import java.io.File;
 
@@ -22,7 +23,7 @@ public class TvSeriesFilePathBuilder extends AbstractPathBuilder {
 		TvSeriesPathEntity result = new TvSeriesPathEntity(this.root);
 
 		File[] directories = this.root.listFiles(new DirectoriesFilter());
-		notifyInit("Start scanning...", directories.length);
+		notifyInit(Labels.START_SCANNING, directories.length);
 		for (int i = 0; i < directories.length; i++) {
 			File directory = directories[i];
 			notifyUpdate(directory.getName(), null);

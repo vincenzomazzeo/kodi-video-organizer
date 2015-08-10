@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.component;
 
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.MemoryUtils;
 
 import javax.swing.ImageIcon;
@@ -48,7 +49,7 @@ public class ImageGallery extends WebDialog {
 	}
 	
 	public void release() {
-		System.out.println("*** ImageGallery -> release ***");
+		Logger.log("*** ImageGallery -> release ***\n");
 		MemoryUtils.printMemory("Before ImageGallery release");
 		setContentPane(new WebPanel());
 		MemoryUtils.printMemory("After ImageGallery release");

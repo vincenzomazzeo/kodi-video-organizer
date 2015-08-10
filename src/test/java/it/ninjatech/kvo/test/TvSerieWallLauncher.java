@@ -13,6 +13,7 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.util.PeopleManager;
+import it.ninjatech.kvo.worker.TvSerieFileScanner;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -45,18 +46,22 @@ public class TvSerieWallLauncher extends WebDialog implements WindowListener, Hi
 		MyApiFilmsManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getMyApiFilmsEnabled());
 		
 //		TvSerie tvSerie = new TvSerie("121361", "Il Trono di Spade", EnhancedLocaleMap.getByLanguage("it"));
-		TvSerie tvSerie = new TvSerie("72158", "One Tree Hill", EnhancedLocaleMap.getByLanguage("it"));
+//		TvSerie tvSerie = new TvSerie("72158", "One Tree Hill", EnhancedLocaleMap.getByLanguage("it"));
+		TvSerie tvSerie = new TvSerie("257655", "Arrow", EnhancedLocaleMap.getByLanguage("it"));
 		TheTvDbManager.getInstance().getData(tvSerie);
 		FanarttvManager.getInstance().getData(tvSerie);
-		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("/Users/Shared/Well/Multimedia/Video/TV Series")) ;
-		tvSeriesPathEntity.addTvSerie(new File("/Users/Shared/Well/Multimedia/Video/TV Series/One Tree Hill"));
+//		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("/Users/Shared/Well/Multimedia/Video/TV Series")) ;
+//		tvSeriesPathEntity.addTvSerie(new File("/Users/Shared/Well/Multimedia/Video/TV Series/One Tree Hill"));
 //		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("D:/GitHubRepository/Test")) ;
 //		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Ciccio"));
+		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("/Users/hawkeleon/Downloads/Workbench")) ;
+		tvSeriesPathEntity.addTvSerie(new File("/Users/hawkeleon/Downloads/Workbench/Arrow"));
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 		tvSeriePathEntity.setTvSerie(tvSerie);
+		(new TvSerieFileScanner(tvSerie)).work();
 		MemoryUtils.printMemory("After start");
 		
-		TvSerieWallLauncher tvSerieWall = new TvSerieWallLauncher(tvSeriePathEntity);
+		TvSerieWallLauncher tvSerieWall = new TvSerieWallLauncher(tvSerie);
 		MemoryUtils.printMemory("Opening");
 		tvSerieWall.setVisible(true);
 		MemoryUtils.printMemory("Closing");
@@ -64,27 +69,27 @@ public class TvSerieWallLauncher extends WebDialog implements WindowListener, Hi
 		System.exit(0);
 	}
 	
-	private final TvSeriePathEntity tvSeriePathEntity;
+	private final TvSerie tvSerie;
 	private TvSerieController controller;
 	
-	private TvSerieWallLauncher(TvSeriePathEntity tvSeriePathEntity) {
+	private TvSerieWallLauncher(TvSerie tvSerie) {
 		super();
 		
 		setModal(true);
 		
-		this.tvSeriePathEntity = tvSeriePathEntity;
+		this.tvSerie = tvSerie;
 		
 		addHierarchyListener(this);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addWindowListener(this);
 		
-		init(tvSeriePathEntity);
+		init(tvSerie);
 		setSize(new Dimension(1380, 900));
 		setLocationRelativeTo(null);
 	}
 	
-	private void init(TvSeriePathEntity tvSeriePathEntity) {
+	private void init(TvSerie tvSerie) {
 		setLayout(new BorderLayout());
 		
 		this.controller = new TvSerieController();
@@ -99,7 +104,7 @@ public class TvSerieWallLauncher extends WebDialog implements WindowListener, Hi
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		System.exit(0);
+		this.controller.destroy();
 	}
 
 	@Override
@@ -125,7 +130,7 @@ public class TvSerieWallLauncher extends WebDialog implements WindowListener, Hi
 	@Override
 	public void hierarchyChanged(HierarchyEvent event) {
 		if ((event.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) == HierarchyEvent.SHOWING_CHANGED && isShowing()) {
-			this.controller.showTvSerie(this.tvSeriePathEntity);
+			this.controller.showTvSerie(this.tvSerie);
 		}
 	}
 	

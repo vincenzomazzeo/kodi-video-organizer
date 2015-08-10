@@ -8,9 +8,9 @@ import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.ui.ImageRetriever;
-import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.worker.AbstractWorker;
 
 import java.util.Collections;
@@ -30,7 +30,7 @@ public class ScrapersSettingsController {
 		this.view = new ScrapersSettingsView(this);
 
 		Settings settings = SettingsHandler.getInstance().getSettings();
-		
+
 		this.view.setTheTvDbEnabled(settings.getTheTvDbEnabled());
 		TheTvDbManager theTvDbManager = TheTvDbManager.getInstance();
 		if (StringUtils.isNotBlank(settings.getTheTvDbApiKey())) {
@@ -38,14 +38,14 @@ public class ScrapersSettingsController {
 			this.view.setTheTvDbLanguages(theTvDbManager.getLanguages());
 			this.view.selectTheTvDbLanguage(EnhancedLocaleMap.getByLanguage(settings.getTheTvDbPreferredLanguage()));
 		}
-		
+
 		this.view.setFanarttvEnabled(settings.getFanarttvEnabled());
 		if (StringUtils.isNotBlank(settings.getFanarttvApiKey())) {
 			this.view.setFanarttvApiKey(settings.getFanarttvApiKey());
 		}
-		
+
 		this.view.setImdbEnabled(settings.getImdbEnabled());
-		
+
 		this.view.setMyApiFilmsEnabled(settings.getMyApiFilmsEnabled());
 	}
 
@@ -55,17 +55,16 @@ public class ScrapersSettingsController {
 
 	protected void notifyConfirm() {
 		ConfirmWorker confirmWorker = new ConfirmWorker(this.view.isTheTvDbEnabled(), this.view.getTheTvDbApiKey(), this.view.getTheTvDbLanguage(),
-		                                                this.view.isFanarttvEnabled(), this.view.getFanarttvApiKey(),
-		                                                this.view.isImdbEnabled(),
-		                                                this.view.isMyApiFilmsEnabled());
-
-		new IndeterminateProgressDialogWorker<>(confirmWorker, "Storing Scrapers Settings").start();
+														this.view.isFanarttvEnabled(), this.view.getFanarttvApiKey(),
+														this.view.isImdbEnabled(),
+														this.view.isMyApiFilmsEnabled());
+		IndeterminateProgressDialogWorker.show(confirmWorker, Labels.STORING_SCRAPERS_SETTINGS);
 
 		this.view.setVisible(false);
 	}
 
 	protected void notifyTheTvDbSecret() {
-		String apikey = (String)WebOptionPane.showInputDialog(this.view, "Insert TheTVDB API Key", "TheTVDB", JOptionPane.QUESTION_MESSAGE, ImageRetriever.retrieveApikey(), null, null);
+		String apikey = (String)WebOptionPane.showInputDialog(this.view, Labels.getInsertScraperApiKey("TheTVDB"), "TheTVDB", JOptionPane.QUESTION_MESSAGE, ImageRetriever.retrieveApikey(), null, null);
 		if (apikey != null) {
 			if (StringUtils.isEmpty(apikey)) {
 				this.view.clearTheTvDbApiKey();
@@ -73,28 +72,20 @@ public class ScrapersSettingsController {
 			else {
 				TheTvDbManagerWorker theTvDbManagerWorker = new TheTvDbManagerWorker(apikey);
 
-				IndeterminateProgressDialogWorker<List<EnhancedLocale>> worker = new IndeterminateProgressDialogWorker<>(theTvDbManagerWorker, "Contacting TheTVDB");
-
-				worker.start();
-				try {
-					List<EnhancedLocale> languages = worker.get();
-					if (languages != null) {
-						this.view.setTheTvDbApiKey(apikey);
-						this.view.setTheTvDbLanguages(languages);
-					}
-					else {
-						WebOptionPane.showMessageDialog(this.view, "Wrong API Key", "TheTVDB", WebOptionPane.INFORMATION_MESSAGE, ImageRetriever.retrieveApikey());
-					}
+				List<EnhancedLocale> languages = IndeterminateProgressDialogWorker.show(theTvDbManagerWorker, Labels.getContactingScraper("TheTVDB"));
+				if (languages != null) {
+					this.view.setTheTvDbApiKey(apikey);
+					this.view.setTheTvDbLanguages(languages);
 				}
-				catch (Exception e) {
-					UI.get().notifyException(e);
+				else {
+					WebOptionPane.showMessageDialog(this.view, Labels.WRONG_API_KEY, "TheTVDB", WebOptionPane.INFORMATION_MESSAGE, ImageRetriever.retrieveApikey());
 				}
 			}
 		}
 	}
-	
+
 	protected void notifyFanarttvSecret() {
-		String apikey = (String)WebOptionPane.showInputDialog(this.view, "Insert Fanart.tv API Key", "Fanart.tv", JOptionPane.QUESTION_MESSAGE, ImageRetriever.retrieveApikey(), null, null);
+		String apikey = (String)WebOptionPane.showInputDialog(this.view, Labels.getInsertScraperApiKey("Fanart.tv"), "Fanart.tv", JOptionPane.QUESTION_MESSAGE, ImageRetriever.retrieveApikey(), null, null);
 		if (apikey != null) {
 			if (StringUtils.isEmpty(apikey)) {
 				this.view.clearTheTvDbApiKey();
@@ -102,25 +93,17 @@ public class ScrapersSettingsController {
 			else {
 				FanarttvManagerWorker fanarttvManagerWorker = new FanarttvManagerWorker(apikey);
 
-				IndeterminateProgressDialogWorker<Boolean> worker = new IndeterminateProgressDialogWorker<>(fanarttvManagerWorker, "Contacting Fanart.tv");
-
-				worker.start();
-				try {
-					Boolean checked = worker.get();
-					if (checked) {
-						this.view.setFanarttvApiKey(apikey);
-					}
-					else {
-						WebOptionPane.showMessageDialog(this.view, "Wrong API Key", "Fanart.tv", WebOptionPane.INFORMATION_MESSAGE, ImageRetriever.retrieveApikey());
-					}
+				Boolean checked = IndeterminateProgressDialogWorker.show(fanarttvManagerWorker, Labels.getContactingScraper("Fanart.tv"));
+				if (checked) {
+					this.view.setFanarttvApiKey(apikey);
 				}
-				catch (Exception e) {
-					UI.get().notifyException(e);
+				else {
+					WebOptionPane.showMessageDialog(this.view, Labels.WRONG_API_KEY, "Fanart.tv", WebOptionPane.INFORMATION_MESSAGE, ImageRetriever.retrieveApikey());
 				}
 			}
 		}
 	}
-	
+
 	private static final class TheTvDbManagerWorker extends AbstractWorker<List<EnhancedLocale>> {
 
 		private final String apikey;
@@ -141,7 +124,7 @@ public class ScrapersSettingsController {
 		}
 
 	}
-	
+
 	private static final class FanarttvManagerWorker extends AbstractWorker<Boolean> {
 
 		private final String apikey;
@@ -168,9 +151,9 @@ public class ScrapersSettingsController {
 		private final boolean myApiFilmsEnabled;
 
 		protected ConfirmWorker(boolean theTvDbEnabled, String theTvDbApiKey, EnhancedLocale theTvDbPreferredLanguage,
-		                        boolean fanarttvEnabled, String fanarttvApiKey,
-		                        boolean imdbEnabled, 
-		                        boolean myApiFilmsEnabled) {
+								boolean fanarttvEnabled, String fanarttvApiKey,
+								boolean imdbEnabled,
+								boolean myApiFilmsEnabled) {
 			this.theTvDbEnabled = theTvDbEnabled;
 			this.theTvDbApiKey = theTvDbApiKey;
 			this.theTvDbPreferredLanguage = theTvDbPreferredLanguage;
@@ -183,7 +166,7 @@ public class ScrapersSettingsController {
 		@Override
 		public Void work() throws Exception {
 			Settings settings = SettingsHandler.getInstance().getSettings();
-			
+
 			settings.setTheTvDbEnabled(this.theTvDbEnabled);
 			if (StringUtils.isNotBlank(this.theTvDbApiKey)) {
 				settings.setTheTvDbApiKey(this.theTvDbApiKey);
@@ -194,10 +177,10 @@ public class ScrapersSettingsController {
 			else {
 				settings.setTheTvDbApiKey(null);
 				settings.setTheTvDbPreferredLanguage(null);
-				
+
 				TheTvDbManager.getInstance().deactivate();
 			}
-			
+
 			settings.setFanarttvEnabled(this.fanarttvEnabled);
 			if (StringUtils.isNotBlank(this.fanarttvApiKey)) {
 				settings.setFanarttvApiKey(this.fanarttvApiKey);
@@ -206,16 +189,16 @@ public class ScrapersSettingsController {
 			}
 			else {
 				settings.setFanarttvApiKey(null);
-				
+
 				FanarttvManager.getInstance().deactivate();
 			}
-			
+
 			settings.setImdbEnabled(this.imdbEnabled);
 			ImdbManager.getInstance().setEnabled(this.imdbEnabled);
 
 			settings.setMyApiFilmsEnabled(this.myApiFilmsEnabled);
 			MyApiFilmsManager.getInstance().setEnabled(this.myApiFilmsEnabled);
-			
+
 			SettingsHandler.getInstance().store();
 
 			return null;

@@ -21,20 +21,26 @@ public final class ImageRetriever {
 		ContentRating_TVPG("TV-PG.png"),
 		ContentRating_TVY("TV-Y.png"),
 		ContentRating_TVY7("TV-Y7.png"),
+		ErrorMark("error_mark.png"),
 		ExceptionConsole("exception_console.png"),
+		ExclamationMark("exclamation_mark.png"),
 		ExtraFanarts("extra_fanarts.png"),
-		Fanarttv_Logo("fanarttv_logo.png"),
+		FanarttvLogo("fanarttv_logo.png"),
 		Folder("folder.png"),
-		Folder_Movies("folder_movies.png"),
-		Folder_TvSeries("folder_tvseries.png"),
-		IMDb_Logo("imdb_logo.png"),
+		FolderMovies("folder_movies.png"),
+		FolderTvSeries("folder_tvseries.png"),
+		GreenButton("green_button.png"),
+		IMDbLogo("imdb_logo.png"),
 		Loading("loading.gif"),
 		Ok("ok.png"),
-		Scrapers_Settings("scrapers_settings.png"),
+		OrangeButton("orange_button.png"),
+		QuestionMark("question_mark.png"),
+		RedButton("red_button.png"),
+		ScrapersSettings("scrapers_settings.png"),
 		Star("star.png"),
 		TvSerie("tvserie.png"),
-		TvSerie_Tile_Poster("tvserie_tile_poster.png"),
-		TheTVDB_Logo("thetvdb_logo.png");
+		TvSerieTilePoster("tvserie_tile_poster.png"),
+		TheTVDBLogo("thetvdb_logo.png");
 
 		private final String value;
 
@@ -56,7 +62,10 @@ public final class ImageRetriever {
 	private static final int FANARTTV_LOGO_SIZE = 285;
 	private static final int IMDB_LOGO_SIZE = 119;
 	private static final int MENU_BAR_BUTTON_SIZE = 40;
+	private static final int MESSAGE_DIALOG_ICON_SIZE = 32;
+	private static final int POPUP_CANCEL_SIZE = 16;
 	private static final int THE_TV_DB_LOGO_SIZE = 300;
+	private static final int TV_SERIE_SEASON_BUTTON_SIZE = 24;
 	private static final int WALL_ARROR_SIZE = 32;
 	private static final int WALL_BALOON_SIZE = 30;
 	private static final int WALL_CONTENT_RATING_SIZE = 20;
@@ -77,6 +86,9 @@ public final class ImageRetriever {
 	private static ImageIcon explorerTreeFolderTvSeriesTab;
 	private static ImageIcon explorerTreeTvSerie;
 	private static ImageIcon loading;
+	private static ImageIcon tvSerieSeasonGreenButton;
+	private static ImageIcon tvSerieSeasonOrangeButton;
+	private static ImageIcon tvSerieSeasonRedButton;
 	private static ImageIcon wallArrowLeft;
 	private static ImageIcon wallArrowRight;
 	private static ImageIcon wallBaloon;
@@ -124,7 +136,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveExplorerTilePosterTvSerie() {
 		if (explorerTilePosterTvSerie == null) {
-			explorerTilePosterTvSerie = retrieveAndScaleImage(ImageName.TvSerie_Tile_Poster, Dimensions.getExplorerTilePosterSize());
+			explorerTilePosterTvSerie = retrieveAndScaleImage(ImageName.TvSerieTilePoster, Dimensions.getExplorerTilePosterSize());
 		}
 
 		return explorerTilePosterTvSerie;
@@ -140,7 +152,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveExplorerTreeFolderMovies() {
 		if (explorerTreeFolderMovies == null) {
-			explorerTreeFolderMovies = retrieveAndScaleImage(ImageName.Folder_Movies, EXPLORER_TREE_ICON_SIZE);
+			explorerTreeFolderMovies = retrieveAndScaleImage(ImageName.FolderMovies, EXPLORER_TREE_ICON_SIZE);
 		}
 
 		return explorerTreeFolderMovies;
@@ -148,7 +160,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveExplorerTreeFolderTvSeries() {
 		if (explorerTreeFolderTvSeries == null) {
-			explorerTreeFolderTvSeries = retrieveAndScaleImage(ImageName.Folder_TvSeries, EXPLORER_TREE_ICON_SIZE);
+			explorerTreeFolderTvSeries = retrieveAndScaleImage(ImageName.FolderTvSeries, EXPLORER_TREE_ICON_SIZE);
 		}
 
 		return explorerTreeFolderTvSeries;
@@ -156,7 +168,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveExplorerTreeFolderMoviesMenu() {
 		if (explorerTreeFolderMoviesMenu == null) {
-			explorerTreeFolderMoviesMenu = retrieveAndScaleImage(ImageName.Folder_Movies, EXPLORER_TREE_MENU_ICON_SIZE);
+			explorerTreeFolderMoviesMenu = retrieveAndScaleImage(ImageName.FolderMovies, EXPLORER_TREE_MENU_ICON_SIZE);
 		}
 
 		return explorerTreeFolderMoviesMenu;
@@ -164,7 +176,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveExplorerTreeFolderTvSeriesMenu() {
 		if (explorerTreeFolderTvSeriesMenu == null) {
-			explorerTreeFolderTvSeriesMenu = retrieveAndScaleImage(ImageName.Folder_TvSeries, EXPLORER_TREE_MENU_ICON_SIZE);
+			explorerTreeFolderTvSeriesMenu = retrieveAndScaleImage(ImageName.FolderTvSeries, EXPLORER_TREE_MENU_ICON_SIZE);
 		}
 
 		return explorerTreeFolderTvSeriesMenu;
@@ -180,7 +192,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveExplorerTreeFolderMoviesTab() {
 		if (explorerTreeFolderMoviesTab == null) {
-			explorerTreeFolderMoviesTab = retrieveAndScaleImage(ImageName.Folder_Movies, EXPLORER_TREE_TAB_ICON_SIZE);
+			explorerTreeFolderMoviesTab = retrieveAndScaleImage(ImageName.FolderMovies, EXPLORER_TREE_TAB_ICON_SIZE);
 		}
 
 		return explorerTreeFolderMoviesTab;
@@ -188,7 +200,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveExplorerTreeFolderTvSeriesTab() {
 		if (explorerTreeFolderTvSeriesTab == null) {
-			explorerTreeFolderTvSeriesTab = retrieveAndScaleImage(ImageName.Folder_TvSeries, EXPLORER_TREE_TAB_ICON_SIZE);
+			explorerTreeFolderTvSeriesTab = retrieveAndScaleImage(ImageName.FolderTvSeries, EXPLORER_TREE_TAB_ICON_SIZE);
 		}
 
 		return explorerTreeFolderTvSeriesTab;
@@ -203,20 +215,20 @@ public final class ImageRetriever {
 	}
 
 	public static ImageIcon retrieveFanartChoiceFanarttvLogo() {
-		return retrieveAndScaleImageByWidth(ImageName.Fanarttv_Logo, FANART_CHOICE_LOGO_SIZE);
+		return retrieveAndScaleImageByWidth(ImageName.FanarttvLogo, FANART_CHOICE_LOGO_SIZE);
 
 	}
 
 	public static ImageIcon retrieveFanartChoiceTheTvDbLogo() {
-		return retrieveAndScaleImageByWidth(ImageName.TheTVDB_Logo, FANART_CHOICE_LOGO_SIZE);
+		return retrieveAndScaleImageByWidth(ImageName.TheTVDBLogo, FANART_CHOICE_LOGO_SIZE);
 	}
 
 	public static ImageIcon retrieveFanarttvLogo() {
-		return retrieveAndScaleImageByWidth(ImageName.Fanarttv_Logo, FANARTTV_LOGO_SIZE);
+		return retrieveAndScaleImageByWidth(ImageName.FanarttvLogo, FANARTTV_LOGO_SIZE);
 	}
 
 	public static ImageIcon retrieveImdbLogo() {
-		return retrieveAndScaleImageByWidth(ImageName.IMDb_Logo, IMDB_LOGO_SIZE);
+		return retrieveAndScaleImageByWidth(ImageName.IMDbLogo, IMDB_LOGO_SIZE);
 	}
 
 	// TODO remove if not used
@@ -227,9 +239,57 @@ public final class ImageRetriever {
 
 		return loading;
 	}
+	
+	public static ImageIcon retrieveMessageDialogCancel() {
+		return retrieveAndScaleImage(ImageName.Cancel, MESSAGE_DIALOG_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveMessageDialogErrorMark() {
+		return retrieveAndScaleImage(ImageName.ErrorMark, MESSAGE_DIALOG_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveMessageDialogExclamationMark() {
+		return retrieveAndScaleImage(ImageName.ExclamationMark, MESSAGE_DIALOG_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveMessageDialogOk() {
+		return retrieveAndScaleImage(ImageName.Ok, MESSAGE_DIALOG_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveMessageDialogQuestionMark() {
+		return retrieveAndScaleImage(ImageName.QuestionMark, MESSAGE_DIALOG_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveTvSerieSeasonGreenButton() {
+		if (tvSerieSeasonGreenButton == null) {
+			tvSerieSeasonGreenButton = retrieveAndScaleImage(ImageName.GreenButton, TV_SERIE_SEASON_BUTTON_SIZE);
+		}
+
+		return tvSerieSeasonGreenButton;
+	}
+	
+	public static ImageIcon retrieveTvSerieSeasonOrangeButton() {
+		if (tvSerieSeasonOrangeButton == null) {
+			tvSerieSeasonOrangeButton = retrieveAndScaleImage(ImageName.OrangeButton, TV_SERIE_SEASON_BUTTON_SIZE);
+		}
+		
+		return tvSerieSeasonOrangeButton;
+	}
+	
+	public static ImageIcon retrieveTvSerieSeasonRedButton() {
+		if (tvSerieSeasonRedButton == null) {
+			tvSerieSeasonRedButton = retrieveAndScaleImage(ImageName.RedButton, TV_SERIE_SEASON_BUTTON_SIZE);
+		}
+		
+		return tvSerieSeasonRedButton;
+	}
+	
+	public static ImageIcon retrievePopupCancel() {
+		return retrieveAndScaleImage(ImageName.Cancel, POPUP_CANCEL_SIZE);
+	}
 
 	public static ImageIcon retrieveTheTvDbLogo() {
-		return retrieveAndScaleImageByWidth(ImageName.TheTVDB_Logo, THE_TV_DB_LOGO_SIZE);
+		return retrieveAndScaleImageByWidth(ImageName.TheTVDBLogo, THE_TV_DB_LOGO_SIZE);
 	}
 
 	public static ImageIcon retrieveToolBarExceptionConsole() {
@@ -237,7 +297,7 @@ public final class ImageRetriever {
 	}
 
 	public static ImageIcon retrieveToolBarScrapersSettings() {
-		return retrieveAndScaleImage(ImageName.Scrapers_Settings, MENU_BAR_BUTTON_SIZE);
+		return retrieveAndScaleImage(ImageName.ScrapersSettings, MENU_BAR_BUTTON_SIZE);
 	}
 
 	public static ImageIcon retrieveTvSerieSeasonDialogCancel() {
@@ -330,7 +390,7 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveWallIMDb() {
 		if (wallIMDb == null) {
-			wallIMDb = retrieveAndScaleImageByHeight(ImageName.IMDb_Logo, WALL_IMDB_SIZE);
+			wallIMDb = retrieveAndScaleImageByHeight(ImageName.IMDbLogo, WALL_IMDB_SIZE);
 		}
 
 		return wallIMDb;

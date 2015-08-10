@@ -5,6 +5,7 @@ import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.PathOpenExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSerieFetchExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.Desktop;
 
@@ -22,7 +23,7 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
 	protected void build() {
 		if (Desktop.isDesktopSupported()) {
 			// Open in System Explorer
-			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, "Open in System Explorer", null, this.node.getValue().getPath())));
+			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
 		}
 		
 		if (TheTvDbManager.getInstance().isActive()) {
@@ -31,7 +32,7 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
     		}
     		else {
     			// Fetch
-   				add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, node, "Fetch", null)));
+   				add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, node, Labels.FETCH, null)));
     		}
 		}
 		

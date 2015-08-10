@@ -4,6 +4,7 @@ import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsView;
 import it.ninjatech.kvo.ui.explorer.tvserie.ExplorerTvSerieView;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.Insets;
 
@@ -29,11 +30,11 @@ public class ExplorerView extends WebPanel {
 	}
 	
 	protected void addRootsViewTab(ExplorerRootsView view) {
-		this.container.addTab("Roots", ImageRetriever.retrieveExplorerTreeFolderTab(), view);
+		this.container.addTab(Labels.ROOTS, ImageRetriever.retrieveExplorerTreeFolderTab(), view);
 	}
 
 	protected void addTvSerieTab(ExplorerTvSerieView view) {
-		String title = "TV Series";
+		String title = Labels.TV_SERIES;
 		
 		if (this.container.getTabCount() == 1) {
 			this.container.addTab(title, ImageRetriever.retrieveExplorerTreeFolderTvSeriesTab(), view);

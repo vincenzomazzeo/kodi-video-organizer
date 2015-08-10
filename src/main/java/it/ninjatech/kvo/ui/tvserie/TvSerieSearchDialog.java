@@ -5,6 +5,7 @@ import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBoxCellRenderer;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -32,7 +33,7 @@ public class TvSerieSearchDialog extends WebDialog implements ActionListener {
 	private WebButton startSearch;
 
 	protected TvSerieSearchDialog(TvSerieSearchController controller) {
-		super(UI.get(), "Search for TV Serie", true);
+		super(UI.get(), Labels.SEARCH_FOR_TV_SERIE, true);
 
 		this.controller = controller;
 		this.container = new WebPanel(new BorderLayout());
@@ -78,12 +79,12 @@ public class TvSerieSearchDialog extends WebDialog implements ActionListener {
 	private WebPanel makeBodyPane() {
 		WebPanel result = null;
 
-		WebLabel searchL = new WebLabel("Search");
+		WebLabel searchL = new WebLabel(Labels.SEARCH);
 		searchL.setDrawShade(true);
 
 		this.search = new WebTextField(40);
 
-		WebLabel languageL = new WebLabel("Language");
+		WebLabel languageL = new WebLabel(Labels.LANGUAGE);
 		languageL.setDrawShade(true);
 
 		this.language = new WebComboBox();

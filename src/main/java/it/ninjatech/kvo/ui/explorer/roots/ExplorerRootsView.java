@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.Insets;
 import java.awt.Point;
@@ -27,8 +28,6 @@ import com.alee.managers.tooltip.TooltipManager;
 public class ExplorerRootsView extends WebScrollPane implements MouseListener, TreeExpansionListener {
 
 	private static final long serialVersionUID = -4394641156105182581L;
-
-	private static final String TOOLTIP = "<html><div align='center'>Here you can add your video root folders<br />Just <i>CTRL + click</i> to add a new root!</div></html>";
 
 	private static WebTree<DefaultMutableTreeNode> makeTree(ExplorerRootsModel model) {
 		WebTree<DefaultMutableTreeNode> result = new WebTree<>(model);
@@ -106,7 +105,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 	}
 
 	protected void setTooltip() {
-		TooltipManager.setTooltip(this.getViewport().getView(), TOOLTIP, TooltipWay.up, 0);
+		TooltipManager.setTooltip(this.getViewport().getView(), Labels.TOOLTIP_EXPLORER_ROOTS, TooltipWay.up, 0);
 	}
 	
 	protected void removeTooltip() {

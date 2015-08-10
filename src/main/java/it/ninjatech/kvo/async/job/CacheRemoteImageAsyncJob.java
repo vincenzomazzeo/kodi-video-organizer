@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.async.job;
 
 import it.ninjatech.kvo.model.ImageProvider;
+import it.ninjatech.kvo.util.Logger;
 
 import java.awt.Dimension;
 import java.awt.Image;
@@ -25,7 +26,7 @@ public class CacheRemoteImageAsyncJob extends AbstractImageLoaderAsyncJob {
 	@Override
 	protected void execute() {
 		try {
-			System.out.printf("-> executing cache-remote image %s\n", this.id);
+			Logger.log("-> executing cache-remote image %s\n", this.id);
 			
 			this.image = getImage(null, null, this.id, this.path, this.size);
 		}
