@@ -22,7 +22,7 @@ import com.sun.jersey.api.client.WebResource;
 public class TheTvDbManager {
 
 	public static final String BASE_URL = "http://thetvdb.com";
-	
+
 	private static TheTvDbManager self;
 
 	public static TheTvDbManager getInstance() {
@@ -45,7 +45,7 @@ public class TheTvDbManager {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
 	public boolean isActive() {
 		return this.enabled && this.active;
 	}
@@ -78,17 +78,23 @@ public class TheTvDbManager {
 		return result;
 	}
 
+	@SuppressWarnings("null")
 	public boolean setApiKey(String apiKey) {
 		boolean result = false;
 
-		ClientResponse response = this.webResource.
-				path("/api").
-				path(String.format("/%s", apiKey)).
-				path("/languages.xml").
-				type(MediaType.TEXT_XML).
-				get(ClientResponse.class);
+		ClientResponse response = null;
+		try {
+			response = this.webResource.
+					path("/api").
+					path(String.format("/%s", apiKey)).
+					path("/languages.xml").
+					type(MediaType.TEXT_XML).
+					get(ClientResponse.class);
 
-		result = response.getStatus() == Status.OK.getStatusCode();
+			result = response.getStatus() == Status.OK.getStatusCode();
+		}
+		catch (Exception e) {
+		}
 
 		if (result) {
 			this.active = true;
@@ -131,7 +137,7 @@ public class TheTvDbManager {
 				get(TheTvDbTvSerie.class);
 
 		theTvDbTvSerie.fill(tvSerie);
-		
+
 		TheTvDbActors theTvDbActors = this.webResource.
 				path("/api").
 				path(String.format("/%s", this.apiKey)).
@@ -140,9 +146,9 @@ public class TheTvDbManager {
 				path("/actors.xml").
 				type(MediaType.TEXT_XML).
 				get(TheTvDbActors.class);
-		
+
 		theTvDbActors.fill(tvSerie);
-		
+
 		TheTvDbBanners theTvDbBanners = this.webResource.
 				path("/api").
 				path(String.format("/%s", this.apiKey)).
@@ -151,7 +157,7 @@ public class TheTvDbManager {
 				path("/banners.xml").
 				type(MediaType.TEXT_XML).
 				get(TheTvDbBanners.class);
-		
+
 		theTvDbBanners.fill(tvSerie);
 	}
 

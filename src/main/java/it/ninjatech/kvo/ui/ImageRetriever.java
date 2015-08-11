@@ -24,6 +24,7 @@ public final class ImageRetriever {
 		ErrorMark("error_mark.png"),
 		ExceptionConsole("exception_console.png"),
 		ExclamationMark("exclamation_mark.png"),
+		Exit("exit.png"),
 		ExtraFanarts("extra_fanarts.png"),
 		FanarttvLogo("fanarttv_logo.png"),
 		Folder("folder.png"),
@@ -296,6 +297,10 @@ public final class ImageRetriever {
 		return retrieveAndScaleImage(ImageName.ExceptionConsole, MENU_BAR_BUTTON_SIZE);
 	}
 
+	public static ImageIcon retrieveToolBarExit() {
+		return retrieveAndScaleImage(ImageName.Exit, MENU_BAR_BUTTON_SIZE);
+	}
+	
 	public static ImageIcon retrieveToolBarScrapersSettings() {
 		return retrieveAndScaleImage(ImageName.ScrapersSettings, MENU_BAR_BUTTON_SIZE);
 	}

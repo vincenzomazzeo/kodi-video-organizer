@@ -7,7 +7,7 @@ import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Labels;
@@ -16,18 +16,14 @@ import it.ninjatech.kvo.worker.AbstractWorker;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.apache.commons.lang3.StringUtils;
-
-import com.alee.laf.optionpane.WebOptionPane;
 
 public class ScrapersSettingsController {
 
 	private final ScrapersSettingsView view;
 
 	public ScrapersSettingsController() {
-		this.view = new ScrapersSettingsView(this);
+		this.view = ScrapersSettingsView.getInstance(this);
 
 		Settings settings = SettingsHandler.getInstance().getSettings();
 
@@ -64,7 +60,9 @@ public class ScrapersSettingsController {
 	}
 
 	protected void notifyTheTvDbSecret() {
-		String apikey = (String)WebOptionPane.showInputDialog(this.view, Labels.getInsertScraperApiKey("TheTVDB"), "TheTVDB", JOptionPane.QUESTION_MESSAGE, ImageRetriever.retrieveApikey(), null, null);
+		ScrapersSettingsApiKeyDialog dialog = ScrapersSettingsApiKeyDialog.getInstance("TheTVDB", Labels.getInsertScraperApiKey("TheTVDB"));
+		dialog.setVisible(true);
+		String apikey = dialog.getValue();
 		if (apikey != null) {
 			if (StringUtils.isEmpty(apikey)) {
 				this.view.clearTheTvDbApiKey();
@@ -78,14 +76,17 @@ public class ScrapersSettingsController {
 					this.view.setTheTvDbLanguages(languages);
 				}
 				else {
-					WebOptionPane.showMessageDialog(this.view, Labels.WRONG_API_KEY, "TheTVDB", WebOptionPane.INFORMATION_MESSAGE, ImageRetriever.retrieveApikey());
+					MessageDialog messageDialog = MessageDialog.getInstance("TheTVDB", Labels.WRONG_API_KEY, MessageDialog.Type.Message);
+					messageDialog.setVisible(true);
 				}
 			}
 		}
 	}
 
 	protected void notifyFanarttvSecret() {
-		String apikey = (String)WebOptionPane.showInputDialog(this.view, Labels.getInsertScraperApiKey("Fanart.tv"), "Fanart.tv", JOptionPane.QUESTION_MESSAGE, ImageRetriever.retrieveApikey(), null, null);
+		ScrapersSettingsApiKeyDialog dialog = ScrapersSettingsApiKeyDialog.getInstance("Fanart.tv", Labels.getInsertScraperApiKey("Fanart.tv"));
+		dialog.setVisible(true);
+		String apikey = dialog.getValue();
 		if (apikey != null) {
 			if (StringUtils.isEmpty(apikey)) {
 				this.view.clearTheTvDbApiKey();
@@ -98,7 +99,8 @@ public class ScrapersSettingsController {
 					this.view.setFanarttvApiKey(apikey);
 				}
 				else {
-					WebOptionPane.showMessageDialog(this.view, Labels.WRONG_API_KEY, "Fanart.tv", WebOptionPane.INFORMATION_MESSAGE, ImageRetriever.retrieveApikey());
+					MessageDialog messageDialog = MessageDialog.getInstance("Fanart.tv", Labels.WRONG_API_KEY, MessageDialog.Type.Message);
+					messageDialog.setVisible(true);
 				}
 			}
 		}

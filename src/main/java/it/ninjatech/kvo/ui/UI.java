@@ -13,6 +13,10 @@ import java.awt.event.WindowListener;
 
 import javax.swing.WindowConstants;
 
+import com.alee.extended.layout.ToolbarLayout;
+import com.alee.extended.statusbar.WebMemoryBar;
+import com.alee.extended.statusbar.WebStatusBar;
+import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebFrame;
 
 public class UI extends WebFrame implements WindowListener {
@@ -40,7 +44,7 @@ public class UI extends WebFrame implements WindowListener {
 
 		this.exceptionController = new ExceptionConsoleController();
 		this.explorerControler = new ExplorerController();
-		
+
 		init();
 	}
 
@@ -77,11 +81,11 @@ public class UI extends WebFrame implements WindowListener {
 		int toRead = this.exceptionController.notifyException(exception);
 		this.toolBar.notifyExceptionsToRead(toRead);
 	}
-	
+
 	public void refreshExceptionsToRead() {
 		this.toolBar.notifyExceptionsToRead(this.exceptionController.getToRead());
 	}
-	
+
 	public ToolBar getToolBar() {
 		return this.toolBar;
 	}
@@ -96,10 +100,22 @@ public class UI extends WebFrame implements WindowListener {
 		setLocationRelativeTo(null);
 		addWindowListener(this);
 
-		this.toolBar = new ToolBar(this.exceptionController.getView());
-		add(this.toolBar, BorderLayout.NORTH);
+		WebPanel contentPane = UIUtils.makeStandardPane(new BorderLayout());
+		setContentPane(contentPane);
+		contentPane.setOpaque(true);
+		contentPane.setBackground(Colors.BACKGROUND_INFO);
 
-		add(this.explorerControler.getView(), BorderLayout.LINE_START);
+		this.toolBar = new ToolBar(this.exceptionController.getView());
+		contentPane.add(this.toolBar, BorderLayout.NORTH);
+
+		contentPane.add(this.explorerControler.getView(), BorderLayout.LINE_START);
+
+		WebStatusBar statusBar = new WebStatusBar();
+		contentPane.add(statusBar, BorderLayout.SOUTH);
+
+		WebMemoryBar memoryBar = new WebMemoryBar();
+		memoryBar.setPreferredWidth(memoryBar.getPreferredSize().width + 20);
+		statusBar.add(memoryBar, ToolbarLayout.END);
 	}
 
 }

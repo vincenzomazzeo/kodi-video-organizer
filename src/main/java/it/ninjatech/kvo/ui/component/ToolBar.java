@@ -1,6 +1,8 @@
 package it.ninjatech.kvo.ui.component;
 
+import it.ninjatech.kvo.KodiVideoOrganizer;
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleView;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsController;
 import it.ninjatech.kvo.util.Labels;
@@ -13,7 +15,6 @@ import java.awt.event.ActionListener;
 import javax.swing.SwingConstants;
 
 import com.alee.extended.panel.WebOverlay;
-import com.alee.global.StyleConstants;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.toolbar.ToolbarStyle;
@@ -27,8 +28,9 @@ public class ToolBar extends WebToolBar implements ActionListener {
 	private static final long serialVersionUID = -2693914047879971469L;
 
 	private final ExceptionConsoleView exceptionConsoleView;
-	private WebButton scrapersSettings;
+	private WebButton exit;
 	private WebButton showExceptionConsole;
+	private WebButton scrapersSettings;
 	private WebLabel exceptionsToReadLabel;
 
 	public ToolBar(ExceptionConsoleView exceptionConsoleView) {
@@ -43,12 +45,15 @@ public class ToolBar extends WebToolBar implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 
-		if (source == this.scrapersSettings) {
-			ScrapersSettingsController controller = new ScrapersSettingsController();
-			controller.getView().setVisible(true);
+		if (source == this.exit) {
+			KodiVideoOrganizer.exit();
 		}
 		else if (source == this.showExceptionConsole) {
 			this.exceptionConsoleView.setVisible(true);
+		}
+		else if (source == this.scrapersSettings) {
+			ScrapersSettingsController controller = new ScrapersSettingsController();
+			controller.getView().setVisible(true);
 		}
 	}
 
@@ -64,15 +69,21 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		setToolbarStyle(ToolbarStyle.attached);
 		setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		setFloatable(false);
+		setOpaque(false);
 
+		this.exit = UIUtils.makeButton(ImageRetriever.retrieveToolBarExit(), this);
+		add(this.exit);
+		
+		addSeparator();
+		addSpacing(20);
+		
 		WebOverlay showExceptionsConsoleOverlayPanel = new WebOverlay();
 		add(showExceptionsConsoleOverlayPanel);
 		showExceptionsConsoleOverlayPanel.setOpaque(false);
 
-		this.showExceptionConsole = WebButton.createIconWebButton(ImageRetriever.retrieveToolBarExceptionConsole(), StyleConstants.smallRound, true);
+		this.showExceptionConsole = UIUtils.makeButton(ImageRetriever.retrieveToolBarExceptionConsole(), this);
 		showExceptionsConsoleOverlayPanel.setComponent(this.showExceptionConsole);
 		TooltipManager.setTooltip(this.showExceptionConsole, Labels.EXCEPTION_CONSOLE);
-		this.showExceptionConsole.addActionListener(this);
 
 		this.exceptionsToReadLabel = new WebLabel();
 		this.exceptionsToReadLabel.setBoldFont().setForeground(Color.RED);
@@ -81,13 +92,13 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		showExceptionsConsoleOverlayPanel.addOverlay(this.exceptionsToReadLabel, SwingConstants.TRAILING, SwingConstants.TOP);
 		showExceptionsConsoleOverlayPanel.setComponentMargin(0, 0, 0, this.exceptionsToReadLabel.getPreferredSize().width);
 
+		addSpacing(20);
 		addSeparator();
-		addSpacing(40);
+		addSpacing(20);
 
-		this.scrapersSettings = WebButton.createIconWebButton(ImageRetriever.retrieveToolBarScrapersSettings(), StyleConstants.smallRound, true);
+		this.scrapersSettings = UIUtils.makeButton(ImageRetriever.retrieveToolBarScrapersSettings(), this);
 		add(this.scrapersSettings);
 		TooltipManager.setTooltip(this.scrapersSettings, Labels.SCRAPERS_SETTINGS);
-		this.scrapersSettings.addActionListener(this);
 	}
 
 }

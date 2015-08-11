@@ -13,7 +13,7 @@ public class ExceptionConsoleController {
 	private boolean expandingFirstInAction;
 
 	public ExceptionConsoleController() {
-		this.view = new ExceptionConsoleView(this);
+		this.view = ExceptionConsoleView.getInstance(this);
 		this.toRead = new HashSet<>();
 		this.expandingFirstInAction = false;
 	}

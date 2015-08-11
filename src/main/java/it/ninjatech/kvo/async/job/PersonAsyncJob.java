@@ -23,17 +23,17 @@ public class PersonAsyncJob extends AsyncJob {
 	private final Dimension imageSize;
 	private String imdbId;
 	private Image image;
-	
+
 	public PersonAsyncJob(String id, String name, Dimension imageSize) {
 		this.id = id;
 		this.name = name;
 		this.imageSize = imageSize;
 	}
-	
+
 	@Override
 	protected void execute() {
 		Person person = PeopleManager.getInstance().getPerson(this.name);
-		
+
 		// Check/Load IMDB ID
 		if (!person.isImdbIdNotFound() && StringUtils.isBlank(person.getImdbId())) {
 			if (ImdbManager.getInstance().isEnabled()) {
@@ -43,17 +43,19 @@ public class PersonAsyncJob extends AsyncJob {
 				person.setImdbId(this.imdbId);
 			}
 		}
-		
+
 		// Check image
 		if (StringUtils.isNotBlank(person.getImdbId()) && person.getImageProvider() == ImageProvider.MyApiFilms && person.isImageDownloadable() && StringUtils.isBlank(person.getImagePath())) {
 			if (MyApiFilmsManager.getInstance().isEnabled()) {
 				Logger.log("-> searching for image of person %s\n", this.name);
 				MyApiFilmsPerson myApiFilmsPerson = MyApiFilmsManager.getInstance().searchForPerson(person.getImdbId());
-				person.setImageDownloadable(myApiFilmsPerson != null && StringUtils.isNotBlank(myApiFilmsPerson.getUrlPhoto()));
-				person.setImagePath(myApiFilmsPerson.getUrlPhoto());
+				if (myApiFilmsPerson != null && StringUtils.isNotBlank(myApiFilmsPerson.getUrlPhoto())) {
+					person.setImageDownloadable(true);
+					person.setImagePath(myApiFilmsPerson.getUrlPhoto());
+				}
 			}
 		}
-		
+
 		if (person.isImageDownloadable()) {
 			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(person.getId(), person.getImageProvider(), person.getImagePath(), this.imageSize);
 			job.execute();
