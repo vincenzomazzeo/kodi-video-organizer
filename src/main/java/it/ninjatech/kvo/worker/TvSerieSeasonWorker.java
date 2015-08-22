@@ -1,6 +1,5 @@
 package it.ninjatech.kvo.worker;
 
-import it.ninjatech.kvo.db.TvSeriePersistenceHandler;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieSeason;
@@ -75,7 +74,8 @@ public class TvSerieSeasonWorker extends AbstractWorker<Void> {
 		notifyUpdate(null, ++update);
 
 		notifyUpdate(Labels.STORING_TV_SERIE_SEASON, null);
-		TvSeriePersistenceHandler.store(this.season);
+		// TODO
+//		PersistenceHandler.save(this.season);
 		notifyUpdate(null, ++update);
 
 		return null;

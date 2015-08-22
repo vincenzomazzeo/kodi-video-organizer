@@ -73,6 +73,7 @@ public class ToolBar extends WebToolBar implements ActionListener {
 
 		this.exit = UIUtils.makeButton(ImageRetriever.retrieveToolBarExit(), this);
 		add(this.exit);
+		TooltipManager.setTooltip(this.exit, Labels.EXIT);
 		
 		addSeparator();
 		addSpacing(20);

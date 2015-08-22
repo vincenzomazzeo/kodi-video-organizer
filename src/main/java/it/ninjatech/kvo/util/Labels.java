@@ -10,10 +10,12 @@ public final class Labels {
 	public static final String API_KEY = "API Key";
 	public static final String CLICK_FOR_DETAIL = "Click for detail";
 	public static final String CLICK_TO_OPEN_IN_SYSTEM_EXPLORER = "Open in System Explorer";
+	public static final String CONFIRM = "Confirm";
 	public static final String DIRECTORS = "Directors";
 	public static final String ENABLED = "Enabled";
 	public static final String EPISODE_SUBTITLE = "Episode Subtitle";
 	public static final String EXCEPTION_CONSOLE = "Exception Console";
+	public static final String EXIT = "Exit";
 	public static final String EXTRA_FANARTS = "Extra Fanarts";
 	public static final String FAILED_TO_CREATE_SETTINGS_FILE = "Failed to create settings file";
 	public static final String FANARTS = "Fanarts";
@@ -28,6 +30,7 @@ public final class Labels {
 	public static final String MOVIE = "Movie";
 	public static final String MOVIES = "Movies";
 	public static final String NEITHER_IMAGE_NOR_IMDB = "Neither image nor IMDB link available for this person";
+	public static final String NO_TV_SERIE_FOUND_ASK_FOR_SEARCH = "No TV Serie found. Do you want to search again changing name or languange?";
 	public static final String OPEN_IN_SYSYEM_EXPLORER = "Open in System Explorer";
 	public static final String OVERVIEW = "Overview";
 	public static final String PREFERRED_LANGUAGE = "Preferred Language";
@@ -42,6 +45,7 @@ public final class Labels {
 	public static final String SEASONS = "Seasons";
 	public static final String START_SCANNING = "Start scanning...";
 	public static final String STORING_SCRAPERS_SETTINGS = "Storing Scrapers Settings";
+	public static final String STORING_SETTINGS = "Storing Settings";
 	public static final String STORING_TV_SERIE_SEASON = "Storing Tv Serie Season data";
 	public static final String SUBTITLE = "Subtitle";
 	public static final String SUBTITLE_FILES = "Subtitle Files";
@@ -69,6 +73,14 @@ public final class Labels {
 	public static final String TOOLTIP_IMAGE_CHANGE = "<html><div align='center'>Left click to change</div></html>";
 	public static final String TOOLTIP_IMAGE_FULL = "<html><div align='center'>Right click for full size image</div></html>";
 	public static final String TOOLTIP_IMAGE_SELECT_FULL = "<html><div align='center'>Left click to select<br />Right click for full size image</div></html>";
+	
+	public static String dbSavingEntity(String entity) {
+		return String.format("Saving %s", entity);
+	}
+	
+	public static String dbSavedEntity(String entity) {
+		return String.format("%s saved", entity);
+	}
 	
 	public static String getFailedToRename(String from, String to) {
 		return String.format("Failed to rename '%s' to '%s'", from, to);

@@ -4,7 +4,7 @@ CREATE TABLE tv_serie_image (
 	provider			VARCHAR(10)		NOT NULL,
 	fanart				VARCHAR(10)		NOT NULL,
 	path				VARCHAR			NOT NULL,
-	rating				DECIMAL(3,1)			,
+	rating				VARCHAR(4)				,
 	rating_count		VARCHAR					,
 	language			VARCHAR(2)		NOT NULL,
 	PRIMARY KEY (id),

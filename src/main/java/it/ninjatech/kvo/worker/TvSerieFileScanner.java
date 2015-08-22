@@ -23,33 +23,34 @@ public class TvSerieFileScanner extends AbstractWorker<Void> {
 	                                                                                                   "mxf", "roq", "nsv"}));
 	
 	private final TvSerie tvSerie;
+	private final File[] files;
 
 	public TvSerieFileScanner(TvSerie tvSerie) {
 		this.tvSerie = tvSerie;
+		
+		File root = new File(this.tvSerie.getTvSeriePathEntity().getPath());
+		this.files = root.listFiles(new TvSerieFileFilter());
 	}
 
 	@Override
 	public Void work() throws Exception {
-		File root = new File(this.tvSerie.getTvSeriePathEntity().getPath());
-		File[] files = root.listFiles(new TvSerieFileFilter());
+		notifyInit("", this.files.length);
 
-		notifyInit("", files.length);
-
-		for (int i = 0; i < files.length; i++) {
-			String fileName = files[i].getName();
+		for (int i = 0; i < this.files.length; i++) {
+			String fileName = this.files[i].getName();
 			if (fileName.equalsIgnoreCase(TvSerieUtils.EXTRAFANART)) {
 				notifyUpdate(Labels.SCANNING_EXTRAFANARTS, null);
-				this.tvSerie.getTvSeriePathEntity().setExtraFanarts(new TreeSet<>(Arrays.asList(files[i].list(new ExtrafanartFilenameFilter()))));
+				this.tvSerie.getTvSeriePathEntity().setExtraFanarts(new TreeSet<>(Arrays.asList(this.files[i].list(new ExtrafanartFilenameFilter()))));
 			}
 			else if (StringUtils.startsWithIgnoreCase(fileName, TvSerieUtils.SEASON)) {
 				notifyUpdate(Labels.getScanning(fileName), null);
 				fileName = StringUtils.normalizeSpace(fileName);
 				Integer number = Integer.valueOf(fileName.substring(fileName.lastIndexOf(' ') + 1));
-				String[] videoFiles = files[i].list(new SeasonVideoFilenameFilter());
+				String[] videoFiles = this.files[i].list(new SeasonVideoFilenameFilter());
 				if (videoFiles.length > 0) {
 					this.tvSerie.getTvSeriePathEntity().setVideoFiles(number, new TreeSet<>(Arrays.asList(videoFiles)));
 				}
-				String[] subtitleFiles = files[i].list(new SeasonSubtitleFilenameFilter());
+				String[] subtitleFiles = this.files[i].list(new SeasonSubtitleFilenameFilter());
 				if (subtitleFiles.length > 0) {
 					this.tvSerie.getTvSeriePathEntity().setSubtitleFiles(number, new TreeSet<>(Arrays.asList(subtitleFiles)));
 				}
@@ -58,6 +59,10 @@ public class TvSerieFileScanner extends AbstractWorker<Void> {
 		}
 
 		return null;
+	}
+	
+	public int getFileCount() {
+		return this.files.length;
 	}
 
 	private static class TvSerieFileFilter implements FileFilter {

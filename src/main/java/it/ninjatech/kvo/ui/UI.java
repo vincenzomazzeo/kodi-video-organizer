@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui;
 
 import it.ninjatech.kvo.KodiVideoOrganizer;
+import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.component.ToolBar;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleController;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
@@ -10,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
 
 import javax.swing.WindowConstants;
 
@@ -25,8 +27,8 @@ public class UI extends WebFrame implements WindowListener {
 
 	private static UI self;
 
-	public static UI build() {
-		self = self == null ? new UI() : self;
+	public static UI build(List<TvSeriesPathEntity> tvSeriesPathEntities) {
+		self = self == null ? new UI(tvSeriesPathEntities) : self;
 
 		return self;
 	}
@@ -39,11 +41,11 @@ public class UI extends WebFrame implements WindowListener {
 	private final ExplorerController explorerControler;
 	private ToolBar toolBar;
 
-	private UI() {
+	private UI(List<TvSeriesPathEntity> tvSeriesPathEntities) {
 		super(Labels.APPLICATION_TITLE);
 
 		this.exceptionController = new ExceptionConsoleController();
-		this.explorerControler = new ExplorerController();
+		this.explorerControler = new ExplorerController(tvSeriesPathEntities);
 
 		init();
 	}

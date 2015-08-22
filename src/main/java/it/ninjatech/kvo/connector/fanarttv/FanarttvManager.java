@@ -49,20 +49,15 @@ public class FanarttvManager {
 	public boolean checkApiKey(String apiKey) {
 		boolean result = false;
 
-		ClientResponse response = null;
-		try {
-			response = this.webResource.
-					path("/v3").
-					path("/tv").
-					path("/72158").
-					queryParam("api_key", apiKey).
-					type(MediaType.APPLICATION_JSON).
-					get(ClientResponse.class);
+		ClientResponse response = this.webResource.
+				path("/v3").
+				path("/tv").
+				path("/72158").
+				queryParam("api_key", apiKey).
+				type(MediaType.APPLICATION_JSON).
+				get(ClientResponse.class);
 
-			result = response.getStatus() == Status.OK.getStatusCode();
-		}
-		catch (Exception e) {
-		}
+		result = response.getStatus() == Status.OK.getStatusCode();
 
 		if (result) {
 			this.active = true;

@@ -8,6 +8,8 @@ import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
+import it.ninjatech.kvo.db.mapper.TvSeriesPathEntityDbMapper;
+import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.PeopleManager;
@@ -60,15 +62,16 @@ public class Loader extends WebFrame {
 
 	private void notifyLoaded() {
 		try {
-			this.loaderSwingWorker.get();
+			Result result = this.loaderSwingWorker.get();
 			setVisible(false);
 			dispose();
 			
-			UI.build().setVisible(true);
+			UI.build(result.tvSeriesPathEntities).setVisible(true);
 			
 			SwingUtilities.invokeLater(new PostStartNotificator());
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			WebOptionPane.showMessageDialog(null, e.getMessage(), "Error", WebOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
@@ -98,10 +101,12 @@ public class Loader extends WebFrame {
 		this.progressBar.setStringPainted(true);
 	}
 
-	private static class LoaderWorker extends AbstractWorker<Void> {
+	private static class LoaderWorker extends AbstractWorker<Result> {
 
 		@Override
-		public Void work() throws Exception {
+		public Result work() throws Exception {
+			Result result = null;
+			
 			notifyUpdate("Checking working directory", 0);
 
 			if (!Utils.getWorkingDirectory().exists()) {
@@ -132,34 +137,40 @@ public class Loader extends WebFrame {
 			notifyUpdate("Initializing People Manager", 18);
 			PeopleManager.init();
 			
-			notifyUpdate("Connecting to DB", 20);
-			ConnectionHandler.init();
-
-			notifyUpdate("Loading enhanced locale map", 50);
+			notifyUpdate("Loading enhanced locale map", 20);
 			EnhancedLocaleMap.init();
 
 			if (StringUtils.isNotBlank(settings.getTheTvDbApiKey()) && settings.getTheTvDbEnabled()) {
-				notifyUpdate("Contacting TheTVDB", 70);
+				notifyUpdate("Contacting TheTVDB", 40);
 				TheTvDbManager.getInstance().setApiKey(settings.getTheTvDbApiKey());
 			}
 			
 			if (StringUtils.isNotBlank(settings.getFanarttvApiKey()) && settings.getFanarttvEnabled()) {
-				notifyUpdate("Contacting Fanart.tv", 85);
+				notifyUpdate("Contacting Fanart.tv", 55);
 				FanarttvManager.getInstance().setApiKey(settings.getFanarttvApiKey());
 			}
 			
+			TheTvDbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getTheTvDbEnabled());
+			FanarttvManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getFanarttvEnabled());
 			ImdbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getImdbEnabled());
-			
 			MyApiFilmsManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getMyApiFilmsEnabled());
+			
+			notifyUpdate("Connecting to DB", 70);
+			ConnectionHandler.init();
+			
+			notifyUpdate("Loading TV Series", 85);
+			List<TvSeriesPathEntity> tvSeriesPathEntities = (new TvSeriesPathEntityDbMapper()).find();
+			
+			result = new Result(tvSeriesPathEntities);
 			
 			notifyUpdate("Done", 100);
 
-			return null;
+			return result;
 		}
 
 	}
 
-	private static class LoaderSwingWorker extends SwingWorker<Void, Progress> implements WorkerProgressListener {
+	private static class LoaderSwingWorker extends SwingWorker<Result, Progress> implements WorkerProgressListener {
 
 		private final LoaderWorker loaderWorker;
 		private final Loader loader;
@@ -189,10 +200,8 @@ public class Loader extends WebFrame {
 		}
 
 		@Override
-		protected Void doInBackground() throws Exception {
-			this.loaderWorker.work();
-
-			return null;
+		protected Result doInBackground() throws Exception {
+			return this.loaderWorker.work();
 		}
 
 		@Override
@@ -213,6 +222,17 @@ public class Loader extends WebFrame {
 			}
 		}
 
+	}
+	
+	private static class Result {
+		
+		private final List<TvSeriesPathEntity> tvSeriesPathEntities;
+
+		private Result(List<TvSeriesPathEntity> tvSeriesPathEntities) {
+			super();
+			this.tvSeriesPathEntities = tvSeriesPathEntities;
+		}
+		
 	}
 
 }

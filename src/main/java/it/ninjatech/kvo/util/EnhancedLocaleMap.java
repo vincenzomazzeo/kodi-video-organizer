@@ -549,7 +549,16 @@ public final class EnhancedLocaleMap {
 	}
 
 	public static EnhancedLocale getByLanguage(String language) {
-		return byLanguage.get(language.toLowerCase());
+		EnhancedLocale result = null;
+		
+		if (!byLanguage.containsKey(language.toLowerCase())) {
+			result = emptyLocale;
+		}
+		else {
+			result = byLanguage.get(language.toLowerCase());
+		}
+		
+		return result;
 	}
 	
 	public static Set<EnhancedLocale> getLanguages() {

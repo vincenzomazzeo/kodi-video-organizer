@@ -18,7 +18,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
-
+// TODO gestire mancanza connessione
 public class TheTvDbManager {
 
 	public static final String BASE_URL = "http://thetvdb.com";
@@ -78,23 +78,17 @@ public class TheTvDbManager {
 		return result;
 	}
 
-	@SuppressWarnings("null")
 	public boolean setApiKey(String apiKey) {
 		boolean result = false;
 
-		ClientResponse response = null;
-		try {
-			response = this.webResource.
-					path("/api").
-					path(String.format("/%s", apiKey)).
-					path("/languages.xml").
-					type(MediaType.TEXT_XML).
-					get(ClientResponse.class);
+		ClientResponse response = this.webResource.
+				path("/api").
+				path(String.format("/%s", apiKey)).
+				path("/languages.xml").
+				type(MediaType.TEXT_XML).
+				get(ClientResponse.class);
 
-			result = response.getStatus() == Status.OK.getStatusCode();
-		}
-		catch (Exception e) {
-		}
+		result = response.getStatus() == Status.OK.getStatusCode();
 
 		if (result) {
 			this.active = true;

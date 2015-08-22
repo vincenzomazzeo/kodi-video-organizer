@@ -1,7 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
-import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootsExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.RootsExplorerRootsTreeNode;
 
@@ -39,7 +38,7 @@ public class ExplorerRootsModel extends DefaultTreeModel {
 
 		Enumeration<?> children = this.root.children();
 		while (children.hasMoreElements() && !result) {
-			AbstractRootExplorerRootsTreeNode<?> child = (AbstractRootExplorerRootsTreeNode<?>)children.nextElement();
+			AbstractRootsExplorerRootsTreeNode<?> child = (AbstractRootsExplorerRootsTreeNode<?>)children.nextElement();
 			result = child.getValue().getPath().equals(root.getPath());
 		}
 

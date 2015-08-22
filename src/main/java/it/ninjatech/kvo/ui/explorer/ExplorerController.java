@@ -1,9 +1,12 @@
 package it.ninjatech.kvo.ui.explorer;
 
 import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsModel;
 import it.ninjatech.kvo.ui.explorer.tvserie.ExplorerTvSerieController;
+
+import java.util.List;
 
 
 public class ExplorerController {
@@ -12,8 +15,8 @@ public class ExplorerController {
 	private final ExplorerTvSerieController tvSerieController;
 	private final ExplorerView view;
 	
-	public ExplorerController() {
-		this.rootsController = new ExplorerRootsController(new ExplorerRootsModel(), this);
+	public ExplorerController(List<TvSeriesPathEntity> tvSeriesPathEntities) {
+		this.rootsController = new ExplorerRootsController(new ExplorerRootsModel(), this, tvSeriesPathEntities);
 		this.tvSerieController = new ExplorerTvSerieController();
 		this.view = new ExplorerView(this);
 		

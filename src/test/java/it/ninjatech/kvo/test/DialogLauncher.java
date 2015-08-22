@@ -6,11 +6,11 @@ import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
-import it.ninjatech.kvo.ui.component.MessageDialog;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchDialog;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import com.alee.laf.WebLookAndFeel;
-import com.alee.laf.rootpane.WebDialog;
 
 public class DialogLauncher {
 
@@ -27,8 +27,8 @@ public class DialogLauncher {
 //		ScrapersSettingsController controller = new ScrapersSettingsController();
 //		ScrapersSettingsView view = controller.getView();
 		
-//		TvSerieSearchView view = new TvSerieSearchView();
-//		TvSerieSearchController controller = new TvSerieSearchController(view, null);
+		TvSerieSearchController controller = new TvSerieSearchController(null);
+		TvSerieSearchDialog view = controller.getView();
 		
 //		List<TvSerie> tvSeries = TheTvDbManager.getInstance().search("highlander", EnhancedLocaleMap.getEmptyLocale());
 //		TvSerieSearchMultiResultController controller = new TvSerieSearchMultiResultController(tvSeries, null);
@@ -38,9 +38,9 @@ public class DialogLauncher {
 //		ExceptionConsoleController controller = new ExceptionConsoleController(view);
 		
 //		ProgressDialog view = ProgressDialog.getInstance("Tv Serie");
-		MessageDialog view = MessageDialog.getInstance("Prova", "Ciccio", MessageDialog.Type.Question);
+//		MessageDialog view = MessageDialog.getInstance("Prova", "Ciccio", MessageDialog.Type.Question);
 		
-		view.setDefaultCloseOperation(WebDialog.DISPOSE_ON_CLOSE);
+//		view.setDefaultCloseOperation(WebDialog.DISPOSE_ON_CLOSE);
 		
 //		for (int i = 0; i < 50; i++) {
 //    		try {
@@ -53,7 +53,6 @@ public class DialogLauncher {
 //		}
 		
 		view.setVisible(true);
-		System.out.println(view.isConfirmed());
 		
 		System.exit(0);
 	}
