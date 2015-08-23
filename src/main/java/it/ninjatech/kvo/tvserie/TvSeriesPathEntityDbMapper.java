@@ -1,6 +1,6 @@
-package it.ninjatech.kvo.db.mapper;
+package it.ninjatech.kvo.tvserie;
 
-import it.ninjatech.kvo.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.db.mapper.AbstractDbMapper;
 
 import java.sql.ResultSet;
 import java.sql.Types;
@@ -9,6 +9,10 @@ import java.util.List;
 
 public class TvSeriesPathEntityDbMapper extends AbstractDbMapper<TvSeriesPathEntity> {
 
+	protected TvSeriesPathEntityDbMapper() {
+		super();
+	}
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public void save(TvSeriesPathEntity tvSeriesPathEntity) throws Exception {
@@ -28,9 +32,9 @@ public class TvSeriesPathEntityDbMapper extends AbstractDbMapper<TvSeriesPathEnt
 	protected TvSeriesPathEntity map(ResultSet resultSet) throws Exception {
 		TvSeriesPathEntity result = null;
 
-		result = new TvSeriesPathEntity(resultSet.getString(1),
-										resultSet.getString(2),
-										resultSet.getString(3));
+		result = new TvSeriesPathEntity(resultSet.getString("id"),
+										resultSet.getString("path"),
+										resultSet.getString("label"));
 
 		return result;
 	}

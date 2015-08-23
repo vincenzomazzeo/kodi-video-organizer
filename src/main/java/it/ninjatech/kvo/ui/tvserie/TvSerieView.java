@@ -5,13 +5,13 @@ import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSerieActor;
 import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.Logger;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -102,15 +102,15 @@ public class TvSerieView extends WebPanel implements TvSerieImageLoaderListener,
 
 	protected void fill(TvSerie tvSerie) {
 		// Title
-		String status = TvSerieUtils.getStatus(tvSerie);
-		String rating = TvSerieUtils.getRating(tvSerie);
-		String ratingCount = TvSerieUtils.getRatingCount(tvSerie);
+		String status = TvSerieHelper.getStatus(tvSerie);
+		String rating = TvSerieHelper.getRating(tvSerie);
+		String ratingCount = TvSerieHelper.getRatingCount(tvSerie);
 
 		this.titlePane.removeAll();
 
 		this.language.setIcon(tvSerie.getLanguage().getLanguageFlag());
 		this.titlePane.add(this.language);
-		this.title.setText(TvSerieUtils.getTitle(tvSerie.getTvSeriePathEntity()));
+		this.title.setText(TvSerieHelper.getTitle(tvSerie.getTvSeriePathEntity()));
 		this.titlePane.add(this.title);
 		if (StringUtils.isNotEmpty(status)) {
 			this.status.setText(String.format("(%s)", status));
@@ -125,14 +125,14 @@ public class TvSerieView extends WebPanel implements TvSerieImageLoaderListener,
 		}
 
 		// Genres
-		this.genres.setText(TvSerieUtils.getGenre(tvSerie));
+		this.genres.setText(TvSerieHelper.getGenre(tvSerie));
 
 		// Info
-		String firstAired = TvSerieUtils.getFirstAired(tvSerie);
-		String network = TvSerieUtils.getNetwork(tvSerie);
-		String contentRating = TvSerieUtils.getContentRating(tvSerie);
-		String imdbId = TvSerieUtils.getImdbId(tvSerie);
-		String overview = TvSerieUtils.getOverview(tvSerie);
+		String firstAired = TvSerieHelper.getFirstAired(tvSerie);
+		String network = TvSerieHelper.getNetwork(tvSerie);
+		String contentRating = TvSerieHelper.getContentRating(tvSerie);
+		String imdbId = TvSerieHelper.getImdbId(tvSerie);
+		String overview = TvSerieHelper.getOverview(tvSerie);
 
 		this.infoPane.removeAll();
 
@@ -159,7 +159,7 @@ public class TvSerieView extends WebPanel implements TvSerieImageLoaderListener,
 			plot.setCaretPosition(0);
 			this.infoPane.add(this.plot);
 		}
-		if (TvSerieUtils.hasExtraFanarts(tvSerie.getTvSeriePathEntity())) {
+		if (TvSerieHelper.hasExtraFanarts(tvSerie.getTvSeriePathEntity())) {
 			this.infoPane.add(this.extrafanarts);
 		}
 
@@ -167,10 +167,10 @@ public class TvSerieView extends WebPanel implements TvSerieImageLoaderListener,
 		this.fanarts.fill(Arrays.asList(TvSerieFanart.values()));
 
 		// Seasons
-		this.seasons.fill(TvSerieUtils.getSeasons(tvSerie));
+		this.seasons.fill(TvSerieHelper.getSeasons(tvSerie));
 
 		// Actors
-		Collection<TvSerieActor> actors = TvSerieUtils.getActors(tvSerie);
+		Collection<TvSerieActor> actors = TvSerieHelper.getActors(tvSerie);
 		this.actors.setVisible(!actors.isEmpty());
 		this.actors.fill(actors);
 	}

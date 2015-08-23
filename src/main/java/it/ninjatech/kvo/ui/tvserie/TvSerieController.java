@@ -10,6 +10,7 @@ import it.ninjatech.kvo.model.TvSerieActor;
 import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSerieImage;
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.UI;
@@ -23,7 +24,6 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceControlle
 import it.ninjatech.kvo.ui.worker.ExtraFanartsGalleryCreator;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.MemoryUtils;
-import it.ninjatech.kvo.util.TvSerieUtils;
 import it.ninjatech.kvo.worker.CachedFanartCopyWorker;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
@@ -76,11 +76,11 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 	public void notifyImageSliderLeftClick(String id, Object data) {
 		if (id.equals(FANARTS_SLIDER_ID)) {
 			TvSerieFanart fanart = (TvSerieFanart)data;
-			if (TvSerieUtils.hasFanarts(this.tvSerie, fanart)) {
+			if (TvSerieHelper.hasFanarts(this.tvSerie, fanart)) {
 				this.workingFanart = fanart;
-				Set<TvSerieImage> images = TvSerieUtils.getFanarts(this.tvSerie, fanart);
+				Set<TvSerieImage> images = TvSerieHelper.getFanarts(this.tvSerie, fanart);
 				Dimension imageSize = Dimensions.getTvSerieFanartChooserSize(fanart);
-				TvSerieImageChoiceDialog dialog = TvSerieImageChoiceDialog.getInstance(this, String.format("%s - %s", TvSerieUtils.getTitle(this.tvSerie.getTvSeriePathEntity()), fanart.getName()), images, imageSize);
+				TvSerieImageChoiceDialog dialog = TvSerieImageChoiceDialog.getInstance(this, String.format("%s - %s", TvSerieHelper.getTitle(this.tvSerie.getTvSeriePathEntity()), fanart.getName()), images, imageSize);
 				for (TvSerieImage image : images) {
 					CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
 					this.fanartChoiceJobHandler.handle(job, dialog);
@@ -94,7 +94,7 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 		}
 		else if (id.equals(SEASONS_SLIDER_ID)) {
 			TvSerieSeason season = (TvSerieSeason)data;
-			if (TvSerieUtils.existsLocalSeason(season)) {
+			if (TvSerieHelper.existsLocalSeason(season)) {
 				MemoryUtils.printMemory("Before Season - Controller");
 				TvSerieSeasonController controller = new TvSerieSeasonController(season);
 				controller.start();
@@ -132,8 +132,8 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 		}
 		else if (id.equals(SEASONS_SLIDER_ID)) {
 			TvSerieSeason season = (TvSerieSeason)data;
-			if (TvSerieUtils.existsLocalSeasonPoster(season)) {
-				ImageFullWorker worker = new ImageFullWorker(this.tvSerie.getTvSeriePathEntity().getPath(), TvSerieUtils.getSeasonPosterFilename(season));
+			if (TvSerieHelper.existsLocalSeasonPoster(season)) {
+				ImageFullWorker worker = new ImageFullWorker(this.tvSerie.getTvSeriePathEntity().getPath(), TvSerieHelper.getSeasonPosterFilename(season));
 				UIUtils.showFullImage(worker, Labels.getTvSerieSeason(season), Labels.getTvSerieSeason(season));
 			}
 		}
@@ -177,8 +177,8 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 	}
 
 	protected void notifyExtraFanartsClick() {
-		ExtraFanartsGalleryCreator creator = new ExtraFanartsGalleryCreator(TvSerieUtils.getExtrafanartPath(this.tvSerie.getTvSeriePathEntity()), TvSerieUtils.getTitle(this.tvSerie.getTvSeriePathEntity()), TvSerieUtils.getExtraFanarts(this.tvSerie.getTvSeriePathEntity()));
-		ImageGallery result = DeterminateProgressDialogWorker.show(creator, TvSerieUtils.getTitle(this.tvSerie.getTvSeriePathEntity()));
+		ExtraFanartsGalleryCreator creator = new ExtraFanartsGalleryCreator(TvSerieHelper.getExtrafanartPath(this.tvSerie.getTvSeriePathEntity()), TvSerieHelper.getTitle(this.tvSerie.getTvSeriePathEntity()), TvSerieHelper.getExtraFanarts(this.tvSerie.getTvSeriePathEntity()));
+		ImageGallery result = DeterminateProgressDialogWorker.show(creator, TvSerieHelper.getTitle(this.tvSerie.getTvSeriePathEntity()));
 		if (result != null) {
 			result.setVisible(true);
 			result.release();

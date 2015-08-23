@@ -1,13 +1,13 @@
 package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.component.AbstractImageSlider;
 import it.ninjatech.kvo.ui.component.SliderPane;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.Dimension;
 
@@ -42,8 +42,8 @@ public class TvSerieSeasonImageSlider extends AbstractImageSlider<TvSerieSeason>
 	protected String getTooltip(TvSerieSeason data) {
 		String result = null;
 
-		if (TvSerieUtils.existsLocalSeason(data)) {
-			if (TvSerieUtils.existsLocalSeasonPoster(data)) {
+		if (TvSerieHelper.existsLocalSeason(data)) {
+			if (TvSerieHelper.existsLocalSeasonPoster(data)) {
 				result = Labels.TOOLTIP_HANDLE_FULL;
 			}
 			else {
@@ -51,7 +51,7 @@ public class TvSerieSeasonImageSlider extends AbstractImageSlider<TvSerieSeason>
 			}
 		}
 		else {
-			if (TvSerieUtils.existsLocalSeasonPoster(data)) {
+			if (TvSerieHelper.existsLocalSeasonPoster(data)) {
 				result = Labels.TOOLTIP_CREATE_FULL;
 			}
 			else {
@@ -112,8 +112,8 @@ public class TvSerieSeasonImageSlider extends AbstractImageSlider<TvSerieSeason>
 		
 		private void makeButtonImage() {
 			TvSerieSeason season = (TvSerieSeason)getData();
-			if (TvSerieUtils.existsLocalSeason(season)) {
-				if (TvSerieUtils.isLocalSeasonComplete(season)) {
+			if (TvSerieHelper.existsLocalSeason(season)) {
+				if (TvSerieHelper.isLocalSeasonComplete(season)) {
 					this.buttonImage = new WebImage(ImageRetriever.retrieveTvSerieSeasonGreenButton());
 				}
 				else {

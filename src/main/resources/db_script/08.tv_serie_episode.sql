@@ -5,7 +5,7 @@ CREATE TABLE tv_serie_episode (
 	number				INT(4)			NOT NULL,
 	language			VARCHAR(2)		NOT NULL,
 	filename			VARCHAR					,
-	dvd_number			DECIMAL(3,2)			,
+	dvd_number			DECIMAL(4,2)			,
 	name				VARCHAR					,
 	first_aired			DATE					,
 	imdb_id				VARCHAR					,

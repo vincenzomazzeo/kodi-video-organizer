@@ -1,9 +1,9 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
-import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.component.ExplorerTile;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -38,10 +38,10 @@ public class ExplorerTvSerieTileView extends WebPanel {
 	protected void setImages(Image fanart, Image poster) {
 		if (fanart != null || poster != null) {
 			this.fullTile = new ExplorerTile(fanart, poster != null ? poster : ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
-											 TvSerieUtils.getTitle(this.value),
-											 TvSerieUtils.getYear(this.value.getTvSerie()),
-											 TvSerieUtils.getRate(this.value.getTvSerie()),
-											 TvSerieUtils.getGenre(this.value.getTvSerie()));
+											 TvSerieHelper.getTitle(this.value),
+											 TvSerieHelper.getYear(this.value.getTvSerie()),
+											 TvSerieHelper.getRate(this.value.getTvSerie()),
+											 TvSerieHelper.getGenre(this.value.getTvSerie()));
 			this.transition.performTransition(this.fullTile);
 		}
 	}
@@ -68,10 +68,10 @@ public class ExplorerTvSerieTileView extends WebPanel {
 		setLayout(new BorderLayout());
 
 		this.defaultTile = new ExplorerTile(null, ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
-											TvSerieUtils.getTitle(this.value),
-											TvSerieUtils.getYear(this.value.getTvSerie()),
-											TvSerieUtils.getRate(this.value.getTvSerie()),
-											TvSerieUtils.getGenre(this.value.getTvSerie()));
+											TvSerieHelper.getTitle(this.value),
+											TvSerieHelper.getYear(this.value.getTvSerie()),
+											TvSerieHelper.getRate(this.value.getTvSerie()),
+											TvSerieHelper.getGenre(this.value.getTvSerie()));
 
 		this.transition = new ComponentTransition(this.defaultTile, new FadeTransitionEffect());
 		add(this.transition, BorderLayout.CENTER);

@@ -8,6 +8,7 @@ import it.ninjatech.kvo.model.ImageProvider;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.model.TvSerieSeasonImage;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.UI;
@@ -16,7 +17,6 @@ import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.MemoryUtils;
-import it.ninjatech.kvo.util.TvSerieUtils;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
@@ -64,15 +64,15 @@ public class TvSerieSeasonController implements ImageChoiceController {
 
 	public TvSerieSeasonController(TvSerieSeason season) {
 		this.season = season;
-		this.videoFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getVideoFilesNotReferenced(this.season.getTvSerie().getTvSeriePathEntity(), this.season.getNumber()));
-		this.subtitleFileListModel = new TvSerieSeasonListModel(TvSerieUtils.getSubtitleFilesNotReferenced(this.season.getTvSerie().getTvSeriePathEntity(), this.season.getNumber()));
+		this.videoFileListModel = new TvSerieSeasonListModel(TvSerieHelper.getVideoFilesNotReferenced(this.season.getTvSerie().getTvSeriePathEntity(), this.season.getNumber()));
+		this.subtitleFileListModel = new TvSerieSeasonListModel(TvSerieHelper.getSubtitleFilesNotReferenced(this.season.getTvSerie().getTvSeriePathEntity(), this.season.getNumber()));
 		this.episodeController = new TvSerieEpisodeController();
-		this.view = TvSerieSeasonDialog.getInstance(this, this.season, this.videoFileListModel, this.subtitleFileListModel, Desktop.isDesktopSupported(), Desktop.isDesktopSupported() && TvSerieUtils.existsLocalSeason(season));
+		this.view = TvSerieSeasonDialog.getInstance(this, this.season, this.videoFileListModel, this.subtitleFileListModel, Desktop.isDesktopSupported(), Desktop.isDesktopSupported() && TvSerieHelper.existsLocalSeason(season));
 		this.videoEpisodeMap = new HashMap<>();
 		this.subtitleEpisodeMap = new HashMap<>();
 		this.mainJobHandler = new TvSerieImageLoaderAsyncJobHandler();
 		this.imageChoiceJobHandler = new TvSerieImageLoaderAsyncJobHandler();
-		this.currentSeasonImage = new File(this.season.getTvSerie().getTvSeriePathEntity().getPath(), TvSerieUtils.getSeasonPosterFilename(this.season));
+		this.currentSeasonImage = new File(this.season.getTvSerie().getTvSeriePathEntity().getPath(), TvSerieHelper.getSeasonPosterFilename(this.season));
 		this.confirmed = false;
 		
 		for (TvSerieEpisode episode : this.season.getEpisodes()) {
@@ -151,7 +151,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 
 	protected void notifyTvSerieSeasonTitleLeftClick() {
 		try {
-			File path = TvSerieUtils.getLocalSeasonPath(this.season);
+			File path = TvSerieHelper.getLocalSeasonPath(this.season);
 			Desktop.getDesktop().open(path);
 		}
 		catch (Exception e) {

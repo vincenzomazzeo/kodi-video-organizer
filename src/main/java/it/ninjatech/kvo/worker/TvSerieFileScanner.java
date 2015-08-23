@@ -1,8 +1,8 @@
 package it.ninjatech.kvo.worker;
 
 import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -38,11 +38,11 @@ public class TvSerieFileScanner extends AbstractWorker<Void> {
 
 		for (int i = 0; i < this.files.length; i++) {
 			String fileName = this.files[i].getName();
-			if (fileName.equalsIgnoreCase(TvSerieUtils.EXTRAFANART)) {
+			if (fileName.equalsIgnoreCase(TvSerieHelper.EXTRAFANART)) {
 				notifyUpdate(Labels.SCANNING_EXTRAFANARTS, null);
 				this.tvSerie.getTvSeriePathEntity().setExtraFanarts(new TreeSet<>(Arrays.asList(this.files[i].list(new ExtrafanartFilenameFilter()))));
 			}
-			else if (StringUtils.startsWithIgnoreCase(fileName, TvSerieUtils.SEASON)) {
+			else if (StringUtils.startsWithIgnoreCase(fileName, TvSerieHelper.SEASON)) {
 				notifyUpdate(Labels.getScanning(fileName), null);
 				fileName = StringUtils.normalizeSpace(fileName);
 				Integer number = Integer.valueOf(fileName.substring(fileName.lastIndexOf(' ') + 1));
@@ -72,7 +72,7 @@ public class TvSerieFileScanner extends AbstractWorker<Void> {
 			boolean result = false;
 
 			if (pathname.isDirectory()) {
-				result = pathname.getName().equalsIgnoreCase(TvSerieUtils.EXTRAFANART) || StringUtils.startsWithIgnoreCase(pathname.getName(), TvSerieUtils.SEASON);
+				result = pathname.getName().equalsIgnoreCase(TvSerieHelper.EXTRAFANART) || StringUtils.startsWithIgnoreCase(pathname.getName(), TvSerieHelper.SEASON);
 			}
 
 			return result;

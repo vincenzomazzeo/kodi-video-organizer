@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.ui.explorer;
 
-import it.ninjatech.kvo.model.TvSeriePathEntity;
-import it.ninjatech.kvo.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsModel;
 import it.ninjatech.kvo.ui.explorer.tvserie.ExplorerTvSerieController;

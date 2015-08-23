@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
-import it.ninjatech.kvo.model.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
 
 import java.util.Comparator;
 import java.util.List;

@@ -2,6 +2,7 @@ package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
@@ -12,7 +13,6 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieEpisodeController.FileData;
 import it.ninjatech.kvo.ui.tvserie.TvSerieEpisodeController.FileListModel;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.Logger;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -130,8 +130,8 @@ public class TvSerieEpisodeView extends WebPanel implements TvSerieImageLoaderLi
 
 	protected void fill(TvSerieEpisode tvSerieEpisode) {
 		// Title
-		String rating = TvSerieUtils.getEpisodeRating(tvSerieEpisode);
-		String ratingCount = TvSerieUtils.getEpisodeRatingCount(tvSerieEpisode);
+		String rating = TvSerieHelper.getEpisodeRating(tvSerieEpisode);
+		String ratingCount = TvSerieHelper.getEpisodeRatingCount(tvSerieEpisode);
 
 		this.titlePane.removeAll();
 
@@ -150,7 +150,7 @@ public class TvSerieEpisodeView extends WebPanel implements TvSerieImageLoaderLi
 		}
 
 		// Info
-		String firstAired = TvSerieUtils.getFirstAired(tvSerieEpisode);
+		String firstAired = TvSerieHelper.getFirstAired(tvSerieEpisode);
 		String imdbId = tvSerieEpisode.getImdbId();
 
 		this.infoPane.removeAll();
@@ -177,17 +177,17 @@ public class TvSerieEpisodeView extends WebPanel implements TvSerieImageLoaderLi
 		}
 
 		// Directors
-		Collection<String> directors = TvSerieUtils.getEpisodeDirectors(tvSerieEpisode);
+		Collection<String> directors = TvSerieHelper.getEpisodeDirectors(tvSerieEpisode);
 		this.directors.setVisible(!directors.isEmpty());
 		this.directors.fill(directors);
 
 		// Writers
-		Collection<String> writers = TvSerieUtils.getEpisodeWriters(tvSerieEpisode);
+		Collection<String> writers = TvSerieHelper.getEpisodeWriters(tvSerieEpisode);
 		this.writers.setVisible(!writers.isEmpty());
 		this.writers.fill(writers);
 
 		// Guest Stars
-		Collection<String> guestStars = TvSerieUtils.getEpisodeGuestStars(tvSerieEpisode);
+		Collection<String> guestStars = TvSerieHelper.getEpisodeGuestStars(tvSerieEpisode);
 		this.guestStars.setVisible(!guestStars.isEmpty());
 		this.guestStars.fill(guestStars);
 	}

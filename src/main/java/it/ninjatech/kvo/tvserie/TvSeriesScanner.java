@@ -1,7 +1,7 @@
-package it.ninjatech.kvo.worker;
+package it.ninjatech.kvo.tvserie;
 
-import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.worker.AbstractWorker;
 
 import java.io.File;
 
@@ -11,7 +11,7 @@ public class TvSeriesScanner extends AbstractWorker<Void> {
 
 	private final TvSeriesPathEntity entity;
 
-	public TvSeriesScanner(TvSeriesPathEntity entity) {
+	protected TvSeriesScanner(TvSeriesPathEntity entity) {
 		this.entity = entity;
 	}
 

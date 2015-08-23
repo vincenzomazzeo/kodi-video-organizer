@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.util;
+package it.ninjatech.kvo.tvserie;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
@@ -6,9 +6,10 @@ import it.ninjatech.kvo.model.TvSerieActor;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSerieImage;
-import it.ninjatech.kvo.model.TvSeriePathEntity;
 import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
+import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.worker.TvSerieFetcher;
 import it.ninjatech.kvo.worker.TvSerieFinder;
 
@@ -23,7 +24,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-public final class TvSerieUtils {
+public final class TvSerieHelper {
 
 	public static final String EXTRAFANART = "extrafanart";
 	public static final String SEASON = "season";
@@ -280,7 +281,7 @@ public final class TvSerieUtils {
 		return tvSerieEpisode.getGuestStars() != null ? tvSerieEpisode.getGuestStars() : Collections.<String> emptySet();
 	}
 
-	private TvSerieUtils() {
+	private TvSerieHelper() {
 	}
 
 }

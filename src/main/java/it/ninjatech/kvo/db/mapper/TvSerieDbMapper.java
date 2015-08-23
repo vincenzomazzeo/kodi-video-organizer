@@ -6,12 +6,14 @@ import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSerieActor;
 import it.ninjatech.kvo.model.TvSerieFanart;
 import it.ninjatech.kvo.model.TvSerieImage;
+import it.ninjatech.kvo.model.TvSerieSeason;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
 
 public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 
@@ -23,10 +25,12 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 		try {
 			connection = ConnectionHandler.getInstance().getConnection();
 
+			// Tv Serie
 			save(connection,
-				 "INSERT INTO tv_serie (id, tv_series_id, provider_id, name, language, first_aired, content_rating, network, overview, rating, rating_count, status, banner, fanart, poster, imdb_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+				 "INSERT INTO tv_serie (id, tv_series_id, path, provider_id, name, language, first_aired, content_rating, network, overview, rating, rating_count, status, banner, fanart, poster, imdb_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 				 new SimpleEntry<Object, Integer>(tvSerie.getId(), Types.VARCHAR),
 				 new SimpleEntry<Object, Integer>(tvSerie.getTvSeriePathEntity().getTvSeriesPathEntity().getId(), Types.VARCHAR),
+				 new SimpleEntry<Object, Integer>(tvSerie.getTvSeriePathEntity().getPath(), Types.VARCHAR),
 				 new SimpleEntry<Object, Integer>(tvSerie.getProviderId(), Types.VARCHAR),
 				 new SimpleEntry<Object, Integer>(tvSerie.getName(), Types.VARCHAR),
 				 new SimpleEntry<Object, Integer>(tvSerie.getLanguage().getLanguageCode(), Types.VARCHAR),
@@ -68,6 +72,12 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 					saveImage(connection, image, tvSerie.getId(), ImageProvider.Fanarttv, fanart);
 				}
 			}
+			
+			// Tv Serie Season
+			TvSerieSeasonDbMapper tvSerieSeasonDbMapper = new TvSerieSeasonDbMapper();
+			for (TvSerieSeason season : tvSerie.getSeasons()) {
+				tvSerieSeasonDbMapper.save(connection, season);
+			}
 
 			connection.commit();
 		}
@@ -94,9 +104,15 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 
 	@Override
 	protected TvSerie map(ResultSet resultSet) throws Exception {
+		// id, tv_series_id, provider_id, name, language, first_aired, content_rating, network, overview, rating, rating_count, status, banner, fanart, poster, imdb_id
 		return null;
 	}
 	
+	public List<TvSerie> find(String tvSeriesPathEntityId) throws Exception {
+		// TODO Auto-generated method stub
+		return super.find();
+	}
+
 	@SuppressWarnings("unchecked")
 	private void saveImage(Connection connection, TvSerieImage image, String tvSerieId, ImageProvider imageProvider, TvSerieFanart fanart) throws Exception {
 		save(connection,

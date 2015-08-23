@@ -5,11 +5,11 @@ import it.ninjatech.kvo.async.job.PersonAsyncJob;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.ImageProvider;
 import it.ninjatech.kvo.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.AbstractImageSlider.ImageSliderListener;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.util.TvSerieUtils;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 
@@ -78,19 +78,19 @@ public class TvSerieEpisodeController implements ImageSliderListener {
 		this.fileListModel.setData(StringUtils.isBlank(tvSerieEpisode.getFilename()) ? videoFile : tvSerieEpisode.getFilename(), mySubtitleFiles);
 		
 		// Directors
-		for (String director : TvSerieUtils.getEpisodeDirectors(tvSerieEpisode)) {
+		for (String director : TvSerieHelper.getEpisodeDirectors(tvSerieEpisode)) {
 			PersonAsyncJob job = new PersonAsyncJob(director, director, this.view.getDirectorSize());
 			this.mainJobHandler.handle(job, this.view, DIRECTORS_SLIDER_ID);
 		}
 		
 		// Writers
-		for (String writer : TvSerieUtils.getEpisodeWriters(tvSerieEpisode)) {
+		for (String writer : TvSerieHelper.getEpisodeWriters(tvSerieEpisode)) {
 			PersonAsyncJob job = new PersonAsyncJob(writer, writer, this.view.getWriterSize());
 			this.mainJobHandler.handle(job, this.view, WRITERS_SLIDER_ID);
 		}
 		
 		// Guest Stars
-		for (String guestStar : TvSerieUtils.getEpisodeGuestStars(tvSerieEpisode)) {
+		for (String guestStar : TvSerieHelper.getEpisodeGuestStars(tvSerieEpisode)) {
 			PersonAsyncJob job = new PersonAsyncJob(guestStar, guestStar, this.view.getGuestStarSize());
 			this.mainJobHandler.handle(job, this.view, GUEST_STARS_SLIDER_ID);
 		}

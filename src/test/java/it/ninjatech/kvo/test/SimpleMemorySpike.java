@@ -1,8 +1,8 @@
 package it.ninjatech.kvo.test;
 
 import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSeriePathEntity;
-import it.ninjatech.kvo.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.MemoryUtils;
 

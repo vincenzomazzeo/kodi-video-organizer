@@ -3,12 +3,13 @@ package it.ninjatech.kvo.ui.explorer.roots;
 import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.db.mapper.TvSerieDbMapper;
-import it.ninjatech.kvo.db.mapper.TvSeriesPathEntityDbMapper;
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.model.Type;
+import it.ninjatech.kvo.tvserie.TvSerieManager;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
@@ -24,11 +25,8 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieSearchMultiResultController;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchMultiResultListener;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.util.TvSerieUtils;
 import it.ninjatech.kvo.worker.DbSaveWorker;
-import it.ninjatech.kvo.worker.MultipleWorker;
 import it.ninjatech.kvo.worker.SettingsStorer;
-import it.ninjatech.kvo.worker.TvSeriesScanner;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -81,29 +79,31 @@ public class ExplorerRootsController {
 		Settings settings = SettingsHandler.getInstance().getSettings();
 
 		File root = showRootChooser(Type.TvSerie, settings.getLastTvSeriesRootParent());
-		if (root != null && !this.model.containtsRoot(root)) {
+		TvSeriesPathEntity tvSeriesPathEntity = TvSerieManager.getInstance().addTvSeriesPathEntity(root);
+		if (tvSeriesPathEntity != null) {
 			if (root.getParentFile() != null) {
 				settings.setLastTvSeriesRootParent(root.getParentFile());
 				storeSettings();
 			}
-			addRoot(root, Type.TvSerie);
+			this.model.addRoot(tvSeriesPathEntity);
+			NotificationManager.showNotification(Labels.notificationRootAdded(Type.TvSerie.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
 			this.parent.addTvSerieTab();
 			this.view.removeTooltip();
 		}
 	}
 
 	protected void notifyAddMoviesRoot() {
-		Settings settings = SettingsHandler.getInstance().getSettings();
-
-		File root = showRootChooser(Type.Movie, settings.getLastMoviesRootParent());
-		if (root != null && !this.model.containtsRoot(root)) {
-			if (root.getParentFile() != null) {
-				settings.setLastMoviesRootParent(root.getParentFile());
-				storeSettings();
-			}
-			addRoot(root, Type.Movie);
-			this.view.removeTooltip();
-		}
+//		Settings settings = SettingsHandler.getInstance().getSettings();
+//
+//		File root = showRootChooser(Type.Movie, settings.getLastMoviesRootParent());
+//		if (root != null && !this.model.containtsRoot(root)) {
+//			if (root.getParentFile() != null) {
+//				settings.setLastMoviesRootParent(root.getParentFile());
+//				storeSettings();
+//			}
+//			addRoot(root, Type.Movie);
+//			this.view.removeTooltip();
+//		}
 	}
 
 	protected void notifyPossibleFsScanning(TreePath path) {
@@ -150,26 +150,6 @@ public class ExplorerRootsController {
 		return result;
 	}
 
-	private void addRoot(File root, Type type) {
-		TvSeriesPathEntity entity = new TvSeriesPathEntity(root);
-
-		MultipleWorker worker = new MultipleWorker();
-
-		TvSeriesScanner scanner = new TvSeriesScanner(entity);
-		worker.addWorker(TvSeriesScanner.class.getSimpleName(), scanner);
-
-		TvSeriesPathEntityDbMapper mapper = new TvSeriesPathEntityDbMapper();
-		DbSaveWorker<TvSeriesPathEntity> dbSaveWorker = new DbSaveWorker<>(entity, mapper, root.getName());
-		worker.addWorker(DbSaveWorker.class.getSimpleName(), dbSaveWorker);
-
-		MultipleWorker.Result result = IndeterminateProgressDialogWorker.show(worker, Labels.getScanningRoot(type.getPlural(), root.getName()));
-		if (result != null) {
-			this.model.addRoot(entity);
-
-			NotificationManager.showNotification(Labels.notificationRootAdded(type.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
-		}
-	}
-
 	private void storeSettings() {
 		SettingsStorer storer = new SettingsStorer();
 		IndeterminateProgressDialogWorker.show(storer, Labels.STORING_SETTINGS);
@@ -205,7 +185,7 @@ public class ExplorerRootsController {
 		private boolean search(String search, EnhancedLocale language, boolean askOnEmpty) {
 			boolean result = false;
 
-			List<TvSerie> tvSeries = TvSerieUtils.searchFor(search, language);
+			List<TvSerie> tvSeries = TvSerieHelper.searchFor(search, language);
 
 			if (tvSeries != null) {
 				if (tvSeries.isEmpty()) {
@@ -252,7 +232,7 @@ public class ExplorerRootsController {
 
 		private void fetch(TvSerie tvSerie) {
 			this.node.getValue().setTvSerie(tvSerie);
-			tvSerie = TvSerieUtils.fetch(tvSerie);
+			tvSerie = TvSerieHelper.fetch(tvSerie);
 			TvSerieDbMapper mapper = new TvSerieDbMapper();
 			DbSaveWorker<TvSerie> worker = new DbSaveWorker<>(tvSerie, mapper, tvSerie.getName());
 			DeterminateProgressDialogWorker.show(worker, tvSerie.getName());

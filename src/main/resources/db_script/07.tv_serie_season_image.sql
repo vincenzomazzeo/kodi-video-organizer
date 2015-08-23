@@ -3,7 +3,7 @@ CREATE TABLE tv_serie_season_image (
 	tv_serie_season_id	UUID			NOT NULL,
 	provider			VARCHAR(10)		NOT NULL,
 	path				VARCHAR			NOT NULL,
-	rating				DECIMAL(3,1)			,
+	rating				VARCHAR(4)				,
 	rating_count		VARCHAR					,
 	language			VARCHAR(2)		NOT NULL,
 	PRIMARY KEY (id),

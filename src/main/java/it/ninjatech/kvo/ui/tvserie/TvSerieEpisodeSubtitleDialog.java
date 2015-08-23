@@ -2,6 +2,7 @@ package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
@@ -10,7 +11,6 @@ import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBox;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.MemoryUtils;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -107,7 +107,7 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 	private WebPanel makeBodyPane(TvSerieEpisode episode, String filename) {
 		WebPanel result = null;
 
-		WebLabel episodeL = UIUtils.makeTitleLabel(TvSerieUtils.getEpisodeName(episode), 16, null);
+		WebLabel episodeL = UIUtils.makeTitleLabel(TvSerieHelper.getEpisodeName(episode), 16, null);
 		episodeL.setHorizontalAlignment(SwingConstants.CENTER);
 
 		WebLabel filenameLabel = UIUtils.makeStandardLabel(Labels.FILENAME, null, null, null);

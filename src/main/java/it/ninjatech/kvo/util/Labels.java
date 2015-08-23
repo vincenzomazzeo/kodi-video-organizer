@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.util;
 
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 
 public final class Labels {
 
@@ -87,7 +88,7 @@ public final class Labels {
 	}
 	
 	public static String getTvSerieTitleSeason(TvSerieSeason season) {
-		return String.format("%s - Season %s", TvSerieUtils.getTitle(season.getTvSerie().getTvSeriePathEntity()), season.getNumber());
+		return String.format("%s - Season %s", TvSerieHelper.getTitle(season.getTvSerie().getTvSeriePathEntity()), season.getNumber());
 	}
 	
 	public static String getTvSerieSeason(TvSerieSeason season) {
@@ -99,15 +100,15 @@ public final class Labels {
 	}
 	
 	public static String getTvSerieSeasonCreationMessage(TvSerieSeason season) {
-		return String.format("<html>Do you want to create <b>%s - %s</b> folder</html>", TvSerieUtils.getTitle(season.getTvSerie().getTvSeriePathEntity()), getTvSerieSeason(season));
+		return String.format("<html>Do you want to create <b>%s - %s</b> folder</html>", TvSerieHelper.getTitle(season.getTvSerie().getTvSeriePathEntity()), getTvSerieSeason(season));
 	}
 	
 	public static String getTvSerieSeasonCreationFailMessage(TvSerieSeason season) {
-		return String.format("<html><b>%s - %s</b> folder creation failed</html>", TvSerieUtils.getTitle(season.getTvSerie().getTvSeriePathEntity()), getTvSerieSeason(season));
+		return String.format("<html><b>%s - %s</b> folder creation failed</html>", TvSerieHelper.getTitle(season.getTvSerie().getTvSeriePathEntity()), getTvSerieSeason(season));
 	}
 	
 	public static String getTvSerieSeasonCreationSuccessMessage(TvSerieSeason season) {
-		return String.format("<html><b>%s - %s</b> folder created</html>", TvSerieUtils.getTitle(season.getTvSerie().getTvSeriePathEntity()), getTvSerieSeason(season));
+		return String.format("<html><b>%s - %s</b> folder created</html>", TvSerieHelper.getTitle(season.getTvSerie().getTvSeriePathEntity()), getTvSerieSeason(season));
 	}
 	
 	public static String getFirstAired(String firstAired) {

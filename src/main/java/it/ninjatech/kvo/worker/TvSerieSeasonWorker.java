@@ -3,8 +3,8 @@ package it.ninjatech.kvo.worker;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -32,14 +32,14 @@ public class TvSerieSeasonWorker extends AbstractWorker<Void> {
 
 		int update = 0;
 
-		File seasonDir = TvSerieUtils.getLocalSeasonPath(this.season);
+		File seasonDir = TvSerieHelper.getLocalSeasonPath(this.season);
 		for (TvSerieEpisode episode : this.videoEpisodeMap.keySet()) {
-			notifyUpdate(String.format("%s -> %s", Labels.VIDEO, TvSerieUtils.getEpisodeName(episode)), null);
+			notifyUpdate(String.format("%s -> %s", Labels.VIDEO, TvSerieHelper.getEpisodeName(episode)), null);
 
 			String filename = this.videoEpisodeMap.get(episode);
 			File sourceFile = new File(seasonDir, filename);
 			String ext = filename.substring(filename.lastIndexOf('.'));
-			File targetFile = new File(seasonDir, String.format("%s%s", TvSerieUtils.getFullEpisodeName(episode), ext));
+			File targetFile = new File(seasonDir, String.format("%s%s", TvSerieHelper.getFullEpisodeName(episode), ext));
 
 			if (!sourceFile.renameTo(targetFile)) {
 				throw new Exception(Labels.getFailedToRename(sourceFile.getAbsolutePath(), targetFile.getAbsolutePath()));
@@ -50,7 +50,7 @@ public class TvSerieSeasonWorker extends AbstractWorker<Void> {
 		}
 
 		for (TvSerieEpisode episode : this.subtitleEpisodeMap.keySet()) {
-			notifyUpdate(String.format("%s -> %s", Labels.SUBTITLE, TvSerieUtils.getEpisodeName(episode)), null);
+			notifyUpdate(String.format("%s -> %s", Labels.SUBTITLE, TvSerieHelper.getEpisodeName(episode)), null);
 
 			Map<String, EnhancedLocale> subtitleMap = this.subtitleEpisodeMap.get(episode);
 			for (String filename : subtitleMap.keySet()) {
@@ -68,7 +68,7 @@ public class TvSerieSeasonWorker extends AbstractWorker<Void> {
 		}
 
 		if (!this.seasonImage.getParentFile().equals(seasonDir.getParentFile())) {
-			File targetFile = new File(seasonDir.getParent(), TvSerieUtils.getSeasonPosterFilename(this.season));
+			File targetFile = new File(seasonDir.getParent(), TvSerieHelper.getSeasonPosterFilename(this.season));
 			Files.copy(this.seasonImage.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 		notifyUpdate(null, ++update);
@@ -89,7 +89,7 @@ public class TvSerieSeasonWorker extends AbstractWorker<Void> {
 		int index = 1;
 		do {
 			String indexSuffix = index == 1 ? "" : String.format(".%d", index);
-			result = String.format("%s%s.%s%s", TvSerieUtils.getFullEpisodeName(episode), indexSuffix, language.getLanguageCode(), ext);
+			result = String.format("%s%s.%s%s", TvSerieHelper.getFullEpisodeName(episode), indexSuffix, language.getLanguageCode(), ext);
 			index++;
 		} while (episode.getSubtitleFilenames().contains(result));
 

@@ -2,13 +2,13 @@ package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -167,7 +167,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener, Trans
 		setLayout(new BorderLayout());
 		setOpaque(false);
 		
-		this.title = UIUtils.makeStandardLabel(TvSerieUtils.getEpisodeName(this.episode), 14, new Insets(5, 5, 5, 5), null);
+		this.title = UIUtils.makeStandardLabel(TvSerieHelper.getEpisodeName(this.episode), 14, new Insets(5, 5, 5, 5), null);
 		add(this.title, BorderLayout.NORTH);
 		this.title.setPreferredWidth(width - 10);
 		this.title.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

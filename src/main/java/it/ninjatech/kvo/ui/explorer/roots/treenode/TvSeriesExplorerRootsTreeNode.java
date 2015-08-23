@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
-import it.ninjatech.kvo.model.TvSeriePathEntity;
-import it.ninjatech.kvo.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;

@@ -4,6 +4,7 @@ import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;
@@ -15,7 +16,6 @@ import it.ninjatech.kvo.ui.tvserie.TvSerieSeasonController.VideoSubtitleTransfer
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.MemoryUtils;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -88,9 +88,9 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	private static WebPanel makeTvSerieTitlePane(TvSerie tvSerie, WebLabel tvSerieTitle) {
 		WebPanel result = null;
 
-		String tvSerieStatus = TvSerieUtils.getStatus(tvSerie);
-		String tvSerieRating = TvSerieUtils.getRating(tvSerie);
-		String tvSerieRatingCount = TvSerieUtils.getRatingCount(tvSerie);
+		String tvSerieStatus = TvSerieHelper.getStatus(tvSerie);
+		String tvSerieRating = TvSerieHelper.getRating(tvSerie);
+		String tvSerieRatingCount = TvSerieHelper.getRatingCount(tvSerie);
 
 		List<Component> components = new ArrayList<>();
 
@@ -328,7 +328,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		result.add(leftPane, BorderLayout.WEST);
 
 		// Serie title
-		this.tvSerieTitle = UIUtils.makeTitleLabel(TvSerieUtils.getTitle(season.getTvSerie().getTvSeriePathEntity()), 30, new Insets(2, 10, 5, 10));
+		this.tvSerieTitle = UIUtils.makeTitleLabel(TvSerieHelper.getTitle(season.getTvSerie().getTvSeriePathEntity()), 30, new Insets(2, 10, 5, 10));
 		result.add(makeTvSerieTitlePane(season.getTvSerie(), this.tvSerieTitle), BorderLayout.CENTER);
 
 		// Buttons

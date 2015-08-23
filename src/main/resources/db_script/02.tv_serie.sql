@@ -1,6 +1,7 @@
 CREATE TABLE tv_serie (
 	id					UUID			NOT NULL,
 	tv_series_id		UUID			NOT NULL,
+	path				VARCHAR			NOT NULL,
 	provider_id			VARCHAR			NOT NULL,
 	name				VARCHAR					,
 	language			VARCHAR(2)		NOT NULL,

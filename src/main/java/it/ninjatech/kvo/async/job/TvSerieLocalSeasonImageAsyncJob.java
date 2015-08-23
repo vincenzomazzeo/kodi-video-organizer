@@ -1,8 +1,8 @@
 package it.ninjatech.kvo.async.job;
 
 import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.util.Logger;
-import it.ninjatech.kvo.util.TvSerieUtils;
 
 import java.awt.Dimension;
 import java.awt.Image;
@@ -29,7 +29,7 @@ public class TvSerieLocalSeasonImageAsyncJob extends AbstractImageLoaderAsyncJob
 		try {
 			Logger.log("-> executing local season %s\n", this.season.getTvSerie().getTvSeriePathEntity().getId());
 			
-			this.image = getImage(this.season.getTvSerie().getTvSeriePathEntity().getPath(), TvSerieUtils.getSeasonPosterFilename(this.season), null, null, this.size);
+			this.image = getImage(this.season.getTvSerie().getTvSeriePathEntity().getPath(), TvSerieHelper.getSeasonPosterFilename(this.season), null, null, this.size);
 		}
 		catch (Exception e) {
 			this.exception = e;

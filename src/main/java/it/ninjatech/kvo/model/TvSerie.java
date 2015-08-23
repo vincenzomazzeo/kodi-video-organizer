@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.model;
 
+import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
