@@ -1,7 +1,17 @@
 package it.ninjatech.kvo.tvserie;
 
-public interface TvSerieWorkerTask<I, O> {
+public abstract class TvSerieWorkerTask<T> {
 
-	public O doTask(I input) throws Exception;
+	private TvSerieWorker<T> worker;
+	
+	protected TvSerieWorkerTask() {}
+	
+	public abstract boolean doTask(T pathEntity) throws Exception;
+	
+	protected void setWorker(TvSerieWorker<T> worker) {
+		this.worker = worker;
+	}
+	
+	
 	
 }

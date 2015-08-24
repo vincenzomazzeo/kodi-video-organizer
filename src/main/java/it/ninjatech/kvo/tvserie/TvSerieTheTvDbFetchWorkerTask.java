@@ -1,15 +1,16 @@
 package it.ninjatech.kvo.tvserie;
 
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
-import it.ninjatech.kvo.model.TvSerie;
 
-public class TvSerieTheTvDbFetchWorkerTask implements TvSerieWorkerTask<TvSerie, Void> {
+public class TvSerieTheTvDbFetchWorkerTask implements TvSerieWorkerTask<TvSeriePathEntity> {
 
+	protected TvSerieTheTvDbFetchWorkerTask() {}
+	
 	@Override
-	public Void doTask(TvSerie tvSerie) throws Exception {
-		TheTvDbManager.getInstance().getData(tvSerie);
+	public boolean doTask(TvSeriePathEntity tvSeriePathEntity) throws Exception {
+		TheTvDbManager.getInstance().getData(tvSeriePathEntity.getTvSerie());
 		
-		return null;
+		return true;
 	}
 	
 }
