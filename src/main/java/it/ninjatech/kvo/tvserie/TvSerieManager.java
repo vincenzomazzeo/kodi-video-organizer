@@ -1,10 +1,8 @@
 package it.ninjatech.kvo.tvserie;
 
 import it.ninjatech.kvo.model.Type;
-import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
+import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.worker.DbSaveWorker;
-import it.ninjatech.kvo.worker.MultipleWorker;
 
 import java.io.File;
 import java.util.HashSet;
@@ -35,23 +33,11 @@ public final class TvSerieManager {
 		TvSeriesPathEntity result = null;
 		
 		if (root != null && !this.tvSeriesPathEntitieRoots.contains(root)) {
-			result = new TvSeriesPathEntity(root);
+			TvSerieAddRootWorker worker = new TvSerieAddRootWorker(root);
 			
-			MultipleWorker worker = new MultipleWorker();
+			result = DeterminateProgressDialogWorker.show(worker, Labels.getScanningRoot(Type.TvSerie.getPlural(), root.getName()));			
 			
-			TvSeriesScanner scanner = new TvSeriesScanner(result);
-			worker.addWorker(TvSeriesScanner.class.getSimpleName(), scanner);
-			
-			TvSeriesPathEntityDbMapper mapper = new TvSeriesPathEntityDbMapper();
-			DbSaveWorker<TvSeriesPathEntity> dbSaveWorker = new DbSaveWorker<>(result, mapper, root.getName());
-			worker.addWorker(DbSaveWorker.class.getSimpleName(), dbSaveWorker);
-			
-			MultipleWorker.Result workerResult = IndeterminateProgressDialogWorker.show(worker, Labels.getScanningRoot(Type.TvSerie.getPlural(), root.getName()));
-			
-			if (workerResult == null) {
-				result = null;
-			}
-			else {
+			if (result != null) {
 				this.tvSeriesPathEntitieRoots.add(root);
 			}
 		}

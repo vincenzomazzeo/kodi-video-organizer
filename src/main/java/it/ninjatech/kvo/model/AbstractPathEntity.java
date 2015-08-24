@@ -3,7 +3,7 @@ package it.ninjatech.kvo.model;
 import java.io.File;
 import java.util.UUID;
 
-public abstract class AbstractPathEntity {
+public abstract class AbstractPathEntity implements Comparable<AbstractPathEntity> {
 
 	private final String id;
 	private final String path;
@@ -45,6 +45,11 @@ public abstract class AbstractPathEntity {
 		else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(AbstractPathEntity other) {
+		return this.label.compareTo(other.label);
 	}
 
 	public String getId() {
