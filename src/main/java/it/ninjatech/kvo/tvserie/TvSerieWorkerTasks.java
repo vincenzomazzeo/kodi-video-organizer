@@ -1,5 +1,7 @@
 package it.ninjatech.kvo.tvserie;
 
+import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
+import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.util.Labels;
 
 import java.io.File;
@@ -24,7 +26,8 @@ public final class TvSerieWorkerTasks {
 		// TODO handle progress notifier
 		if (check(new File(tvSeriePathEntity.getPath()), progressNotifier)) {
 			if (tvSeriePathEntity.getTvSerie() != null) {
-				// TODO fetch
+				TheTvDbManager.getInstance().getData(tvSeriePathEntity.getTvSerie());
+				FanarttvManager.getInstance().getData(tvSeriePathEntity.getTvSerie());
 				// TODO scan
 				// TODO update object
 				// TODO save
