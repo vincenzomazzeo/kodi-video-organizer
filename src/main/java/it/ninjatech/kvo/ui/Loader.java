@@ -333,13 +333,13 @@ public class Loader extends WebFrame {
 		}
 
 		@Override
-		public void workerInit(String message, Integer value) {
-			publish(new Progress(Progress.Type.Init, message, value));
+		public void workerInit(String message, String submessage, Integer value) {
+			publish(new Progress(Progress.Type.Init, message, submessage, value));
 		}
 
 		@Override
-		public void workerUpdate(String message, Integer value) {
-			publish(new Progress(Progress.Type.Update, message, value));
+		public void workerUpdate(String message, String submessage, Integer value) {
+			publish(new Progress(Progress.Type.Update, message, submessage, value));
 		}
 
 		@Override

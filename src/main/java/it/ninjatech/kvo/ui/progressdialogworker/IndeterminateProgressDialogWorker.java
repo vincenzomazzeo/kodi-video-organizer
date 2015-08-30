@@ -8,9 +8,13 @@ import java.util.List;
 public class IndeterminateProgressDialogWorker<T> extends AbstractProgressDialogWorker<T> {
 
 	public static <T> T show(AbstractWorker<T> worker, String title) {
+		return show(worker, title, false);
+	}
+	
+	public static <T> T show(AbstractWorker<T> worker, String title, boolean enableSubmessage) {
 		T result = null;
 		
-		IndeterminateProgressDialogWorker<T> progressWorker = new IndeterminateProgressDialogWorker<>(worker, title);
+		IndeterminateProgressDialogWorker<T> progressWorker = new IndeterminateProgressDialogWorker<>(worker, title, enableSubmessage);
 		
 		progressWorker.start();
 		try {
@@ -23,8 +27,8 @@ public class IndeterminateProgressDialogWorker<T> extends AbstractProgressDialog
 		return result;
 	}
 	
-	private IndeterminateProgressDialogWorker(AbstractWorker<T> worker, String title) {
-		super(worker, title);
+	private IndeterminateProgressDialogWorker(AbstractWorker<T> worker, String title, boolean enableSubmessage) {
+		super(worker, title, enableSubmessage);
 		
 		this.progress.getProgressBar().setIndeterminate(true);
 		this.progress.getProgressBar().setStringPainted(false);
@@ -34,7 +38,7 @@ public class IndeterminateProgressDialogWorker<T> extends AbstractProgressDialog
 	protected void process(List<Progress> chunks) {
 		for (Progress chunk : chunks) {
 			if (chunk.getMessage() != null) {
-				this.progress.setText(chunk.getMessage());
+				this.progress.setTextNorth(chunk.getMessage());
 			}
 		}
 	}

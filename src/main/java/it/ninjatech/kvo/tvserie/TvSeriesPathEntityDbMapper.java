@@ -14,7 +14,6 @@ public class TvSeriesPathEntityDbMapper extends AbstractDbMapper<TvSeriesPathEnt
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public void save(TvSeriesPathEntity tvSeriesPathEntity) throws Exception {
 		save("INSERT INTO tv_series (id, path, label) VALUES (?, ?, ?)",
 			 new SimpleEntry<Object, Integer>(tvSeriesPathEntity.getId(), Types.VARCHAR),
@@ -23,7 +22,6 @@ public class TvSeriesPathEntityDbMapper extends AbstractDbMapper<TvSeriesPathEnt
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<TvSeriesPathEntity> find() throws Exception {
 		return find("SELECT * FROM tv_series ORDER BY label");
 	}

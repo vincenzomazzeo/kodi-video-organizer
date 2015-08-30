@@ -18,14 +18,22 @@ public abstract class AbstractWorker<T> {
 	}
 
 	protected void notifyInit(String message, Integer value) {
+		notifyInit(message, null, value);
+	}
+	
+	protected void notifyInit(String message, String submessage, Integer value) {
 		for (WorkerProgressListener listener : this.listeners) {
-			listener.workerInit(message, value);
+			listener.workerInit(message, submessage, value);
 		}
 	}
 
 	protected void notifyUpdate(String message, Integer value) {
+		notifyUpdate(message, null, value);
+	}
+	
+	protected void notifyUpdate(String message, String submessage, Integer value) {
 		for (WorkerProgressListener listener : this.listeners) {
-			listener.workerUpdate(message, value);
+			listener.workerUpdate(message, submessage, value);
 		}
 	}
 

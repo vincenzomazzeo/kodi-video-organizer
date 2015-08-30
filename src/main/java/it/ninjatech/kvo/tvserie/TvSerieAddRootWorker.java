@@ -12,13 +12,16 @@ public class TvSerieAddRootWorker extends AbstractTvSerieWorker<File, TvSeriesPa
 	public TvSeriesPathEntity work() throws Exception {
 		TvSeriesPathEntity result = null;
 		
-		this.progressNotifier.notifyWorkerMessage("Scanning " + this.input.getName());
+		this.progressNotifier.notifyWorkerMessage("( /3) Scanning " + this.input.getName());
 		
 		if (TvSerieWorkerTasks.check(this.input, this.progressNotifier)) {
+			this.progressNotifier.notifyWorkerMessage("(1/3) Scanning " + this.input.getName());
 			result = new TvSeriesPathEntity(this.input);
 			
+			this.progressNotifier.notifyWorkerMessage("(2/3) Scanning " + this.input.getName());
 			TvSerieWorkerTasks.scan(result, this.progressNotifier);
 			
+			this.progressNotifier.notifyWorkerMessage("(3/3) Scanning " + this.input.getName());
 			TvSerieWorkerTasks.save(result, this.progressNotifier);
 		}
 		

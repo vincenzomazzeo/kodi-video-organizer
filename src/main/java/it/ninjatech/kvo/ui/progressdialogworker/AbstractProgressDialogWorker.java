@@ -13,11 +13,11 @@ public abstract class AbstractProgressDialogWorker<T> extends SwingWorker<T, Pro
 	protected ProgressDialog progress;
 	private final AbstractWorker<T> worker;
 	
-	protected AbstractProgressDialogWorker(AbstractWorker<T> worker, String title) {
+	protected AbstractProgressDialogWorker(AbstractWorker<T> worker, String title, boolean showTextSouth) {
 		super();
 		
 		this.worker = worker;
-		this.progress = ProgressDialog.getInstance(title);
+		this.progress = ProgressDialog.getInstance(title, showTextSouth);
 		
 		this.worker.addWorkerProgressListener(this);
 	}
@@ -26,13 +26,13 @@ public abstract class AbstractProgressDialogWorker<T> extends SwingWorker<T, Pro
 	protected abstract void process(List<Progress> chunks);
 	
 	@Override
-	public void workerInit(String message, Integer value) {
-		publish(new Progress(Progress.Type.Init, message, value));
+	public void workerInit(String message, String submessage, Integer value) {
+		publish(new Progress(Progress.Type.Init, message, submessage, value));
 	}
 
 	@Override
-	public void workerUpdate(String message, Integer value) {
-		publish(new Progress(Progress.Type.Update, message, value));
+	public void workerUpdate(String message, String submessage, Integer value) {
+		publish(new Progress(Progress.Type.Update, message, submessage, value));
 	}
 	
 	@Override

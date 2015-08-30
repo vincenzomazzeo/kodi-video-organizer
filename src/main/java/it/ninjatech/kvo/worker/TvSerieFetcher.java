@@ -14,15 +14,15 @@ public class TvSerieFetcher extends AbstractWorker<TvSerie> {
 
 	@Override
 	public TvSerie work() throws Exception {
-		TvSerieFileScanner fileScanner = new TvSerieFileScanner(this.tvSerie);
-		notifyInit(this.tvSerie.getName(), fileScanner.getFileCount() + 2);
+//		TvSerieFileScanner fileScanner = new TvSerieFileScanner(this.tvSerie);
+//		notifyInit(this.tvSerie.getName(), fileScanner.getFileCount() + 2);
+//		
+//		fileScanner.work();
 		
-		fileScanner.work();
-		
-		TheTvDbManager.getInstance().getData(this.tvSerie);
-		notifyUpdate(null, fileScanner.getFileCount() + 1);
-		FanarttvManager.getInstance().getData(this.tvSerie);
-		notifyUpdate(null, fileScanner.getFileCount() + 2);
+//		TheTvDbManager.getInstance().getData(this.tvSerie);
+//		notifyUpdate(null, fileScanner.getFileCount() + 1);
+//		FanarttvManager.getInstance().getData(this.tvSerie);
+//		notifyUpdate(null, fileScanner.getFileCount() + 2);
 		
 		return this.tvSerie;
 	}

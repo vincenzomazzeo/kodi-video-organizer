@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.tvserie;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
+import it.ninjatech.kvo.model.FsElement;
 import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.model.TvSerieSeason;
@@ -16,6 +17,7 @@ import java.util.TreeSet;
 public class TvSeriePathEntity extends AbstractPathEntity {
 
 	private final TvSeriesPathEntity tvSeriesPathEntity;
+	private final SortedSet<FsElement> fsElements;
 	private final Map<Integer, SortedSet<String>> videoFiles;
 	private final Map<Integer, SortedSet<String>> subtitleFiles;
 	private final SortedSet<String> extraFanarts;
@@ -25,6 +27,7 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		super(id, path, label);
 
 		this.tvSeriesPathEntity = tvSeriesPathEntity;
+		this.fsElements = new TreeSet<>();
 		this.videoFiles = new TreeMap<>();
 		this.subtitleFiles = new TreeMap<>();
 		this.extraFanarts = new TreeSet<>();
@@ -35,6 +38,7 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		super(file);
 
 		this.tvSeriesPathEntity = tvSeriesPathEntity;
+		this.fsElements = new TreeSet<>();
 		this.videoFiles = new TreeMap<>();
 		this.subtitleFiles = new TreeMap<>();
 		this.extraFanarts = new TreeSet<>();
@@ -44,6 +48,14 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 	// TODO capire se si può rendere protected
 	public TvSeriesPathEntity getTvSeriesPathEntity() {
 		return this.tvSeriesPathEntity;
+	}
+	
+	public void addFsElement(FsElement fsElement) {
+		this.fsElements.add(fsElement);
+	}
+	
+	public Set<FsElement> getFsElements() {
+		return Collections.unmodifiableSortedSet(this.fsElements);
 	}
 
 	// TODO capire se si può rendere protected
@@ -120,5 +132,12 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		this.tvSerie = tvSerie;
 		this.tvSerie.setTvSeriePathEntity(this);
 	}
-
+	
+	protected void clearFileData() {
+		this.fsElements.clear();
+		this.videoFiles.clear();
+		this.subtitleFiles.clear();
+		this.extraFanarts.clear();
+	}
+	
 }

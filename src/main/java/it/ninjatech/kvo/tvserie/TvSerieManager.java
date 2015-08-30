@@ -35,7 +35,7 @@ public final class TvSerieManager {
 		if (root != null && !this.tvSeriesPathEntitieRoots.contains(root)) {
 			TvSerieAddRootWorker worker = new TvSerieAddRootWorker(root);
 			
-			result = DeterminateProgressDialogWorker.show(worker, Labels.getScanningRoot(Type.TvSerie.getPlural(), root.getName()));			
+			result = DeterminateProgressDialogWorker.show(worker, Labels.getScanningRoot(Type.TvSerie.getPlural(), root.getName()), true);			
 			
 			if (result != null) {
 				this.tvSeriesPathEntitieRoots.add(root);

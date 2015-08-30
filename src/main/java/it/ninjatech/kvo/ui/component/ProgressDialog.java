@@ -5,7 +5,6 @@ import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Insets;
 
 import javax.swing.SwingConstants;
@@ -22,7 +21,7 @@ public class ProgressDialog extends WebDialog {
 	private static final long serialVersionUID = 4539429148679067497L;
 	private static ProgressDialog self;
 
-	public static ProgressDialog getInstance(String title) {
+	public static ProgressDialog getInstance(String title, boolean showTextSouth) {
 		if (self == null) {
 			boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
 			WebLookAndFeel.setDecorateDialogs(true);
@@ -32,13 +31,14 @@ public class ProgressDialog extends WebDialog {
 			self.setShowTitleComponent(false);
 		}
 
-		self.set(title);
+		self.set(title, showTextSouth);
 
 		return self;
 	}
 
 	private WebLabel title;
-	private WebLabel text;
+	private WebLabel textNorth;
+	private WebLabel textSouth;
 	private WebProgressBar progressBar;
 
 	private ProgressDialog() {
@@ -50,16 +50,18 @@ public class ProgressDialog extends WebDialog {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		init();
-		
-		setPreferredSize(new Dimension(500, 150));
 	}
 	
 	public WebProgressBar getProgressBar() {
 		return this.progressBar;
 	}
 	
-	public void setText(String text) {
-		this.text.setText(text);
+	public void setTextNorth(String text) {
+		this.textNorth.setText(text);
+	}
+	
+	public void setTextSouth(String text) {
+		this.textSouth.setText(text);
 	}
 	
 	public void setMaximum(int maximum) {
@@ -70,8 +72,12 @@ public class ProgressDialog extends WebDialog {
 		this.progressBar.setValue(progress);
 	}
 
-	private void set(String title) {
+	private void set(String title, boolean showTextSouth) {
 		this.title.setText(title);
+		this.textNorth.setText(" ");
+		this.textSouth.setText(" ");
+		
+		this.textSouth.setVisible(showTextSouth);
 
 		pack();
 		setLocationRelativeTo(UI.get());
@@ -87,8 +93,13 @@ public class ProgressDialog extends WebDialog {
 		this.title = UIUtils.makeStandardLabel("", 20, null, SwingConstants.CENTER);
 		container.add(this.title, BorderLayout.NORTH);
 
-		this.text = UIUtils.makeStandardLabel("", 16, null, SwingConstants.CENTER);
-		container.add(this.text, BorderLayout.CENTER);
+		WebPanel textPane = UIUtils.makeStandardPane(new BorderLayout(0, 4));
+		container.add(textPane, BorderLayout.CENTER);
+		
+		this.textNorth = UIUtils.makeStandardLabel("", 16, null, SwingConstants.CENTER);
+		textPane.add(this.textNorth, BorderLayout.NORTH);
+		this.textSouth = UIUtils.makeStandardLabel("", 16, null, SwingConstants.CENTER);
+		textPane.add(this.textSouth, BorderLayout.SOUTH);
 
 		this.progressBar = new WebProgressBar(WebProgressBar.HORIZONTAL, 0, 100);
 		this.progressBar.setStringPainted(false);

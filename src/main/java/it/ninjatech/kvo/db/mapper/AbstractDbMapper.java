@@ -25,7 +25,8 @@ public abstract class AbstractDbMapper<T> {
 		return new ArrayList<>();
 	}
 
-	protected void save(String statement, @SuppressWarnings("unchecked") Entry<Object, Integer>... parameters) throws Exception {
+	@SafeVarargs
+	protected final void save(String statement, Entry<Object, Integer>... parameters) throws Exception {
 		Connection connection = null;
 
 		try {
@@ -55,7 +56,8 @@ public abstract class AbstractDbMapper<T> {
 		}
 	}
 
-	protected void save(Connection connection, String statement, @SuppressWarnings("unchecked") Entry<Object, Integer>... parameters) throws Exception {
+	@SafeVarargs
+	protected final void save(Connection connection, String statement, Entry<Object, Integer>... parameters) throws Exception {
 		PreparedStatement preparedStatement = null;
 
 		try {
@@ -84,7 +86,8 @@ public abstract class AbstractDbMapper<T> {
 		}
 	}
 
-	protected T findOne(String statement, @SuppressWarnings("unchecked") Entry<Object, Integer>... parameters) throws Exception {
+	@SafeVarargs
+	protected final T findOne(String statement, Entry<Object, Integer>... parameters) throws Exception {
 		T result = null;
 
 		PreparedStatement preparedStatement = null;
@@ -131,7 +134,8 @@ public abstract class AbstractDbMapper<T> {
 		return result;
 	}
 
-	protected List<T> find(String statement, @SuppressWarnings("unchecked") Entry<Object, Integer>... parameters) throws Exception {
+	@SafeVarargs
+	protected final List<T> find(String statement, Entry<Object, Integer>... parameters) throws Exception {
 		List<T> result = new ArrayList<>();
 
 		PreparedStatement preparedStatement = null;
