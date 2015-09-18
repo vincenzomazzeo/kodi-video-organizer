@@ -6,7 +6,7 @@ import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbLanguages;
 import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSerie;
 import it.ninjatech.kvo.connector.thetvdb.model.TheTvDbTvSeriesSearchResult;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.io.File;

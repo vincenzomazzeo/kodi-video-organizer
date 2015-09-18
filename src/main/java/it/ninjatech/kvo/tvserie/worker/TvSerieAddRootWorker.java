@@ -1,4 +1,6 @@
-package it.ninjatech.kvo.tvserie;
+package it.ninjatech.kvo.tvserie.worker;
+
+import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 
 import java.io.File;
 
@@ -11,6 +13,8 @@ public class TvSerieAddRootWorker extends AbstractTvSerieWorker<File, TvSeriesPa
 	@Override
 	public TvSeriesPathEntity work() throws Exception {
 		TvSeriesPathEntity result = null;
+		
+		// TODO message
 		
 		this.progressNotifier.notifyWorkerMessage("( /3) Scanning " + this.input.getName());
 		

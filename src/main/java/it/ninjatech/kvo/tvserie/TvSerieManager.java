@@ -1,6 +1,15 @@
 package it.ninjatech.kvo.tvserie;
 
 import it.ninjatech.kvo.model.Type;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieFetchAllWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveRootWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieScanAllWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieScanOnlyRootWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.Labels;
 
@@ -45,33 +54,59 @@ public final class TvSerieManager {
 		return result;
 	}
 	
-	// Worker da fare:
-	// 1. fetch di una lista di tvserie
-	// 2. scan di una lista di tvserie
-	// 3. update di una lista di tvserie
-	// 4. salvataggio nel db di una lista di tvserie
-	
-	public void fetch(TvSeriesPathEntity tvSeriesPathEntity) {
-		// Fa la fetch di tutti i tvSeriePathEntity che hanno un tvSerie
+	public Boolean scan(TvSeriesPathEntity tvSeriesPathEntity) {
+		Boolean result = null;
+		
+		TvSerieScanOnlyRootWorker worker = new TvSerieScanOnlyRootWorker(tvSeriesPathEntity);
+		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		
+		return result;
 	}
 	
-	public void scan(TvSeriesPathEntity tvSeriesPathEntity) {
-		// Fa lo scan di tutti i tvSeriePathEntity che hanno un tvSerie
+	public Boolean scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
+		Boolean result = null;
+		
+		TvSerieScanAllWorker worker = new TvSerieScanAllWorker(tvSeriesPathEntity);
+		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		
+		return result;
 	}
 	
-	public void fetch(TvSeriePathEntity tvSeriePathEntity) {
-		// Controlla che il path esista
-		// L'operazione di fetcher legge i dati dai provider usando un nuovo oggetto tv serie
-		// Scan
-		// Aggiorna l'oggetto presente in tvSeriePathEntity
-		// Aggiorna i dati nel db
+	public Boolean fetch(TvSeriesPathEntity tvSeriesPathEntity) {
+		Boolean result = null;
+		
+		TvSerieFetchAllWorker worker = new TvSerieFetchAllWorker(tvSeriesPathEntity);
+		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		
+		return result;
 	}
 	
-	public void scan(TvSeriePathEntity tvSeriePathEntity) {
-		// Controlla che il path esista
-		// L'operazione di scan legge i file dal FS
-		// Aggiorna l'oggetto presente in tvSeriePathEntity
-		// Aggiorna i dati nel db
+	public void remove(TvSeriesPathEntity tvSeriesPathEntity) {
+		TvSerieRemoveRootWorker worker = new TvSerieRemoveRootWorker(tvSeriesPathEntity);
+		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+	}
+	
+	public Boolean scan(TvSeriePathEntity tvSeriePathEntity) {
+		Boolean result = null;
+		
+		TvSerieFetchWorker worker = new TvSerieFetchWorker(tvSeriePathEntity);
+		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		
+		return result;
+	}
+	
+	public Boolean fetch(TvSeriePathEntity tvSeriePathEntity) {
+		Boolean result = null;
+		
+		TvSerieFetchWorker worker = new TvSerieFetchWorker(tvSeriePathEntity);
+		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		
+		return result;
+	}
+	
+	public void remove(TvSeriePathEntity tvSeriePathEntity) {
+		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(tvSeriePathEntity);
+		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
 	}
 	
 }

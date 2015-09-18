@@ -1,12 +1,13 @@
 package it.ninjatech.kvo.tvserie;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSerieActor;
-import it.ninjatech.kvo.model.TvSerieEpisode;
-import it.ninjatech.kvo.model.TvSerieFanart;
-import it.ninjatech.kvo.model.TvSerieImage;
-import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerieActor;
+import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerieImage;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Labels;

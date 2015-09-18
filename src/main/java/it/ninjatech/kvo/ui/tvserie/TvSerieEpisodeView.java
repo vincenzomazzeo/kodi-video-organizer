@@ -1,8 +1,8 @@
 package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
-import it.ninjatech.kvo.model.TvSerieEpisode;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;

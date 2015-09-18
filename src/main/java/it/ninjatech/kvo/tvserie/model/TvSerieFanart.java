@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.model;
+package it.ninjatech.kvo.tvserie.model;
 
 import java.awt.Dimension;
 

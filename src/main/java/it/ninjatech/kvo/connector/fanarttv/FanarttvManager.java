@@ -3,7 +3,7 @@ package it.ninjatech.kvo.connector.fanarttv;
 import java.io.File;
 
 import it.ninjatech.kvo.connector.fanarttv.model.FanarttvFanarts;
-import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;

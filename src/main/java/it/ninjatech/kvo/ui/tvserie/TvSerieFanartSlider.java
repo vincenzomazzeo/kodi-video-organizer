@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.component.AbstractImageSlider;
 

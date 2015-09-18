@@ -1,4 +1,7 @@
-package it.ninjatech.kvo.model;
+package it.ninjatech.kvo.tvserie.model;
+
+import it.ninjatech.kvo.model.EnhancedLocale;
+import it.ninjatech.kvo.model.ImageProvider;
 
 import java.math.BigDecimal;
 

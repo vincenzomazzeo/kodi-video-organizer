@@ -1,12 +1,13 @@
-package it.ninjatech.kvo.db.mapper;
+package it.ninjatech.kvo.tvserie.dbmapper;
 
+import it.ninjatech.kvo.db.AbstractDbMapper;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.model.ImageProvider;
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSerieActor;
-import it.ninjatech.kvo.model.TvSerieFanart;
-import it.ninjatech.kvo.model.TvSerieImage;
-import it.ninjatech.kvo.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerieActor;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerieImage;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,7 +19,6 @@ import java.util.List;
 public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void save(TvSerie tvSerie) throws Exception {
 		Connection connection = null;
 
@@ -26,7 +26,7 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 			connection = ConnectionHandler.getInstance().getConnection();
 
 			// Tv Serie
-			save(connection,
+			write(connection,
 				 "INSERT INTO tv_serie (id, tv_series_id, path, provider_id, name, language, first_aired, content_rating, network, overview, rating, rating_count, status, banner, fanart, poster, imdb_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 				 new SimpleEntry<Object, Integer>(tvSerie.getId(), Types.VARCHAR),
 				 new SimpleEntry<Object, Integer>(tvSerie.getTvSeriePathEntity().getTvSeriesPathEntity().getId(), Types.VARCHAR),
@@ -47,14 +47,14 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 				 new SimpleEntry<Object, Integer>(tvSerie.getImdbId(), Types.VARCHAR));
 
 			for (String genre : tvSerie.getGenres()) {
-				save(connection,
+				write(connection,
 				     "INSERT INTO tv_serie_genre (tv_serie_id, genre) VALUES (?, ?)",
 				     new SimpleEntry<Object, Integer>(tvSerie.getId(), Types.VARCHAR),
 					 new SimpleEntry<Object, Integer>(genre, Types.VARCHAR));
 			}
 			
 			for (TvSerieActor actor : tvSerie.getActors()) {
-				save(connection,
+				write(connection,
 					 "INSERT INTO tv_serie_actor (id, tv_serie_id, name, role, image_path, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
 					 new SimpleEntry<Object, Integer>(actor.getId(), Types.VARCHAR),
 					 new SimpleEntry<Object, Integer>(tvSerie.getId(), Types.VARCHAR),
@@ -82,10 +82,12 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 			connection.commit();
 		}
 		catch (Exception e) {
-			try {
-				connection.rollback();
-			}
-			catch (Exception e2) {
+			if (connection != null) {
+				try {
+					connection.rollback();
+				}
+				catch (Exception e2) {
+				}
 			}
 
 			throw e;
@@ -101,9 +103,15 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 		}
 
 	}
+	
+	@Override
+	public void delete(TvSerie tvSerie) throws Exception {
+		write("DELETE FROM tv_serie WHERE id = ?", new SimpleEntry<Object, Integer>(tvSerie.getId(), Types.VARCHAR));
+	}
 
 	@Override
 	protected TvSerie map(ResultSet resultSet) throws Exception {
+		// TODO
 		// id, tv_series_id, provider_id, name, language, first_aired, content_rating, network, overview, rating, rating_count, status, banner, fanart, poster, imdb_id
 		return null;
 	}
@@ -113,9 +121,8 @@ public class TvSerieDbMapper extends AbstractDbMapper<TvSerie> {
 		return super.find();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void saveImage(Connection connection, TvSerieImage image, String tvSerieId, ImageProvider imageProvider, TvSerieFanart fanart) throws Exception {
-		save(connection,
+		write(connection,
 		     "INSERT INTO tv_serie_image (id, tv_serie_id, provider, fanart, path, rating, rating_count, language) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 		     new SimpleEntry<Object, Integer>(image.getId(), Types.VARCHAR),
 		     new SimpleEntry<Object, Integer>(tvSerieId, Types.VARCHAR),

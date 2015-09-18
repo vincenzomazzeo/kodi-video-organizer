@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.async.job;
 
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
 import it.ninjatech.kvo.util.Logger;
 
 import java.awt.Dimension;

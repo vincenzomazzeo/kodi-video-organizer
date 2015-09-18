@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.tvserie;
+package it.ninjatech.kvo.tvserie.model;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
 
@@ -12,29 +12,37 @@ public class TvSeriesPathEntity extends AbstractPathEntity {
 
 	private final SortedSet<TvSeriePathEntity> tvSeries;
 	
-	protected TvSeriesPathEntity(String id, String path, String label) {
+	public TvSeriesPathEntity(String id, String path, String label) {
 		super(id, path, label);
 		
 		this.tvSeries = new TreeSet<>();
 	}
 	
-	protected TvSeriesPathEntity(File file) {
+	public TvSeriesPathEntity(File file) {
 		super(file);
 		
 		this.tvSeries = new TreeSet<>();
 	}
 	
-	protected void addTvSerie(File path) {
-		TvSeriePathEntity entity = new TvSeriePathEntity(path, this);
+	public TvSeriePathEntity addTvSerie(File path) {
+		TvSeriePathEntity result = new TvSeriePathEntity(path, this);
 		
-		if (!this.tvSeries.contains(entity)) {
-			this.tvSeries.add(entity);
+		if (!this.tvSeries.contains(result)) {
+			this.tvSeries.add(result);
 		}
+		else {
+			result = null;
+		}
+		
+		return result;
 	}
 
-	// TODO capire se si può rendere protected
 	public Set<TvSeriePathEntity> getTvSeries() {
 		return Collections.unmodifiableSortedSet(this.tvSeries);
+	}
+	
+	public void removeTvSerie(TvSeriePathEntity tvSerie) {
+		this.tvSeries.remove(tvSerie);
 	}
 
 }

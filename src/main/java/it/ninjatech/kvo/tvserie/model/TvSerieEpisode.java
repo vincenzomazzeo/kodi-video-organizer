@@ -1,4 +1,6 @@
-package it.ninjatech.kvo.model;
+package it.ninjatech.kvo.tvserie.model;
+
+import it.ninjatech.kvo.model.EnhancedLocale;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -6,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+
+// TODO capire quali metodi possono diventare protected
 
 public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 	
@@ -112,6 +116,10 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 	
 	public void addSubtitleFilename(String subtitleFilename) {
 		this.subtitleFilenames.add(subtitleFilename);
+	}
+	
+	public void removeSubtitleFilename(String subtitleFilename) {
+		this.subtitleFilenames.remove(subtitleFilename);
 	}
 
 	public BigDecimal getDvdNumber() {

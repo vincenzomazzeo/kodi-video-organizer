@@ -1,10 +1,10 @@
 package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSerieEpisode;
-import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;

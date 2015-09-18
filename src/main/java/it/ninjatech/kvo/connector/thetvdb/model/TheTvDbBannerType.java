@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.connector.thetvdb.model;
 
-import it.ninjatech.kvo.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
 
 public enum TheTvDbBannerType {
 

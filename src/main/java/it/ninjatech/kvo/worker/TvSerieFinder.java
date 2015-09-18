@@ -2,7 +2,7 @@ package it.ninjatech.kvo.worker;
 
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 
 import java.util.ArrayList;
 import java.util.List;

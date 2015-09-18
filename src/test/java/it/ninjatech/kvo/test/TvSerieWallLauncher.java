@@ -6,14 +6,14 @@ import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
-import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.TvSerieManager;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.tvserie.TvSerieController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.util.PeopleManager;
-import it.ninjatech.kvo.worker.TvSerieFileScanner;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -38,6 +38,7 @@ public class TvSerieWallLauncher extends WebDialog implements WindowListener, Hi
 		AsyncManager.init();
 		PeopleManager.init();
 		EnhancedLocaleMap.init();
+		TvSerieManager.init();
 		TheTvDbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getTheTvDbEnabled());
 		TheTvDbManager.getInstance().setApiKey(SettingsHandler.getInstance().getSettings().getTheTvDbApiKey());
 		FanarttvManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getFanarttvEnabled());
@@ -58,7 +59,7 @@ public class TvSerieWallLauncher extends WebDialog implements WindowListener, Hi
 		tvSeriesPathEntity.addTvSerie(new File("/Users/hawkeleon/Downloads/Workbench/Arrow"));
 		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
 		tvSeriePathEntity.setTvSerie(tvSerie);
-		(new TvSerieFileScanner(tvSerie)).work();
+//		TvSerieManager.getInstance().scan(tvSeriePathEntity);
 		MemoryUtils.printMemory("After start");
 		
 		TvSerieWallLauncher tvSerieWall = new TvSerieWallLauncher(tvSerie);

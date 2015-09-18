@@ -4,7 +4,7 @@ import it.ninjatech.kvo.async.AsyncJob;
 import it.ninjatech.kvo.async.AsyncJobListener;
 import it.ninjatech.kvo.async.AsyncManager;
 import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
-import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.UI;
 

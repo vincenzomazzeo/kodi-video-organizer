@@ -1,4 +1,4 @@
-package it.ninjatech.kvo.tvserie;
+package it.ninjatech.kvo.tvserie.worker;
 
 import it.ninjatech.kvo.worker.AbstractWorker;
 

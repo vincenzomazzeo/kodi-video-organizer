@@ -7,7 +7,7 @@ import it.ninjatech.kvo.async.job.CacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.PersonAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
-import it.ninjatech.kvo.model.TvSerieActor;
+import it.ninjatech.kvo.tvserie.model.TvSerieActor;
 
 import java.awt.Image;
 import java.util.ArrayList;

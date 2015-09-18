@@ -1,10 +1,7 @@
-package it.ninjatech.kvo.tvserie;
+package it.ninjatech.kvo.tvserie.model;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.FsElement;
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSerieEpisode;
-import it.ninjatech.kvo.model.TvSerieSeason;
 
 import java.io.File;
 import java.util.Collections;
@@ -45,51 +42,46 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		this.tvSerie = null;
 	}
 
-	// TODO capire se si può rendere protected
 	public TvSeriesPathEntity getTvSeriesPathEntity() {
 		return this.tvSeriesPathEntity;
 	}
 	
-	public void addFsElement(FsElement fsElement) {
-		this.fsElements.add(fsElement);
+	public void setFsElements(SortedSet<FsElement> fsElements) {
+		this.fsElements.clear();
+		this.fsElements.addAll(fsElements);
 	}
 	
 	public Set<FsElement> getFsElements() {
 		return Collections.unmodifiableSortedSet(this.fsElements);
 	}
 
-	// TODO capire se si può rendere protected
 	public TvSerie getTvSerie() {
 		return this.tvSerie;
 	}
 	
-	// TODO capire se si può rendere protected
-	public void setVideoFiles(Integer season, SortedSet<String> videoFiles) {
-		this.videoFiles.put(season, videoFiles);
+	public void setVideoFiles(Map<Integer, SortedSet<String>> videoFiles) {
+		this.videoFiles.clear();
+		this.videoFiles.putAll(videoFiles);
 	}
 	
-	// TODO capire se si può rendere protected
-	public void setSubtitleFiles(Integer season, SortedSet<String> subtitleFiles) {
-		this.subtitleFiles.put(season, subtitleFiles);
+	public void setSubtitleFiles(Map<Integer, SortedSet<String>> subtitleFiles) {
+		this.subtitleFiles.clear();
+		this.subtitleFiles.putAll(subtitleFiles);
 	}
 	
-	// TODO capire se si può rendere protected
 	public void setExtraFanarts(Set<String> extraFanarts) {
 		this.extraFanarts.clear();
 		this.extraFanarts.addAll(extraFanarts);
 	}
 	
-	// TODO capire se si può rendere protected
 	public boolean hasExtraFanarts() {
 		return !this.extraFanarts.isEmpty();
 	}
 	
-	// TODO capire se si può rendere protected
 	public Set<String> getExtraFanarts() {
 		return Collections.unmodifiableSortedSet(this.extraFanarts);
 	}
 	
-	// TODO capire se si può rendere protected
 	public Set<String> getVideoFilesNotReferenced(Integer season) {
 		Set<String> result = new TreeSet<>();
 		
@@ -109,7 +101,6 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		return result;
 	}
 	
-	// TODO capire se si può rendere protected
 	public Set<String> getSubtitleFilesNotReferenced(Integer season) {
 		Set<String> result = new TreeSet<>();
 		
@@ -127,17 +118,9 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		return result;
 	}
 
-	// TODO capire se si può rendere protected
 	public void setTvSerie(TvSerie tvSerie) {
 		this.tvSerie = tvSerie;
 		this.tvSerie.setTvSeriePathEntity(this);
-	}
-	
-	protected void clearFileData() {
-		this.fsElements.clear();
-		this.videoFiles.clear();
-		this.subtitleFiles.clear();
-		this.extraFanarts.clear();
 	}
 	
 }

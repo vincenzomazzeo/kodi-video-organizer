@@ -2,8 +2,8 @@ package it.ninjatech.kvo.connector.thetvdb.model;
 
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbDateAdapter;
 import it.ninjatech.kvo.connector.thetvdb.adapter.TheTvDbPipeAdapter;
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.math.BigDecimal;

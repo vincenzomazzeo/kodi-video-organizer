@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.ui.explorer.tvserie;
 
-import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 
 import java.awt.Component;
 import java.awt.Rectangle;

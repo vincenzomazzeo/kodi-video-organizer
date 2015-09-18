@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.ui;
 
-import it.ninjatech.kvo.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;

@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.worker;
 
-import it.ninjatech.kvo.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
 import it.ninjatech.kvo.util.Utils;
 
 import java.io.File;

@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.ui;
 
 import it.ninjatech.kvo.KodiVideoOrganizer;
-import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.component.ToolBar;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleController;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;

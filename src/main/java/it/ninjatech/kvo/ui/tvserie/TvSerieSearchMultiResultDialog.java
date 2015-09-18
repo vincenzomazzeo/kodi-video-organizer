@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.util.Labels;

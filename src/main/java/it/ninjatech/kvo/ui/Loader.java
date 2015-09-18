@@ -9,7 +9,7 @@ import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.tvserie.TvSerieManager;
-import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.PeopleManager;

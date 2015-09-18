@@ -1,11 +1,11 @@
 package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
-import it.ninjatech.kvo.model.TvSerie;
-import it.ninjatech.kvo.model.TvSerieActor;
-import it.ninjatech.kvo.model.TvSerieFanart;
-import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerieActor;
+import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;

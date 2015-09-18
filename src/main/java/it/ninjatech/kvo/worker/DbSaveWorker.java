@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.worker;
 
-import it.ninjatech.kvo.db.mapper.AbstractDbMapper;
+import it.ninjatech.kvo.db.AbstractDbMapper;
 import it.ninjatech.kvo.util.Labels;
 
 public class DbSaveWorker<T> extends AbstractWorker<Void> {

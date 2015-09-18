@@ -1,8 +1,8 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.ImageProvider;
+import it.ninjatech.kvo.tvserie.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.ImageRetriever;

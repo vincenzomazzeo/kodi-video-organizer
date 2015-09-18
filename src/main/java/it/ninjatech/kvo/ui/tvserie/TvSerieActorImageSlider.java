@@ -2,7 +2,7 @@ package it.ninjatech.kvo.ui.tvserie;
 
 import java.awt.Dimension;
 
-import it.ninjatech.kvo.model.TvSerieActor;
+import it.ninjatech.kvo.tvserie.model.TvSerieActor;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.component.AbstractImageSlider;

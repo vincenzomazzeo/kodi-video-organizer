@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.util;
 
-import it.ninjatech.kvo.model.TvSerieSeason;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 
 public final class Labels {
 

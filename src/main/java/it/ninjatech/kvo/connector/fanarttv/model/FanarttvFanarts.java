@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.connector.fanarttv.model;
 
-import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import java.util.Set;

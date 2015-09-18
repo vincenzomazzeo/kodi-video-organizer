@@ -1,6 +1,7 @@
-package it.ninjatech.kvo.model;
+package it.ninjatech.kvo.tvserie.model;
 
-import it.ninjatech.kvo.tvserie.TvSeriePathEntity;
+import it.ninjatech.kvo.model.EnhancedLocale;
+import it.ninjatech.kvo.model.ImageProvider;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -75,6 +76,24 @@ public class TvSerie {
 		else if (!this.id.equals(other.id))
 			return false;
 		return true;
+	}
+	
+	public void clear() {
+		this.firstAired = null;
+		this.contentRating = null;
+		this.genres = null;
+		this.network = null;
+		this.overview = null;
+		this.rating = null;
+		this.ratingCount = null;
+		this.status = null;
+		this.banner = null;
+		this.fanart = null;
+		this.poster = null;
+		this.imdbId = null;
+		this.seasons.clear();
+		this.actors.clear();
+		this.fanarts.clear();
 	}
 
 	public void addEpisode(Integer seasonNumber, TvSerieEpisode episode) {

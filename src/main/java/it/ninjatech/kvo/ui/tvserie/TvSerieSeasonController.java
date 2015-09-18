@@ -2,13 +2,13 @@ package it.ninjatech.kvo.ui.tvserie;
 
 import it.ninjatech.kvo.async.job.CacheRemoteImageAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
-import it.ninjatech.kvo.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.ImageProvider;
-import it.ninjatech.kvo.model.TvSerieEpisode;
-import it.ninjatech.kvo.model.TvSerieSeason;
-import it.ninjatech.kvo.model.TvSerieSeasonImage;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.model.AbstractTvSerieImage;
+import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeasonImage;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.UI;

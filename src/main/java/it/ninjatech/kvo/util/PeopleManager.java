@@ -1,7 +1,7 @@
 package it.ninjatech.kvo.util;
 
 import it.ninjatech.kvo.model.ImageProvider;
-import it.ninjatech.kvo.model.TvSerieActor;
+import it.ninjatech.kvo.tvserie.model.TvSerieActor;
 
 import java.util.HashMap;
 import java.util.Map;

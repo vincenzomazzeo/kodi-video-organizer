@@ -1,8 +1,9 @@
-package it.ninjatech.kvo.db.mapper;
+package it.ninjatech.kvo.tvserie.dbmapper;
 
-import it.ninjatech.kvo.model.TvSerieEpisode;
-import it.ninjatech.kvo.model.TvSerieSeason;
-import it.ninjatech.kvo.model.TvSerieSeasonImage;
+import it.ninjatech.kvo.db.AbstractDbMapper;
+import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeasonImage;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,16 +17,15 @@ public class TvSerieSeasonDbMapper extends AbstractDbMapper<TvSerieSeason> {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected void save(Connection connection, TvSerieSeason tvSerieSeason) throws Exception {
-		save(connection,
+		write(connection,
 		     "INSERT INTO tv_serie_season (id, tv_serie_id, number) VALUES (?, ?, ?)",
 		     new SimpleEntry<Object, Integer>(tvSerieSeason.getId(), Types.VARCHAR),
 		     new SimpleEntry<Object, Integer>(tvSerieSeason.getTvSerie().getId(), Types.VARCHAR),
 		     new SimpleEntry<Object, Integer>(tvSerieSeason.getNumber(), Types.INTEGER));
 		
 		for (TvSerieSeasonImage image : tvSerieSeason.getImages()) {
-			save (connection,
+			write (connection,
 			      "INSERT INTO tv_serie_season_image (id, tv_serie_season_id, provider, path, rating, rating_count, language) VALUES (?, ?, ?, ?, ?, ?, ?)",
 			      new SimpleEntry<Object, Integer>(image.getId(), Types.VARCHAR),
 			      new SimpleEntry<Object, Integer>(tvSerieSeason.getId(), Types.VARCHAR),

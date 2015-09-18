@@ -2,14 +2,14 @@ package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
-import it.ninjatech.kvo.db.mapper.TvSerieDbMapper;
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.EnhancedLocale;
-import it.ninjatech.kvo.model.TvSerie;
 import it.ninjatech.kvo.model.Type;
 import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
-import it.ninjatech.kvo.tvserie.TvSeriesPathEntity;
+import it.ninjatech.kvo.tvserie.dbmapper.TvSerieDbMapper;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;

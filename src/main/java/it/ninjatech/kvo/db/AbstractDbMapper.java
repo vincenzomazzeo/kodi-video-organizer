@@ -1,6 +1,4 @@
-package it.ninjatech.kvo.db.mapper;
-
-import it.ninjatech.kvo.db.ConnectionHandler;
+package it.ninjatech.kvo.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +14,9 @@ public abstract class AbstractDbMapper<T> {
 
 	public void save(T entity) throws Exception {
 	}
+	
+	public void delete(T entity) throws Exception {
+	}
 
 	public T findOne() throws Exception {
 		return null;
@@ -26,21 +27,23 @@ public abstract class AbstractDbMapper<T> {
 	}
 
 	@SafeVarargs
-	protected final void save(String statement, Entry<Object, Integer>... parameters) throws Exception {
+	protected final void write(String statement, Entry<Object, Integer>... parameters) throws Exception {
 		Connection connection = null;
 
 		try {
 			connection = ConnectionHandler.getInstance().getConnection();
-			
-			save(connection, statement, parameters);
+
+			write(connection, statement, parameters);
 
 			connection.commit();
 		}
 		catch (Exception e) {
-			try {
-				connection.rollback();
-			}
-			catch (Exception e2) {
+			if (connection != null) {
+				try {
+					connection.rollback();
+				}
+				catch (Exception e2) {
+				}
 			}
 
 			throw e;
@@ -57,7 +60,7 @@ public abstract class AbstractDbMapper<T> {
 	}
 
 	@SafeVarargs
-	protected final void save(Connection connection, String statement, Entry<Object, Integer>... parameters) throws Exception {
+	protected final void write(Connection connection, String statement, Entry<Object, Integer>... parameters) throws Exception {
 		PreparedStatement preparedStatement = null;
 
 		try {

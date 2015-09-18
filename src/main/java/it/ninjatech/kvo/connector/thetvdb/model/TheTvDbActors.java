@@ -1,6 +1,6 @@
 package it.ninjatech.kvo.connector.thetvdb.model;
 
-import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 
 import java.util.List;
 

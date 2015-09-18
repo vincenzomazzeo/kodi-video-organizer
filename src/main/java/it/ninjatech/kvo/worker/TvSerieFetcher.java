@@ -2,7 +2,7 @@ package it.ninjatech.kvo.worker;
 
 import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
-import it.ninjatech.kvo.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 
 public class TvSerieFetcher extends AbstractWorker<TvSerie> {
 
