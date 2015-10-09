@@ -7,7 +7,7 @@ public class FsDirectoryExplorerRootsTreeNode extends AbstractFsExplorerRootsTre
 
 	private static final long serialVersionUID = -1101982841588522847L;
 
-	public FsDirectoryExplorerRootsTreeNode(AbstractExplorerRootsTreeNode parent, String label) {
+	protected FsDirectoryExplorerRootsTreeNode(AbstractExplorerRootsTreeNode parent, String label) {
 		super(true, parent, label);
 	}
 

@@ -5,17 +5,20 @@ import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.Type;
-import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.dbmapper.TvSerieDbMapper;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractFsExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootExplorerRootsTreeNode;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootsExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
@@ -113,14 +116,20 @@ public class ExplorerRootsController {
 			if (node.isFsScanningRequired()) {
 				node.removeChildren();
 
+				boolean scanResult = false;
 				AbstractPathEntity value = (AbstractPathEntity)node.getValue();
-
-				File root = new File(value.getPath());
-
-				ExplorerRootsFsScanner scanner = new ExplorerRootsFsScanner(root, node, value.getLabel());
-				scanner.scan();
-
-				this.model.reload(node);
+				if (value instanceof TvSeriePathEntity) {
+					TvSeriePathEntity tvSeriePathEntity = (TvSeriePathEntity)value;
+					scanResult = TvSerieManager.getInstance().scan(tvSeriePathEntity);
+					if (scanResult) {
+						AbstractFsExplorerRootsTreeNode.createAndAddFromFsElements(tvSeriePathEntity.getFsElements(), node);
+					}
+					else {
+						AbstractRootsExplorerRootsTreeNode<?> parent = (AbstractRootsExplorerRootsTreeNode<?>)node.getParent();
+						parent.remove(node);
+					}
+					this.model.reload(node);
+				}
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 package it.ninjatech.kvo.tvserie;
 
+import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.Type;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
@@ -10,11 +12,15 @@ import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanAllWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanOnlyRootWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.Labels;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -32,22 +38,31 @@ public final class TvSerieManager {
 		return self;
 	}
 	
-	private final Set<File> tvSeriesPathEntitieRoots;
+	private final Set<File> tvSeriesPathEntityRoots;
 	
 	private TvSerieManager() {
-		this.tvSeriesPathEntitieRoots = new HashSet<>();
+		this.tvSeriesPathEntityRoots = new HashSet<>();
+	}
+	
+	public Map<String, List<TvSerie>> search(Map<String, EnhancedLocale> data) {
+		Map<String, List<TvSerie>> result = null;
+		
+		TvSerieSearchWorker worker = new TvSerieSearchWorker(data);
+		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		
+		return result;
 	}
 	
 	public TvSeriesPathEntity addTvSeriesPathEntity(File root) {
 		TvSeriesPathEntity result = null;
 		
-		if (root != null && !this.tvSeriesPathEntitieRoots.contains(root)) {
+		if (root != null && !this.tvSeriesPathEntityRoots.contains(root)) {
 			TvSerieAddRootWorker worker = new TvSerieAddRootWorker(root);
 			
 			result = DeterminateProgressDialogWorker.show(worker, Labels.getScanningRoot(Type.TvSerie.getPlural(), root.getName()), true);			
 			
 			if (result != null) {
-				this.tvSeriesPathEntitieRoots.add(root);
+				this.tvSeriesPathEntityRoots.add(root);
 			}
 		}
 		
@@ -89,7 +104,7 @@ public final class TvSerieManager {
 	public Boolean scan(TvSeriePathEntity tvSeriePathEntity) {
 		Boolean result = null;
 		
-		TvSerieFetchWorker worker = new TvSerieFetchWorker(tvSeriePathEntity);
+		TvSerieScanWorker worker = new TvSerieScanWorker(tvSeriePathEntity); 
 		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
 		
 		return result;

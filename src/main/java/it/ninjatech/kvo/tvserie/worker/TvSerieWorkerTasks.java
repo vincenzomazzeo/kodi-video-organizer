@@ -2,6 +2,7 @@ package it.ninjatech.kvo.tvserie.worker;
 
 import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
+import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.FsElement;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.tvserie.dbmapper.TvSerieDbMapper;
@@ -16,10 +17,12 @@ import it.ninjatech.kvo.util.Labels;
 import java.io.File;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -45,6 +48,15 @@ public final class TvSerieWorkerTasks {
 		scan(tvSeriePathEntity, null);
 	}
 
+	protected static List<TvSerie> search(String name, EnhancedLocale language, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
+		// TODO handle progress notifier
+		List<TvSerie> result = new ArrayList<>();
+		
+		result.addAll(TheTvDbManager.getInstance().search(name, language));
+		
+		return result;
+	}
+	
 	protected static boolean check(File path, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
 		boolean result = false;
 

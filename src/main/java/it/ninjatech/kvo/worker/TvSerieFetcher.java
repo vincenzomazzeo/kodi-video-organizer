@@ -3,7 +3,7 @@ package it.ninjatech.kvo.worker;
 import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
-
+// TODO rimuovere
 public class TvSerieFetcher extends AbstractWorker<TvSerie> {
 
 	private final TvSerie tvSerie;

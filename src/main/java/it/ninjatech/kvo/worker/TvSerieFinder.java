@@ -6,7 +6,7 @@ import it.ninjatech.kvo.tvserie.model.TvSerie;
 
 import java.util.ArrayList;
 import java.util.List;
-
+// TODO rimuovere
 public class TvSerieFinder extends AbstractWorker<List<TvSerie>> {
 
 	private final String name;

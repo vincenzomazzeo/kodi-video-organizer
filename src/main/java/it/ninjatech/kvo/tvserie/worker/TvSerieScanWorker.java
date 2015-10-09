@@ -6,7 +6,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 
 public class TvSerieScanWorker extends AbstractTvSerieWorker<TvSeriePathEntity, Boolean> {
 
-	protected TvSerieScanWorker(TvSeriePathEntity input) {
+	public TvSerieScanWorker(TvSeriePathEntity input) {
 		super(input);
 	}
 

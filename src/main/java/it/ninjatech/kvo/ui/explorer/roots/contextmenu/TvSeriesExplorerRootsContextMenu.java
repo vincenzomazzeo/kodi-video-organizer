@@ -23,12 +23,16 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
 			// Open in System Explorer
 			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
 		}
+
+		// TODO
 		
 		// Remove
 		
-		// Rescan
+		// Scan
 		
-		// Refresh all
+		// Scan Recursive
+		
+		// Fetch all
 		
 		// Add new Tv Serie
 	}

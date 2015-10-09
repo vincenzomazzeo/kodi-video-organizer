@@ -30,6 +30,7 @@ public final class TvSerieHelper {
 	public static final String EXTRAFANART = "extrafanart";
 	public static final String SEASON = "season";
 
+	// TODO remove
 	public static List<TvSerie> searchFor(String name, EnhancedLocale language) {
 		List<TvSerie> result = null;
 
@@ -40,6 +41,7 @@ public final class TvSerieHelper {
 		return result;
 	}
 
+	// TODO remove
 	public static TvSerie fetch(TvSerie tvSerie) {
 		TvSerie result = null;
 

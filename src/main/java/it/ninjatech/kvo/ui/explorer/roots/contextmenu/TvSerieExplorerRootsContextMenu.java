@@ -26,6 +26,13 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
 			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
 		}
 		
+		// TODO
+		// Scan
+		
+		// Fetch
+		
+		// Remove
+		
 		if (TheTvDbManager.getInstance().isActive()) {
     		if (this.node.getValue().getTvSerie() != null) {
     			// Refresh

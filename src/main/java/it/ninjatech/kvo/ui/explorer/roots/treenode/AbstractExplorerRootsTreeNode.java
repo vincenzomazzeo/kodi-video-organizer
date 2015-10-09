@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 public abstract class AbstractExplorerRootsTreeNode extends DefaultMutableTreeNode implements Comparable<AbstractExplorerRootsTreeNode> {
@@ -69,6 +70,11 @@ public abstract class AbstractExplorerRootsTreeNode extends DefaultMutableTreeNo
 		return this.children.elements();
 	}
 	
+	@Override
+    public void remove(MutableTreeNode child) {
+	    this.children.remove(child);
+    }
+
 	public void addChild(AbstractExplorerRootsTreeNode child) {
 		this.children.add(child);
 	}
