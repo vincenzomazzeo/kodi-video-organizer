@@ -94,7 +94,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	@Override
 	public void notifyImageChoiceLeftClick(AbstractTvSerieImage image) {
 		this.currentSeasonImage = new File(Utils.getCacheDirectory(), image.getId());
-		CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), this.view.getSeasonImageSize());
+		CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), this.view.getSeasonImageSize(), "jpg");
 		this.mainJobHandler.handle(job, this.view);
 	}
 
@@ -114,7 +114,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 
 		for (TvSerieEpisode episode : this.season.getEpisodes()) {
 			if (StringUtils.isNotBlank(episode.getArtwork())) {
-				CacheRemoteImageAsyncJob episodeImageJob = new CacheRemoteImageAsyncJob(episode.getId(), ImageProvider.TheTvDb, episode.getArtwork(), this.view.getEpisodeImageSize());
+				CacheRemoteImageAsyncJob episodeImageJob = new CacheRemoteImageAsyncJob(episode.getId(), ImageProvider.TheTvDb, episode.getArtwork(), this.view.getEpisodeImageSize(), "jpg");
 				this.mainJobHandler.handle(episodeImageJob, this.view);
 			}
 		}
@@ -165,7 +165,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		Dimension imageSize = Dimensions.getTvSerieSeasonChooserSize();
 		TvSerieImageChoiceDialog dialog = TvSerieImageChoiceDialog.getInstance(this, Labels.getTvSerieSeason(this.season), images, imageSize);
 		for (TvSerieSeasonImage image : images) {
-			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
+			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize, "jpg");
 			this.imageChoiceJobHandler.handle(job, dialog);
 		}
 

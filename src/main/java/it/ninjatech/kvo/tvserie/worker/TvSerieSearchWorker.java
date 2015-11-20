@@ -17,9 +17,10 @@ public class TvSerieSearchWorker extends AbstractTvSerieWorker<Map<String, Enhan
 	public Map<String, List<TvSerie>> work() throws Exception {
 		Map<String, List<TvSerie>> result = new HashMap<>();
 		
-		// TODO message
-//		this.progressNotifier.notifyWorkerMessage(this.input.getLabel());
+		this.progressNotifier.notifyTaskInit(null, this.input.size());
+		int counter = 1;
 		for (String name : this.input.keySet()) {
+		    this.progressNotifier.notifyTaskUpdate(null, counter++);
 			result.put(name, TvSerieWorkerTasks.search(name, this.input.get(name), this.progressNotifier));
 		}
 		

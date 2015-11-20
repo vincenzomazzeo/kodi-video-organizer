@@ -31,7 +31,7 @@ public class TvSerieLocalFanartAsyncJob extends AbstractImageLoaderAsyncJob {
 		try {
 			Logger.log("-> executing local fanart %s\n", this.tvSerie.getTvSeriePathEntity().getId());
 			
-			this.image = getImage(this.tvSerie.getTvSeriePathEntity().getPath(), this.fanart.getFilename(), null, null, this.size);
+			this.image = getImage(this.tvSerie.getTvSeriePathEntity().getPath(), this.fanart.getFilename(), null, null, this.size, this.fanart.getType());
 		}
 		catch (Exception e) {
 			this.exception = e;

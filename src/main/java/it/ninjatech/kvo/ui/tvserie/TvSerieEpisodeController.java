@@ -63,7 +63,7 @@ public class TvSerieEpisodeController implements ImageSliderListener {
 		this.view.fill(tvSerieEpisode);
 		
 		if (StringUtils.isNotBlank(tvSerieEpisode.getArtwork())) {
-			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(tvSerieEpisode.getId(), ImageProvider.TheTvDb, tvSerieEpisode.getArtwork(), this.view.getArtworkSize());
+			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(tvSerieEpisode.getId(), ImageProvider.TheTvDb, tvSerieEpisode.getArtwork(), this.view.getArtworkSize(), "jpg");
 			this.mainJobHandler.handle(job, this.view, ARTWORK_ID);
 		}
 		

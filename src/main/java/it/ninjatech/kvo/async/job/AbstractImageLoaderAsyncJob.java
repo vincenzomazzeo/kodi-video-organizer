@@ -42,7 +42,7 @@ public abstract class AbstractImageLoaderAsyncJob extends AsyncJob {
 		return this.id;
 	}
 
-	protected Image getImage(String directory, String name, String cacheName, String remoteName, Dimension size) throws IOException {
+	protected Image getImage(String directory, String name, String cacheName, String remoteName, Dimension size, String type) throws IOException {
 		Image result = null;
 
 		File image = null;
@@ -83,7 +83,7 @@ public abstract class AbstractImageLoaderAsyncJob extends AsyncJob {
 					// Save in cache
 					image = new File(Utils.getCacheDirectory(), cacheName);
 					image.deleteOnExit();
-					ImageIO.write((BufferedImage)result, "jpg", image);
+					ImageIO.write((BufferedImage)result, type, image);
 					Logger.log("-> [%s] image %s requested to remote host (%s)\n", this.id, remoteName, this.provider);
 				}
 				break;

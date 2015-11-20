@@ -6,10 +6,11 @@ import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
+import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
-import it.ninjatech.kvo.ui.tvserie.TvSerieSearchControllerNEW;
+import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.util.PeopleManager;
@@ -17,6 +18,7 @@ import it.ninjatech.kvo.util.PeopleManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.alee.laf.WebLookAndFeel;
 
@@ -27,6 +29,7 @@ public class TvSerieSearchLauncher {
 		WebLookAndFeel.install();
 		SettingsHandler.init();
 		AsyncManager.init();
+		ConnectionHandler.init();
 		PeopleManager.init();
 		EnhancedLocaleMap.init();
 		TvSerieManager.init();
@@ -37,7 +40,9 @@ public class TvSerieSearchLauncher {
 		ImdbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getImdbEnabled());
 		MyApiFilmsManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getMyApiFilmsEnabled());
 
-		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("D:/GitHubRepository/Test")) ;
+		TvSeriesPathEntity tvSeriesPathEntity = TvSerieManager.getInstance().addTvSeriesPathEntity(new File("D:/GitHubRepository/Test"));
+//		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("D:/GitHubRepository/Test")) ;
+		
 		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/24"));
 		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Ciccio"));
 		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/La spada della verità"));
@@ -47,10 +52,10 @@ public class TvSerieSearchLauncher {
 		
 		List<TvSeriePathEntity> entities = new ArrayList<>(tvSeriesPathEntity.getTvSeries());
 		
-		TvSerieSearchControllerNEW controller = new TvSerieSearchControllerNEW(entities);
-		entities = controller.search();
+		TvSerieSearchController controller = new TvSerieSearchController(entities);
+		Map<TvSeriePathEntity, Boolean> searchResult = controller.search();
 		
-		System.out.println(entities.size());
+		System.out.println(searchResult.size());
 		
 		System.exit(0);
 	}

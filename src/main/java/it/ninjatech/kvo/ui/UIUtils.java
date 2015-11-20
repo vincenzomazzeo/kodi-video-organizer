@@ -325,12 +325,22 @@ public final class UIUtils {
         return result;
     }
 
-    public static WebLinkLabel makeImdbLink(String link) {
+    public static WebLinkLabel makeImdbTitleLink(String link) {
         WebLinkLabel result = new WebLinkLabel();
 
         result.setToolTipText(Labels.IMDB);
         result.setIcon(ImageRetriever.retrieveWallIMDb());
         result.setLink(ImdbManager.getTitleUrl(link), false);
+
+        return result;
+    }
+    
+    public static WebLinkLabel makeImdbActorLink(String link) {
+        WebLinkLabel result = new WebLinkLabel();
+
+        result.setToolTipText(Labels.IMDB);
+        result.setIcon(ImageRetriever.retrieveWallIMDb());
+        result.setLink(ImdbManager.getNameUrl(link), false);
 
         return result;
     }

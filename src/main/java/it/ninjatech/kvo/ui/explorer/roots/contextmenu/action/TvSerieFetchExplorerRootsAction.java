@@ -11,6 +11,7 @@ public class TvSerieFetchExplorerRootsAction extends AbstractExplorerRootsAction
 
 	private static final long serialVersionUID = 3659400507619583599L;
 	
+	
 	public TvSerieFetchExplorerRootsAction(ExplorerRootsController controller, TvSerieExplorerRootsTreeNode node, String text, Icon icon) {
 		super(controller, node, text, icon);
 	}

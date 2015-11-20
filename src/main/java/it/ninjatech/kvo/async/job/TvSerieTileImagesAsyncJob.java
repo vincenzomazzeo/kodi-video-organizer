@@ -36,11 +36,11 @@ public class TvSerieTileImagesAsyncJob extends AbstractImageLoaderAsyncJob {
 			this.fanart = getImage(this.tvSerie.getTvSeriePathEntity().getPath(), FANTART, 
 			                       String.format("%s_%s", this.tvSerie.getTvSeriePathEntity().getId(), FANTART), 
 			                       this.tvSerie.getFanart(), 
-			                       this.tileSize);
+			                       this.tileSize, "jpg");
 			this.poster = getImage(this.tvSerie.getTvSeriePathEntity().getPath(), POSTER, 
 			                       String.format("%s_%s", this.tvSerie.getTvSeriePathEntity().getId(), POSTER), 
 			                       this.tvSerie.getPoster(), 
-			                       this.tilePosterSize);
+			                       this.tilePosterSize, "jpg");
 		}
 		catch (Exception e) {
 			this.exception = e;

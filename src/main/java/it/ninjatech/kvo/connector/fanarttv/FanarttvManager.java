@@ -1,9 +1,9 @@
 package it.ninjatech.kvo.connector.fanarttv;
 
-import java.io.File;
-
 import it.ninjatech.kvo.connector.fanarttv.model.FanarttvFanarts;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
+
+import java.io.File;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
@@ -14,84 +14,92 @@ import com.sun.jersey.api.client.WebResource;
 
 public class FanarttvManager {
 
-	public static final String BASE_URL = "https://fanart.tv";
+    public static final String BASE_URL = "http://webservice.fanart.tv";
 
-	private static FanarttvManager self;
+    private static FanarttvManager self;
 
-	public static FanarttvManager getInstance() {
-		return self == null ? self = new FanarttvManager() : self;
-	}
+    public static FanarttvManager getInstance() {
+        return self == null ? self = new FanarttvManager() : self;
+    }
 
-	private final WebResource webResource;
-	private boolean enabled;
-	private boolean active;
-	private String apiKey;
+    private final WebResource webResource;
+    private boolean enabled;
+    private boolean active;
+    private String apiKey;
 
-	private FanarttvManager() {
-		this.webResource = Client.create().resource(BASE_URL);
-		this.enabled = false;
-		this.active = false;
-	}
+    private FanarttvManager() {
+        this.webResource = Client.create().resource(BASE_URL);
+        this.enabled = false;
+        this.active = false;
+    }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public boolean isActive() {
-		return this.enabled && this.active;
-	}
+    public boolean isActive() {
+        return this.enabled && this.active;
+    }
 
-	public void deactivate() {
-		this.active = false;
-		this.apiKey = null;
-	}
+    public void deactivate() {
+        this.active = false;
+        this.apiKey = null;
+    }
 
-	public boolean checkApiKey(String apiKey) {
-		boolean result = false;
+    public boolean checkApiKey(String apiKey) {
+        boolean result = false;
 
-		ClientResponse response = this.webResource.
-				path("/v3").
-				path("/tv").
-				path("/72158").
-				queryParam("api_key", apiKey).
-				type(MediaType.APPLICATION_JSON).
-				get(ClientResponse.class);
+        ClientResponse response = this.webResource.
+                path("/v3").
+                path("/tv").
+                path("/72158").
+                queryParam("api_key", apiKey).
+                type(MediaType.APPLICATION_JSON).
+                get(ClientResponse.class);
 
-		result = response.getStatus() == Status.OK.getStatusCode();
+        result = response.getStatus() == Status.OK.getStatusCode();
 
-		if (result) {
-			this.active = true;
-			this.apiKey = apiKey;
-		}
+        if (result) {
+            this.active = true;
+            this.apiKey = apiKey;
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public boolean setApiKey(String apiKey) {
-		boolean result = checkApiKey(apiKey);
+    public boolean setApiKey(String apiKey) {
+        boolean result = checkApiKey(apiKey);
 
-		if (result) {
-			this.active = true;
-			this.apiKey = apiKey;
-		}
+        if (result) {
+            this.active = true;
+            this.apiKey = apiKey;
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public void getData(TvSerie tvSerie) {
-		FanarttvFanarts fanarttvFanarts = this.webResource.
-				path("/v3").
-				path("/tv").
-				path(tvSerie.getProviderId()).
-				queryParam("api_key", apiKey).
-				type(MediaType.APPLICATION_JSON).
-				get(FanarttvFanarts.class);
+    public void getData(TvSerie tvSerie) {
+        if (isActive()) {
+            FanarttvFanarts fanarttvFanarts = this.webResource.
+                    path("/v3").
+                    path("/tv").
+                    path(tvSerie.getProviderId()).
+                    queryParam("api_key", apiKey).
+                    type(MediaType.APPLICATION_JSON).
+                    get(FanarttvFanarts.class);
 
-		fanarttvFanarts.fill(tvSerie);
-	}
+            fanarttvFanarts.fill(tvSerie);
+        }
+    }
 
-	public File getImage(String path) {
-		return Client.create().resource(path).get(File.class);
-	}
+    public File getImage(String path) {
+        File result = null;
+        
+        if (isActive()) {
+            result = Client.create().resource(path).get(File.class);
+        }
+        
+        return result;
+    }
 
 }

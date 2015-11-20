@@ -5,6 +5,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsModel;
 import it.ninjatech.kvo.ui.explorer.tvserie.ExplorerTvSerieController;
+import it.ninjatech.kvo.ui.wall.WallController;
 
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class ExplorerController {
 	private final ExplorerTvSerieController tvSerieController;
 	private final ExplorerView view;
 	
-	public ExplorerController(List<TvSeriesPathEntity> tvSeriesPathEntities) {
+	public ExplorerController(List<TvSeriesPathEntity> tvSeriesPathEntities, WallController wallController) {
 		this.rootsController = new ExplorerRootsController(new ExplorerRootsModel(), this, tvSeriesPathEntities);
-		this.tvSerieController = new ExplorerTvSerieController();
+		this.tvSerieController = new ExplorerTvSerieController(wallController);
 		this.view = new ExplorerView(this);
 		
 		this.view.addRootsViewTab(this.rootsController.getView());

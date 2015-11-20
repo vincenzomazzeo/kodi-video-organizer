@@ -12,6 +12,7 @@ import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
+import it.ninjatech.kvo.util.Logger;
 import it.ninjatech.kvo.util.PeopleManager;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.AbstractWorker;
@@ -150,77 +151,6 @@ public class Loader extends WebFrame {
 				notifyUpdate(null, progress);
 			}
 			
-//			notifyUpdate("Checking working directory", 0);
-//
-//			if (!Utils.getWorkingDirectory().exists()) {
-//				if (!Utils.getWorkingDirectory().mkdirs()) {
-//					throw new Exception("Failed to create working directory. Program will exit.");
-//				}
-//			}
-//			if (!Utils.getCacheDirectory().exists()) {
-//				if (!Utils.getCacheDirectory().mkdirs()) {
-//					throw new Exception("Failed to create cache directory. Program will exit.");
-//				}
-//			}
-			
-//			notifyUpdate("Cleaning cache", 2);
-//			File[] cachedFiles = Utils.getCacheDirectory().listFiles();
-//			for (File cachedFile : cachedFiles) {
-//				cachedFile.delete();
-//			}
-			
-//			notifyUpdate("Reading settings", 5);
-//			SettingsHandler.init();
-//			
-//			Settings settings = SettingsHandler.getInstance().getSettings();
-
-//			notifyUpdate("Initializing Async Manager", 7);
-//			AsyncManager.init();
-			
-//			notifyUpdate("Initializing Tv Serie Manager", 8);
-			
-			
-//			notifyUpdate("Initializing People Manager", 8);
-//			PeopleManager.init();
-			
-//			notifyUpdate("Loading enhanced locale map", 9);
-//			EnhancedLocaleMap.init();
-
-//			if (StringUtils.isNotBlank(settings.getTheTvDbApiKey()) && settings.getTheTvDbEnabled()) {
-//				notifyUpdate("Contacting TheTVDB", 10);
-//				TheTvDbManager.getInstance().setApiKey(settings.getTheTvDbApiKey());
-//			}
-			
-//			if (StringUtils.isNotBlank(settings.getFanarttvApiKey()) && settings.getFanarttvEnabled()) {
-//				notifyUpdate("Contacting Fanart.tv", 25);
-//				FanarttvManager.getInstance().setApiKey(settings.getFanarttvApiKey());
-//			}
-			
-//			TheTvDbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getTheTvDbEnabled());
-//			FanarttvManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getFanarttvEnabled());
-//			ImdbManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getImdbEnabled());
-//			MyApiFilmsManager.getInstance().setEnabled(SettingsHandler.getInstance().getSettings().getMyApiFilmsEnabled());
-			
-//			notifyUpdate("Connecting to DB", 40);
-//			ConnectionHandler.init();
-			
-//			notifyUpdate("Loading TV Series", 60);
-//			List<TvSeriesPathEntity> tvSeriesPathEntities = (new TvSeriesPathEntityDbMapper()).find();
-//			TvSerieDbMapper tvSerieDbMapper = new TvSerieDbMapper();
-//			for (TvSeriesPathEntity tvSeriesPathEntity : tvSeriesPathEntities) {
-//				List<TvSerie> tvSeries = tvSerieDbMapper.find(tvSeriesPathEntity.getId());
-//				
-//				tvSeriesPathEntity.addTvSerie(null)
-//			}
-			/*
-		tvSeriesPathEntity.addTvSerie(new File("/Users/hawkeleon/Downloads/Workbench/Arrow"));
-		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
-		tvSeriePathEntity.setTvSerie(tvSerie);
-		(new TvSerieFileScanner(tvSerie)).work();
-			 */
-			
-//			notifyUpdate("Loading Movies", 80);
-			
 			result = new Result(this.tvSeriesPathEntities);
 			
 			notifyUpdate("Done", 100);
@@ -235,11 +165,13 @@ public class Loader extends WebFrame {
 					throw new Exception("Failed to create working directory. Program will exit.");
 				}
 			}
+			Logger.log("Working directory: %s\n", Utils.getWorkingDirectory().getAbsolutePath());
 			if (!Utils.getCacheDirectory().exists()) {
 				if (!Utils.getCacheDirectory().mkdirs()) {
 					throw new Exception("Failed to create cache directory. Program will exit.");
 				}
 			}
+			Logger.log("Cache directory: %s\n", Utils.getWorkingDirectory().getAbsolutePath());
 		}
 		
 		@SuppressWarnings("unused")

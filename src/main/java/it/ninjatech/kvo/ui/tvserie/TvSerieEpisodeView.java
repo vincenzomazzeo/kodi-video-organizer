@@ -253,7 +253,7 @@ public class TvSerieEpisodeView extends WebPanel implements TvSerieImageLoaderLi
 	private void makeInfoPane() {
 		this.firstAired = UIUtils.makeStandardLabel("", 12, null, null);
 
-		this.imdb = UIUtils.makeImdbLink("");
+		this.imdb = UIUtils.makeImdbTitleLink("");
 
 		this.infoPane = UIUtils.makeFlowLayoutPane(FlowLayout.CENTER, 15, 5);
 	}

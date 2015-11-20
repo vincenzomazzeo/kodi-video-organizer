@@ -14,7 +14,7 @@ import com.alee.laf.menu.WebMenuItem;
 public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContextMenu<TvSerieExplorerRootsTreeNode> {
 
 	private static final long serialVersionUID = 5985142688588885888L;
-
+	
 	public TvSerieExplorerRootsContextMenu(ExplorerRootsController controller, TvSerieExplorerRootsTreeNode node) {
 		super(controller, node);
 	}
@@ -39,7 +39,7 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
     		}
     		else {
     			// Fetch
-   				add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, node, Labels.FETCH, null)));
+   				add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, this.node, Labels.FETCH, null)));
     		}
 		}
 		

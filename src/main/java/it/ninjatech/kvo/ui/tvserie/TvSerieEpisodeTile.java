@@ -182,7 +182,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener, Trans
 		this.imageTransition.setBackground(Colors.BACKGROUND_INFO);
 		this.imageComponent = null;
 		if (StringUtils.isNotBlank(this.episode.getImdbId())) {
-			WebLinkLabel imdbLink = UIUtils.makeImdbLink(this.episode.getImdbId());
+			WebLinkLabel imdbLink = UIUtils.makeImdbTitleLink(this.episode.getImdbId());
 			this.imageComponent = new WebOverlay(this.imageTransition, imdbLink, SwingUtilities.RIGHT, SwingUtilities.BOTTOM);
 		}
 		else {

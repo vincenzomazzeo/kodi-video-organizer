@@ -6,8 +6,6 @@ import it.ninjatech.kvo.connector.fanarttv.FanarttvManager;
 import it.ninjatech.kvo.connector.imdb.ImdbManager;
 import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
-import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
-import it.ninjatech.kvo.ui.tvserie.TvSerieSearchDialog;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 
 import com.alee.laf.WebLookAndFeel;
@@ -26,9 +24,6 @@ public class DialogLauncher {
 		
 //		ScrapersSettingsController controller = new ScrapersSettingsController();
 //		ScrapersSettingsView view = controller.getView();
-		
-		TvSerieSearchController controller = new TvSerieSearchController(null);
-		TvSerieSearchDialog view = controller.getView();
 		
 //		List<TvSerie> tvSeries = TheTvDbManager.getInstance().search("highlander", EnhancedLocaleMap.getEmptyLocale());
 //		TvSerieSearchMultiResultController controller = new TvSerieSearchMultiResultController(tvSeries, null);
@@ -52,7 +47,7 @@ public class DialogLauncher {
 //    		}
 //		}
 		
-		view.setVisible(true);
+//		view.setVisible(true);
 		
 		System.exit(0);
 	}

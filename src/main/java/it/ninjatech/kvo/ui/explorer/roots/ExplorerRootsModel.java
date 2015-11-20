@@ -2,6 +2,7 @@ package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.RootsExplorerRootsTreeNode;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
 
 import javax.swing.tree.DefaultTreeModel;
 
@@ -20,6 +21,11 @@ public class ExplorerRootsModel extends DefaultTreeModel {
 	protected void addRoot(AbstractPathEntity root) {
 		this.root.addRoot(root);
 		reload();
+	}
+	
+	protected void removeRoot(TvSeriesExplorerRootsTreeNode root) {
+	    this.root.removeRoot(root);
+	    reload();
 	}
 
 }

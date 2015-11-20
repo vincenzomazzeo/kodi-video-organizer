@@ -280,7 +280,7 @@ public class TvSerieView extends WebPanel implements TvSerieImageLoaderListener,
 
 		this.contentRating = new WebImage();
 
-		this.imdb = UIUtils.makeImdbLink("");
+		this.imdb = UIUtils.makeImdbTitleLink("");
 
 		this.plot = UIUtils.makeButton(ImageRetriever.retrieveWallBaloon(), this);
 		this.plot.setToolTipText(Labels.OVERVIEW);

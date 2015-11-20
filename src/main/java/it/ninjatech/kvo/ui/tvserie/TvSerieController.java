@@ -82,7 +82,7 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 				Dimension imageSize = Dimensions.getTvSerieFanartChooserSize(fanart);
 				TvSerieImageChoiceDialog dialog = TvSerieImageChoiceDialog.getInstance(this, String.format("%s - %s", TvSerieHelper.getTitle(this.tvSerie.getTvSeriePathEntity()), fanart.getName()), images, imageSize);
 				for (TvSerieImage image : images) {
-					CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize);
+					CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(image.getId(), image.getProvider(), image.getPath(), imageSize, fanart.getType());
 					this.fanartChoiceJobHandler.handle(job, dialog);
 				}
 				dialog.setVisible(true);

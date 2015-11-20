@@ -10,27 +10,24 @@ import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class TvSerieSearchControllerNEW {
+public abstract class AbstractTvSerieSearchController<Input, Result> {
 
-    private final Map<String, TvSeriePathEntity> entityMap;
-    private final TvSerieSearchDialogNEW view;
+    protected final Map<String, TvSeriePathEntity> entityMap;
+    private final TvSerieSearchDialog view;
 
-    public TvSerieSearchControllerNEW(List<TvSeriePathEntity> entities) {
-        this.entityMap = new HashMap<>();
-        this.view = TvSerieSearchDialogNEW.getInstance(this);
-
-        for (TvSeriePathEntity entity : entities) {
-            this.entityMap.put(entity.getId(), entity);
-        }
+    protected AbstractTvSerieSearchController() {
+        this.entityMap = new Hashtable<>();
+        this.view = TvSerieSearchDialog.getInstance(this);
     }
+    
+    public abstract Result search();
 
-    public List<TvSeriePathEntity> search() {
-        List<TvSeriePathEntity> result = new ArrayList<>();
-
+    protected void startSearch() {
         List<SearchData> searchDatas = new ArrayList<>();
         EnhancedLocale defaultLocale = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
         for (TvSeriePathEntity tvSeriePathEntity : this.entityMap.values()) {
@@ -39,20 +36,14 @@ public class TvSerieSearchControllerNEW {
 
         if (!doSearch(searchDatas)) {
             this.view.setVisible(true);
+            this.view.release();
         }
-
-        result.addAll(this.entityMap.values());
-        
-        for (TvSeriePathEntity tvSeriePathEntity : result) {
-            TvSerieManager.getInstance().fetch(tvSeriePathEntity);
-        }
-
-        return result;
     }
-
+    
     protected void notifyCancel() {
         this.entityMap.clear();
         this.view.setVisible(false);
+        this.view.release();
     }
 
     protected void notifyConfirm(Map<String, Object> data) {
@@ -81,6 +72,7 @@ public class TvSerieSearchControllerNEW {
                 this.entityMap.remove(ignoredId);
             }
             this.view.setVisible(false);
+            this.view.release();
         }
     }
 

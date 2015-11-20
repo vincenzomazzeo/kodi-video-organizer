@@ -57,7 +57,7 @@ public class PersonAsyncJob extends AsyncJob {
 		}
 
 		if (person.isImageDownloadable()) {
-			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(person.getId(), person.getImageProvider(), person.getImagePath(), this.imageSize);
+			CacheRemoteImageAsyncJob job = new CacheRemoteImageAsyncJob(person.getId(), person.getImageProvider(), person.getImagePath(), this.imageSize, "jpg");
 			job.execute();
 			this.image = job.getImage();
 		}

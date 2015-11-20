@@ -8,10 +8,6 @@ import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchAllWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
-import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveRootWorker;
-import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveWorker;
-import it.ninjatech.kvo.tvserie.worker.TvSerieScanAllWorker;
-import it.ninjatech.kvo.tvserie.worker.TvSerieScanOnlyRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
@@ -48,7 +44,7 @@ public final class TvSerieManager {
 		Map<String, List<TvSerie>> result = null;
 		
 		TvSerieSearchWorker worker = new TvSerieSearchWorker(data);
-		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		result = DeterminateProgressDialogWorker.show(worker, Labels.SEARCHING_FOR_TV_SERIES, true);
 		
 		return result;
 	}
@@ -69,59 +65,59 @@ public final class TvSerieManager {
 		return result;
 	}
 	
-	public Boolean scan(TvSeriesPathEntity tvSeriesPathEntity) {
-		Boolean result = null;
-		
-		TvSerieScanOnlyRootWorker worker = new TvSerieScanOnlyRootWorker(tvSeriesPathEntity);
-		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-		
-		return result;
-	}
+//	public Boolean scan(TvSeriesPathEntity tvSeriesPathEntity) {
+//		Boolean result = null;
+//		
+//		TvSerieScanOnlyRootWorker worker = new TvSerieScanOnlyRootWorker(tvSeriesPathEntity);
+//		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+//		
+//		return result;
+//	}
 	
-	public Boolean scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
-		Boolean result = null;
-		
-		TvSerieScanAllWorker worker = new TvSerieScanAllWorker(tvSeriesPathEntity);
-		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-		
-		return result;
-	}
+//	public Boolean scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
+//		Boolean result = null;
+//		
+//		TvSerieScanAllWorker worker = new TvSerieScanAllWorker(tvSeriesPathEntity);
+//		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+//		
+//		return result;
+//	}
 	
-	public Boolean fetch(TvSeriesPathEntity tvSeriesPathEntity) {
-		Boolean result = null;
+	public Map<TvSeriePathEntity, Boolean> fetch(TvSeriesPathEntity tvSeriesPathEntity) {
+	    Map<TvSeriePathEntity, Boolean> result = null;
 		
 		TvSerieFetchAllWorker worker = new TvSerieFetchAllWorker(tvSeriesPathEntity);
-		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		result = DeterminateProgressDialogWorker.show(worker, "", true);
 		
 		return result;
 	}
 	
-	public void remove(TvSeriesPathEntity tvSeriesPathEntity) {
-		TvSerieRemoveRootWorker worker = new TvSerieRemoveRootWorker(tvSeriesPathEntity);
-		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-	}
+//	public void remove(TvSeriesPathEntity tvSeriesPathEntity) {
+//		TvSerieRemoveRootWorker worker = new TvSerieRemoveRootWorker(tvSeriesPathEntity);
+//		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+//	}
 	
 	public Boolean scan(TvSeriePathEntity tvSeriePathEntity) {
 		Boolean result = null;
 		
 		TvSerieScanWorker worker = new TvSerieScanWorker(tvSeriePathEntity); 
-		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		result = DeterminateProgressDialogWorker.show(worker, "", true);
 		
 		return result;
 	}
 	
-	public Boolean fetch(TvSeriePathEntity tvSeriePathEntity) {
-		Boolean result = null;
+	public List<Boolean> fetch(List<TvSeriePathEntity> tvSeriePathEntities) {
+		List<Boolean> result = null;
 		
-		TvSerieFetchWorker worker = new TvSerieFetchWorker(tvSeriePathEntity);
-		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+		TvSerieFetchWorker worker = new TvSerieFetchWorker(tvSeriePathEntities);
+		result = DeterminateProgressDialogWorker.show(worker, "", true);
 		
 		return result;
 	}
 	
-	public void remove(TvSeriePathEntity tvSeriePathEntity) {
-		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(tvSeriePathEntity);
-		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-	}
+//	public void remove(TvSeriePathEntity tvSeriePathEntity) {
+//		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(tvSeriePathEntity);
+//		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
+//	}
 	
 }

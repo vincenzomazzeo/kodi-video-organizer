@@ -5,6 +5,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.component.ToolBar;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleController;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
+import it.ninjatech.kvo.ui.wall.WallController;
 import it.ninjatech.kvo.util.Labels;
 
 import java.awt.BorderLayout;
@@ -38,6 +39,7 @@ public class UI extends WebFrame implements WindowListener {
 	}
 
 	private final ExceptionConsoleController exceptionController;
+	private final WallController wallController;
 	private final ExplorerController explorerControler;
 	private ToolBar toolBar;
 
@@ -45,7 +47,8 @@ public class UI extends WebFrame implements WindowListener {
 		super(Labels.APPLICATION_TITLE);
 
 		this.exceptionController = new ExceptionConsoleController();
-		this.explorerControler = new ExplorerController(tvSeriesPathEntities);
+		this.wallController = new WallController();
+		this.explorerControler = new ExplorerController(tvSeriesPathEntities, this.wallController);
 
 		init();
 	}
@@ -111,6 +114,8 @@ public class UI extends WebFrame implements WindowListener {
 		contentPane.add(this.toolBar, BorderLayout.NORTH);
 
 		contentPane.add(this.explorerControler.getView(), BorderLayout.LINE_START);
+		
+		contentPane.add(this.wallController.getView(), BorderLayout.CENTER);
 
 		WebStatusBar statusBar = new WebStatusBar();
 		contentPane.add(statusBar, BorderLayout.SOUTH);

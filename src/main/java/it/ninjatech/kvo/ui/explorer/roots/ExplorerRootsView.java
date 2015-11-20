@@ -115,7 +115,7 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 	protected WebTree<DefaultMutableTreeNode> getTree() {
 		return this.tree;
 	}
-
+	
 	protected void showAddRootMenu(int x, int y) {
 		this.addRootMenu.showMenu(this, new Point(x, y));
 	}

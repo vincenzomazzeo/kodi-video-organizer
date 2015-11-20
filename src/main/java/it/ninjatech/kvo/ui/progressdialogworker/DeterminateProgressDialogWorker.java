@@ -21,6 +21,8 @@ public class DeterminateProgressDialogWorker<T> extends AbstractProgressDialogWo
 			result = progressWorker.get();
 		}
 		catch (Exception e) {
+		    // TODO rimuovere
+		    e.printStackTrace();
 			UI.get().notifyException(e);
 		}
 		

@@ -18,148 +18,159 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
+
 // TODO gestire mancanza connessione
 public class TheTvDbManager {
 
-	public static final String BASE_URL = "http://thetvdb.com";
+    public static final String BASE_URL = "http://thetvdb.com";
 
-	private static TheTvDbManager self;
+    private static TheTvDbManager self;
 
-	public static TheTvDbManager getInstance() {
-		return self == null ? self = new TheTvDbManager() : self;
-	}
+    public static TheTvDbManager getInstance() {
+        return self == null ? self = new TheTvDbManager() : self;
+    }
 
-	private final WebResource webResource;
-	private boolean enabled;
-	private boolean active;
-	private String apiKey;
-	private List<EnhancedLocale> languages;
+    private final WebResource webResource;
+    private boolean enabled;
+    private boolean active;
+    private String apiKey;
+    private List<EnhancedLocale> languages;
 
-	private TheTvDbManager() {
-		this.webResource = Client.create().resource(BASE_URL);
-		this.enabled = false;
-		this.active = false;
-		this.languages = null;
-	}
+    private TheTvDbManager() {
+        this.webResource = Client.create().resource(BASE_URL);
+        this.enabled = false;
+        this.active = false;
+        this.languages = null;
+    }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public boolean isActive() {
-		return this.enabled && this.active;
-	}
+    public boolean isActive() {
+        return this.enabled && this.active;
+    }
 
-	public List<EnhancedLocale> getLanguages() {
-		return this.languages;
-	}
+    public List<EnhancedLocale> getLanguages() {
+        return this.languages;
+    }
 
-	public void deactivate() {
-		this.active = false;
-		this.apiKey = null;
-		this.languages = null;
-	}
+    public void deactivate() {
+        this.active = false;
+        this.apiKey = null;
+        this.languages = null;
+    }
 
-	public List<EnhancedLocale> checkApiKey(String apiKey) {
-		List<EnhancedLocale> result = null;
+    public List<EnhancedLocale> checkApiKey(String apiKey) {
+        List<EnhancedLocale> result = null;
 
-		ClientResponse response = this.webResource.
-				path("/api").
-				path(String.format("/%s", apiKey)).
-				path("/languages.xml").
-				type(MediaType.TEXT_XML).
-				get(ClientResponse.class);
+        ClientResponse response = this.webResource.
+                path("/api").
+                path(String.format("/%s", apiKey)).
+                path("/languages.xml").
+                type(MediaType.TEXT_XML).
+                get(ClientResponse.class);
 
-		if (response.getStatus() == Status.OK.getStatusCode()) {
-			TheTvDbLanguages languages = response.getEntity(TheTvDbLanguages.class);
-			result = languages.toLanguages();
-		}
+        if (response.getStatus() == Status.OK.getStatusCode()) {
+            TheTvDbLanguages languages = response.getEntity(TheTvDbLanguages.class);
+            result = languages.toLanguages();
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public boolean setApiKey(String apiKey) {
-		boolean result = false;
+    public boolean setApiKey(String apiKey) {
+        boolean result = false;
 
-		ClientResponse response = this.webResource.
-				path("/api").
-				path(String.format("/%s", apiKey)).
-				path("/languages.xml").
-				type(MediaType.TEXT_XML).
-				get(ClientResponse.class);
+        ClientResponse response = this.webResource.
+                path("/api").
+                path(String.format("/%s", apiKey)).
+                path("/languages.xml").
+                type(MediaType.TEXT_XML).
+                get(ClientResponse.class);
 
-		result = response.getStatus() == Status.OK.getStatusCode();
+        result = response.getStatus() == Status.OK.getStatusCode();
 
-		if (result) {
-			this.active = true;
-			this.apiKey = apiKey;
-			TheTvDbLanguages languages = response.getEntity(TheTvDbLanguages.class);
-			this.languages = languages.toLanguages();
-		}
+        if (result) {
+            this.active = true;
+            this.apiKey = apiKey;
+            TheTvDbLanguages languages = response.getEntity(TheTvDbLanguages.class);
+            this.languages = languages.toLanguages();
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public List<TvSerie> search(String name, EnhancedLocale language) {
-		List<TvSerie> result = null;
+    public List<TvSerie> search(String name, EnhancedLocale language) {
+        List<TvSerie> result = null;
 
-		WebResource webResource = this.webResource.
-				path("/api").
-				path("/GetSeries.php").
-				queryParam("seriesname", name);
-		if (!EnhancedLocaleMap.isEmptyLocale(language)) {
-			webResource = webResource.queryParam("language", language.getLanguageCode());
-		}
-		TheTvDbTvSeriesSearchResult searchResult = webResource.
-				type(MediaType.TEXT_XML).
-				get(TheTvDbTvSeriesSearchResult.class);
+        if (isActive()) {
+            WebResource webResource = this.webResource.
+                    path("/api").
+                    path("/GetSeries.php").
+                    queryParam("seriesname", name);
+            if (!EnhancedLocaleMap.isEmptyLocale(language)) {
+                webResource = webResource.queryParam("language", language.getLanguageCode());
+            }
+            TheTvDbTvSeriesSearchResult searchResult = webResource.
+                    type(MediaType.TEXT_XML).
+                    get(TheTvDbTvSeriesSearchResult.class);
 
-		result = searchResult.toTvSeries();
+            result = searchResult.toTvSeries();
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public void getData(TvSerie tvSerie) {
-		TheTvDbTvSerie theTvDbTvSerie = this.webResource.
-				path("/api").
-				path(String.format("/%s", this.apiKey)).
-				path("/series").
-				path(String.format("/%s", tvSerie.getProviderId())).
-				path("/all").
-				path(String.format("/%s.xml", tvSerie.getLanguage().getLanguageCode())).
-				type(MediaType.TEXT_XML).
-				get(TheTvDbTvSerie.class);
+    public void getData(TvSerie tvSerie) {
+        if (isActive()) {
+            TheTvDbTvSerie theTvDbTvSerie = this.webResource.
+                    path("/api").
+                    path(String.format("/%s", this.apiKey)).
+                    path("/series").
+                    path(String.format("/%s", tvSerie.getProviderId())).
+                    path("/all").
+                    path(String.format("/%s.xml", tvSerie.getLanguage().getLanguageCode())).
+                    type(MediaType.TEXT_XML).
+                    get(TheTvDbTvSerie.class);
 
-		theTvDbTvSerie.fill(tvSerie);
+            theTvDbTvSerie.fill(tvSerie);
 
-		TheTvDbActors theTvDbActors = this.webResource.
-				path("/api").
-				path(String.format("/%s", this.apiKey)).
-				path("/series").
-				path(String.format("/%s", tvSerie.getProviderId())).
-				path("/actors.xml").
-				type(MediaType.TEXT_XML).
-				get(TheTvDbActors.class);
+            TheTvDbActors theTvDbActors = this.webResource.
+                    path("/api").
+                    path(String.format("/%s", this.apiKey)).
+                    path("/series").
+                    path(String.format("/%s", tvSerie.getProviderId())).
+                    path("/actors.xml").
+                    type(MediaType.TEXT_XML).
+                    get(TheTvDbActors.class);
 
-		theTvDbActors.fill(tvSerie);
+            theTvDbActors.fill(tvSerie);
 
-		TheTvDbBanners theTvDbBanners = this.webResource.
-				path("/api").
-				path(String.format("/%s", this.apiKey)).
-				path("/series").
-				path(String.format("/%s", tvSerie.getProviderId())).
-				path("/banners.xml").
-				type(MediaType.TEXT_XML).
-				get(TheTvDbBanners.class);
+            TheTvDbBanners theTvDbBanners = this.webResource.
+                    path("/api").
+                    path(String.format("/%s", this.apiKey)).
+                    path("/series").
+                    path(String.format("/%s", tvSerie.getProviderId())).
+                    path("/banners.xml").
+                    type(MediaType.TEXT_XML).
+                    get(TheTvDbBanners.class);
 
-		theTvDbBanners.fill(tvSerie);
-	}
+            theTvDbBanners.fill(tvSerie);
+        }
+    }
 
-	public File getImage(String path) {
-		return this.webResource.
-				path("/banners").
-				path(String.format("/%s", path)).
-				get(File.class);
-	}
+    public File getImage(String path) {
+        File result = null;
+
+        if (isActive()) {
+            result = this.webResource.
+                    path("/banners").
+                    path(String.format("/%s", path)).
+                    get(File.class);
+        }
+
+        return result;
+    }
 
 }

@@ -41,17 +41,10 @@ public final class TvSerieWorkerTasks {
 	                                                                                                   "mpeg", "mpe", "mpv", "m2v", "svi", "3gp", "3g2",
 	                                                                                                   "mxf", "roq", "nsv" }));
 
-	public static void main(String[] args) throws Exception {
-		TvSeriesPathEntity tvSeriesPathEntity = new TvSeriesPathEntity(new File("D:/GitHubRepository/Test"));
-		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Ciccio"));
-		TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.getTvSeries().iterator().next();
-		scan(tvSeriePathEntity, null);
-	}
-
 	protected static List<TvSerie> search(String name, EnhancedLocale language, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
-		// TODO handle progress notifier
 		List<TvSerie> result = new ArrayList<>();
 		
+		progressNotifier.notifyTaskUpdate(name, null);
 		result.addAll(TheTvDbManager.getInstance().search(name, language));
 		
 		return result;
@@ -60,11 +53,8 @@ public final class TvSerieWorkerTasks {
 	protected static boolean check(File path, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
 		boolean result = false;
 
-// String message = "Checking " + path.getName() + " existence";
-
-// progressNotifier.notifyTaskInit(message, 1);
+		progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_CHECK, null);
 		result = path.exists() && path.isDirectory();
-// progressNotifier.notifyTaskUpdate(message, 1);
 
 		return result;
 	}
@@ -89,12 +79,14 @@ public final class TvSerieWorkerTasks {
 	}
 	
 	protected static void delete(TvSeriesPathEntity tvSeriesPathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
-		// TODO handle progress notifier
+	    progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_DELETE, null);
 		TvSeriesPathEntityDbMapper mapper = new TvSeriesPathEntityDbMapper();
 		mapper.delete(tvSeriesPathEntity);
 	}
 
 	protected static void scan(TvSeriePathEntity tvSeriePathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
+	    progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_SCAN, null);
+	    
 		SortedSet<FsElement> fsElements = new TreeSet<>();
 		Map<Integer, SortedSet<String>> videoFiles = new HashMap<>();
 		Map<Integer, SortedSet<String>> subtitleFiles = new HashMap<>();
@@ -194,25 +186,23 @@ public final class TvSerieWorkerTasks {
 	}
 	
 	protected static void fetch(TvSeriePathEntity tvSeriePathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
-		// TODO handle progress notifier
-		
 		TvSerie tvSerie = tvSeriePathEntity.getTvSerie();
 		tvSerie.clear();
-		
+
+		progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_FETCH_THE_TV_DB, null);
 		TheTvDbManager.getInstance().getData(tvSeriePathEntity.getTvSerie());
+		progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_FETCH_FANART_TV, null);
 		FanarttvManager.getInstance().getData(tvSeriePathEntity.getTvSerie());
 	}
 	
 	protected static void save(TvSeriePathEntity tvSeriePathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
-		// TODO handle progress notifier
-//		progressNotifier.notifyTaskInit(Labels.dbSavingEntity(tvSeriesPathEntity.getLabel()), 1);
+	    progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_SAVE, null);
 		TvSerieDbMapper mapper = new TvSerieDbMapper();
 		mapper.save(tvSeriePathEntity.getTvSerie());
-//		progressNotifier.notifyTaskUpdate(Labels.dbSavingEntity(tvSeriesPathEntity.getLabel()), 1);
 	}
 	
 	protected static void delete(TvSeriePathEntity tvSeriePathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
-		// TODO handle progress notifier
+		progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_DELETE, null);
 		TvSerieDbMapper mapper = new TvSerieDbMapper();
 		mapper.delete(tvSeriePathEntity.getTvSerie());
 	}
@@ -228,10 +218,6 @@ public final class TvSerieWorkerTasks {
 
 	private static boolean isSubtitleFile(String name) {
 		return StringUtils.endsWithIgnoreCase(name, "srt");
-	}
-
-	private static String getTaskMessage(int taskNumber, int taskCount, String message) {
-		return String.format("(%d/%d) %s", taskNumber, taskCount, message);
 	}
 
 	private TvSerieWorkerTasks() {

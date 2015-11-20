@@ -23,8 +23,10 @@ public final class Labels {
 	public static final String FETCHING_DATA = "Fetching data";
 	public static final String FETCH = "Fetch";
 	public static final String FILENAME = "Filename";
+	public static final String FOLLOWING_TV_SERIES_MISSING = "The following TV Series were not found...";
 	public static final String GUEST_STARS = "Guest Stars";
 	public static final String ID = "ID";
+	public static final String IGNORE_TV_SERIE = "Ignore this TV Serie";
 	public static final String IMDB = "Find out more on IMDb";
 	public static final String LANGUAGE = "Language";
 	public static final String LOADING_EXTRA_FANARTS = "Loading Extra Fanarts";
@@ -43,6 +45,7 @@ public final class Labels {
 	public static final String SEARCH = "Search";
 	public static final String SEARCH_FOR_TV_SERIE = "Search for TV Serie";
 	public static final String SEARCHING_FOR_TV_SERIE = "Searching for TV Serie";
+	public static final String SEARCHING_FOR_TV_SERIES = "Searching for TV Series";
 	public static final String SEASONS = "Seasons";
 	public static final String START_SCANNING = "Start scanning...";
 	public static final String STORING_SCRAPERS_SETTINGS = "Storing Scrapers Settings";
@@ -74,6 +77,46 @@ public final class Labels {
 	public static final String TOOLTIP_IMAGE_CHANGE = "<html><div align='center'>Left click to change</div></html>";
 	public static final String TOOLTIP_IMAGE_FULL = "<html><div align='center'>Right click for full size image</div></html>";
 	public static final String TOOLTIP_IMAGE_SELECT_FULL = "<html><div align='center'>Left click to select<br />Right click for full size image</div></html>";
+	
+	/* TV Serie Workers */
+	public static final String TV_SERIE_TASK_CHECK = "Checking existence...";
+	public static final String TV_SERIE_TASK_SCAN = "Scanning files...";
+	public static final String TV_SERIE_TASK_FETCH_THE_TV_DB = "Retrieving data from TheTvDB...";
+	public static final String TV_SERIE_TASK_FETCH_FANART_TV = "Retrieving data from Fanart.TV...";
+	public static final String TV_SERIE_TASK_DELETE = "Deleting data from DB...";
+	public static final String TV_SERIE_TASK_SAVE = "Saving data into DB...";
+	
+	//
+	
+	public static final String TV_SERIE_WORKER_ADD_ROOT_1 = "Preparing to adding TV Serie root %s";
+	public static final String TV_SERIE_WORKER_ADD_ROOT_2 = "(1/3) Creating data for root %s";
+	public static final String TV_SERIE_WORKER_ADD_ROOT_3 = "(2/3) Scanning root %s";
+	public static final String TV_SERIE_WORKER_ADD_ROOT_4 = "(3/3) Saving data for root %s";
+	
+	public static String tvSerieWorkerAddRoot(String message, String root) {
+	    return String.format(message, root);
+	}
+	
+	private static final String TV_SERIE_WORKER_FETCH_1 = "(%d/%d) %s";
+	
+	public static String tvSerieWorkerFetch(int current, int total, String name) {
+	    return String.format(TV_SERIE_WORKER_FETCH_1, current, total, name);
+	}
+	
+	public static final String TV_SERIES_WORKER_FETCH_1 = "Preparing to fetch TV Serie root %1$s";
+	public static final String TV_SERIES_WORKER_FETCH_2 = "(%2$d/%3$d) %1$s/%4$s";
+	
+	public static String tvSeriesWorkerFetch(String message, String root, int current, int total, String name) {
+	    return String.format(message, root, current, total, name);
+	}
+	
+	public static final String TV_SERIE_WORKER_SCAN_1 = "%s";
+	
+	public static String tvSerieWorkerScan(String name) {
+        return String.format(TV_SERIE_WORKER_SCAN_1, name);
+    }
+	
+	/********************/
 	
 	public static String dbSavingEntity(String entity) {
 		return String.format("Saving %s", entity);

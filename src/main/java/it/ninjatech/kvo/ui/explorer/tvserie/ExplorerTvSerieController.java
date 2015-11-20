@@ -7,6 +7,7 @@ import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.wall.WallController;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,11 +17,13 @@ import java.util.Set;
 
 public class ExplorerTvSerieController implements AsyncJobListener {
 
+    private final WallController wallController;
 	private final ExplorerTvSerieModel model;
 	private final ExplorerTvSerieView view;
 	private final Map<String, TileStatus> tiles;
 
-	public ExplorerTvSerieController() {
+	public ExplorerTvSerieController(WallController wallController) {
+	    this.wallController = wallController;
 		this.model = new ExplorerTvSerieModel();
 		this.view = new ExplorerTvSerieView(this, this.model);
 		this.tiles = new HashMap<>();
@@ -49,6 +52,10 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 		this.model.addTile(tvSeriePathEntity);
 	}
 
+	protected void notifyClick(TvSeriePathEntity tvSeriePathEntity) {
+	    this.wallController.showTvSerie(tvSeriePathEntity);
+	}
+	
 	protected void handleStateChanged() {
 		Set<String> tilesToRemove = new HashSet<>(this.tiles.keySet());
 

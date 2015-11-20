@@ -67,5 +67,9 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 		this.children.add(rootNode);
 		Collections.sort(this.children);
 	}
+	
+	public void removeRoot(TvSeriesExplorerRootsTreeNode root) {
+	    this.children.remove(root);
+	}
 
 }

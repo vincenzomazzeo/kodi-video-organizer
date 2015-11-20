@@ -61,7 +61,7 @@ public class TvSerieTilesLauncher extends WebFrame {
 	private TvSerieTilesLauncher(/*TvSeriePathEntity tvSeriePathEntity*/) {
 		super();
 		
-		this.controller = new ExplorerTvSerieController();
+		this.controller = new ExplorerTvSerieController(null);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		

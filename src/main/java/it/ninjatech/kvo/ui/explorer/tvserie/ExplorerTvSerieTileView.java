@@ -6,13 +6,16 @@ import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.component.ExplorerTile;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
 import com.alee.laf.panel.WebPanel;
 
-public class ExplorerTvSerieTileView extends WebPanel {
+public class ExplorerTvSerieTileView extends WebPanel implements MouseListener {
 
 	private static final long serialVersionUID = -4365144207002586456L;
 
@@ -28,10 +31,33 @@ public class ExplorerTvSerieTileView extends WebPanel {
 		this.value = value;
 		this.controller = controller;
 
+		addMouseListener(this);
+		
 		init();
 	}
 
-	protected TvSeriePathEntity getValue() {
+    @Override
+    public void mouseClicked(MouseEvent event) {
+        this.controller.notifyClick(this.value);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent event) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent event) {
+    }
+
+    protected TvSeriePathEntity getValue() {
 		return this.value;
 	}
 
@@ -66,6 +92,7 @@ public class ExplorerTvSerieTileView extends WebPanel {
 
 	private void init() {
 		setLayout(new BorderLayout());
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		this.defaultTile = new ExplorerTile(null, ImageRetriever.retrieveExplorerTilePosterTvSerie().getImage(),
 											TvSerieHelper.getTitle(this.value),

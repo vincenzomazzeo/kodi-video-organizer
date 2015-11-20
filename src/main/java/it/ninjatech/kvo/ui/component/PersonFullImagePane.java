@@ -31,7 +31,7 @@ public class PersonFullImagePane extends WebPanel {
 		
 		
 		if (image != null && StringUtils.isNotBlank(imdbId)) {
-			content = new WebOverlay(new WebImage(image), UIUtils.makeImdbLink(imdbId), SwingUtilities.RIGHT, SwingUtilities.BOTTOM);
+			content = new WebOverlay(new WebImage(image), UIUtils.makeImdbActorLink(imdbId), SwingUtilities.RIGHT, SwingUtilities.BOTTOM);
 		}
 		else if (image != null) {
 			content = new WebImage(image);
@@ -42,7 +42,7 @@ public class PersonFullImagePane extends WebPanel {
 			pane.setPreferredSize(Dimensions.ACTOR_FULL_SIZE);
 			
 			if (StringUtils.isNotBlank(imdbId)) {
-				content = new WebOverlay(pane, UIUtils.makeImdbLink(imdbId), SwingUtilities.RIGHT, SwingUtilities.BOTTOM);
+				content = new WebOverlay(pane, UIUtils.makeImdbActorLink(imdbId), SwingUtilities.RIGHT, SwingUtilities.BOTTOM);
 			}
 			else {
 				content = pane;

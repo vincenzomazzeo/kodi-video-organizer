@@ -1,40 +1,39 @@
 package it.ninjatech.kvo.ui.tvserie;
 
-import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
-import it.ninjatech.kvo.model.EnhancedLocale;
+import it.ninjatech.kvo.tvserie.TvSerieManager;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class TvSerieSearchController {
+public class TvSerieSearchController extends AbstractTvSerieSearchController<List<TvSeriePathEntity>, Map<TvSeriePathEntity, Boolean>> {
 
-	private final TvSerieSearchDialog view;
-	private final TvSerieSearchListener listener;
+    public TvSerieSearchController(List<TvSeriePathEntity> entities) {
+        super();
 
-	public TvSerieSearchController(TvSerieSearchListener listener) {
-		this.view = TvSerieSearchDialog.getInstance(this);
-		this.listener = listener;
+        for (TvSeriePathEntity entity : entities) {
+            this.entityMap.put(entity.getId(), entity);
+        }
+    }
 
-		this.view.setLanguages(TheTvDbManager.getInstance().getLanguages());
-	}
+    @Override
+    public Map<TvSeriePathEntity, Boolean> search() {
+        Map<TvSeriePathEntity, Boolean> result = new HashMap<>();
 
-	public TvSerieSearchDialog getView() {
-		return this.view;
-	}
+        startSearch();
 
-	public String getSearch() {
-		return this.view.getSearch();
-	}
-	
-	public EnhancedLocale getLanguage() {
-		return this.view.getLanguage();
-	}
-	
-	protected void notifySearch() {
-		if (StringUtils.isNotBlank(this.view.getSearch())) {
-			if (this.listener.notifyTvSerieSearch(this.view.getSearch(), this.view.getLanguage())) {
-				this.view.setVisible(false);
-			}
-		}
-	}
+        List<TvSeriePathEntity> entities = new ArrayList<>(this.entityMap.values());
+
+        if (!entities.isEmpty()) {
+            List<Boolean> fetchResult = TvSerieManager.getInstance().fetch(entities);
+            for (int i = 0, n = entities.size(); i < n; i++) {
+                result.put(entities.get(i), fetchResult.get(i));
+            }
+        }
+
+        return result;
+    }
 
 }

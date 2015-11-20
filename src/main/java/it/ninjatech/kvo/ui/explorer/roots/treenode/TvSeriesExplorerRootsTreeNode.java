@@ -8,6 +8,9 @@ import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsConte
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.TvSeriesExplorerRootsContextMenu;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.Icon;
 
@@ -43,4 +46,17 @@ public class TvSeriesExplorerRootsTreeNode extends AbstractRootsExplorerRootsTre
 		return new TvSeriesExplorerRootsContextMenu(controller, this);
 	}
 
+	public Map<TvSeriePathEntity, TvSerieExplorerRootsTreeNode> findChildren(Set<TvSeriePathEntity> entities) {
+	    Map<TvSeriePathEntity, TvSerieExplorerRootsTreeNode> result = new HashMap<>();
+	    
+	    for (int i = 0, n = this.children.size(); i < n; i++) {
+	        TvSerieExplorerRootsTreeNode child = (TvSerieExplorerRootsTreeNode)this.children.get(i);
+	        if (entities.contains(child.getValue())) {
+	            result.put(child.getValue(), child);
+	        }
+	    }
+	    
+	    return result;
+	}
+	
 }
