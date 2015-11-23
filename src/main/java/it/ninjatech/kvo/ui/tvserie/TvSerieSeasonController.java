@@ -5,6 +5,7 @@ import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.ImageProvider;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
 import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
@@ -13,14 +14,12 @@ import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
-import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.util.Utils;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
-import it.ninjatech.kvo.worker.TvSerieSeasonWorker;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -77,9 +76,11 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		
 		for (TvSerieEpisode episode : this.season.getEpisodes()) {
 			if (episode.getFilename() != null) {
-				this.view.setEpisodeVideoFile(episode, episode.getFilename());
+				this.view.setEpisodeVideoFile(episode, TvSerieHelper.getEpisodeFileName(episode));
+//				this.view.setEpisodeVideoFile(episode, episode.getFilename());
 			}
-			for (String subtitleFilename : episode.getSubtitleFilenames()) {
+			for (String subtitleFilename : TvSerieHelper.getEpisodeSubtitleFileNames(episode)) {
+//			for (String subtitleFilename : episode.getSubtitleFilenames()) {
 				EnhancedLocale language = Utils.getLanguageFromSubtitleFile(subtitleFilename);
 				this.view.addEpisodeSubtitle(episode, language, subtitleFilename);
 			}
@@ -125,8 +126,7 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	}
 
 	protected void notifyConfirm() {
-		TvSerieSeasonWorker worker = new TvSerieSeasonWorker(this.season, this.videoEpisodeMap, this.subtitleEpisodeMap, this.currentSeasonImage);
-		DeterminateProgressDialogWorker.show(worker, Labels.SAVING_SEASON);
+	    TvSerieManager.getInstance().handleSeason(this.season, this.videoEpisodeMap, this.subtitleEpisodeMap, this.currentSeasonImage);
 		
 		this.confirmed = true;
 

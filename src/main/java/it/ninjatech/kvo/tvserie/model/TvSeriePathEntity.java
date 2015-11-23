@@ -86,15 +86,19 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		Set<String> result = new TreeSet<>();
 		
 		if (this.videoFiles.containsKey(season)) {
-			result.addAll(this.videoFiles.get(season));
+		    Set<String> videoFiles = new TreeSet<>(this.videoFiles.get(season));
 			
 			TvSerieSeason tvSerieSeason = this.tvSerie.getSeason(season);
 			if (tvSerieSeason != null) {
 				for (TvSerieEpisode episode : tvSerieSeason.getEpisodes()) {
 					if (episode.getFilename() != null) {
-						result.remove(episode.getFilename());
+						videoFiles.remove(episode.getFilename());
 					}
 				}
+			}
+			
+			for (String videoFile : videoFiles) {
+			    result.add((new File(videoFile)).getName());
 			}
 		}
 		
@@ -105,13 +109,17 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		Set<String> result = new TreeSet<>();
 		
 		if (this.subtitleFiles.containsKey(season)) {
-			result.addAll(this.subtitleFiles.get(season));
+		    Set<String> subtitleFiles = new TreeSet<>(this.subtitleFiles.get(season));
 			
 			TvSerieSeason tvSerieSeason = this.tvSerie.getSeason(season);
 			if (tvSerieSeason != null) {
 				for (TvSerieEpisode episode : tvSerieSeason.getEpisodes()) {
-					result.removeAll(episode.getSubtitleFilenames());
+					subtitleFiles.removeAll(episode.getSubtitleFilenames());
 				}
+			}
+			
+			for (String subtitleFile : subtitleFiles) {
+			    result.add((new File(subtitleFile)).getName());
 			}
 		}
 		

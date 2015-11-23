@@ -8,11 +8,8 @@ import it.ninjatech.kvo.tvserie.model.TvSerieFanart;
 import it.ninjatech.kvo.tvserie.model.TvSerieImage;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
-import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.worker.TvSerieFetcher;
-import it.ninjatech.kvo.worker.TvSerieFinder;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -20,8 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -29,28 +26,6 @@ public final class TvSerieHelper {
 
 	public static final String EXTRAFANART = "extrafanart";
 	public static final String SEASON = "season";
-
-	// TODO remove
-	public static List<TvSerie> searchFor(String name, EnhancedLocale language) {
-		List<TvSerie> result = null;
-
-		TvSerieFinder tvSerieFinder = new TvSerieFinder(name, language);
-
-		result = IndeterminateProgressDialogWorker.show(tvSerieFinder, Labels.SEARCHING_FOR_TV_SERIE);
-
-		return result;
-	}
-
-	// TODO remove
-	public static TvSerie fetch(TvSerie tvSerie) {
-		TvSerie result = null;
-
-		TvSerieFetcher tvSerieFetcher = new TvSerieFetcher(tvSerie);
-
-		result = IndeterminateProgressDialogWorker.show(tvSerieFetcher, Labels.FETCHING_DATA);
-
-		return result;
-	}
 
 	// **************
 	// * PathEntity *
@@ -232,12 +207,26 @@ public final class TvSerieHelper {
 	// * Episode *
 	// ***********
 
-	public static String getFirstAired(TvSerieEpisode tvSerieEpisode) {
+	public static String getEpisodeFileName(TvSerieEpisode episode) {
+	    return (new File(episode.getFilename())).getName();
+	}
+	
+	public static Set<String> getEpisodeSubtitleFileNames(TvSerieEpisode episode) {
+	    Set<String> result = new TreeSet<>();
+	    
+	    for (String subtitleFilename : episode.getSubtitleFilenames()) {
+	        result.add((new File(subtitleFilename)).getName());
+	    }
+        
+        return result;
+    }
+	
+	public static String getFirstAired(TvSerieEpisode episode) {
 		String result = "";
 
-		if (tvSerieEpisode.getFirstAired() != null) {
+		if (episode.getFirstAired() != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			result = sdf.format(tvSerieEpisode.getFirstAired());
+			result = sdf.format(episode.getFirstAired());
 		}
 
 		return result;

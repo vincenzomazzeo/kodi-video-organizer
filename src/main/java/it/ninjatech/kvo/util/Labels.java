@@ -41,7 +41,6 @@ public final class Labels {
 	public static final String OVERVIEW = "Overview";
 	public static final String PREFERRED_LANGUAGE = "Preferred Language";
 	public static final String ROOTS = "Roots";
-	public static final String SAVING_SEASON = "Saving Season";
 	public static final String SCANNING = "Scanning...";
 	public static final String SCANNING_EXTRAFANARTS = "Scanning Extrafanarts";
 	public static final String SCRAPERS_SETTINGS = "Scrapers Settings";
@@ -100,12 +99,6 @@ public final class Labels {
 	    return String.format(message, root);
 	}
 	
-//	private static final String TV_SERIE_WORKER_CHECK_ROOT_1 = "Checking %s existence...";
-//	
-//	public static String tvSerieWorkerCheckRoot(String root) {
-//	    return String.format(TV_SERIE_WORKER_CHECK_ROOT_1, root);
-//	}
-	
 	private static final String TV_SERIE_WORKER_FETCH_1 = "(%d/%d) %s";
 	
 	public static String tvSerieWorkerFetch(int current, int total, String name) {
@@ -117,6 +110,14 @@ public final class Labels {
 	public static String tvSerieWorkerScan(String name) {
         return String.format(TV_SERIE_WORKER_SCAN_1, name);
     }
+	
+	public static final String TV_SERIE_SEASON_WORKER_1 = "Saving TV Serie %s - Season %d";
+	public static final String TV_SERIE_SEASON_WORKER_2 = "%s -> Video";
+	public static final String TV_SERIE_SEASON_WORKER_3 = "%s -> Subtitle";
+	
+	public static String tvSerieSeasonWorker(String message, String name, Integer season) {
+	    return String.format(message, name, season);
+	}
 	
 	/********************/
 	

@@ -3,13 +3,16 @@ package it.ninjatech.kvo.tvserie;
 import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.Type;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieCheckRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.Labels;
 
@@ -118,5 +121,20 @@ public final class TvSerieManager {
 //		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(tvSeriePathEntity);
 //		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
 //	}
+	
+	public Boolean handleSeason(TvSerieSeason season,
+                                Map<TvSerieEpisode, String> videoEpisodeMap,
+                                Map<TvSerieEpisode, Map<String, EnhancedLocale>> subtitleEpisodeMap,
+                                File seasonImage) {
+	    Boolean result = null;
+	    
+	    TvSerieSeasonWorker worker = new TvSerieSeasonWorker(TvSerieSeasonWorker.makeInputData(season, 
+	                                                                                           videoEpisodeMap, 
+	                                                                                           subtitleEpisodeMap, 
+	                                                                                           seasonImage));
+	    DeterminateProgressDialogWorker.show(worker, "", true);
+	    
+	    return result;
+	}
 	
 }
