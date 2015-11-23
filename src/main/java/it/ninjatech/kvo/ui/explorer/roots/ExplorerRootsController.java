@@ -18,7 +18,6 @@ import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
-import it.ninjatech.kvo.ui.tvserie.TvSeriesSearchController;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.worker.SettingsStorer;
 
@@ -64,7 +63,7 @@ public class ExplorerRootsController {
     }
 
     public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
-        TvSerieSearchController tvSerieSearchController = new TvSerieSearchController(Collections.singletonList(node.getValue()));
+        TvSerieSearchController tvSerieSearchController = new TvSerieSearchController(Collections.singleton(node.getValue()));
         Map<TvSeriePathEntity, Boolean> searchResult = tvSerieSearchController.search();
         TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
         for (TvSeriePathEntity tvSeriePathEntity : searchResult.keySet()) {
@@ -81,13 +80,9 @@ public class ExplorerRootsController {
     }
 
     public void searchForTvSeries(TvSeriesExplorerRootsTreeNode node) {
-        TvSeriesSearchController tvSeriesSearchController = new TvSeriesSearchController(node.getValue());
-        Map<TvSeriePathEntity, Boolean> searchResult = tvSeriesSearchController.search();
-        if (searchResult == null) {
-            // Root exists no more!
-            this.model.removeRoot(node);
-        }
-        else {
+        if (TvSerieManager.getInstance().check(node.getValue())) {
+            TvSerieSearchController tvSerieSearchController = new TvSerieSearchController(node.getValue().getTvSeries());
+            Map<TvSeriePathEntity, Boolean> searchResult = tvSerieSearchController.search();
             Set<TvSeriePathEntity> entitiesToRefresh = new HashSet<>();
             Set<TvSeriePathEntity> entitiesToRemove = new HashSet<>();
             for (TvSeriePathEntity tvSeriePathEntity : searchResult.keySet()) {
@@ -100,17 +95,25 @@ public class ExplorerRootsController {
                     node.getValue().removeTvSerie(tvSeriePathEntity);
                 }
             }
-            if (!entitiesToRefresh.isEmpty()) {
-                for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRefresh).values()) {
-                    this.model.nodeChanged(child);
+            if (!entitiesToRefresh.isEmpty() || !entitiesToRemove.isEmpty()) {
+                if (!entitiesToRefresh.isEmpty()) {
+                    for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRefresh).values()) {
+                        this.model.nodeChanged(child);
+                    }
                 }
-            }
-            if (!entitiesToRemove.isEmpty()) {
-                for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRemove).values()) {
-                    node.remove(child);
+                if (!entitiesToRemove.isEmpty()) {
+                    for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRemove).values()) {
+                        node.remove(child);
+                    }
+                    this.model.nodeStructureChanged(node);
                 }
-                this.model.nodeStructureChanged(node);
+                NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(entitiesToRefresh, entitiesToRemove));
             }
+        }
+        else {
+            // Root exists no more!
+            this.model.removeRoot(node);
+            NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRootRemoved(node.getValue().getLabel()));
         }
     }
 

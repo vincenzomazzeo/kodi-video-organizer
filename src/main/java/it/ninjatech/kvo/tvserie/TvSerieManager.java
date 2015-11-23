@@ -6,7 +6,7 @@ import it.ninjatech.kvo.tvserie.model.TvSerie;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
-import it.ninjatech.kvo.tvserie.worker.TvSerieFetchAllWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieCheckRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 
 public final class TvSerieManager {
 
@@ -65,6 +64,15 @@ public final class TvSerieManager {
 		return result;
 	}
 	
+	public Boolean check(TvSeriesPathEntity tvSeriesPathEntity) {
+	    Boolean result = null;
+	    
+	    TvSerieCheckRootWorker worker = new TvSerieCheckRootWorker(tvSeriesPathEntity);
+	    result = DeterminateProgressDialogWorker.show(worker, "", true);
+	    
+	    return result;
+	}
+	
 //	public Boolean scan(TvSeriesPathEntity tvSeriesPathEntity) {
 //		Boolean result = null;
 //		
@@ -82,15 +90,6 @@ public final class TvSerieManager {
 //		
 //		return result;
 //	}
-	
-	public Map<TvSeriePathEntity, Boolean> fetch(TvSeriesPathEntity tvSeriesPathEntity) {
-	    Map<TvSeriePathEntity, Boolean> result = null;
-		
-		TvSerieFetchAllWorker worker = new TvSerieFetchAllWorker(tvSeriesPathEntity);
-		result = DeterminateProgressDialogWorker.show(worker, "", true);
-		
-		return result;
-	}
 	
 //	public void remove(TvSeriesPathEntity tvSeriesPathEntity) {
 //		TvSerieRemoveRootWorker worker = new TvSerieRemoveRootWorker(tvSeriesPathEntity);

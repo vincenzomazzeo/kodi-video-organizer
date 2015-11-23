@@ -1,6 +1,9 @@
 package it.ninjatech.kvo.util;
 
+import java.util.Set;
+
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 
 public final class Labels {
@@ -97,20 +100,19 @@ public final class Labels {
 	    return String.format(message, root);
 	}
 	
+//	private static final String TV_SERIE_WORKER_CHECK_ROOT_1 = "Checking %s existence...";
+//	
+//	public static String tvSerieWorkerCheckRoot(String root) {
+//	    return String.format(TV_SERIE_WORKER_CHECK_ROOT_1, root);
+//	}
+	
 	private static final String TV_SERIE_WORKER_FETCH_1 = "(%d/%d) %s";
 	
 	public static String tvSerieWorkerFetch(int current, int total, String name) {
 	    return String.format(TV_SERIE_WORKER_FETCH_1, current, total, name);
 	}
 	
-	public static final String TV_SERIES_WORKER_FETCH_1 = "Preparing to fetch TV Serie root %1$s";
-	public static final String TV_SERIES_WORKER_FETCH_2 = "(%2$d/%3$d) %1$s/%4$s";
-	
-	public static String tvSeriesWorkerFetch(String message, String root, int current, int total, String name) {
-	    return String.format(message, root, current, total, name);
-	}
-	
-	public static final String TV_SERIE_WORKER_SCAN_1 = "%s";
+	private static final String TV_SERIE_WORKER_SCAN_1 = "%s";
 	
 	public static String tvSerieWorkerScan(String name) {
         return String.format(TV_SERIE_WORKER_SCAN_1, name);
@@ -200,6 +202,32 @@ public final class Labels {
 	
 	public static String notificationTvSerieFetched(String tvSerie) {
 		return String.format("<html>TV Serie <b>%s</b> fetched</html>", tvSerie);
+	}
+	
+	public static String notificationTvSeriesRootRemoved(String root) {
+	    return String.format("<html>The TV Serie root <b>%s</b> is no longer present and has been removed</html>", root);
+	}
+	
+	public static String notificationTvSeriesRefreshRemove(Set<TvSeriePathEntity> entitiesToRefresh,
+	                                                       Set<TvSeriePathEntity> entitiesToRemove) {
+	    StringBuilder result = new StringBuilder("<html>");
+	    if (!entitiesToRefresh.isEmpty()) {
+	        result.append("<p>The following TV Series were refreshed<ul>");
+	        for (TvSeriePathEntity entity : entitiesToRefresh) {
+	            result.append("<li><b>").append(entity.getLabel()).append("</b></li>");
+	        }
+	        result.append("</ul></p>");
+	    }
+	    if (!entitiesToRemove.isEmpty()) {
+	        result.append("<br /><p>The following TV Series are no longer present and have been removed<ul>");
+            for (TvSeriePathEntity entity : entitiesToRemove) {
+                result.append("<li><b>").append(entity.getLabel()).append("</b></li>");
+            }
+            result.append("</ul></p>");
+	    }
+	    result.append("</html>");
+	    
+	    return result.toString();
 	}
 	
 	private Labels() {}

@@ -52,7 +52,7 @@ public class TvSerieSearchDialog extends WebDialog implements ActionListener, Li
     private static final long serialVersionUID = 5589915260921364947L;
     private static TvSerieSearchDialog self;
 
-    public static TvSerieSearchDialog getInstance(AbstractTvSerieSearchController controller) {
+    public static TvSerieSearchDialog getInstance(TvSerieSearchController controller) {
         if (self == null) {
             boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
             WebLookAndFeel.setDecorateDialogs(true);
@@ -69,13 +69,13 @@ public class TvSerieSearchDialog extends WebDialog implements ActionListener, Li
 
     private final Map<String, Search> searchMap;
     private final Set<String> missing;
-    private AbstractTvSerieSearchController controller;
+    private TvSerieSearchController controller;
     private WebList list;
     private WebPanel tvSerie;
     private WebButton ok;
     private WebButton cancel;
 
-    private TvSerieSearchDialog(AbstractTvSerieSearchController controller) {
+    private TvSerieSearchDialog(TvSerieSearchController controller) {
         super(UI.get(), Labels.SEARCH_FOR_TV_SERIE, true);
 
         this.searchMap = new HashMap<>();
@@ -162,14 +162,14 @@ public class TvSerieSearchDialog extends WebDialog implements ActionListener, Li
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void addFreeText(String id, String name) {
-        ((DefaultListModel)this.list.getModel()).addElement(name);
         this.searchMap.put(name, new FreeTextSearch(id));
+        ((DefaultListModel)this.list.getModel()).addElement(name);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void addMultiResult(String id, String name, List<TvSerie> tvSeries) {
-        ((DefaultListModel)this.list.getModel()).addElement(name);
         this.searchMap.put(name, new MultiResultSearch(id, tvSeries));
+        ((DefaultListModel)this.list.getModel()).addElement(name);
     }
     
     @SuppressWarnings("rawtypes")

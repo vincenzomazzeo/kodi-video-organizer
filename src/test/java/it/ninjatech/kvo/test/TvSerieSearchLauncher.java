@@ -16,9 +16,9 @@ import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.util.PeopleManager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.alee.laf.WebLookAndFeel;
 
@@ -50,7 +50,7 @@ public class TvSerieSearchLauncher {
 		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Flash"));
 		tvSeriesPathEntity.addTvSerie(new File("D:/GitHubRepository/Test/Rezartina"));
 		
-		List<TvSeriePathEntity> entities = new ArrayList<>(tvSeriesPathEntity.getTvSeries());
+		Set<TvSeriePathEntity> entities = new HashSet<>(tvSeriesPathEntity.getTvSeries());
 		
 		TvSerieSearchController controller = new TvSerieSearchController(entities);
 		Map<TvSeriePathEntity, Boolean> searchResult = controller.search();

@@ -102,6 +102,7 @@ public class ProgressDialog extends WebDialog {
 		textPane.add(this.textSouth, BorderLayout.SOUTH);
 
 		this.progressBar = new WebProgressBar(WebProgressBar.HORIZONTAL, 0, 100);
+		this.progressBar.setPreferredWidth(500);
 		this.progressBar.setStringPainted(false);
 		container.add(this.progressBar, BorderLayout.SOUTH);
 	}
