@@ -12,6 +12,7 @@ import it.ninjatech.kvo.tvserie.worker.TvSerieCheckRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonCreateWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.Labels;
@@ -132,7 +133,16 @@ public final class TvSerieManager {
 	                                                                                           videoEpisodeMap, 
 	                                                                                           subtitleEpisodeMap, 
 	                                                                                           seasonImage));
-	    DeterminateProgressDialogWorker.show(worker, "", true);
+	    result = DeterminateProgressDialogWorker.show(worker, "", true);
+	    
+	    return result;
+	}
+	
+	public Boolean createSeason(TvSerieSeason season) {
+	    Boolean result = null;
+	    
+	    TvSerieSeasonCreateWorker worker = new TvSerieSeasonCreateWorker(season);
+	    result = DeterminateProgressDialogWorker.show(worker, "", true);
 	    
 	    return result;
 	}

@@ -17,6 +17,9 @@ public abstract class AbstractDbMapper<T> {
 	
 	public void delete(T entity) throws Exception {
 	}
+	
+	public void update(T entity) throws Exception {
+	}
 
 	public T findOne() throws Exception {
 		return null;

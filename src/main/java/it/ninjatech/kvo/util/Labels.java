@@ -18,10 +18,12 @@ public final class Labels {
 	public static final String DIRECTORS = "Directors";
 	public static final String ENABLED = "Enabled";
 	public static final String EPISODE_SUBTITLE = "Episode Subtitle";
+	public static final String ERROR = "Error";
 	public static final String EXCEPTION_CONSOLE = "Exception Console";
 	public static final String EXIT = "Exit";
 	public static final String EXTRA_FANARTS = "Extra Fanarts";
 	public static final String FAILED_TO_CREATE_SETTINGS_FILE = "Failed to create settings file";
+	public static final String FAILED_TO_UPDATE_SEASON = "Failed to update season";
 	public static final String FANARTS = "Fanarts";
 	public static final String FETCHING_DATA = "Fetching data";
 	public static final String FETCH = "Fetch";
@@ -118,6 +120,12 @@ public final class Labels {
 	public static String tvSerieSeasonWorker(String message, String name, Integer season) {
 	    return String.format(message, name, season);
 	}
+	
+	private static final String TV_SERIE_SEASON_CREATE_WORKER_1 = "Creating TV Serie %s - Season %d";
+	
+	public static String tvSerieSeasonCreateWorker(String name, Integer season) {
+        return String.format(TV_SERIE_SEASON_CREATE_WORKER_1, name, season);
+    }
 	
 	/********************/
 	

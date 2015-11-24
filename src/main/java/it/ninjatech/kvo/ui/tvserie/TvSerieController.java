@@ -5,6 +5,7 @@ import it.ninjatech.kvo.async.job.PersonAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalFanartAsyncJob;
 import it.ninjatech.kvo.async.job.TvSerieLocalSeasonImageAsyncJob;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
+import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.model.AbstractTvSerieImage;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
 import it.ninjatech.kvo.tvserie.model.TvSerieActor;
@@ -27,7 +28,6 @@ import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.worker.CachedFanartCopyWorker;
 import it.ninjatech.kvo.worker.CachedImageFullWorker;
 import it.ninjatech.kvo.worker.ImageFullWorker;
-import it.ninjatech.kvo.worker.TvSerieSeasonCreator;
 
 import java.awt.Dimension;
 import java.util.Set;
@@ -111,12 +111,16 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 				MessageDialog messageDialog = MessageDialog.getInstance(Labels.TV_SERIE_SEASON_CREATION, Labels.getTvSerieSeasonCreationMessage(season), MessageDialog.Type.Question);
 				messageDialog.setVisible(true);
 				if (messageDialog.isConfirmed()) {
-					TvSerieSeasonCreator creator = new TvSerieSeasonCreator(season);
-					Boolean result = IndeterminateProgressDialogWorker.show(creator, id);
-					messageDialog = MessageDialog.getInstance(Labels.TV_SERIE_SEASON_CREATION,
-															  result ? Labels.getTvSerieSeasonCreationSuccessMessage(season) : Labels.getTvSerieSeasonCreationFailMessage(season),
-															  result ? MessageDialog.Type.Message : MessageDialog.Type.Error);
-					messageDialog.setVisible(true);
+				    if (TvSerieManager.getInstance().createSeason(season)) {
+				        MessageDialog.getInstance(Labels.TV_SERIE_SEASON_CREATION, 
+				                                  Labels.getTvSerieSeasonCreationSuccessMessage(season), 
+				                                  MessageDialog.Type.Message).setVisible(true);
+				    }
+				    else {
+				        MessageDialog.getInstance(Labels.TV_SERIE_SEASON_CREATION, 
+				                                  Labels.getTvSerieSeasonCreationFailMessage(season), 
+				                                  MessageDialog.Type.Error).setVisible(true);
+				    }
 					this.view.refreshSeason(season);
 				}
 			}

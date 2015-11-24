@@ -14,6 +14,7 @@ import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
+import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.MemoryUtils;
@@ -77,10 +78,8 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		for (TvSerieEpisode episode : this.season.getEpisodes()) {
 			if (episode.getFilename() != null) {
 				this.view.setEpisodeVideoFile(episode, TvSerieHelper.getEpisodeFileName(episode));
-//				this.view.setEpisodeVideoFile(episode, episode.getFilename());
 			}
 			for (String subtitleFilename : TvSerieHelper.getEpisodeSubtitleFileNames(episode)) {
-//			for (String subtitleFilename : episode.getSubtitleFilenames()) {
 				EnhancedLocale language = Utils.getLanguageFromSubtitleFile(subtitleFilename);
 				this.view.addEpisodeSubtitle(episode, language, subtitleFilename);
 			}
@@ -126,9 +125,10 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	}
 
 	protected void notifyConfirm() {
-	    TvSerieManager.getInstance().handleSeason(this.season, this.videoEpisodeMap, this.subtitleEpisodeMap, this.currentSeasonImage);
-		
-		this.confirmed = true;
+	    this.confirmed = TvSerieManager.getInstance().handleSeason(this.season, this.videoEpisodeMap, this.subtitleEpisodeMap, this.currentSeasonImage);
+	    if (!this.confirmed) {
+	        MessageDialog.getInstance(Labels.ERROR, Labels.FAILED_TO_UPDATE_SEASON, MessageDialog.Type.Error).setVisible(true);
+	    }
 
 		destroy();
 	}
