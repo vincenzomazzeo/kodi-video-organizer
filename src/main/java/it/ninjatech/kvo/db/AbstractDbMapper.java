@@ -144,38 +144,11 @@ public abstract class AbstractDbMapper<T> {
 	protected final List<T> find(String statement, Entry<Object, Integer>... parameters) throws Exception {
 		List<T> result = new ArrayList<>();
 
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-
 		Connection connection = ConnectionHandler.getInstance().getConnection();
 		try {
-			preparedStatement = connection.prepareStatement(statement);
-			int index = 0;
-			for (Entry<Object, Integer> parameter : parameters) {
-				preparedStatement.setObject(++index, parameter.getKey(), parameter.getValue());
-			}
-
-			resultSet = preparedStatement.executeQuery();
-
-			while (resultSet.next()) {
-				result.add(map(resultSet));
-			}
+		    result = find(connection, statement, parameters);
 		}
 		finally {
-			if (resultSet != null) {
-				try {
-					resultSet.close();
-				}
-				catch (SQLException e) {
-				}
-			}
-			if (preparedStatement != null) {
-				try {
-					preparedStatement.close();
-				}
-				catch (SQLException e) {
-				}
-			}
 			if (connection != null) {
 				try {
 					connection.close();
@@ -186,6 +159,46 @@ public abstract class AbstractDbMapper<T> {
 		}
 
 		return result;
+	}
+	
+	@SafeVarargs
+    protected final List<T> find(Connection connection, String statement, Entry<Object, Integer>... parameters) throws Exception {
+	    List<T> result = new ArrayList<>();
+
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(statement);
+            int index = 0;
+            for (Entry<Object, Integer> parameter : parameters) {
+                preparedStatement.setObject(++index, parameter.getKey(), parameter.getValue());
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                result.add(map(resultSet));
+            }
+        }
+        finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                }
+                catch (SQLException e) {
+                }
+            }
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                }
+                catch (SQLException e) {
+                }
+            }
+        }
+
+        return result;
 	}
 
 }

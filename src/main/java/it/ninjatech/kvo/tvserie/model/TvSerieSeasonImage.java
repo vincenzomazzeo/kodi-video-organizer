@@ -9,6 +9,12 @@ public class TvSerieSeasonImage extends AbstractTvSerieImage {
 
 	private final Integer season;
 	
+	protected TvSerieSeasonImage(String id, ImageProvider provider, String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale language) {
+        super(id, provider, path, rating, ratingCount, language);
+        
+        this.season = season;
+    }
+	
 	protected TvSerieSeasonImage(ImageProvider provider, String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale language) {
 		super(provider, path, rating, ratingCount, language);
 

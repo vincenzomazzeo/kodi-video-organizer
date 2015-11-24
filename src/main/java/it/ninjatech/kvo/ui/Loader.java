@@ -9,6 +9,10 @@ import it.ninjatech.kvo.connector.myapifilms.MyApiFilmsManager;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.tvserie.TvSerieManager;
+import it.ninjatech.kvo.tvserie.dbmapper.TvSerieDbMapper;
+import it.ninjatech.kvo.tvserie.dbmapper.TvSeriesPathEntityDbMapper;
+import it.ninjatech.kvo.tvserie.model.TvSerie;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
@@ -21,8 +25,8 @@ import it.ninjatech.kvo.worker.WorkerProgressListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -241,8 +245,18 @@ public class Loader extends WebFrame {
 		}
 		
 		@SuppressWarnings("unused")
-		public void loadTvSeries() {
-			this.tvSeriesPathEntities = new ArrayList<>();
+		public void loadTvSeries() throws Exception {
+		    TvSeriesPathEntityDbMapper tvSeriesPathEntityDbMapper = new TvSeriesPathEntityDbMapper();
+		    TvSerieDbMapper tvSerieDbMapper = new TvSerieDbMapper();
+		    
+			this.tvSeriesPathEntities = tvSeriesPathEntityDbMapper.find();
+			for (TvSeriesPathEntity tvSeriesPathEntity : this.tvSeriesPathEntities) {
+			    Map<String, TvSerie> tvSeries = tvSerieDbMapper.find(tvSeriesPathEntity.getId());
+			    for (String tvSeriePath : tvSeries.keySet()) {
+			        TvSeriePathEntity tvSeriePathEntity = tvSeriesPathEntity.addTvSerie(new File(tvSeriePath));
+			        tvSeriePathEntity.setTvSerie(tvSeries.get(tvSeriePath));
+			    }
+			}
 		}
 		
 		@SuppressWarnings("unused")

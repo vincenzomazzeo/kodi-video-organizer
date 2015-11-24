@@ -76,22 +76,20 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 		return this.number;
 	}
 	
-	public void addTheTvDbImage(String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale lanaguage) {
-		SortedSet<TvSerieSeasonImage> images = this.images.get(ImageProvider.TheTvDb);
-		if (images == null) {
-			images = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
-			this.images.put(ImageProvider.TheTvDb, images);
-		}
-		images.add(new TvSerieSeasonImage(ImageProvider.TheTvDb, path, season, rating, ratingCount, lanaguage));
-	}
-	
-	public void addFanarttvImage(String path, Integer season, Integer likes, EnhancedLocale lanaguage) {
-		SortedSet<TvSerieSeasonImage> images = this.images.get(ImageProvider.Fanarttv);
-		if (images == null) {
-			images = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
-			this.images.put(ImageProvider.Fanarttv, images);
-		}
-		images.add(new TvSerieSeasonImage(ImageProvider.Fanarttv, path, season, likes != null ? new BigDecimal(likes) : null, null, lanaguage));
+	public void addFanarttvImage(String id, String path, Integer season, String likes, EnhancedLocale language) {
+        addImage(ImageProvider.Fanarttv, new TvSerieSeasonImage(id, ImageProvider.Fanarttv, path, season, likes != null ? new BigDecimal(likes) : null, null, language));
+    }
+    
+    public void addFanarttvImage(String path, Integer season, Integer likes, EnhancedLocale language) {
+        addImage(ImageProvider.Fanarttv, new TvSerieSeasonImage(ImageProvider.Fanarttv, path, season, likes != null ? new BigDecimal(likes) : null, null, language));
+    }
+    
+    public void addTheTvDbImage(String id, String path, Integer season, String rating, String ratingCount, EnhancedLocale language) {
+        addImage(ImageProvider.TheTvDb, new TvSerieSeasonImage(id, ImageProvider.TheTvDb, path, season, rating != null ? new BigDecimal(rating) : null, ratingCount, language));
+    }
+    
+    public void addTheTvDbImage(String path, Integer season, BigDecimal rating, String ratingCount, EnhancedLocale language) {
+	    addImage(ImageProvider.TheTvDb, new TvSerieSeasonImage(ImageProvider.TheTvDb, path, season, rating, ratingCount, language));
 	}
 	
 	public boolean hasImages() {
@@ -143,4 +141,13 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 		episode.setSeason(this);
 	}
 	
+	private void addImage(ImageProvider imageProvider, TvSerieSeasonImage image) {
+        SortedSet<TvSerieSeasonImage> images = this.images.get(imageProvider);
+        if (images == null) {
+            images = new TreeSet<>(TvSerieSeasonImage.makeRatingComparator());
+            this.images.put(imageProvider, images);
+        }
+        images.add(image);
+    }
+    
 }

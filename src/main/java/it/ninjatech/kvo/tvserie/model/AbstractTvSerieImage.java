@@ -40,13 +40,17 @@ public abstract class AbstractTvSerieImage {
 	private final String ratingCount;
 	private final EnhancedLocale language;
 	
+	protected AbstractTvSerieImage(String id, ImageProvider provider, String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
+	    this.id = id;
+        this.provider = provider;
+        this.path = path;
+        this.rating = rating;
+        this.ratingCount = ratingCount;
+        this.language = language;
+	}
+	
 	protected AbstractTvSerieImage(ImageProvider provider, String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
-		this.id = UUID.randomUUID().toString();
-		this.provider = provider;
-		this.path = path;
-		this.rating = rating;
-		this.ratingCount = ratingCount;
-		this.language = language;
+	    this(UUID.randomUUID().toString(), provider, path, rating, ratingCount, language);
 	}
 
 	@Override

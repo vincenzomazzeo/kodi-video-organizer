@@ -52,4 +52,17 @@ public enum TvSerieFanart {
 		return this.chooserHeight;
 	}
 	
+	public static TvSerieFanart parseName(String name) {
+	    TvSerieFanart result = null;
+	    
+	    for (TvSerieFanart fanart : values()) {
+	        if (fanart.name.equals(name)) {
+	            result = fanart;
+	            break;
+	        }
+	    }
+	    
+	    return result;
+	}
+	
 }

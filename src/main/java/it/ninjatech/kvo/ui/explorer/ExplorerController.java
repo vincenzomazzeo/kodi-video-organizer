@@ -22,6 +22,15 @@ public class ExplorerController {
 		this.view = new ExplorerView(this);
 		
 		this.view.addRootsViewTab(this.rootsController.getView());
+		
+		if (!tvSeriesPathEntities.isEmpty()) {
+		    addTvSerieTab();
+		    for (TvSeriesPathEntity tvSeriesPathEntity : tvSeriesPathEntities) {
+		        for (TvSeriePathEntity tvSeriePathEntity : tvSeriesPathEntity.getTvSeries()) {
+		            addTvSerieTile(tvSeriePathEntity);
+		        }
+		    }
+		}
 	}
 	
 	public ExplorerView getView() {
