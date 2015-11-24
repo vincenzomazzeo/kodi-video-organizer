@@ -17,7 +17,7 @@ import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractRootsExplorerRootsTre
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
-import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
+import it.ninjatech.kvo.ui.tvserie.TvSerieFetchController;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.worker.SettingsStorer;
 
@@ -63,7 +63,7 @@ public class ExplorerRootsController {
     }
 
     public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
-        TvSerieSearchController tvSerieSearchController = new TvSerieSearchController(Collections.singleton(node.getValue()));
+        TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(Collections.singleton(node.getValue()));
         Map<TvSeriePathEntity, Boolean> searchResult = tvSerieSearchController.search();
         TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
         for (TvSeriePathEntity tvSeriePathEntity : searchResult.keySet()) {
@@ -81,7 +81,7 @@ public class ExplorerRootsController {
 
     public void searchForTvSeries(TvSeriesExplorerRootsTreeNode node) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
-            TvSerieSearchController tvSerieSearchController = new TvSerieSearchController(node.getValue().getTvSeries());
+            TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(node.getValue().getTvSeries());
             Map<TvSeriePathEntity, Boolean> searchResult = tvSerieSearchController.search();
             Set<TvSeriePathEntity> entitiesToRefresh = new HashSet<>();
             Set<TvSeriePathEntity> entitiesToRemove = new HashSet<>();

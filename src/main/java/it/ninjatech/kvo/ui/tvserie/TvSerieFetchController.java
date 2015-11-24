@@ -15,14 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class TvSerieSearchController {
+import org.apache.commons.lang3.StringUtils;
+
+public class TvSerieFetchController {
 
     private final Map<String, TvSeriePathEntity> entityMap;
-    private final TvSerieSearchDialog view;
+    private final TvSerieFetchDialog view;
 
-    public TvSerieSearchController(Set<TvSeriePathEntity> entities) {
+    public TvSerieFetchController(Set<TvSeriePathEntity> entities) {
         this.entityMap = new Hashtable<>();
-        this.view = TvSerieSearchDialog.getInstance(this);
+        this.view = TvSerieFetchDialog.getInstance(this);
         
         for (TvSeriePathEntity entity : entities) {
             this.entityMap.put(entity.getId(), entity);
@@ -35,7 +37,9 @@ public class TvSerieSearchController {
         List<SearchData> searchDatas = new ArrayList<>();
         EnhancedLocale defaultLocale = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
         for (TvSeriePathEntity tvSeriePathEntity : this.entityMap.values()) {
-            searchDatas.add(new SearchData(tvSeriePathEntity.getId(), tvSeriePathEntity.getLabel(), tvSeriePathEntity.getLabel(), defaultLocale));
+            if (StringUtils.isBlank(tvSeriePathEntity.getTvSerie().getProviderId())) {
+                searchDatas.add(new SearchData(tvSeriePathEntity.getId(), tvSeriePathEntity.getLabel(), tvSeriePathEntity.getLabel(), defaultLocale));
+            }
         }
 
         if (!doSearch(searchDatas)) {

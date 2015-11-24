@@ -47,16 +47,16 @@ import com.alee.laf.table.WebTable;
 import com.alee.laf.table.renderers.WebTableCellRenderer;
 import com.alee.laf.text.WebTextField;
 
-public class TvSerieSearchDialog extends WebDialog implements ActionListener, ListSelectionListener {
+public class TvSerieFetchDialog extends WebDialog implements ActionListener, ListSelectionListener {
 
     private static final long serialVersionUID = 5589915260921364947L;
-    private static TvSerieSearchDialog self;
+    private static TvSerieFetchDialog self;
 
-    public static TvSerieSearchDialog getInstance(TvSerieSearchController controller) {
+    public static TvSerieFetchDialog getInstance(TvSerieFetchController controller) {
         if (self == null) {
             boolean decorateFrames = WebLookAndFeel.isDecorateDialogs();
             WebLookAndFeel.setDecorateDialogs(true);
-            self = new TvSerieSearchDialog(controller);
+            self = new TvSerieFetchDialog(controller);
             self.setShowCloseButton(false);
             WebLookAndFeel.setDecorateDialogs(decorateFrames);
         }
@@ -69,13 +69,13 @@ public class TvSerieSearchDialog extends WebDialog implements ActionListener, Li
 
     private final Map<String, Search> searchMap;
     private final Set<String> missing;
-    private TvSerieSearchController controller;
+    private TvSerieFetchController controller;
     private WebList list;
     private WebPanel tvSerie;
     private WebButton ok;
     private WebButton cancel;
 
-    private TvSerieSearchDialog(TvSerieSearchController controller) {
+    private TvSerieFetchDialog(TvSerieFetchController controller) {
         super(UI.get(), Labels.SEARCH_FOR_TV_SERIE, true);
 
         this.searchMap = new HashMap<>();
@@ -329,9 +329,9 @@ public class TvSerieSearchDialog extends WebDialog implements ActionListener, Li
 
         private static final long serialVersionUID = 8020508070739678576L;
 
-        private final TvSerieSearchDialog dialog;
+        private final TvSerieFetchDialog dialog;
         
-        private ListRenderer(TvSerieSearchDialog dialog) {
+        private ListRenderer(TvSerieFetchDialog dialog) {
             super();
             
             this.dialog = dialog;

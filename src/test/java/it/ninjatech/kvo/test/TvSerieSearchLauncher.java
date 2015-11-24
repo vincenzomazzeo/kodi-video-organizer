@@ -10,7 +10,7 @@ import it.ninjatech.kvo.db.ConnectionHandler;
 import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
-import it.ninjatech.kvo.ui.tvserie.TvSerieSearchController;
+import it.ninjatech.kvo.ui.tvserie.TvSerieFetchController;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.MemoryUtils;
 import it.ninjatech.kvo.util.PeopleManager;
@@ -52,7 +52,7 @@ public class TvSerieSearchLauncher {
 		
 		Set<TvSeriePathEntity> entities = new HashSet<>(tvSeriesPathEntity.getTvSeries());
 		
-		TvSerieSearchController controller = new TvSerieSearchController(entities);
+		TvSerieFetchController controller = new TvSerieFetchController(entities);
 		Map<TvSeriePathEntity, Boolean> searchResult = controller.search();
 		
 		System.out.println(searchResult.size());
