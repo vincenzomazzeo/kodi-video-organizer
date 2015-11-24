@@ -3,7 +3,8 @@ package it.ninjatech.kvo.ui.explorer.roots.contextmenu;
 import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.PathOpenExplorerRootsAction;
-import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSeriesFetchAllExplorerRootsAction;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSeriesFetchExplorerRootsAction;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSeriesScanExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
 import it.ninjatech.kvo.util.Labels;
 
@@ -31,22 +32,16 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
         // Remove
 
         // Scan
-        // -- cerca nuove cartelle
+        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null)));
 
         // Scan Recursive
         // -- cerca nuove cartelle e propaga ai figli
-
-        // Fetch all
-        // -- ricerca la serie tv: solo se TvSerie è nullo
-
-        // Refresh all
-        // -- esegue di nuovo la fetch
 
         // Add new Tv Serie
 
         if (TheTvDbManager.getInstance().isActive()) {
             // Fetch
-            add(new WebMenuItem(new TvSeriesFetchAllExplorerRootsAction(this.controller, this.node, Labels.FETCH, null)));
+            add(new WebMenuItem(new TvSeriesFetchExplorerRootsAction(this.controller, this.node, Labels.FETCH, null)));
         }
     }
 

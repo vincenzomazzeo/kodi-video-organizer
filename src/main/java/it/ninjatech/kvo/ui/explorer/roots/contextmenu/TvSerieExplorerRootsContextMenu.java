@@ -13,37 +13,30 @@ import com.alee.laf.menu.WebMenuItem;
 
 public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContextMenu<TvSerieExplorerRootsTreeNode> {
 
-	private static final long serialVersionUID = 5985142688588885888L;
-	
-	public TvSerieExplorerRootsContextMenu(ExplorerRootsController controller, TvSerieExplorerRootsTreeNode node) {
-		super(controller, node);
-	}
+    private static final long serialVersionUID = 5985142688588885888L;
 
-	@Override
-	protected void build() {
-		if (Desktop.isDesktopSupported()) {
-			// Open in System Explorer
-			add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
-		}
-		
-		// TODO
-		// Scan
-		
-		// Fetch
-		
-		// Remove
-		
-		if (TheTvDbManager.getInstance().isActive()) {
-    		if (this.node.getValue().getTvSerie() != null) {
-    			// Refresh
-    		}
-    		else {
-    			// Fetch
-   				add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, this.node, Labels.FETCH, null)));
-    		}
-		}
-		
-		// Rescan ???
-	}
+    public TvSerieExplorerRootsContextMenu(ExplorerRootsController controller, TvSerieExplorerRootsTreeNode node) {
+        super(controller, node);
+    }
+
+    @Override
+    protected void build() {
+        if (Desktop.isDesktopSupported()) {
+            // Open in System Explorer
+            add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
+        }
+
+        // TODO
+        // Scan
+
+        // Remove
+
+        if (TheTvDbManager.getInstance().isActive()) {
+            // Fetch
+            add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, this.node, Labels.FETCH, null)));
+        }
+
+        // Rescan ???
+    }
 
 }

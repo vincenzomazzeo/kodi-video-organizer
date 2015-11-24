@@ -43,6 +43,7 @@ public final class Labels {
 	public static final String OVERVIEW = "Overview";
 	public static final String PREFERRED_LANGUAGE = "Preferred Language";
 	public static final String ROOTS = "Roots";
+	public static final String SCAN = "Scan";
 	public static final String SCANNING = "Scanning...";
 	public static final String SCANNING_EXTRAFANARTS = "Scanning Extrafanarts";
 	public static final String SCRAPERS_SETTINGS = "Scrapers Settings";

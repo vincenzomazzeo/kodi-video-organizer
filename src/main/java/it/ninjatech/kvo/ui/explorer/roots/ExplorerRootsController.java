@@ -79,6 +79,9 @@ public class ExplorerRootsController {
         }
     }
 
+    public void scanTvSeries(TvSeriesExplorerRootsTreeNode node) {
+    }
+    
     public void searchForTvSeries(TvSeriesExplorerRootsTreeNode node) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
             TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(node.getValue().getTvSeries());
