@@ -128,6 +128,13 @@ public final class Labels {
         return String.format(TV_SERIE_SEASON_CREATE_WORKER_1, name, season);
     }
 	
+	public static final String TV_SERIE_SCAN_ROOT_WORKER_1 = "Scanning root %s";
+	public static final String TV_SERIE_SCAN_ROOT_WORKER_2 = "(%2$d/%3$d) %1$s";
+	
+	public static String tvSerieScanRootWorker(String message, String name, int current, int total) {
+	    return String.format(message, name, current, total);
+	}
+	
 	/********************/
 	
 	public static String dbSavingEntity(String entity) {
