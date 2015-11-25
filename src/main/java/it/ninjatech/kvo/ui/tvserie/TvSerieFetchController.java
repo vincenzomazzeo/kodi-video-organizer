@@ -37,7 +37,7 @@ public class TvSerieFetchController {
         List<SearchData> searchDatas = new ArrayList<>();
         EnhancedLocale defaultLocale = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
         for (TvSeriePathEntity tvSeriePathEntity : this.entityMap.values()) {
-            if (StringUtils.isBlank(tvSeriePathEntity.getTvSerie().getProviderId())) {
+            if (tvSeriePathEntity.getTvSerie() == null || StringUtils.isBlank(tvSeriePathEntity.getTvSerie().getProviderId())) {
                 searchDatas.add(new SearchData(tvSeriePathEntity.getId(), tvSeriePathEntity.getLabel(), tvSeriePathEntity.getLabel(), defaultLocale));
             }
         }
