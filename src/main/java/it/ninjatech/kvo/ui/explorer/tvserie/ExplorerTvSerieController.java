@@ -7,6 +7,7 @@ import it.ninjatech.kvo.async.job.TvSerieTileImagesAsyncJob;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.wall.WallController;
 
 import java.util.HashMap;
@@ -17,12 +18,14 @@ import java.util.Set;
 
 public class ExplorerTvSerieController implements AsyncJobListener {
 
+    private final ExplorerController explorerController;
     private final WallController wallController;
 	private final ExplorerTvSerieModel model;
 	private final ExplorerTvSerieView view;
 	private final Map<String, TileStatus> tiles;
 
-	public ExplorerTvSerieController(WallController wallController) {
+	public ExplorerTvSerieController(ExplorerController explorerController, WallController wallController) {
+	    this.explorerController = explorerController;
 	    this.wallController = wallController;
 		this.model = new ExplorerTvSerieModel();
 		this.view = new ExplorerTvSerieView(this, this.model);
@@ -53,6 +56,7 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 	}
 
 	protected void notifyClick(TvSeriePathEntity tvSeriePathEntity) {
+	    this.explorerController.notifyTvSerieClick(tvSeriePathEntity);
 	    this.wallController.showTvSerie(tvSeriePathEntity);
 	}
 	

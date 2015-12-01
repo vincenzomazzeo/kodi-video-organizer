@@ -9,7 +9,6 @@ import it.ninjatech.kvo.ui.wall.WallController;
 
 import java.util.List;
 
-
 public class ExplorerController {
 
 	private final ExplorerRootsController rootsController;
@@ -18,7 +17,7 @@ public class ExplorerController {
 	
 	public ExplorerController(List<TvSeriesPathEntity> tvSeriesPathEntities, WallController wallController) {
 		this.rootsController = new ExplorerRootsController(new ExplorerRootsModel(), this, tvSeriesPathEntities);
-		this.tvSerieController = new ExplorerTvSerieController(wallController);
+		this.tvSerieController = new ExplorerTvSerieController(this, wallController);
 		this.view = new ExplorerView(this);
 		
 		this.view.addRootsViewTab(this.rootsController.getView());
@@ -47,6 +46,10 @@ public class ExplorerController {
 	
 	public void addTvSerieTile(TvSeriePathEntity tvSeriePathEntity) {
 		this.tvSerieController.addTile(tvSeriePathEntity);
+	}
+	
+	public void notifyTvSerieClick(TvSeriePathEntity tvSeriePathEntity) {
+	    this.rootsController.notifyPossibleFsScanning(tvSeriePathEntity);
 	}
 	
 }

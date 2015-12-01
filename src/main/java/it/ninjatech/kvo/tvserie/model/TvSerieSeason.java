@@ -34,6 +34,11 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 	}
 	
 	@Override
+    public String toString() {
+        return String.format("[%s] %d", this.id, this.number);
+    }
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -107,6 +112,19 @@ public class TvSerieSeason implements Comparable<TvSerieSeason> {
 		}
 		
 		return result;
+	}
+	
+	public TvSerieEpisode getEpisode(Integer episodeNumber) {
+	    TvSerieEpisode result = null;
+	    
+	    for (TvSerieEpisode episode : this.episodes) {
+	        if (episode.getNumber().equals(episodeNumber)) {
+	            result = episode;
+	            break;
+	        }
+	    }
+	    
+	    return result;
 	}
 	
 	public int getEpisodeCount() {

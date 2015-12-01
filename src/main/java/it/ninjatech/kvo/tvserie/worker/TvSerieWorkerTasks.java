@@ -87,10 +87,18 @@ public final class TvSerieWorkerTasks {
 	protected static void scan(TvSeriePathEntity tvSeriePathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
 	    progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_SCAN, null);
 	    
-		SortedSet<FsElement> fsElements = new TreeSet<>();
-		Map<Integer, SortedSet<String>> videoFiles = new HashMap<>();
-		Map<Integer, SortedSet<String>> subtitleFiles = new HashMap<>();
-		SortedSet<String> extraFanarts = new TreeSet<>();
+	    TvSerie tvSerie = tvSeriePathEntity.getTvSerie();
+	    for (TvSerieSeason season : tvSerie.getSeasons()) {
+            for (TvSerieEpisode episode : season.getEpisodes()) {
+                episode.clearFilenames();
+            }
+        }
+	    
+	    SortedSet<FsElement> fsElements = new TreeSet<>();
+	    SortedSet<String> extraFanarts = new TreeSet<>();
+	    Map<Integer, SortedSet<String>> videoFiles = new HashMap<>();
+	    Map<Integer, SortedSet<String>> subtitleFiles = new HashMap<>();
+	    /*
 
 		// TvSerie filenames
 		Map<String, TvSerieEpisode> episodeVideoFiles = new HashMap<>();
@@ -99,13 +107,14 @@ public final class TvSerieWorkerTasks {
 		if (tvSerie != null) {
 			for (TvSerieSeason season : tvSerie.getSeasons()) {
 				for (TvSerieEpisode episode : season.getEpisodes()) {
-					episodeVideoFiles.put(episode.getFilename(), episode);
+				    episodeVideoFiles.put(getVideoFilenameNoExtension(episode), episode);
 					for (String subtitleFilename : episode.getSubtitleFilenames()) {
-						episodeSubtitleFiles.put(subtitleFilename, episode);
+						episodeSubtitleFiles.put(getSubtitleFilenameNoExtension(subtitleFilename), episode);
 					}
 				}
 			}
 		}
+		*/
 
 		File main = new File(tvSeriePathEntity.getPath());
 		Deque<Entry<File, FsElement>> toScan = new ArrayDeque<>();
@@ -143,7 +152,16 @@ public final class TvSerieWorkerTasks {
 						}
 						else if (seasonNumber != null) {
 							if (isVideoFile(file.getName())) {
-								TvSerieEpisode episode = episodeVideoFiles.remove(file.getAbsolutePath());
+							    if (!TvSerieHelper.setEpisodeFilename(tvSerie, file)) {
+							        SortedSet<String> seasonVideoFiles = videoFiles.get(seasonNumber);
+                                    if (seasonVideoFiles == null) {
+                                        seasonVideoFiles = new TreeSet<>();
+                                        videoFiles.put(seasonNumber, seasonVideoFiles);
+                                    }
+                                    seasonVideoFiles.add(file.getAbsolutePath());
+							    }
+							    /*
+								TvSerieEpisode episode = episodeVideoFiles.remove(getAbsolutePathNoExtension(file));
 								if (episode == null) {
 									SortedSet<String> seasonVideoFiles = videoFiles.get(seasonNumber);
 									if (seasonVideoFiles == null) {
@@ -152,9 +170,14 @@ public final class TvSerieWorkerTasks {
 									}
 									seasonVideoFiles.add(file.getAbsolutePath());
 								}
+								else {
+								    episode.setFilename(file.getAbsolutePath());
+								}
+								*/
 							}
 							else if (isSubtitleFile(file.getName())) {
-								TvSerieEpisode episode = episodeSubtitleFiles.remove(file.getAbsolutePath());
+							    /*
+								TvSerieEpisode episode = episodeSubtitleFiles.remove(getAbsolutePathNoExtension(file));
 								if (episode == null) {
 									SortedSet<String> seasonSubtitleFiles = subtitleFiles.get(seasonNumber);
 									if (seasonSubtitleFiles == null) {
@@ -163,6 +186,10 @@ public final class TvSerieWorkerTasks {
 									}
 									seasonSubtitleFiles.add(file.getAbsolutePath());
 								}
+								else {
+								    episode.addSubtitleFilename(file.getAbsolutePath());
+								}
+								*/
 							}
 						}
 					}
@@ -170,6 +197,7 @@ public final class TvSerieWorkerTasks {
 			}
 		}
 
+		/*
 		for (String episodeVideoFile : episodeVideoFiles.keySet()) {
 			TvSerieEpisode episode = episodeVideoFiles.get(episodeVideoFile);
 			episode.setFilename(null);
@@ -178,6 +206,7 @@ public final class TvSerieWorkerTasks {
 			TvSerieEpisode episode = episodeSubtitleFiles.get(episodeSubtitleFile);
 			episode.removeSubtitleFilename(episodeSubtitleFile);
 		}
+		*/
 
 		tvSeriePathEntity.setFsElements(fsElements);
 		tvSeriePathEntity.setVideoFiles(videoFiles);
@@ -219,6 +248,35 @@ public final class TvSerieWorkerTasks {
 	private static boolean isSubtitleFile(String name) {
 		return StringUtils.endsWithIgnoreCase(name, "srt");
 	}
+	
+	/*
+	private static String getVideoFilenameNoExtension(TvSerieEpisode episode) {
+	    String result = null;
+	    
+	    if (episode.getFilename() == null) {
+	        File path = new File(TvSerieHelper.getLocalSeasonPath(episode.getSeason()), TvSerieHelper.getFullEpisodeName(episode));
+	        result = path.getAbsolutePath();
+	    }
+	    else {
+	        result = episode.getFilename();
+	        result = result.substring(0, result.lastIndexOf('.'));
+	    }
+	    
+	    return result;
+	}
+	
+	private static String getSubtitleFilenameNoExtension(String subtitleFilename) {
+	    return subtitleFilename.substring(0, subtitleFilename.lastIndexOf('.'));
+	}
+	
+	private static String getAbsolutePathNoExtension(File file) {
+	    String result = file.getAbsolutePath();
+	    
+	    result = result.substring(0, result.lastIndexOf('.'));
+	    
+	    return result;
+	}
+	*/
 
 	private TvSerieWorkerTasks() {
 	}

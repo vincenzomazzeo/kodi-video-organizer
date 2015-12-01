@@ -10,6 +10,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.Utils;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -19,6 +20,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,6 +29,13 @@ public final class TvSerieHelper {
 
 	public static final String EXTRAFANART = "extrafanart";
 	public static final String SEASON = "season";
+	private static final String FIRST_AIRED_DATE_FORMAT = "dd/MM/yyyy";
+	private static final String YEAR_DATE_FORMAT = "yyyy";
+	private static final String SEASON_POSTER_FILENAME = "season%s-poster.jpg";
+	private static final String FULL_EPISODE_NAME_FORMAT = "%s - %s";
+	private static final String EPISODE_NAME_FORMAT = "%s - %s";
+	private static final String FS_EPISODE_NAME_FORMAT = "%s - (?<%s>[\\d]+) - .+";
+	private static final String EPISODE_NUMBER_GROUP_NAME = "episodeNumber";
 
 	// **************
 	// * PathEntity *
@@ -74,7 +84,7 @@ public final class TvSerieHelper {
 		String result = "";
 
 		if (tvSerie.getFirstAired() != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(FIRST_AIRED_DATE_FORMAT);
 			result = sdf.format(tvSerie.getFirstAired());
 		}
 
@@ -85,7 +95,7 @@ public final class TvSerieHelper {
 		String result = "";
 
 		if (tvSerie.getFirstAired() != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(YEAR_DATE_FORMAT);
 			result = sdf.format(tvSerie.getFirstAired());
 		}
 
@@ -198,7 +208,7 @@ public final class TvSerieHelper {
 		String result = null;
 
 		DecimalFormat df = new DecimalFormat("00");
-		result = String.format("season%s-poster.jpg", df.format(season.getNumber()));
+		result = String.format(SEASON_POSTER_FILENAME, df.format(season.getNumber()));
 
 		return result;
 	}
@@ -225,7 +235,7 @@ public final class TvSerieHelper {
 		String result = "";
 
 		if (episode.getFirstAired() != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat(FIRST_AIRED_DATE_FORMAT);
 			result = sdf.format(episode.getFirstAired());
 		}
 
@@ -233,18 +243,75 @@ public final class TvSerieHelper {
 	}
 
 	public static String getFullEpisodeName(TvSerieEpisode episode) {
-		return String.format("%s - %s", episode.getSeason().getTvSerie().getName(), getEpisodeName(episode));
+		return String.format(FULL_EPISODE_NAME_FORMAT, episode.getSeason().getTvSerie().getName(), getEpisodeName(episode));
 	}
 
 	public static String getEpisodeName(TvSerieEpisode episode) {
 		String result = null;
 
 		DecimalFormat format = new DecimalFormat("00");
-		result = String.format("%s - %s", format.format(episode.getNumber()), episode.getName());
+		result = String.format(EPISODE_NAME_FORMAT, format.format(episode.getNumber()), episode.getName());
 
 		return result;
 	}
-
+	
+	public static boolean setEpisodeFilename(TvSerie tvSerie, File file) {
+	    boolean result = false;
+	    
+	    Integer seasonNumber = Integer.valueOf(file.getParentFile().getName().toLowerCase().substring(SEASON.length() + 1));
+	    String tvSerieNameNormalized = Utils.normalizeName(tvSerie.getName());
+	    String regexp = String.format(FS_EPISODE_NAME_FORMAT, tvSerieNameNormalized, EPISODE_NUMBER_GROUP_NAME);
+	    Matcher matcher = Pattern.compile(regexp).matcher(file.getName());
+	    if (matcher.matches()) {
+	        Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_GROUP_NAME));
+	        
+	        TvSerieSeason season = tvSerie.getSeason(seasonNumber);
+	        if (season != null) {
+	            TvSerieEpisode episode = season.getEpisode(episodeNumber);
+	            if (episode != null) {
+	                episode.setFilename(file.getAbsolutePath());
+	                result = true;
+	            }
+	        }
+	    }
+	    
+	    return result;
+	}
+	
+	public static boolean addEpisodeSubtitleFilename(TvSerie tvSerie, File file) {
+	    boolean result = false;
+	    
+	    Integer seasonNumber = Integer.valueOf(file.getParentFile().getName().toLowerCase().substring(SEASON.length() + 1));
+	    String tvSerieNameNormalized = Utils.normalizeName(tvSerie.getName());
+	    String regexp = String.format("%s - (?<n>[\\d]+) - .+(?<s>[\\.\\d]?)(?<l>[\\.a-z]{2}).+", tvSerieNameNormalized);
+	    Matcher matcher = Pattern.compile(regexp).matcher(file.getName());
+	    if (matcher.matches()) {
+	        System.out.println("qui");
+            /*
+	        Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_GROUP_NAME));
+            
+            TvSerieSeason season = tvSerie.getSeason(seasonNumber);
+            if (season != null) {
+                TvSerieEpisode episode = season.getEpisode(episodeNumber);
+                if (episode != null) {
+                    episode.setFilename(file.getAbsolutePath());
+                    result = true;
+                }
+            }
+            */
+        }
+	    
+	    // The Following - 01 - Inside the Following.2.it.srt
+	    // The Following - 01 - Inside the Following.it.srt
+	    
+	    return result;
+	}
+	
+	public static void main(String[] args) {
+        TvSerie a = new TvSerie("", "ciccio", null);
+        addEpisodeSubtitleFilename(a, new File("D:/ciccio/season 1/ciccio - 01 - prova.2.it.srt"));
+    }
+	
 	public static String getEpisodeRating(TvSerieEpisode tvSerieEpisode) {
 		String result = null;
 

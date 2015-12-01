@@ -42,6 +42,11 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		this.tvSerie = null;
 	}
 
+	@Override
+    public String toString() {
+        return String.format("[%s] %s - %s", getId(), getPath(), getLabel());
+    }
+	
 	public TvSeriesPathEntity getTvSeriesPathEntity() {
 		return this.tvSeriesPathEntity;
 	}

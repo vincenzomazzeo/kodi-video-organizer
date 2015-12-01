@@ -120,6 +120,13 @@ public class ExplorerRootsController {
         }
     }
 
+    public void notifyPossibleFsScanning(TvSeriePathEntity tvSeriePathEntity) {
+        TvSerieExplorerRootsTreeNode node = this.model.findTvSerieNode(tvSeriePathEntity);
+        if (node != null && node.isFsScanningRequired()) {
+            fsScanning(node);
+        }
+    }
+    
     protected void notifyAddRoot(int x, int y) {
         this.view.showAddRootMenu(x, y);
     }
@@ -127,6 +134,8 @@ public class ExplorerRootsController {
     protected void notifyAddTvSeriesRoot() {
         Settings settings = SettingsHandler.getInstance().getSettings();
 
+        // TODO check for duplicate
+        
         File root = showRootChooser(Type.TvSerie, settings.getLastTvSeriesRootParent());
         TvSeriesPathEntity tvSeriesPathEntity = TvSerieManager.getInstance().addTvSeriesPathEntity(root);
         if (tvSeriesPathEntity != null) {
@@ -160,26 +169,11 @@ public class ExplorerRootsController {
             AbstractRootExplorerRootsTreeNode<?> node = (AbstractRootExplorerRootsTreeNode<?>)path.getLastPathComponent();
 
             if (node.isFsScanningRequired()) {
-                node.removeChildren();
-
-                boolean scanResult = false;
-                AbstractPathEntity value = (AbstractPathEntity)node.getValue();
-                if (value instanceof TvSeriePathEntity) {
-                    TvSeriePathEntity tvSeriePathEntity = (TvSeriePathEntity)value;
-                    scanResult = TvSerieManager.getInstance().scan(tvSeriePathEntity);
-                    if (scanResult) {
-                        AbstractFsExplorerRootsTreeNode.createAndAddFromFsElements(tvSeriePathEntity.getFsElements(), node);
-                    }
-                    else {
-                        AbstractRootsExplorerRootsTreeNode<?> parent = (AbstractRootsExplorerRootsTreeNode<?>)node.getParent();
-                        parent.remove(node);
-                    }
-                    this.model.reload(node);
-                }
+                fsScanning((TvSerieExplorerRootsTreeNode)node);
             }
         }
     }
-
+    
     protected void notifyShowContextMenu(TreePath path, int x, int y) {
         if (path != null && path.getLastPathComponent() instanceof AbstractExplorerRootsTreeNode) {
             AbstractExplorerRootsTreeNode node = (AbstractExplorerRootsTreeNode)path.getLastPathComponent();
@@ -191,6 +185,25 @@ public class ExplorerRootsController {
         }
     }
 
+    private void fsScanning(TvSerieExplorerRootsTreeNode node) {
+        node.removeChildren();
+
+        boolean scanResult = false;
+        AbstractPathEntity value = (AbstractPathEntity)node.getValue();
+        if (value instanceof TvSeriePathEntity) {
+            TvSeriePathEntity tvSeriePathEntity = (TvSeriePathEntity)value;
+            scanResult = TvSerieManager.getInstance().scan(tvSeriePathEntity);
+            if (scanResult) {
+                AbstractFsExplorerRootsTreeNode.createAndAddFromFsElements(tvSeriePathEntity.getFsElements(), node);
+            }
+            else {
+                AbstractRootsExplorerRootsTreeNode<?> parent = (AbstractRootsExplorerRootsTreeNode<?>)node.getParent();
+                parent.remove(node);
+            }
+            this.model.reload(node);
+        }
+    }
+    
     private File showRootChooser(Type type, File lastRootParent) {
         File result = null;
 

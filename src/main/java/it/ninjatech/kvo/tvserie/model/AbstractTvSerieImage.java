@@ -52,6 +52,11 @@ public abstract class AbstractTvSerieImage {
 	protected AbstractTvSerieImage(ImageProvider provider, String path, BigDecimal rating, String ratingCount, EnhancedLocale language) {
 	    this(UUID.randomUUID().toString(), provider, path, rating, ratingCount, language);
 	}
+	
+	@Override
+    public String toString() {
+        return String.format("[%s] %s", this.id, this.path);
+    }
 
 	@Override
 	public int hashCode() {

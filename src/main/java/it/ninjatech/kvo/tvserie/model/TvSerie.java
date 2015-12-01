@@ -51,6 +51,11 @@ public class TvSerie {
 	public TvSerie(String providerId, String name, EnhancedLocale language) {
 		this(UUID.randomUUID().toString(), providerId, name, language);
 	}
+	
+	@Override
+    public String toString() {
+        return String.format("[%s] %s", this.id, this.name);
+    }
 
 	@Override
 	public int hashCode() {

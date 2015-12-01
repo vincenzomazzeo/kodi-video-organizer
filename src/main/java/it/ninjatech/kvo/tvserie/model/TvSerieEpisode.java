@@ -45,6 +45,11 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 	public TvSerieEpisode(String providerId, Integer number, EnhancedLocale language) {
 		this(UUID.randomUUID().toString(), providerId, number, language);
 	}
+	
+	@Override
+    public String toString() {
+        return String.format("[%s] %d - %s - %s", this.id, this.number, this.name, this.filename);
+    }
 
 	@Override
 	public int hashCode() {
@@ -208,6 +213,11 @@ public class TvSerieEpisode implements Comparable<TvSerieEpisode> {
 
 	public void setArtwork(String artwork) {
 		this.artwork = artwork;
+	}
+	
+	public void clearFilenames() {
+	    this.filename = null;
+	    this.subtitleFilenames.clear();
 	}
 	
 	protected void setSeason(TvSerieSeason season) {

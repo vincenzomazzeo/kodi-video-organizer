@@ -60,6 +60,10 @@ public final class Utils {
 		return result;
 	}
 	
+	public static String normalizeName(String name) {
+	    return name.replaceAll("\\\\|/|:|\\*|\\?|\"|<|>|\\|", "").replace('.', ' ');
+	}
+	
 	private Utils() {}
 	
 }

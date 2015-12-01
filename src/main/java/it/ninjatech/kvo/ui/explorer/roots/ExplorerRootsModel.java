@@ -1,10 +1,16 @@
 package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.RootsExplorerRootsTreeNode;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
 
+import java.util.Collections;
+import java.util.Map;
+
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 public class ExplorerRootsModel extends DefaultTreeModel {
 
@@ -26,6 +32,23 @@ public class ExplorerRootsModel extends DefaultTreeModel {
 	protected void removeRoot(TvSeriesExplorerRootsTreeNode root) {
 	    this.root.removeRoot(root);
 	    reload();
+	}
+	
+	protected TvSerieExplorerRootsTreeNode findTvSerieNode(TvSeriePathEntity entity) {
+	    TvSerieExplorerRootsTreeNode result = null;
+	    
+	    for (int i = 0, n = this.root.getChildCount(); i < n; i++) {
+	        TreeNode node = this.root.getChildAt(i);
+	        if (node.getClass().equals(TvSeriesExplorerRootsTreeNode.class)) {
+	            Map<TvSeriePathEntity, TvSerieExplorerRootsTreeNode> children = ((TvSeriesExplorerRootsTreeNode)node).findChildren(Collections.singleton(entity));
+	            if (!children.isEmpty()) {
+	                result = children.values().iterator().next();
+	                break;
+	            }
+	        }
+	    }
+	    
+	    return result;
 	}
 
 }

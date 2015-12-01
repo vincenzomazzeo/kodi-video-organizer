@@ -21,6 +21,11 @@ public class TvSerieActor implements Comparable<TvSerieActor> {
 		
 		PeopleManager.getInstance().addTvSerieActor(this);
 	}
+	
+	@Override
+    public String toString() {
+        return String.format("[%s] %s", this.id, this.name);
+    }
 
 	@Override
 	public int hashCode() {

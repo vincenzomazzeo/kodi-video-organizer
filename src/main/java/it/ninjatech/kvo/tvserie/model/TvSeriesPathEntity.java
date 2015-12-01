@@ -24,7 +24,12 @@ public class TvSeriesPathEntity extends AbstractPathEntity {
 		this.tvSeries = new TreeSet<>();
 	}
 	
-	public TvSeriePathEntity addTvSerie(File path) {
+	@Override
+    public String toString() {
+        return String.format("[%s] %s - %s", getId(), getPath(), getLabel());
+    }
+
+    public TvSeriePathEntity addTvSerie(File path) {
 		TvSeriePathEntity result = new TvSeriePathEntity(path, this);
 		
 		if (!this.tvSeries.contains(result)) {
