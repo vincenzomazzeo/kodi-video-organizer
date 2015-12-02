@@ -24,9 +24,9 @@ public class TvSerieFetchWorker extends AbstractTvSerieWorker<List<TvSeriePathEn
 		    
 		    if (TvSerieWorkerTasks.check(new File(entity.getPath()), this.progressNotifier)) {
 		        this.progressNotifier.notifyTaskUpdate(null, 10);
-		        TvSerieWorkerTasks.scan(entity, this.progressNotifier);
-		        this.progressNotifier.notifyTaskUpdate(null, 50);
 		        TvSerieWorkerTasks.fetch(entity, this.progressNotifier);
+		        this.progressNotifier.notifyTaskUpdate(null, 50);
+		        TvSerieWorkerTasks.scan(entity, this.progressNotifier);
 		        this.progressNotifier.notifyTaskUpdate(null, 85);
 		        TvSerieWorkerTasks.delete(entity, this.progressNotifier);
 		        this.progressNotifier.notifyTaskUpdate(null, 90);

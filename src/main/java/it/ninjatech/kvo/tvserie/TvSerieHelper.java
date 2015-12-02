@@ -35,7 +35,10 @@ public final class TvSerieHelper {
 	private static final String FULL_EPISODE_NAME_FORMAT = "%s - %s";
 	private static final String EPISODE_NAME_FORMAT = "%s - %s";
 	private static final String FS_EPISODE_NAME_FORMAT = "%s - (?<%s>[\\d]+) - .+";
+	private static final String FS_EPISODE_SUBTITLE_NAME_FORMAT = "%s - (?<%s>[\\d]+) - .+(?<%s>[\\.\\d]?)(?<%s>[\\.a-z]{2}).+";
 	private static final String EPISODE_NUMBER_GROUP_NAME = "episodeNumber";
+	private static final String EPISODE_SUBTITLE_NUMBER_GROUP_NAME = "subtitleNumber";
+	private static final String EPISODE_SUBTITLE_LANGUAGE_GROUP_NAME = "subtitleLanguage";
 
 	// **************
 	// * PathEntity *
@@ -283,34 +286,24 @@ public final class TvSerieHelper {
 	    
 	    Integer seasonNumber = Integer.valueOf(file.getParentFile().getName().toLowerCase().substring(SEASON.length() + 1));
 	    String tvSerieNameNormalized = Utils.normalizeName(tvSerie.getName());
-	    String regexp = String.format("%s - (?<n>[\\d]+) - .+(?<s>[\\.\\d]?)(?<l>[\\.a-z]{2}).+", tvSerieNameNormalized);
+	    String regexp = String.format(FS_EPISODE_SUBTITLE_NAME_FORMAT, tvSerieNameNormalized, 
+	                                  EPISODE_NUMBER_GROUP_NAME, EPISODE_SUBTITLE_NUMBER_GROUP_NAME, EPISODE_SUBTITLE_LANGUAGE_GROUP_NAME);
 	    Matcher matcher = Pattern.compile(regexp).matcher(file.getName());
 	    if (matcher.matches()) {
-	        System.out.println("qui");
-            /*
 	        Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_GROUP_NAME));
             
             TvSerieSeason season = tvSerie.getSeason(seasonNumber);
             if (season != null) {
                 TvSerieEpisode episode = season.getEpisode(episodeNumber);
                 if (episode != null) {
-                    episode.setFilename(file.getAbsolutePath());
+                    episode.addSubtitleFilename(file.getAbsolutePath());
                     result = true;
                 }
             }
-            */
         }
-	    
-	    // The Following - 01 - Inside the Following.2.it.srt
-	    // The Following - 01 - Inside the Following.it.srt
 	    
 	    return result;
 	}
-	
-	public static void main(String[] args) {
-        TvSerie a = new TvSerie("", "ciccio", null);
-        addEpisodeSubtitleFilename(a, new File("D:/ciccio/season 1/ciccio - 01 - prova.2.it.srt"));
-    }
 	
 	public static String getEpisodeRating(TvSerieEpisode tvSerieEpisode) {
 		String result = null;

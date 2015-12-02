@@ -30,7 +30,7 @@ public class TvSerieEpisodeMapper extends AbstractDbMapper<TvSerieEpisode> {
         result.setName(resultSet.getString("name"));
         result.setFirstAired(resultSet.getDate("first_aired"));
         result.setImdbId(resultSet.getString("imdb_id"));
-        result.setOverview(resultSet.getClob("overview").toString());
+        result.setOverview(resultSet.getString("overview"));
         result.setRating(resultSet.getBigDecimal("rating"));
         result.setRatingCount(resultSet.getInt("rating_count"));
         result.setArtwork(resultSet.getString("artwork"));
