@@ -34,8 +34,8 @@ public final class TvSerieHelper {
 	private static final String SEASON_POSTER_FILENAME = "season%s-poster.jpg";
 	private static final String FULL_EPISODE_NAME_FORMAT = "%s - %s";
 	private static final String EPISODE_NAME_FORMAT = "%s - %s";
-	private static final String FS_EPISODE_NAME_FORMAT = "%s - (?<%s>[\\d]+) - .+";
-	private static final String FS_EPISODE_SUBTITLE_NAME_FORMAT = "%s - (?<%s>[\\d]+) - .+(?<%s>[\\.\\d]?)(?<%s>[\\.a-z]{2}).+";
+	private static final String FS_EPISODE_NAME_FORMAT = "%s - [\\d]+x(?<%s>[\\d]+) - .+";
+	private static final String FS_EPISODE_SUBTITLE_NAME_FORMAT = "%s - [\\d]x(?<%s>[\\d]+) - .+(?<%s>[\\.\\d]?)(?<%s>[\\.a-z]{2}).+";
 	private static final String EPISODE_NUMBER_GROUP_NAME = "episodeNumber";
 	private static final String EPISODE_SUBTITLE_NUMBER_GROUP_NAME = "subtitleNumber";
 	private static final String EPISODE_SUBTITLE_LANGUAGE_GROUP_NAME = "subtitleLanguage";
