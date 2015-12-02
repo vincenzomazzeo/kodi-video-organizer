@@ -12,6 +12,10 @@ import java.util.Set;
 
 public class TvSerieScanRootWorker extends AbstractTvSerieWorker<TvSerieScanRootWorkerInputData, Map<TvSeriePathEntity, Boolean>> {
 
+    public static TvSerieScanRootWorkerInputData makeInputData(TvSeriesPathEntity entity, Boolean recursive) {
+        return new TvSerieScanRootWorkerInputData(entity, recursive);
+    }
+    
     public TvSerieScanRootWorker(TvSerieScanRootWorkerInputData input) {
         super(input);
     }

@@ -80,6 +80,15 @@ public class ExplorerRootsController {
     }
 
     public void scanTvSeries(TvSeriesExplorerRootsTreeNode node) {
+        if (TvSerieManager.getInstance().check(node.getValue())) {
+            TvSerieManager.getInstance().scan(node.getValue());
+            this.model.refreshRoot(node);
+        }
+        else {
+            // Root exists no more!
+            this.model.removeRoot(node);
+            NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRootRemoved(node.getValue().getLabel()));
+        }
     }
     
     public void searchForTvSeries(TvSeriesExplorerRootsTreeNode node) {

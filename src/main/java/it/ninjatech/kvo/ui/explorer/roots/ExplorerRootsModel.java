@@ -26,12 +26,17 @@ public class ExplorerRootsModel extends DefaultTreeModel {
 
 	protected void addRoot(AbstractPathEntity root) {
 		this.root.addRoot(root);
-		reload();
+		nodeStructureChanged(this.root);
 	}
 	
 	protected void removeRoot(TvSeriesExplorerRootsTreeNode root) {
 	    this.root.removeRoot(root);
-	    reload();
+	    nodeStructureChanged(this.root);
+	}
+	
+	protected void refreshRoot(TvSeriesExplorerRootsTreeNode root) {
+	    this.root.refreshRoot(root);
+	    nodeStructureChanged(root);
 	}
 	
 	protected TvSerieExplorerRootsTreeNode findTvSerieNode(TvSeriePathEntity entity) {

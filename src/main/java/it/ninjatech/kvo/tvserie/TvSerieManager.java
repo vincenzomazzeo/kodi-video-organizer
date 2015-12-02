@@ -10,6 +10,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieCheckRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieScanRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonCreateWorker;
@@ -77,14 +78,10 @@ public final class TvSerieManager {
 	    return result;
 	}
 	
-//	public Boolean scan(TvSeriesPathEntity tvSeriesPathEntity) {
-//		Boolean result = null;
-//		
-//		TvSerieScanOnlyRootWorker worker = new TvSerieScanOnlyRootWorker(tvSeriesPathEntity);
-//		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-//		
-//		return result;
-//	}
+	public void scan(TvSeriesPathEntity tvSeriesPathEntity) {
+		TvSerieScanRootWorker worker = new TvSerieScanRootWorker(TvSerieScanRootWorker.makeInputData(tvSeriesPathEntity, false));
+		DeterminateProgressDialogWorker.show(worker, "", true);
+	}
 	
 //	public Boolean scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
 //		Boolean result = null;

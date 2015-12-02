@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.explorer.roots.treenode;
 
 import it.ninjatech.kvo.model.AbstractPathEntity;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
@@ -8,6 +9,8 @@ import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsConte
 import it.ninjatech.kvo.util.Labels;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.Icon;
 
@@ -70,6 +73,22 @@ public class RootsExplorerRootsTreeNode extends AbstractExplorerRootsTreeNode {
 	
 	public void removeRoot(TvSeriesExplorerRootsTreeNode root) {
 	    this.children.remove(root);
+	}
+	
+	public void refreshRoot(TvSeriesExplorerRootsTreeNode root) {
+	    Set<TvSeriePathEntity> tvSeriePathEntities = new HashSet<>();
+	    for (AbstractExplorerRootsTreeNode child : root.children) {
+	        tvSeriePathEntities.add(((TvSerieExplorerRootsTreeNode)child).value);
+	    }
+	    
+	    TvSeriesPathEntity entity = root.getValue();
+	    for (TvSeriePathEntity tvSeriePathEntity : entity.getTvSeries()) {
+	        if (!tvSeriePathEntities.remove(tvSeriePathEntity)) {
+	            TvSerieExplorerRootsTreeNode child = new TvSerieExplorerRootsTreeNode(tvSeriePathEntity, root);
+	            root.addChild(child);
+	        }
+	    }
+	    root.sortChildren();
 	}
 
 }
