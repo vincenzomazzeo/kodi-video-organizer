@@ -79,9 +79,15 @@ public class ExplorerRootsController {
         }
     }
 
-    public void scanTvSeries(TvSeriesExplorerRootsTreeNode node) {
+    public void scanTvSeries(TvSeriesExplorerRootsTreeNode node, boolean recursive) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
-            TvSerieManager.getInstance().scan(node.getValue());
+            if (recursive) {
+                Map<TvSeriePathEntity, Boolean> scanResult = TvSerieManager.getInstance().scanRecursive(node.getValue());
+                handleTvSeries(node, scanResult, true, false);
+            }
+            else {
+                TvSerieManager.getInstance().scan(node.getValue());
+            }
             this.model.refreshRoot(node);
         }
         else {
@@ -90,37 +96,12 @@ public class ExplorerRootsController {
             NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRootRemoved(node.getValue().getLabel()));
         }
     }
-    
+
     public void searchForTvSeries(TvSeriesExplorerRootsTreeNode node) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
             TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(node.getValue().getTvSeries());
             Map<TvSeriePathEntity, Boolean> searchResult = tvSerieSearchController.search();
-            Set<TvSeriePathEntity> entitiesToRefresh = new HashSet<>();
-            Set<TvSeriePathEntity> entitiesToRemove = new HashSet<>();
-            for (TvSeriePathEntity tvSeriePathEntity : searchResult.keySet()) {
-                if (searchResult.get(tvSeriePathEntity)) {
-                    entitiesToRefresh.add(tvSeriePathEntity);
-                    this.parent.addTvSerieTile(tvSeriePathEntity);
-                }
-                else {
-                    entitiesToRemove.add(tvSeriePathEntity);
-                    node.getValue().removeTvSerie(tvSeriePathEntity);
-                }
-            }
-            if (!entitiesToRefresh.isEmpty() || !entitiesToRemove.isEmpty()) {
-                if (!entitiesToRefresh.isEmpty()) {
-                    for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRefresh).values()) {
-                        this.model.nodeChanged(child);
-                    }
-                }
-                if (!entitiesToRemove.isEmpty()) {
-                    for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRemove).values()) {
-                        node.remove(child);
-                    }
-                    this.model.nodeStructureChanged(node);
-                }
-                NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(entitiesToRefresh, entitiesToRemove));
-            }
+            handleTvSeries(node, searchResult, false, true);
         }
         else {
             // Root exists no more!
@@ -135,7 +116,7 @@ public class ExplorerRootsController {
             fsScanning(node);
         }
     }
-    
+
     protected void notifyAddRoot(int x, int y) {
         this.view.showAddRootMenu(x, y);
     }
@@ -144,7 +125,7 @@ public class ExplorerRootsController {
         Settings settings = SettingsHandler.getInstance().getSettings();
 
         // TODO check for duplicate
-        
+
         File root = showRootChooser(Type.TvSerie, settings.getLastTvSeriesRootParent());
         TvSeriesPathEntity tvSeriesPathEntity = TvSerieManager.getInstance().addTvSeriesPathEntity(root);
         if (tvSeriesPathEntity != null) {
@@ -182,7 +163,7 @@ public class ExplorerRootsController {
             }
         }
     }
-    
+
     protected void notifyShowContextMenu(TreePath path, int x, int y) {
         if (path != null && path.getLastPathComponent() instanceof AbstractExplorerRootsTreeNode) {
             AbstractExplorerRootsTreeNode node = (AbstractExplorerRootsTreeNode)path.getLastPathComponent();
@@ -212,7 +193,7 @@ public class ExplorerRootsController {
             this.model.reload(node);
         }
     }
-    
+
     private File showRootChooser(Type type, File lastRootParent) {
         File result = null;
 
@@ -230,6 +211,42 @@ public class ExplorerRootsController {
     private void storeSettings() {
         SettingsStorer storer = new SettingsStorer();
         IndeterminateProgressDialogWorker.show(storer, Labels.STORING_SETTINGS);
+    }
+
+    private void handleTvSeries(TvSeriesExplorerRootsTreeNode node, Map<TvSeriePathEntity, Boolean> children,
+                                boolean onlyRemove, boolean showNotification) {
+        // TODO completare questo metodo: non va bene perché è confuso
+        Set<TvSeriePathEntity> entitiesToRefresh = new HashSet<>();
+        Set<TvSeriePathEntity> entitiesToRemove = new HashSet<>();
+        for (TvSeriePathEntity tvSeriePathEntity : children.keySet()) {
+            if (children.get(tvSeriePathEntity)) {
+                if (!onlyRemove) {
+                    // TODO da sistemare l'add
+                    entitiesToRefresh.add(tvSeriePathEntity);
+                    this.parent.addTvSerieTile(tvSeriePathEntity);
+                }
+            }
+            else {
+                entitiesToRemove.add(tvSeriePathEntity);
+                node.getValue().removeTvSerie(tvSeriePathEntity);
+            }
+        }
+        if (!entitiesToRefresh.isEmpty() || !entitiesToRemove.isEmpty()) {
+            if (!entitiesToRefresh.isEmpty()) {
+                for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRefresh).values()) {
+                    this.model.nodeChanged(child);
+                }
+            }
+            if (!entitiesToRemove.isEmpty()) {
+                for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRemove).values()) {
+                    node.remove(child);
+                }
+                this.model.nodeStructureChanged(node);
+            }
+            if (showNotification) {
+                NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(entitiesToRefresh, entitiesToRemove));
+            }
+        }
     }
 
 }

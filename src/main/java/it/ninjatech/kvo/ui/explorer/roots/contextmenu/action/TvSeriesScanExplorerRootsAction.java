@@ -11,13 +11,18 @@ public class TvSeriesScanExplorerRootsAction extends AbstractExplorerRootsAction
 
     private static final long serialVersionUID = 6744878807457130360L;
 
-    public TvSeriesScanExplorerRootsAction(ExplorerRootsController controller, TvSeriesExplorerRootsTreeNode node, String text, Icon icon) {
+    private final boolean recursive;
+
+    public TvSeriesScanExplorerRootsAction(ExplorerRootsController controller, TvSeriesExplorerRootsTreeNode node,
+                                           String text, Icon icon, boolean recursive) {
         super(controller, node, text, icon);
+
+        this.recursive = recursive;
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        this.controller.scanTvSeries(this.node);
+        this.controller.scanTvSeries(this.node, this.recursive);
     }
-    
+
 }

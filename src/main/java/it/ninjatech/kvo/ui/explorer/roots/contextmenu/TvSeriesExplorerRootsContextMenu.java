@@ -32,10 +32,10 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
         // Remove
 
         // Scan
-        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null)));
+        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null, false)));
 
         // Scan Recursive
-        // -- cerca nuove cartelle e propaga ai figli
+        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN_RECURSIVE, null, true)));
 
         // Add new Tv Serie
 

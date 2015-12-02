@@ -18,6 +18,11 @@ public class FsElement implements Comparable<FsElement> {
 	}
 
 	@Override
+    public String toString() {
+        return String.format("[%s] %s", this.directory ? "d" : " ", this.name);
+    }
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

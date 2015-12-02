@@ -83,14 +83,14 @@ public final class TvSerieManager {
 		DeterminateProgressDialogWorker.show(worker, "", true);
 	}
 	
-//	public Boolean scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
-//		Boolean result = null;
-//		
-//		TvSerieScanAllWorker worker = new TvSerieScanAllWorker(tvSeriesPathEntity);
-//		result = DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-//		
-//		return result;
-//	}
+	public Map<TvSeriePathEntity, Boolean> scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
+		Map<TvSeriePathEntity, Boolean> result = null;
+		
+		TvSerieScanRootWorker worker = new TvSerieScanRootWorker(TvSerieScanRootWorker.makeInputData(tvSeriesPathEntity, true));
+		result = DeterminateProgressDialogWorker.show(worker, "", true);
+		
+		return result;
+	}
 	
 //	public void remove(TvSeriesPathEntity tvSeriesPathEntity) {
 //		TvSerieRemoveRootWorker worker = new TvSerieRemoveRootWorker(tvSeriesPathEntity);
