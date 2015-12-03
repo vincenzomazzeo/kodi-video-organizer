@@ -231,6 +231,7 @@ public class ExplorerRootsController {
     
     private void refreshTvSerieNodes(TvSeriesExplorerRootsTreeNode node, Set<TvSeriePathEntity> tvSeriePathEntities) {
         for (TvSerieExplorerRootsTreeNode child : node.findChildren(tvSeriePathEntities).values()) {
+            AbstractFsExplorerRootsTreeNode.replaceFromFsElements(child.getValue().getFsElements(), child);
             this.model.nodeChanged(child);
             this.model.nodeStructureChanged(child);
         }

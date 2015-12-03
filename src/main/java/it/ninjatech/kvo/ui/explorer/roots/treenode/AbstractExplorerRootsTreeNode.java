@@ -83,6 +83,10 @@ public abstract class AbstractExplorerRootsTreeNode extends DefaultMutableTreeNo
 	    return this.children.contains(child);
 	}
 	
+	public void removeChildren() {
+	    this.children.clear();
+	}
+	
     public void sortChildren() {
 		Collections.sort(this.children);
 	}

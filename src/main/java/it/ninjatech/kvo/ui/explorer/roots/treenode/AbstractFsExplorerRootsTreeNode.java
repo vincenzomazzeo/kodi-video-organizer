@@ -10,6 +10,11 @@ public abstract class AbstractFsExplorerRootsTreeNode extends AbstractExplorerRo
 
     private static final long serialVersionUID = 286038544551010962L;
 
+    public static void replaceFromFsElements(Set<FsElement> fsElements, AbstractExplorerRootsTreeNode parent) {
+        parent.removeChildren();
+        createAndAddFromFsElements(fsElements, parent);
+    }
+    
     public static void createAndAddFromFsElements(Set<FsElement> fsElements, AbstractExplorerRootsTreeNode parent) {
         for (FsElement fsElement : fsElements) {
             createAndAddFromFsElement(parent, fsElement);
