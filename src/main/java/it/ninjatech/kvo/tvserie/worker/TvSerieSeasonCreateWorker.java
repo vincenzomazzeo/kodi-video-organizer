@@ -22,7 +22,7 @@ public class TvSerieSeasonCreateWorker extends AbstractTvSerieWorker<TvSerieSeas
         this.progressNotifier.notifyTaskInit(null, 100);
         File seasonPath = TvSerieHelper.getLocalSeasonPath(this.input);
         result = seasonPath.mkdir();
-        this.input.getTvSerie().getTvSeriePathEntity().addFsElement(new FsElement(seasonPath.getAbsolutePath(), true));
+        this.input.getTvSerie().getTvSeriePathEntity().addFsElement(new FsElement(seasonPath.getName(), true));
         this.progressNotifier.notifyTaskUpdate(null, 100);
 
         return result;

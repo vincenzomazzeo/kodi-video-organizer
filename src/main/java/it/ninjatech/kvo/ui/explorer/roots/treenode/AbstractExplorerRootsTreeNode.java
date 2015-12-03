@@ -79,7 +79,11 @@ public abstract class AbstractExplorerRootsTreeNode extends DefaultMutableTreeNo
 		this.children.add(child);
 	}
 	
-	public void sortChildren() {
+	public boolean hasChild(AbstractExplorerRootsTreeNode child) {
+	    return this.children.contains(child);
+	}
+	
+    public void sortChildren() {
 		Collections.sort(this.children);
 	}
 	

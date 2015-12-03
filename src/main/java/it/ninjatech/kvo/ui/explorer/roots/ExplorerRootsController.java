@@ -123,6 +123,7 @@ public class ExplorerRootsController {
 
     public void notifyTvSerieNodeStructureChanged(TvSeriePathEntity tvSeriePathEntity) {
         TvSerieExplorerRootsTreeNode node = this.model.findTvSerieNode(tvSeriePathEntity);
+        AbstractFsExplorerRootsTreeNode.createAndAddFromFsElements(tvSeriePathEntity.getFsElements(), node);
         this.model.nodeStructureChanged(node);
     }
     
