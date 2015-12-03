@@ -7,10 +7,11 @@ import it.ninjatech.kvo.util.Labels;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class TvSerieScanRootWorker extends AbstractTvSerieWorker<TvSerieScanRootWorkerInputData, Map<TvSeriePathEntity, Boolean>> {
+public class TvSerieScanRootWorker extends AbstractTvSerieWorker<TvSerieScanRootWorkerInputData, Map<Boolean, Set<TvSeriePathEntity>>> {
 
     public static TvSerieScanRootWorkerInputData makeInputData(TvSeriesPathEntity entity, Boolean recursive) {
         return new TvSerieScanRootWorkerInputData(entity, recursive);
@@ -21,8 +22,11 @@ public class TvSerieScanRootWorker extends AbstractTvSerieWorker<TvSerieScanRoot
     }
 
     @Override
-    public Map<TvSeriePathEntity, Boolean> work() throws Exception {
-        Map<TvSeriePathEntity, Boolean> result = new HashMap<>();
+    public Map<Boolean, Set<TvSeriePathEntity>> work() throws Exception {
+        Map<Boolean, Set<TvSeriePathEntity>> result = new HashMap<>();
+        
+        result.put(Boolean.TRUE, new HashSet<TvSeriePathEntity>());
+        result.put(Boolean.FALSE, new HashSet<TvSeriePathEntity>());
 
         this.progressNotifier.notifyWorkerMessage(Labels.tvSerieScanRootWorker(Labels.TV_SERIE_SCAN_ROOT_WORKER_1, this.input.entity.getLabel(), 0, 0));
 
@@ -43,7 +47,7 @@ public class TvSerieScanRootWorker extends AbstractTvSerieWorker<TvSerieScanRoot
                         this.progressNotifier.notifyTaskUpdate(null, 75);
                         TvSerieWorkerTasks.save(tvSeriePathEntity, this.progressNotifier);
                     }
-                    result.put(tvSeriePathEntity, true);
+                    result.get(Boolean.TRUE).add(tvSeriePathEntity);
                 }
                 else {
                     this.progressNotifier.notifyTaskUpdate(null, 10);
@@ -52,7 +56,7 @@ public class TvSerieScanRootWorker extends AbstractTvSerieWorker<TvSerieScanRoot
                     if (tvSeriePathEntity.getTvSerie() != null) {
                         TvSerieWorkerTasks.delete(tvSeriePathEntity, this.progressNotifier);
                     }
-                    result.put(tvSeriePathEntity, false);
+                    result.get(Boolean.FALSE).add(tvSeriePathEntity);
                 }
                 this.progressNotifier.notifyTaskUpdate(null, 100);
             }

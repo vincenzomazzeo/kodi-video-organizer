@@ -226,19 +226,19 @@ public final class Labels {
 	    return String.format("<html>The TV Serie root <b>%s</b> is no longer present and has been removed</html>", root);
 	}
 	
-	public static String notificationTvSeriesRefreshRemove(Set<TvSeriePathEntity> entitiesToRefresh,
-	                                                       Set<TvSeriePathEntity> entitiesToRemove) {
+	public static String notificationTvSeriesRefreshRemove(Set<TvSeriePathEntity> entitiesRefreshed,
+	                                                       Set<TvSeriePathEntity> entitiesRemoved) {
 	    StringBuilder result = new StringBuilder("<html>");
-	    if (!entitiesToRefresh.isEmpty()) {
+	    if (!entitiesRefreshed.isEmpty()) {
 	        result.append("<p>The following TV Series were refreshed<ul>");
-	        for (TvSeriePathEntity entity : entitiesToRefresh) {
+	        for (TvSeriePathEntity entity : entitiesRefreshed) {
 	            result.append("<li><b>").append(entity.getLabel()).append("</b></li>");
 	        }
 	        result.append("</ul></p>");
 	    }
-	    if (!entitiesToRemove.isEmpty()) {
+	    if (!entitiesRemoved.isEmpty()) {
 	        result.append("<br /><p>The following TV Series are no longer present and have been removed<ul>");
-            for (TvSeriePathEntity entity : entitiesToRemove) {
+            for (TvSeriePathEntity entity : entitiesRemoved) {
                 result.append("<li><b>").append(entity.getLabel()).append("</b></li>");
             }
             result.append("</ul></p>");

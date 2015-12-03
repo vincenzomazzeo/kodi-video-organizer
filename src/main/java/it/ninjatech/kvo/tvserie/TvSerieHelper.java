@@ -34,11 +34,12 @@ public final class TvSerieHelper {
 	private static final String SEASON_POSTER_FILENAME = "season%s-poster.jpg";
 	private static final String FULL_EPISODE_NAME_FORMAT = "%s - %s";
 	private static final String EPISODE_NAME_FORMAT = "%s - %s";
-	private static final String FS_EPISODE_NAME_FORMAT = "%s - [\\d]+x(?<%s>[\\d]+) - .+";
-	private static final String FS_EPISODE_SUBTITLE_NAME_FORMAT = "%s - [\\d]x(?<%s>[\\d]+) - .+(?<%s>[\\.\\d]?)(?<%s>[\\.a-z]{2}).+";
-	private static final String EPISODE_NUMBER_GROUP_NAME = "episodeNumber";
-	private static final String EPISODE_SUBTITLE_NUMBER_GROUP_NAME = "subtitleNumber";
-	private static final String EPISODE_SUBTITLE_LANGUAGE_GROUP_NAME = "subtitleLanguage";
+	private static final String FS_EPISODE_NAME_FORMAT = "%s - %dx%00d - %s";
+	private static final String FS_EPISODE_NAME_REGEXP = "%s - [\\d]+x(?<%s>[\\d]+) - .+";
+	private static final String FS_EPISODE_SUBTITLE_NAME_REGEXP = "%s - [\\d]x(?<%s>[\\d]+) - .+(?<%s>[\\.\\d]?)(?<%s>[\\.a-z]{2}).+";
+	private static final String EPISODE_NUMBER_REGEXP_GROUP_NAME = "episodeNumber";
+	private static final String EPISODE_SUBTITLE_NUMBER_REGEXP_GROUP_NAME = "subtitleNumber";
+	private static final String EPISODE_SUBTITLE_LANGUAGE_REGEXP_GROUP_NAME = "subtitleLanguage";
 
 	// **************
 	// * PathEntity *
@@ -258,15 +259,23 @@ public final class TvSerieHelper {
 		return result;
 	}
 	
+	public static String getFsEpisodeName(TvSerieEpisode episode) {
+	    return String.format(FS_EPISODE_NAME_FORMAT, 
+	                         episode.getSeason().getTvSerie().getName(),
+	                         episode.getSeason().getNumber(),
+	                         episode.getNumber(),
+	                         episode.getName());
+	}
+	
 	public static boolean setEpisodeFilename(TvSerie tvSerie, File file) {
 	    boolean result = false;
 	    
 	    Integer seasonNumber = Integer.valueOf(file.getParentFile().getName().toLowerCase().substring(SEASON.length() + 1));
 	    String tvSerieNameNormalized = Utils.normalizeName(tvSerie.getName());
-	    String regexp = String.format(FS_EPISODE_NAME_FORMAT, tvSerieNameNormalized, EPISODE_NUMBER_GROUP_NAME);
+	    String regexp = String.format(FS_EPISODE_NAME_REGEXP, tvSerieNameNormalized, EPISODE_NUMBER_REGEXP_GROUP_NAME);
 	    Matcher matcher = Pattern.compile(regexp).matcher(file.getName());
 	    if (matcher.matches()) {
-	        Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_GROUP_NAME));
+	        Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_REGEXP_GROUP_NAME));
 	        
 	        TvSerieSeason season = tvSerie.getSeason(seasonNumber);
 	        if (season != null) {
@@ -286,11 +295,11 @@ public final class TvSerieHelper {
 	    
 	    Integer seasonNumber = Integer.valueOf(file.getParentFile().getName().toLowerCase().substring(SEASON.length() + 1));
 	    String tvSerieNameNormalized = Utils.normalizeName(tvSerie.getName());
-	    String regexp = String.format(FS_EPISODE_SUBTITLE_NAME_FORMAT, tvSerieNameNormalized, 
-	                                  EPISODE_NUMBER_GROUP_NAME, EPISODE_SUBTITLE_NUMBER_GROUP_NAME, EPISODE_SUBTITLE_LANGUAGE_GROUP_NAME);
+	    String regexp = String.format(FS_EPISODE_SUBTITLE_NAME_REGEXP, tvSerieNameNormalized, 
+	                                  EPISODE_NUMBER_REGEXP_GROUP_NAME, EPISODE_SUBTITLE_NUMBER_REGEXP_GROUP_NAME, EPISODE_SUBTITLE_LANGUAGE_REGEXP_GROUP_NAME);
 	    Matcher matcher = Pattern.compile(regexp).matcher(file.getName());
 	    if (matcher.matches()) {
-	        Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_GROUP_NAME));
+	        Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_REGEXP_GROUP_NAME));
             
             TvSerieSeason season = tvSerie.getSeason(seasonNumber);
             if (season != null) {

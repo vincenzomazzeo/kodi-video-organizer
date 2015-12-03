@@ -50,6 +50,10 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 	public TvSeriesPathEntity getTvSeriesPathEntity() {
 		return this.tvSeriesPathEntity;
 	}
+
+	public void addFsElement(FsElement fsElement) {
+	    this.fsElements.add(fsElement);
+	}
 	
 	public void setFsElements(SortedSet<FsElement> fsElements) {
 		this.fsElements.clear();
@@ -59,7 +63,7 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 	public Set<FsElement> getFsElements() {
 		return Collections.unmodifiableSortedSet(this.fsElements);
 	}
-
+	
 	public TvSerie getTvSerie() {
 		return this.tvSerie;
 	}

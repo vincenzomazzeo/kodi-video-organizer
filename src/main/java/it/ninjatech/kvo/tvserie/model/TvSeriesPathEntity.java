@@ -49,5 +49,9 @@ public class TvSeriesPathEntity extends AbstractPathEntity {
 	public void removeTvSerie(TvSeriePathEntity tvSerie) {
 		this.tvSeries.remove(tvSerie);
 	}
+	
+	public void removeTvSeries(Set<TvSeriePathEntity> tvSeries) {
+	    this.tvSeries.removeAll(tvSeries);
+	}
 
 }

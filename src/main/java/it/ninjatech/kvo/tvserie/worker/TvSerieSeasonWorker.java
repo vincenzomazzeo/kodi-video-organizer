@@ -30,7 +30,7 @@ public class TvSerieSeasonWorker extends AbstractTvSerieWorker<TvSerieSeasonWork
         int index = 1;
         do {
             String indexSuffix = index == 1 ? "" : String.format(".%d", index);
-            result = new File(seasonDir, String.format("%s%s.%s%s", TvSerieHelper.getFullEpisodeName(episode), indexSuffix, language.getLanguageCode(), ext));
+            result = new File(seasonDir, String.format("%s%s.%s%s", TvSerieHelper.getFsEpisodeName(episode), indexSuffix, language.getLanguageCode(), ext));
             index++;
         } while (episode.getSubtitleFilenames().contains(result.getAbsolutePath()));
 
@@ -59,7 +59,7 @@ public class TvSerieSeasonWorker extends AbstractTvSerieWorker<TvSerieSeasonWork
             String filename = this.input.videoEpisodeMap.get(episode);
             File sourceFile = new File(seasonDir, filename);
             String ext = filename.substring(filename.lastIndexOf('.'));
-            File targetFile = new File(seasonDir, String.format("%s%s", TvSerieHelper.getFullEpisodeName(episode), ext));
+            File targetFile = new File(seasonDir, String.format("%s%s", TvSerieHelper.getFsEpisodeName(episode), ext));
 
             if (!sourceFile.renameTo(targetFile)) {
                 throw new Exception(Labels.getFailedToRename(sourceFile.getAbsolutePath(), targetFile.getAbsolutePath()));

@@ -22,6 +22,7 @@ import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.IndeterminateProgressDialogWorker;
 import it.ninjatech.kvo.ui.tvserie.TvSerieImageChoiceDialog.ImageChoiceController;
+import it.ninjatech.kvo.ui.wall.WallController;
 import it.ninjatech.kvo.ui.worker.ExtraFanartsGalleryCreator;
 import it.ninjatech.kvo.util.Labels;
 import it.ninjatech.kvo.util.MemoryUtils;
@@ -40,13 +41,15 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 	protected static final String FANARTS_SLIDER_ID = "Fanarts";
 	protected static final String SEASONS_SLIDER_ID = "Seasons";
 
+	private final WallController wallController;
 	private final TvSerieView view;
 	private final TvSerieImageLoaderAsyncJobHandler mainJobHandler;
 	private final TvSerieImageLoaderAsyncJobHandler fanartChoiceJobHandler;
 	private TvSerie tvSerie;
 	private TvSerieFanart workingFanart;
 
-	public TvSerieController() {
+	public TvSerieController(WallController wallController) {
+	    this.wallController = wallController;
 		this.view = new TvSerieView(this);
 		this.mainJobHandler = new TvSerieImageLoaderAsyncJobHandler();
 		this.fanartChoiceJobHandler = new TvSerieImageLoaderAsyncJobHandler();
@@ -112,6 +115,7 @@ public class TvSerieController implements ImageChoiceController, ImageSliderList
 				messageDialog.setVisible(true);
 				if (messageDialog.isConfirmed()) {
 				    if (TvSerieManager.getInstance().createSeason(season)) {
+				        this.wallController.notifyTvSerieNodeStructureChanged(season.getTvSerie().getTvSeriePathEntity());
 				        MessageDialog.getInstance(Labels.TV_SERIE_SEASON_CREATION, 
 				                                  Labels.getTvSerieSeasonCreationSuccessMessage(season), 
 				                                  MessageDialog.Type.Message).setVisible(true);

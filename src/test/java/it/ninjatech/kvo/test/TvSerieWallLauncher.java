@@ -93,7 +93,7 @@ public class TvSerieWallLauncher extends WebDialog implements WindowListener, Hi
 	private void init(TvSerie tvSerie) {
 		setLayout(new BorderLayout());
 		
-		this.controller = new TvSerieController();
+		this.controller = new TvSerieController(null);
 		WebScrollPane pane = new WebScrollPane(this.controller.getView());
 		
 		add(pane, BorderLayout.CENTER);

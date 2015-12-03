@@ -31,8 +31,11 @@ public class TvSerieFetchController {
         }
     }
     
-    public Map<TvSeriePathEntity, Boolean> search() {
-        Map<TvSeriePathEntity, Boolean> result = new HashMap<>();
+    public Map<Boolean, Set<TvSeriePathEntity>> search() {
+        Map<Boolean, Set<TvSeriePathEntity>> result = new HashMap<>();
+        
+        result.put(Boolean.TRUE, new HashSet<TvSeriePathEntity>());
+        result.put(Boolean.FALSE, new HashSet<TvSeriePathEntity>());
 
         List<SearchData> searchDatas = new ArrayList<>();
         EnhancedLocale defaultLocale = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
@@ -52,7 +55,8 @@ public class TvSerieFetchController {
         if (!entities.isEmpty()) {
             List<Boolean> fetchResult = TvSerieManager.getInstance().fetch(entities);
             for (int i = 0, n = entities.size(); i < n; i++) {
-                result.put(entities.get(i), fetchResult.get(i));
+                Set<TvSeriePathEntity> tvSeriePathEntities = result.get(fetchResult.get(i));
+                tvSeriePathEntities.add(entities.get(i));
             }
         }
 

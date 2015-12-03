@@ -53,7 +53,7 @@ public class TvSerieSearchLauncher {
 		Set<TvSeriePathEntity> entities = new HashSet<>(tvSeriesPathEntity.getTvSeries());
 		
 		TvSerieFetchController controller = new TvSerieFetchController(entities);
-		Map<TvSeriePathEntity, Boolean> searchResult = controller.search();
+		Map<Boolean, Set<TvSeriePathEntity>> searchResult = controller.search();
 		
 		System.out.println(searchResult.size());
 		

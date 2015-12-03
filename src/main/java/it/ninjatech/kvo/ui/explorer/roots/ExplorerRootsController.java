@@ -23,7 +23,6 @@ import it.ninjatech.kvo.worker.SettingsStorer;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,26 +63,26 @@ public class ExplorerRootsController {
 
     public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
         TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(Collections.singleton(node.getValue()));
-        Map<TvSeriePathEntity, Boolean> searchResult = tvSerieSearchController.search();
+        Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.search();
         TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
-        for (TvSeriePathEntity tvSeriePathEntity : searchResult.keySet()) {
-            if (searchResult.get(tvSeriePathEntity)) {
-                this.parent.addTvSerieTile(tvSeriePathEntity);
-                this.model.nodeChanged(node);
-            }
-            else {
-                parent.getValue().removeTvSerie(tvSeriePathEntity);
-                parent.remove(node);
-                this.model.nodeStructureChanged(parent);
-            }
+        for (TvSeriePathEntity tvSeriePathEntity : searchResult.get(Boolean.TRUE)) {
+            this.parent.addTvSerieTile(tvSeriePathEntity);
+            this.model.nodeChanged(node);
+        }
+        for (TvSeriePathEntity tvSeriePathEntity : searchResult.get(Boolean.FALSE)) {
+            parent.getValue().removeTvSerie(tvSeriePathEntity);
+            parent.remove(node);
+            this.model.nodeStructureChanged(parent);
         }
     }
 
     public void scanTvSeries(TvSeriesExplorerRootsTreeNode node, boolean recursive) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
             if (recursive) {
-                Map<TvSeriePathEntity, Boolean> scanResult = TvSerieManager.getInstance().scanRecursive(node.getValue());
-                handleTvSeries(node, scanResult, true, false);
+                Map<Boolean, Set<TvSeriePathEntity>> scanResult = TvSerieManager.getInstance().scanRecursive(node.getValue());
+                node.getValue().removeTvSeries(scanResult.get(Boolean.FALSE));
+                refreshTvSerieNodes(node, scanResult.get(Boolean.TRUE));
+                removeTvSerieNodes(node, scanResult.get(Boolean.FALSE));
             }
             else {
                 TvSerieManager.getInstance().scan(node.getValue());
@@ -100,8 +99,13 @@ public class ExplorerRootsController {
     public void searchForTvSeries(TvSeriesExplorerRootsTreeNode node) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
             TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(node.getValue().getTvSeries());
-            Map<TvSeriePathEntity, Boolean> searchResult = tvSerieSearchController.search();
-            handleTvSeries(node, searchResult, false, true);
+            Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.search();
+            addTvSerieTiles(searchResult.get(Boolean.TRUE));
+            node.getValue().removeTvSeries(searchResult.get(Boolean.FALSE));
+            refreshTvSerieNodes(node, searchResult.get(Boolean.TRUE));
+            removeTvSerieNodes(node, searchResult.get(Boolean.FALSE));
+            NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(searchResult.get(Boolean.TRUE), 
+                                                                                                     searchResult.get(Boolean.FALSE)));
         }
         else {
             // Root exists no more!
@@ -117,6 +121,11 @@ public class ExplorerRootsController {
         }
     }
 
+    public void notifyTvSerieNodeStructureChanged(TvSeriePathEntity tvSeriePathEntity) {
+        TvSerieExplorerRootsTreeNode node = this.model.findTvSerieNode(tvSeriePathEntity);
+        this.model.nodeStructureChanged(node);
+    }
+    
     protected void notifyAddRoot(int x, int y) {
         this.view.showAddRootMenu(x, y);
     }
@@ -212,41 +221,25 @@ public class ExplorerRootsController {
         SettingsStorer storer = new SettingsStorer();
         IndeterminateProgressDialogWorker.show(storer, Labels.STORING_SETTINGS);
     }
-
-    private void handleTvSeries(TvSeriesExplorerRootsTreeNode node, Map<TvSeriePathEntity, Boolean> children,
-                                boolean onlyRemove, boolean showNotification) {
-        // TODO completare questo metodo: non va bene perché è confuso
-        Set<TvSeriePathEntity> entitiesToRefresh = new HashSet<>();
-        Set<TvSeriePathEntity> entitiesToRemove = new HashSet<>();
-        for (TvSeriePathEntity tvSeriePathEntity : children.keySet()) {
-            if (children.get(tvSeriePathEntity)) {
-                if (!onlyRemove) {
-                    // TODO da sistemare l'add
-                    entitiesToRefresh.add(tvSeriePathEntity);
-                    this.parent.addTvSerieTile(tvSeriePathEntity);
-                }
-            }
-            else {
-                entitiesToRemove.add(tvSeriePathEntity);
-                node.getValue().removeTvSerie(tvSeriePathEntity);
-            }
+    
+    private void addTvSerieTiles(Set<TvSeriePathEntity> tvSeriePathEntities) {
+        for (TvSeriePathEntity tvSeriePathEntity : tvSeriePathEntities) {
+            this.parent.addTvSerieTile(tvSeriePathEntity);
         }
-        if (!entitiesToRefresh.isEmpty() || !entitiesToRemove.isEmpty()) {
-            if (!entitiesToRefresh.isEmpty()) {
-                for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRefresh).values()) {
-                    this.model.nodeChanged(child);
-                }
-            }
-            if (!entitiesToRemove.isEmpty()) {
-                for (TvSerieExplorerRootsTreeNode child : node.findChildren(entitiesToRemove).values()) {
-                    node.remove(child);
-                }
-                this.model.nodeStructureChanged(node);
-            }
-            if (showNotification) {
-                NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(entitiesToRefresh, entitiesToRemove));
-            }
+    }
+    
+    private void refreshTvSerieNodes(TvSeriesExplorerRootsTreeNode node, Set<TvSeriePathEntity> tvSeriePathEntities) {
+        for (TvSerieExplorerRootsTreeNode child : node.findChildren(tvSeriePathEntities).values()) {
+            this.model.nodeChanged(child);
+            this.model.nodeStructureChanged(child);
         }
+    }
+    
+    private void removeTvSerieNodes(TvSeriesExplorerRootsTreeNode node, Set<TvSeriePathEntity> tvSeriePathEntities) {
+        for (TvSerieExplorerRootsTreeNode child : node.findChildren(tvSeriePathEntities).values()) {
+            node.remove(child);
+        }
+        this.model.nodeStructureChanged(node);
     }
 
 }

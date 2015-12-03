@@ -83,8 +83,8 @@ public final class TvSerieManager {
 		DeterminateProgressDialogWorker.show(worker, "", true);
 	}
 	
-	public Map<TvSeriePathEntity, Boolean> scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
-		Map<TvSeriePathEntity, Boolean> result = null;
+	public Map<Boolean, Set<TvSeriePathEntity>> scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {
+		Map<Boolean, Set<TvSeriePathEntity>> result = null;
 		
 		TvSerieScanRootWorker worker = new TvSerieScanRootWorker(TvSerieScanRootWorker.makeInputData(tvSeriesPathEntity, true));
 		result = DeterminateProgressDialogWorker.show(worker, "", true);

@@ -20,6 +20,8 @@ public class ExplorerController {
 		this.tvSerieController = new ExplorerTvSerieController(this, wallController);
 		this.view = new ExplorerView(this);
 		
+		wallController.setExplorerController(this);
+		
 		this.view.addRootsViewTab(this.rootsController.getView());
 		
 		if (!tvSeriesPathEntities.isEmpty()) {
@@ -50,6 +52,10 @@ public class ExplorerController {
 	
 	public void notifyTvSerieClick(TvSeriePathEntity tvSeriePathEntity) {
 	    this.rootsController.notifyPossibleFsScanning(tvSeriePathEntity);
+	}
+	
+	public void notifyTvSerieNodeStructureChanged(TvSeriePathEntity tvSeriePathEntity) {
+	    this.rootsController.notifyTvSerieNodeStructureChanged(tvSeriePathEntity);
 	}
 	
 }
