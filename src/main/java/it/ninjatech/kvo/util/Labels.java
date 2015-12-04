@@ -11,6 +11,7 @@ public final class Labels {
 	public static final String APPLICATION_TITLE = "Kodi Video Organizer";
 	
 	public static final String ACTORS = "Actors";
+	public static final String ADD_TV_SERIE = "Add TV Serie";
 	public static final String API_KEY = "API Key";
 	public static final String CLICK_FOR_DETAIL = "Click for detail";
 	public static final String CLICK_TO_OPEN_IN_SYSTEM_EXPLORER = "Open in System Explorer";

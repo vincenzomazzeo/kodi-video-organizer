@@ -32,7 +32,6 @@ public final class ImageRetriever {
 		FolderTvSeries("folder_tvseries.png"),
 		GreenButton("green_button.png"),
 		IMDbLogo("imdb_logo.png"),
-		Loading("loading.gif"),
 		Ok("ok.png"),
 		OrangeButton("orange_button.png"),
 		QuestionMark("question_mark.png"),
@@ -86,7 +85,6 @@ public final class ImageRetriever {
 	private static ImageIcon explorerTreeFolderMoviesTab;
 	private static ImageIcon explorerTreeFolderTvSeriesTab;
 	private static ImageIcon explorerTreeTvSerie;
-	private static ImageIcon loading;
 	private static ImageIcon tvSerieSeasonGreenButton;
 	private static ImageIcon tvSerieSeasonOrangeButton;
 	private static ImageIcon tvSerieSeasonRedButton;
@@ -232,15 +230,6 @@ public final class ImageRetriever {
 		return retrieveAndScaleImageByWidth(ImageName.IMDbLogo, IMDB_LOGO_SIZE);
 	}
 
-	// TODO remove if not used
-	public static ImageIcon retrieveLoading() {
-		if (loading == null) {
-			loading = retrieveImage(ImageName.Loading);
-		}
-
-		return loading;
-	}
-	
 	public static ImageIcon retrieveMessageDialogCancel() {
 		return retrieveAndScaleImage(ImageName.Cancel, MESSAGE_DIALOG_ICON_SIZE);
 	}
