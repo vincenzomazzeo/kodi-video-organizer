@@ -25,6 +25,7 @@ import it.ninjatech.kvo.worker.WorkerProgressListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,8 @@ public class Loader extends WebFrame {
 			Result result = this.loaderSwingWorker.get();
 			setVisible(false);
 			dispose();
+			
+			TvSerieManager.getInstance().notifyTvSeriesPathEntities(new HashSet<>(result.tvSeriesPathEntities));
 			
 			UI.build(result.tvSeriesPathEntities).setVisible(true);
 			

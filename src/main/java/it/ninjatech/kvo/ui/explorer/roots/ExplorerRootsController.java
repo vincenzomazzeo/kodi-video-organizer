@@ -8,6 +8,7 @@ import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
@@ -103,7 +104,8 @@ public class ExplorerRootsController {
         }
     }
 
-    public void scanTvSerie(TvSeriesExplorerRootsTreeNode parent, TvSerieExplorerRootsTreeNode node) {
+    public void scanTvSerie(TvSerieExplorerRootsTreeNode node) {
+        TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
         if (TvSerieManager.getInstance().scan(node.getValue())) {
             refreshTvSerieNodes(parent, Collections.singleton(node.getValue()));
         }
@@ -129,6 +131,14 @@ public class ExplorerRootsController {
         }
     }
     
+    public void removeTvSerie(TvSerieExplorerRootsTreeNode node) {
+        // TODO aggiungere popup conferma con checkbox di delete from disc
+        TvSerieManager.getInstance().remove(node.getValue());
+        removeTvSerieNodes((TvSeriesExplorerRootsTreeNode)node.getParent(), Collections.singleton(node.getValue()));
+        NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(Collections.<TvSeriePathEntity>emptySet(), 
+                                                                                                 Collections.singleton(node.getValue())));
+    }
+    
     public void notifyPossibleFsScanning(TvSeriePathEntity tvSeriePathEntity) {
         TvSerieExplorerRootsTreeNode node = this.model.findTvSerieNode(tvSeriePathEntity);
         if (node != null && node.isFsScanningRequired()) {
@@ -149,8 +159,6 @@ public class ExplorerRootsController {
     protected void notifyAddTvSeriesRoot() {
         Settings settings = SettingsHandler.getInstance().getSettings();
 
-        // TODO check for duplicate
-
         File root = showRootChooser(Type.TvSerie, settings.getLastTvSeriesRootParent());
         TvSeriesPathEntity tvSeriesPathEntity = TvSerieManager.getInstance().addTvSeriesPathEntity(root);
         if (tvSeriesPathEntity != null) {
@@ -162,6 +170,11 @@ public class ExplorerRootsController {
             NotificationManager.showNotification(Labels.notificationRootAdded(Type.TvSerie.getPlural(), root.getName())).setDisplayTime(TimeUnit.SECONDS.toMillis(3));
             this.parent.addTvSerieTab();
             this.view.removeTooltip();
+        }
+        else {
+            MessageDialog.getInstance(Labels.TV_SERIE, 
+                                      Labels.getTvSeriesRootAlreadyExists(root.getAbsolutePath()), 
+                                      MessageDialog.Type.Message).setVisible(true);
         }
     }
 

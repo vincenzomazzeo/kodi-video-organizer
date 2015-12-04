@@ -26,23 +26,23 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
             // Open in System Explorer
             add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
         }
-
-        // TODO
-
-        // Remove
-
-        // Scan
-        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null, false)));
-
-        // Scan Recursive
-        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN_RECURSIVE, null, true)));
-
-        // Add new Tv Serie
-
+        
         if (TheTvDbManager.getInstance().isActive()) {
             // Fetch
             add(new WebMenuItem(new TvSeriesFetchExplorerRootsAction(this.controller, this.node, Labels.FETCH, null)));
         }
+
+        // TODO
+        // Add new Tv Serie
+        
+        // Scan
+        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null, false)));
+        
+        // Scan Recursive
+        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN_RECURSIVE, null, true)));
+
+        // TODO
+        // Remove
     }
 
 }

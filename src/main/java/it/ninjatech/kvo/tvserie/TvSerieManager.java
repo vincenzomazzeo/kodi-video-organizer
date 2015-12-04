@@ -10,6 +10,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieCheckRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
@@ -42,6 +43,12 @@ public final class TvSerieManager {
 	
 	private TvSerieManager() {
 		this.tvSeriesPathEntityRoots = new HashSet<>();
+	}
+	
+	public void notifyTvSeriesPathEntities(Set<TvSeriesPathEntity> tvSeriesPathEntities) {
+	    for (TvSeriesPathEntity tvSeriesPathEntity : tvSeriesPathEntities) {
+	        this.tvSeriesPathEntityRoots.add(new File(tvSeriesPathEntity.getPath()));
+	    }
 	}
 	
 	public Map<String, List<TvSerie>> search(Map<String, EnhancedLocale> data) {
@@ -119,10 +126,10 @@ public final class TvSerieManager {
 		return result;
 	}
 	
-//	public void remove(TvSeriePathEntity tvSeriePathEntity) {
-//		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(tvSeriePathEntity);
-//		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-//	}
+	public void remove(TvSeriePathEntity tvSeriePathEntity) {
+		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(tvSeriePathEntity);
+		DeterminateProgressDialogWorker.show(worker, "", true);
+	}
 	
 	public Boolean handleSeason(TvSerieSeason season,
                                 Map<TvSerieEpisode, String> videoEpisodeMap,

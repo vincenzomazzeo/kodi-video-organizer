@@ -42,6 +42,7 @@ public final class Labels {
 	public static final String OPEN_IN_SYSYEM_EXPLORER = "Open in System Explorer";
 	public static final String OVERVIEW = "Overview";
 	public static final String PREFERRED_LANGUAGE = "Preferred Language";
+	public static final String REMOVE = "Remove";
 	public static final String ROOTS = "Roots";
 	public static final String SCAN = "Scan";
 	public static final String SCAN_RECURSIVE = "Recursive Scan";
@@ -113,6 +114,12 @@ public final class Labels {
 	
 	public static String tvSerieWorkerScan(String name) {
         return String.format(TV_SERIE_WORKER_SCAN_1, name);
+    }
+	
+	private static final String TV_SERIE_WORKER_DELETE_1 = "Removing %s";
+    
+    public static String tvSerieWorkerDelete(String name) {
+        return String.format(TV_SERIE_WORKER_DELETE_1, name);
     }
 	
 	public static final String TV_SERIE_SEASON_WORKER_1 = "Saving TV Serie %s - Season %d";
@@ -213,6 +220,10 @@ public final class Labels {
 	public static String getNoFanartTryRefresh(String fanart) {
 		return String.format("No %s fanart found. Try to refresh TV Serie.", fanart);
 	}
+	
+	public static String getTvSeriesRootAlreadyExists(String root) {
+        return String.format("<html>Tv Series root <b>%s</b> already exists</html>", root);
+    }
 	
 	public static String notificationRootAdded(String typePlural, String root) {
 		return String.format("<html>%s root <b>%s</b> added</html>", typePlural, root);

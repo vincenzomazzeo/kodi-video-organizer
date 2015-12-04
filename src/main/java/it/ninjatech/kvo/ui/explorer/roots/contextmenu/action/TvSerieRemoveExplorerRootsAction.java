@@ -7,17 +7,17 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Icon;
 
-public class TvSerieScanExplorerRootsAction extends AbstractExplorerRootsAction<TvSerieExplorerRootsTreeNode> {
+public class TvSerieRemoveExplorerRootsAction extends AbstractExplorerRootsAction<TvSerieExplorerRootsTreeNode> {
 
 	private static final long serialVersionUID = 3659400507619583599L;
 	
-	public TvSerieScanExplorerRootsAction(ExplorerRootsController controller, TvSerieExplorerRootsTreeNode node, String text, Icon icon) {
+	public TvSerieRemoveExplorerRootsAction(ExplorerRootsController controller, TvSerieExplorerRootsTreeNode node, String text, Icon icon) {
 		super(controller, node, text, icon);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		this.controller.scanTvSerie(this.node);
+		this.controller.removeTvSerie(this.node);
 	}
 
 }
