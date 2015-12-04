@@ -17,7 +17,8 @@ public class ExplorerView extends WebPanel {
 
 	private static final long serialVersionUID = -7297279602345249270L;
 
-	private final ExplorerController controller;
+	@SuppressWarnings("unused")
+    private final ExplorerController controller;
 	private final WebTabbedPane container;
 	
 	protected ExplorerView(ExplorerController controller) {
@@ -39,13 +40,25 @@ public class ExplorerView extends WebPanel {
 		if (this.container.getTabCount() == 1) {
 			this.container.addTab(title, ImageRetriever.retrieveExplorerTreeFolderTvSeriesTab(), view);
 		}
-		else if (!this.container.getTitleAt(1).equals(title)) {
-			this.container.insertTab(title, ImageRetriever.retrieveExplorerTreeFolderTvSeriesTab(), view, null, 1);
+		boolean add = true;
+		for (int i = 1, n = this.container.getTabCount(); i < n; i++) {
+		    if (this.container.getTitleAt(i).equals(title)) {
+		        add = false;
+		        break;
+		    }
+		}
+		if (add) {
+		    this.container.insertTab(title, ImageRetriever.retrieveExplorerTreeFolderTvSeriesTab(), view, null, 1);
 		}
 	}
 	
 	protected void removeTvSerieTab() {
-		this.container.removeTabAt(1);
+		for (int i = 1, n = this.container.getTabCount(); i < n; i++) {
+            if (this.container.getTitleAt(i).equals(Labels.TV_SERIES)) {
+                this.container.removeTabAt(i);
+                break;
+            }
+		}
 	}
 
 	private void init() {

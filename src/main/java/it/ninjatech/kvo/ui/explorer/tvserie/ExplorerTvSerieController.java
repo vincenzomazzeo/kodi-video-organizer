@@ -54,6 +54,18 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 	public void addTile(TvSeriePathEntity tvSeriePathEntity) {
 		this.model.addTile(tvSeriePathEntity);
 	}
+	
+	public void addTiles(Set<TvSeriePathEntity> tvSeriePathEntities) {
+        this.model.addTiles(tvSeriePathEntities);
+    }
+	
+	public void removeTile(TvSeriePathEntity tvSeriePathEntity) {
+	    this.model.removeTile(tvSeriePathEntity);
+	}
+	
+	public void removeTiles(Set<TvSeriePathEntity> tvSeriePathEntities) {
+	    this.model.removeTiles(tvSeriePathEntities);
+	}
 
 	protected void notifyClick(TvSeriePathEntity tvSeriePathEntity) {
 	    this.explorerController.notifyTvSerieClick(tvSeriePathEntity);

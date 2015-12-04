@@ -10,6 +10,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieCheckRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
@@ -43,6 +44,10 @@ public final class TvSerieManager {
 	
 	private TvSerieManager() {
 		this.tvSeriesPathEntityRoots = new HashSet<>();
+	}
+	
+	public boolean hasTvSeriesPathEntityRoots() {
+	    return !this.tvSeriesPathEntityRoots.isEmpty();
 	}
 	
 	public void notifyTvSeriesPathEntities(Set<TvSeriesPathEntity> tvSeriesPathEntities) {
@@ -103,10 +108,11 @@ public final class TvSerieManager {
 		return result;
 	}
 	
-//	public void remove(TvSeriesPathEntity tvSeriesPathEntity) {
-//		TvSerieRemoveRootWorker worker = new TvSerieRemoveRootWorker(tvSeriesPathEntity);
-//		DeterminateProgressDialogWorker.show(worker, ""/* TODO message */, true);
-//	}
+	public void remove(TvSeriesPathEntity tvSeriesPathEntity, Boolean removeFromDisk) {
+		TvSerieRemoveRootWorker worker = new TvSerieRemoveRootWorker(TvSerieRemoveRootWorker.makeInputData(tvSeriesPathEntity, removeFromDisk));
+		this.tvSeriesPathEntityRoots.remove(new File(tvSeriesPathEntity.getPath()));
+		DeterminateProgressDialogWorker.show(worker, "", true);
+	}
 	
 	public Boolean scan(TvSeriePathEntity tvSeriePathEntity) {
 		Boolean result = null;
@@ -126,8 +132,8 @@ public final class TvSerieManager {
 		return result;
 	}
 	
-	public void remove(TvSeriePathEntity tvSeriePathEntity) {
-		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(tvSeriePathEntity);
+	public void remove(TvSeriePathEntity tvSeriePathEntity, Boolean removeFromDisk) {
+		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(TvSerieRemoveWorker.makeInputData(tvSeriePathEntity, removeFromDisk));
 		DeterminateProgressDialogWorker.show(worker, "", true);
 	}
 	
