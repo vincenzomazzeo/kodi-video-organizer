@@ -78,9 +78,13 @@ public final class TvSerieManager {
 	    return result;
 	}
 	
-	public void scan(TvSeriesPathEntity tvSeriesPathEntity) {
+	public Map<Boolean, Set<TvSeriePathEntity>> scan(TvSeriesPathEntity tvSeriesPathEntity) {
+	    Map<Boolean, Set<TvSeriePathEntity>> result = null;
+	    
 		TvSerieScanRootWorker worker = new TvSerieScanRootWorker(TvSerieScanRootWorker.makeInputData(tvSeriesPathEntity, false));
-		DeterminateProgressDialogWorker.show(worker, "", true);
+		result = DeterminateProgressDialogWorker.show(worker, "", true);
+		
+		return result;
 	}
 	
 	public Map<Boolean, Set<TvSeriePathEntity>> scanRecursive(TvSeriesPathEntity tvSeriesPathEntity) {

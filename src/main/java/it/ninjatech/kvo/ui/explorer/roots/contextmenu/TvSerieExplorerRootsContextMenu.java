@@ -4,6 +4,7 @@ import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.PathOpenExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSerieFetchExplorerRootsAction;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSerieScanExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.util.Labels;
 
@@ -26,17 +27,16 @@ public class TvSerieExplorerRootsContextMenu extends AbstractExplorerRootsContex
             add(new WebMenuItem(new PathOpenExplorerRootsAction(this.controller, this.node, Labels.OPEN_IN_SYSYEM_EXPLORER, null, this.node.getValue().getPath())));
         }
 
-        // TODO
         // Scan
+        add(new WebMenuItem(new TvSerieScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null)));
 
+        // TODO
         // Remove
 
         if (TheTvDbManager.getInstance().isActive()) {
             // Fetch
             add(new WebMenuItem(new TvSerieFetchExplorerRootsAction(this.controller, this.node, Labels.FETCH, null)));
         }
-
-        // Rescan ???
     }
 
 }

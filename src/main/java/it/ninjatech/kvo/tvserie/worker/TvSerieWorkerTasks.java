@@ -59,7 +59,15 @@ public final class TvSerieWorkerTasks {
         return result;
     }
 
-    protected static void scan(TvSeriesPathEntity tvSeriesPathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
+    protected static Set<TvSeriePathEntity> scan(TvSeriesPathEntity tvSeriesPathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
+        Set<TvSeriePathEntity> result = new HashSet<>();
+        
+        Map<String, TvSeriePathEntity> notFound = new HashMap<>();
+        Set<TvSeriePathEntity> tvSeriePathEntities = tvSeriesPathEntity.getTvSeries();
+        for (TvSeriePathEntity tvSeriePathEntity : tvSeriePathEntities) {
+            notFound.put(tvSeriePathEntity.getPath(), tvSeriePathEntity);
+        }
+        
         File root = new File(tvSeriesPathEntity.getPath());
         File[] directories = root.listFiles(new DirectoriesFilter());
         progressNotifier.notifyTaskInit(Labels.START_SCANNING, directories.length);
@@ -67,8 +75,13 @@ public final class TvSerieWorkerTasks {
             File directory = directories[i];
             progressNotifier.notifyTaskUpdate(directory.getName(), null);
             tvSeriesPathEntity.addTvSerie(directory);
+            notFound.remove(directory.getAbsolutePath());
             progressNotifier.notifyTaskUpdate(directory.getName(), i + 1);
         }
+        
+        result.addAll(notFound.values());
+        
+        return result;
     }
 
     protected static void save(TvSeriesPathEntity tvSeriesPathEntity, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {

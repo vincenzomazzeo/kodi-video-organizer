@@ -29,6 +29,9 @@ public class TvSerieScanWorker extends AbstractTvSerieWorker<TvSeriePathEntity, 
 			}
 			result = true;
 		}
+		else {
+		    this.input.getTvSeriesPathEntity().removeTvSerie(this.input);
+		}
 		this.progressNotifier.notifyTaskUpdate(null, 100);
 		
 		return result;

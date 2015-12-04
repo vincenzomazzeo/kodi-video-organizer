@@ -61,31 +61,20 @@ public class ExplorerRootsController {
         return this.view;
     }
 
-    public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
-        TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(Collections.singleton(node.getValue()));
-        Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.search();
-        TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
-        for (TvSeriePathEntity tvSeriePathEntity : searchResult.get(Boolean.TRUE)) {
-            this.parent.addTvSerieTile(tvSeriePathEntity);
-            this.model.nodeChanged(node);
-        }
-        for (TvSeriePathEntity tvSeriePathEntity : searchResult.get(Boolean.FALSE)) {
-            parent.getValue().removeTvSerie(tvSeriePathEntity);
-            parent.remove(node);
-            this.model.nodeStructureChanged(parent);
-        }
-    }
-
     public void scanTvSeries(TvSeriesExplorerRootsTreeNode node, boolean recursive) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
+            Map<Boolean, Set<TvSeriePathEntity>> scanResult = null;
             if (recursive) {
-                Map<Boolean, Set<TvSeriePathEntity>> scanResult = TvSerieManager.getInstance().scanRecursive(node.getValue());
-                node.getValue().removeTvSeries(scanResult.get(Boolean.FALSE));
+                scanResult = TvSerieManager.getInstance().scanRecursive(node.getValue());
                 refreshTvSerieNodes(node, scanResult.get(Boolean.TRUE));
-                removeTvSerieNodes(node, scanResult.get(Boolean.FALSE));
             }
             else {
-                TvSerieManager.getInstance().scan(node.getValue());
+                scanResult = TvSerieManager.getInstance().scan(node.getValue());
+            }
+            removeTvSerieNodes(node, scanResult.get(Boolean.FALSE));
+            if (!scanResult.get(Boolean.FALSE).isEmpty()) {
+                NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(Collections.<TvSeriePathEntity>emptySet(), 
+                                                                                                         scanResult.get(Boolean.FALSE)));
             }
             this.model.refreshRoot(node);
         }
@@ -114,6 +103,32 @@ public class ExplorerRootsController {
         }
     }
 
+    public void scanTvSerie(TvSeriesExplorerRootsTreeNode parent, TvSerieExplorerRootsTreeNode node) {
+        if (TvSerieManager.getInstance().scan(node.getValue())) {
+            refreshTvSerieNodes(parent, Collections.singleton(node.getValue()));
+        }
+        else {
+            removeTvSerieNodes(parent, Collections.singleton(node.getValue()));
+            NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(Collections.<TvSeriePathEntity>emptySet(), 
+                                                                                                     Collections.singleton(node.getValue())));
+        }
+    }
+    
+    public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
+        TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(Collections.singleton(node.getValue()));
+        Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.search();
+        TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
+        for (TvSeriePathEntity tvSeriePathEntity : searchResult.get(Boolean.TRUE)) {
+            this.parent.addTvSerieTile(tvSeriePathEntity);
+            this.model.nodeChanged(node);
+        }
+        for (TvSeriePathEntity tvSeriePathEntity : searchResult.get(Boolean.FALSE)) {
+            parent.getValue().removeTvSerie(tvSeriePathEntity);
+            parent.remove(node);
+            this.model.nodeStructureChanged(parent);
+        }
+    }
+    
     public void notifyPossibleFsScanning(TvSeriePathEntity tvSeriePathEntity) {
         TvSerieExplorerRootsTreeNode node = this.model.findTvSerieNode(tvSeriePathEntity);
         if (node != null && node.isFsScanningRequired()) {
