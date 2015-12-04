@@ -35,6 +35,7 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
 
         // TODO
         // Add new Tv Serie
+        add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null, false)));
         
         // Scan
         add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN, null, false)));
