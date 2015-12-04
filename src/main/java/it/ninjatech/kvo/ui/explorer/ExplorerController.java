@@ -27,9 +27,7 @@ public class ExplorerController {
 		if (!tvSeriesPathEntities.isEmpty()) {
 		    addTvSerieTab();
 		    for (TvSeriesPathEntity tvSeriesPathEntity : tvSeriesPathEntities) {
-		        for (TvSeriePathEntity tvSeriePathEntity : tvSeriesPathEntity.getTvSeries()) {
-		            addTvSerieTile(tvSeriePathEntity);
-		        }
+		        addTvSerieTiles(tvSeriesPathEntity);
 		    }
 		}
 	}
@@ -48,6 +46,18 @@ public class ExplorerController {
 	
 	public void addTvSerieTile(TvSeriePathEntity tvSeriePathEntity) {
 		this.tvSerieController.addTile(tvSeriePathEntity);
+	}
+	
+	public void addTvSerieTiles(TvSeriesPathEntity tvSeriesPathEntity) {
+        this.tvSerieController.addTiles(tvSeriesPathEntity.getTvSeries());
+    }
+	
+	public void removeTvSerieTile(TvSeriePathEntity tvSeriePathEntity) {
+	    this.tvSerieController.removeTile(tvSeriePathEntity);
+	}
+	
+	public void removeTvSerieTiles(TvSeriesPathEntity tvSeriesPathEntity) {
+	    this.tvSerieController.removeTiles(tvSeriesPathEntity.getTvSeries());
 	}
 	
 	public void notifyTvSerieClick(TvSeriePathEntity tvSeriePathEntity) {

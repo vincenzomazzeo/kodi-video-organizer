@@ -2,8 +2,8 @@ package it.ninjatech.kvo.ui.explorer.tvserie;
 
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -26,10 +26,22 @@ public class ExplorerTvSerieModel {
 		this.view.fireModelUpdate();
 	}
 	
-	protected void addTile(List<TvSeriePathEntity> tvSeriePathEntities) {
+	protected void addTiles(Collection<TvSeriePathEntity> tvSeriePathEntities) {
 		this.data.addAll(tvSeriePathEntities);
 		
 		this.view.fireModelUpdate();
+	}
+	
+	protected void removeTile(TvSeriePathEntity tvSeriePathEntity) {
+	    this.data.remove(tvSeriePathEntity);
+	    
+	    this.view.fireModelUpdate();
+	}
+	
+	protected void removeTiles(Set<TvSeriePathEntity> tvSeriePathEntities) {
+	    this.data.removeAll(tvSeriePathEntities);
+        
+        this.view.fireModelUpdate();
 	}
 	
 	protected Set<TvSeriePathEntity> getData() {

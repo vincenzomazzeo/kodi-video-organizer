@@ -43,6 +43,9 @@ public final class Labels {
 	public static final String OVERVIEW = "Overview";
 	public static final String PREFERRED_LANGUAGE = "Preferred Language";
 	public static final String REMOVE = "Remove";
+	public static final String REMOVE_FROM_DISK = "Remove from disk (cannot be undone)";
+	public static final String REMOVE_TV_SERIE = "Remove TV Serie";
+	public static final String REMOVE_TV_SERIES_ROOT = "Remove TV Serie Root";
 	public static final String ROOTS = "Roots";
 	public static final String SCAN = "Scan";
 	public static final String SCAN_RECURSIVE = "Recursive Scan";
@@ -116,10 +119,16 @@ public final class Labels {
         return String.format(TV_SERIE_WORKER_SCAN_1, name);
     }
 	
-	private static final String TV_SERIE_WORKER_DELETE_1 = "Removing %s";
+	private static final String TV_SERIE_WORKER_REMOVE_1 = "Removing TV Serie %s";
     
-    public static String tvSerieWorkerDelete(String name) {
-        return String.format(TV_SERIE_WORKER_DELETE_1, name);
+    public static String tvSerieWorkerRemove(String name) {
+        return String.format(TV_SERIE_WORKER_REMOVE_1, name);
+    }
+    
+    private static final String TV_SERIES_WORKER_REMOVE_1 = "Removing TV Serie root %s";
+    
+    public static String tvSeriesWorkerRemove(String name) {
+        return String.format(TV_SERIES_WORKER_REMOVE_1, name);
     }
 	
 	public static final String TV_SERIE_SEASON_WORKER_1 = "Saving TV Serie %s - Season %d";
@@ -224,6 +233,14 @@ public final class Labels {
 	public static String getTvSeriesRootAlreadyExists(String root) {
         return String.format("<html>Tv Series root <b>%s</b> already exists</html>", root);
     }
+	
+	public static String getTvSerieRemove(String tvSerie) {
+	    return String.format("Are you sure you want to remove TV Serie %s?", tvSerie);
+	}
+	
+	public static String getTvSeriesRootRemove(String root) {
+	    return String.format("Are you sure you want to remove TV Serie root %s?", root);
+	}
 	
 	public static String notificationRootAdded(String typePlural, String root) {
 		return String.format("<html>%s root <b>%s</b> added</html>", typePlural, root);

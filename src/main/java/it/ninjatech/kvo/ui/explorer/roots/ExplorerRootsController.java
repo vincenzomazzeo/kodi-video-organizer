@@ -9,6 +9,7 @@ import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.component.MessageDialog;
+import it.ninjatech.kvo.ui.component.RemoveDialog;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.AbstractExplorerRootsContextMenu;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.AbstractExplorerRootsTreeNode;
@@ -104,6 +105,20 @@ public class ExplorerRootsController {
         }
     }
 
+    public void removeTvSeriesRoot(TvSeriesExplorerRootsTreeNode node) {
+        RemoveDialog removeDialog = RemoveDialog.getInstance(Labels.REMOVE_TV_SERIES_ROOT, Labels.getTvSeriesRootRemove(node.getValue().getLabel()));
+        removeDialog.setVisible(true);
+        if (removeDialog.isConfirmed()) {
+            TvSerieManager.getInstance().remove(node.getValue(), removeDialog.isRemoveFromDisk());
+            this.model.removeRoot(node);
+            this.parent.removeTvSerieTiles(node.getValue());
+            NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRootRemoved(node.getValue().getLabel()));
+            if (!TvSerieManager.getInstance().hasTvSeriesPathEntityRoots()) {
+                this.parent.removeTvSerieTab();
+            }
+        }
+    }
+    
     public void scanTvSerie(TvSerieExplorerRootsTreeNode node) {
         TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
         if (TvSerieManager.getInstance().scan(node.getValue())) {
@@ -132,11 +147,15 @@ public class ExplorerRootsController {
     }
     
     public void removeTvSerie(TvSerieExplorerRootsTreeNode node) {
-        // TODO aggiungere popup conferma con checkbox di delete from disc
-        TvSerieManager.getInstance().remove(node.getValue());
-        removeTvSerieNodes((TvSeriesExplorerRootsTreeNode)node.getParent(), Collections.singleton(node.getValue()));
-        NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(Collections.<TvSeriePathEntity>emptySet(), 
-                                                                                                 Collections.singleton(node.getValue())));
+        RemoveDialog removeDialog = RemoveDialog.getInstance(Labels.REMOVE_TV_SERIE, Labels.getTvSerieRemove(node.getValue().getLabel()));
+        removeDialog.setVisible(true);
+        if (removeDialog.isConfirmed()) {
+            TvSerieManager.getInstance().remove(node.getValue(), removeDialog.isRemoveFromDisk());
+            removeTvSerieNodes((TvSeriesExplorerRootsTreeNode)node.getParent(), Collections.singleton(node.getValue()));
+            this.parent.removeTvSerieTile(node.getValue());
+            NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(Collections.<TvSeriePathEntity>emptySet(), 
+                                                                                                     Collections.singleton(node.getValue())));
+        }
     }
     
     public void notifyPossibleFsScanning(TvSeriePathEntity tvSeriePathEntity) {

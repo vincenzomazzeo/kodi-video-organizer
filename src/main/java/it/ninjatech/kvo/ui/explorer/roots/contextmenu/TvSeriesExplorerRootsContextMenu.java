@@ -4,6 +4,7 @@ import it.ninjatech.kvo.connector.thetvdb.TheTvDbManager;
 import it.ninjatech.kvo.ui.explorer.roots.ExplorerRootsController;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.PathOpenExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSeriesFetchExplorerRootsAction;
+import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSeriesRemoveExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.contextmenu.action.TvSeriesScanExplorerRootsAction;
 import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSeriesExplorerRootsTreeNode;
 import it.ninjatech.kvo.util.Labels;
@@ -41,8 +42,8 @@ public class TvSeriesExplorerRootsContextMenu extends AbstractExplorerRootsConte
         // Scan Recursive
         add(new WebMenuItem(new TvSeriesScanExplorerRootsAction(this.controller, this.node, Labels.SCAN_RECURSIVE, null, true)));
 
-        // TODO
         // Remove
+        add(new WebMenuItem(new TvSeriesRemoveExplorerRootsAction(this.controller, this.node, Labels.REMOVE, null)));
     }
 
 }
