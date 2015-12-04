@@ -30,6 +30,9 @@ public class TvSerieScanWorker extends AbstractTvSerieWorker<TvSeriePathEntity, 
 			result = true;
 		}
 		else {
+		    this.progressNotifier.notifyTaskUpdate(null, 10);
+		    TvSerieWorkerTasks.delete(this.input, this.progressNotifier);
+            this.progressNotifier.notifyTaskUpdate(null, 90);
 		    this.input.getTvSeriesPathEntity().removeTvSerie(this.input);
 		}
 		this.progressNotifier.notifyTaskUpdate(null, 100);
