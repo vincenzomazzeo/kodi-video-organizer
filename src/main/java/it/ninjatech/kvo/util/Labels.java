@@ -11,6 +11,7 @@ public final class Labels {
 	public static final String APPLICATION_TITLE = "Kodi Video Organizer";
 	
 	public static final String ACTORS = "Actors";
+	public static final String ADAPT_PATH_TO_NAME = "Adapt Path to Name";
 	public static final String ADD_TV_SERIE = "Add TV Serie";
 	public static final String API_KEY = "API Key";
 	public static final String CLICK_FOR_DETAIL = "Click for detail";
@@ -118,6 +119,12 @@ public final class Labels {
 	
 	public static String tvSerieWorkerScan(String name) {
         return String.format(TV_SERIE_WORKER_SCAN_1, name);
+    }
+	
+	private static final String TV_SERIE_WORKER_ADAPT_PATH_TO_NAME_1 = "%s";
+    
+    public static String tvSerieWorkerAdaptPathToName(String name) {
+        return String.format(TV_SERIE_WORKER_ADAPT_PATH_TO_NAME_1, name);
     }
 	
 	private static final String TV_SERIE_WORKER_REMOVE_1 = "Removing TV Serie %s";

@@ -97,6 +97,9 @@ public class TvSerieFetchController {
             this.view.setVisible(false);
             this.view.release();
         }
+        else {
+            this.view.refresh();
+        }
     }
 
     private boolean doSearch(List<SearchData> searchDatas) {
@@ -129,7 +132,12 @@ public class TvSerieFetchController {
                         candidates.add(tvSerie);
                     }
                 }
-                if (candidates.size() == 1) {
+                if (candidates.isEmpty()) {
+                    this.view.remove(searchData.id, searchData.name);
+                    this.view.addFreeText(searchData.id, searchData.name);
+                    result = false;
+                }
+                else if (candidates.size() == 1) {
                     TvSeriePathEntity tvSeriePathEntity = this.entityMap.get(searchData.id);
                     tvSeriePathEntity.setTvSerie(candidates.get(0));
                 }

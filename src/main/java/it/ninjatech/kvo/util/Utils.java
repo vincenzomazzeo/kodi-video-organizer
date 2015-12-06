@@ -3,7 +3,6 @@ package it.ninjatech.kvo.util;
 import it.ninjatech.kvo.model.EnhancedLocale;
 
 import java.io.File;
-import java.text.Normalizer;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,18 +24,6 @@ public final class Utils {
 		result = new File(getWorkingDirectory(), "cache");
 		
 		return result;
-	}
-	
-	// Normalize to "Normalization Form Canonical Decomposition" (NFD)
-	public static String normalizeUnicode(String str) {
-		String result = str;
-		
-	    Normalizer.Form form = Normalizer.Form.NFD;
-	    if (!Normalizer.isNormalized(str, form)) {
-	        result = Normalizer.normalize(str, form);
-	    }
-	    
-	    return result;
 	}
 	
 	public static EnhancedLocale getLanguageFromSubtitleFile(String subtitleFile) {

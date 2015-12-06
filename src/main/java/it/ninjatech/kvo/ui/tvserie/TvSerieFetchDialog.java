@@ -151,6 +151,12 @@ public class TvSerieFetchDialog extends WebDialog implements ActionListener, Lis
         }
     }
     
+    protected void refresh() {
+        this.tvSerie.removeAll();
+        this.tvSerie.revalidate();
+        this.tvSerie.repaint();
+    }
+    
     @SuppressWarnings({ "rawtypes" })
     protected void release() {
         this.searchMap.clear();

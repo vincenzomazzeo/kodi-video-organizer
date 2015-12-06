@@ -6,7 +6,7 @@ import java.util.UUID;
 public abstract class AbstractPathEntity implements Comparable<AbstractPathEntity> {
 
 	private final String id;
-	private final String path;
+	private String path;
 	private final String label;
 	
 	protected AbstractPathEntity(String id, String path, String label) {
@@ -60,7 +60,11 @@ public abstract class AbstractPathEntity implements Comparable<AbstractPathEntit
 		return this.path;
 	}
 
-	public String getLabel() {
+	public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getLabel() {
 		return this.label;
 	}
 	

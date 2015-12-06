@@ -158,6 +158,14 @@ public class ExplorerRootsController {
         }
     }
     
+    public void adaptPathToName(TvSerieExplorerRootsTreeNode node) {
+        if (!TvSerieManager.getInstance().adaptPathToName(node.getValue())) {
+            removeTvSerieNodes((TvSeriesExplorerRootsTreeNode)node.getParent(), Collections.singleton(node.getValue()));
+            NotificationManager.showNotification(this.view, Labels.notificationTvSeriesRefreshRemove(Collections.<TvSeriePathEntity>emptySet(), 
+                                                                                                     Collections.singleton(node.getValue())));
+        }
+    }
+    
     public void notifyPossibleFsScanning(TvSeriePathEntity tvSeriePathEntity) {
         TvSerieExplorerRootsTreeNode node = this.model.findTvSerieNode(tvSeriePathEntity);
         if (node != null && node.isFsScanningRequired()) {
