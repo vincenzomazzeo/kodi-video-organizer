@@ -3,11 +3,14 @@ package it.ninjatech.kvo.ui.explorer.roots;
 import it.ninjatech.kvo.configuration.Settings;
 import it.ninjatech.kvo.configuration.SettingsHandler;
 import it.ninjatech.kvo.model.AbstractPathEntity;
+import it.ninjatech.kvo.model.EnhancedLocale;
 import it.ninjatech.kvo.model.Type;
+import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.tvserie.TvSerieManager;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.UI;
+import it.ninjatech.kvo.ui.component.AddDialog;
 import it.ninjatech.kvo.ui.component.MessageDialog;
 import it.ninjatech.kvo.ui.component.RemoveDialog;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
@@ -90,7 +93,7 @@ public class ExplorerRootsController {
     public void searchForTvSeries(TvSeriesExplorerRootsTreeNode node) {
         if (TvSerieManager.getInstance().check(node.getValue())) {
             TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(node.getValue().getTvSeries());
-            Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.search();
+            Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.searchAndFetch();
             addTvSerieTiles(searchResult.get(Boolean.TRUE));
             node.getValue().removeTvSeries(searchResult.get(Boolean.FALSE));
             refreshTvSerieNodes(node, searchResult.get(Boolean.TRUE));
@@ -119,6 +122,32 @@ public class ExplorerRootsController {
         }
     }
     
+    public void addTvSerie(TvSeriesExplorerRootsTreeNode node) {
+        AddDialog addDialog = AddDialog.getInstance(Labels.ADD_TV_SERIE);
+        addDialog.setVisible(true);
+        if (addDialog.isConfirmed()) {
+            String search = addDialog.getSearchString();
+            EnhancedLocale language = addDialog.getLanguage();
+            
+            TvSeriePathEntity tvSeriePathEntity = node.getValue().getTemporaryTvSerie(search);
+            
+            TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(Collections.singleton(tvSeriePathEntity));
+            tvSerieSearchController.setLanguage(language);
+            Set<TvSeriePathEntity> searchResult = tvSerieSearchController.onlySearch();
+            if (!searchResult.isEmpty()) {
+                if (TvSerieManager.getInstance().add(tvSeriePathEntity)) {
+                    node.refreshChildren();
+                    this.model.nodeStructureChanged(node);
+                    addTvSerieTiles(searchResult);
+                    NotificationManager.showNotification(this.view, Labels.notificationTvSerieAdded(TvSerieHelper.getTitle(tvSeriePathEntity)));
+                }
+                else {
+                    MessageDialog.getInstance(Labels.ERROR, Labels.getTvSerieAddFailed(TvSerieHelper.getTitle(tvSeriePathEntity)), MessageDialog.Type.Error).setVisible(true);
+                }
+            }
+        }
+    }
+    
     public void scanTvSerie(TvSerieExplorerRootsTreeNode node) {
         TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
         if (TvSerieManager.getInstance().scan(node.getValue())) {
@@ -133,7 +162,7 @@ public class ExplorerRootsController {
     
     public void searchForTvSerie(TvSerieExplorerRootsTreeNode node) {
         TvSerieFetchController tvSerieSearchController = new TvSerieFetchController(Collections.singleton(node.getValue()));
-        Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.search();
+        Map<Boolean, Set<TvSeriePathEntity>> searchResult = tvSerieSearchController.searchAndFetch();
         TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
         for (TvSeriePathEntity tvSeriePathEntity : searchResult.get(Boolean.TRUE)) {
             this.parent.addTvSerieTile(tvSeriePathEntity);
@@ -298,5 +327,5 @@ public class ExplorerRootsController {
         }
         this.model.nodeStructureChanged(node);
     }
-
+    
 }

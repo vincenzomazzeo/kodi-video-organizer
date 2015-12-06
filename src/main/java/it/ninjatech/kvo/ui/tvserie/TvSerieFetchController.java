@@ -21,27 +21,57 @@ public class TvSerieFetchController {
 
     private final Map<String, TvSeriePathEntity> entityMap;
     private final TvSerieFetchDialog view;
+    private EnhancedLocale language;
 
     public TvSerieFetchController(Set<TvSeriePathEntity> entities) {
         this.entityMap = new Hashtable<>();
         this.view = TvSerieFetchDialog.getInstance(this);
-        
+
         for (TvSeriePathEntity entity : entities) {
             this.entityMap.put(entity.getId(), entity);
         }
     }
+
+    public void setLanguage(EnhancedLocale language) {
+        this.language = language;
+    }
+
+    public Set<TvSeriePathEntity> onlySearch() {
+        Set<TvSeriePathEntity> result = new HashSet<>();
+
+        List<SearchData> searchDatas = new ArrayList<>();
+        EnhancedLocale language = this.language == null || EnhancedLocaleMap.isEmptyLocale(this.language)
+                ? EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage())
+                : this.language;
+        for (TvSeriePathEntity tvSeriePathEntity : this.entityMap.values()) {
+            if (tvSeriePathEntity.getTvSerie() == null || StringUtils.isBlank(tvSeriePathEntity.getTvSerie().getProviderId())) {
+                searchDatas.add(new SearchData(tvSeriePathEntity.getId(), tvSeriePathEntity.getLabel(), tvSeriePathEntity.getLabel(), language));
+            }
+        }
+
+        if (!doSearch(searchDatas)) {
+            this.view.setVisible(true);
+            this.view.release();
+        }
+
+        result.addAll(this.entityMap.values());
+
+        return result;
+    }
     
-    public Map<Boolean, Set<TvSeriePathEntity>> search() {
+    public Map<Boolean, Set<TvSeriePathEntity>> searchAndFetch() {
         Map<Boolean, Set<TvSeriePathEntity>> result = new HashMap<>();
-        
+
         result.put(Boolean.TRUE, new HashSet<TvSeriePathEntity>());
         result.put(Boolean.FALSE, new HashSet<TvSeriePathEntity>());
 
         List<SearchData> searchDatas = new ArrayList<>();
-        EnhancedLocale defaultLocale = EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage());
+        EnhancedLocale language = this.language == null || EnhancedLocaleMap.isEmptyLocale(this.language)
+                ? EnhancedLocaleMap.getByLanguage(SettingsHandler.getInstance().getSettings().getTheTvDbPreferredLanguage())
+                : this.language;
         for (TvSeriePathEntity tvSeriePathEntity : this.entityMap.values()) {
             if (tvSeriePathEntity.getTvSerie() == null || StringUtils.isBlank(tvSeriePathEntity.getTvSerie().getProviderId())) {
-                searchDatas.add(new SearchData(tvSeriePathEntity.getId(), tvSeriePathEntity.getLabel(), tvSeriePathEntity.getLabel(), defaultLocale));
+                searchDatas.add(new SearchData(tvSeriePathEntity.getId(), tvSeriePathEntity.getLabel(), tvSeriePathEntity.getLabel(), language));
             }
         }
 

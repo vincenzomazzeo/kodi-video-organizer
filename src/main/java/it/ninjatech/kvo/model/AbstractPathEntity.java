@@ -7,7 +7,7 @@ public abstract class AbstractPathEntity implements Comparable<AbstractPathEntit
 
 	private final String id;
 	private String path;
-	private final String label;
+	private String label;
 	
 	protected AbstractPathEntity(String id, String path, String label) {
 		this.id = id;
@@ -67,5 +67,9 @@ public abstract class AbstractPathEntity implements Comparable<AbstractPathEntit
     public String getLabel() {
 		return this.label;
 	}
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 	
 }

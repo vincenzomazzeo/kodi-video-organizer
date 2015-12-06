@@ -41,6 +41,21 @@ public class TvSeriesPathEntity extends AbstractPathEntity {
 		
 		return result;
 	}
+    
+    public TvSeriePathEntity getTemporaryTvSerie(String tvSerie) {
+        return new TvSeriePathEntity(new File(this.getPath(), tvSerie), this);
+    }
+    
+    public boolean addTvSerie(TvSeriePathEntity tvSeriePathEntity) {
+        boolean result = false;
+        
+        if (!this.tvSeries.contains(tvSeriePathEntity)) {
+            this.tvSeries.add(tvSeriePathEntity);
+            result = true;
+        }
+        
+        return result;
+    }
 
 	public Set<TvSeriePathEntity> getTvSeries() {
 		return Collections.unmodifiableSortedSet(this.tvSeries);

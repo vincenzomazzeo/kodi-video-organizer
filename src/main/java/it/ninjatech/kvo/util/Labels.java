@@ -109,6 +109,12 @@ public final class Labels {
 	    return String.format(message, root);
 	}
 	
+	private static final String TV_SERIE_WORKER_ADD_1 = "Adding TV Serie %s";
+    
+    public static String tvSerieWorkerAdd(String name) {
+        return String.format(TV_SERIE_WORKER_ADD_1, name);
+    }
+	
 	private static final String TV_SERIE_WORKER_FETCH_1 = "(%d/%d) %s";
 	
 	public static String tvSerieWorkerFetch(int current, int total, String name) {
@@ -250,6 +256,10 @@ public final class Labels {
 	    return String.format("Are you sure you want to remove TV Serie root %s?", root);
 	}
 	
+	public static String getTvSerieAddFailed(String tvSerie) {
+	    return String.format("Failed to add TV Serie %s", tvSerie);
+	}
+	
 	public static String notificationRootAdded(String typePlural, String root) {
 		return String.format("<html>%s root <b>%s</b> added</html>", typePlural, root);
 	}
@@ -261,6 +271,10 @@ public final class Labels {
 	public static String notificationTvSeriesRootRemoved(String root) {
 	    return String.format("<html>The TV Serie root <b>%s</b> is no longer present and has been removed</html>", root);
 	}
+	
+	public static String notificationTvSerieAdded(String name) {
+        return String.format("<html>The TV Serie <b>%s</b> has been successfully added</html>", name);
+    }
 	
 	public static String notificationTvSeriesRefreshRemove(Set<TvSeriePathEntity> entitiesRefreshed,
 	                                                       Set<TvSeriePathEntity> entitiesRemoved) {

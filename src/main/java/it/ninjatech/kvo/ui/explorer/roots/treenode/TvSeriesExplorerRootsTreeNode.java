@@ -59,4 +59,14 @@ public class TvSeriesExplorerRootsTreeNode extends AbstractRootsExplorerRootsTre
 	    return result;
 	}
 	
+	public void refreshChildren() {
+	    Map<TvSeriePathEntity, TvSerieExplorerRootsTreeNode> children = findChildren(this.value.getTvSeries());
+	    for (TvSeriePathEntity tvSerie : value.getTvSeries()) {
+	        if (!children.containsKey(tvSerie)) {
+	            this.children.add(new TvSerieExplorerRootsTreeNode(tvSerie, this));
+	        }
+        }
+        Collections.sort(this.children);
+	}
+	
 }

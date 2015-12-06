@@ -203,7 +203,11 @@ public class FanarttvFanarts {
 
 		private void fill(TvSerie tvSerie, FanarttvFanartType type) {
 			if (type == FanarttvFanartType.SeasonPoster) {
-				tvSerie.addFanarttvSeasonImage(this.url, Integer.valueOf(this.season), super.getLikes(), this.lang != null ? EnhancedLocaleMap.getByLanguage(this.lang) : EnhancedLocaleMap.getEmptyLocale());
+				try {
+				    tvSerie.addFanarttvSeasonImage(this.url, Integer.valueOf(this.season), super.getLikes(), this.lang != null ? EnhancedLocaleMap.getByLanguage(this.lang) : EnhancedLocaleMap.getEmptyLocale());
+				}
+				catch (Exception e) {
+				}
 			}
 			else {
 				super.fill(tvSerie, type);

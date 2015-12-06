@@ -9,6 +9,7 @@ import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAdaptPathToNameWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieAddRootWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieAddWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieCheckRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieFetchWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieRemoveRootWorker;
@@ -131,6 +132,15 @@ public final class TvSerieManager {
 		result = DeterminateProgressDialogWorker.show(worker, "", true);
 		
 		return result;
+	}
+	
+	public Boolean add(TvSeriePathEntity tvSeriePathEntity) {
+	    Boolean result = null;
+	    
+	    TvSerieAddWorker worker = new TvSerieAddWorker(tvSeriePathEntity);
+	    result = DeterminateProgressDialogWorker.show(worker, "", true);
+	    
+	    return result;
 	}
 	
 	public Boolean adaptPathToName(TvSeriePathEntity tvSeriePathEntity) {

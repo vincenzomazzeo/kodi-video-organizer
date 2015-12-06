@@ -83,6 +83,10 @@ public final class TvSerieHelper {
     // ***********
     // * TvSerie *
     // ***********
+    public static String getFsName(TvSerie tvSerie) {
+        return Utils.normalizeName(tvSerie.getName());
+    }
+    
     public static Collection<TvSerieSeason> getSeasons(TvSerie tvSerie) {
         return tvSerie.getSeasons();
     }

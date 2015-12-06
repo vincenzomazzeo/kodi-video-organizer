@@ -80,15 +80,18 @@ public class FanarttvManager {
 
     public void getData(TvSerie tvSerie) {
         if (isActive()) {
-            FanarttvFanarts fanarttvFanarts = this.webResource.
+            ClientResponse response = this.webResource.
                     path("/v3").
                     path("/tv").
                     path(tvSerie.getProviderId()).
                     queryParam("api_key", apiKey).
                     type(MediaType.APPLICATION_JSON).
-                    get(FanarttvFanarts.class);
-
-            fanarttvFanarts.fill(tvSerie);
+                    get(ClientResponse.class);
+            
+            if (response.getStatus() == Status.OK.getStatusCode()) {
+                FanarttvFanarts fanarttvFanarts = response.getEntity(FanarttvFanarts.class);
+                fanarttvFanarts.fill(tvSerie);
+            }
         }
     }
 
