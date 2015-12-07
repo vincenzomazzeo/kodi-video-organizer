@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.Insets;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -20,10 +21,10 @@ import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.managers.language.data.TooltipWay;
 import com.alee.managers.tooltip.TooltipManager;
-//TODO UIUtils
+
 public class ExplorerTile extends WebPanel {
-	// TODO check memory leak solved
-	private static final long serialVersionUID = 4129515407391265281L;
+
+    private static final long serialVersionUID = 4129515407391265281L;
 
 	private Image fanart;
 	private Image poster;
@@ -69,7 +70,6 @@ public class ExplorerTile extends WebPanel {
 		poster.setRound(2);
 
 		WebPanel info = makeInfoPane(size, posterSize, posterMargin, title, year, rate, genre);
-		info.setBackground(Colors.BACKGROUND_INFO_ALPHA);
 
 		WebOverlay backOverlay = new WebOverlay(background, info, SwingUtilities.CENTER, SwingUtilities.BOTTOM);
 
@@ -80,8 +80,10 @@ public class ExplorerTile extends WebPanel {
 	}
 
 	private WebPanel makeInfoPane(Dimension size, Dimension posterSize, int posterMargin, String title, String year, String rate, String genre) {
-		WebPanel result = new WebPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-
+		WebPanel result = UIUtils.makeFlowLayoutPane(FlowLayout.LEFT, 0, 0);
+		result.setOpaque(true);
+		result.setBackground(Colors.BACKGROUND_INFO_ALPHA);
+	    
 		int infoWidth = size.width - posterMargin - posterSize.width;
 		int infoHeight = Dimensions.getExplorerTileInfoHeight();
 		int topHeight = infoHeight / 5 * 3;
@@ -90,50 +92,30 @@ public class ExplorerTile extends WebPanel {
 		result.setPreferredSize(new Dimension(size.width, infoHeight));
 		result.add(UIUtils.makeHorizontalFillerPane(posterMargin + posterSize.width, true));
 
-		WebPanel infoTop = new WebPanel(new BorderLayout());
-		infoTop.setOpaque(false);
+		WebPanel infoTop = UIUtils.makeStandardPane(new BorderLayout());
 		infoTop.setPreferredSize(new Dimension(infoWidth, topHeight));
 
-		this.title = new WebLabel(title);
+		this.title = UIUtils.makeStandardLabel(title, 16, new Insets(5, 5, 5, 5), null);
 		infoTop.add(this.title, BorderLayout.CENTER);
 		TooltipManager.setTooltip(this.title, title, TooltipWay.up, 0);
-		this.title.setMargin(5);
-		this.title.setFontSize(16);
 		this.title.setForeground(Colors.FOREGROUND_TITLE);
 		this.title.setShadeColor(Colors.FOREGROUND_SHADE_TITLE);
-		this.title.setDrawShade(true);
 
-		WebLabel yearL = new WebLabel(year);
+		WebLabel yearL = UIUtils.makeStandardLabel(year, 14, new Insets(5, 5, 5, 5), SwingConstants.RIGHT);
 		infoTop.add(yearL, BorderLayout.EAST);
-		yearL.setHorizontalAlignment(SwingConstants.RIGHT);
-		yearL.setMargin(5);
-		yearL.setFontSize(14);
-		yearL.setForeground(Colors.FOREGROUND_STANDARD);
-		yearL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		yearL.setDrawShade(true);
 
-		WebPanel infoBottom = new WebPanel();
-		infoBottom.setOpaque(false);
+		WebPanel infoBottom = UIUtils.makeStandardPane(new BorderLayout());
 		infoBottom.setPreferredSize(new Dimension(infoWidth, bottomHeight));
 
-		WebLabel rateL = new WebLabel(rate);
+		WebLabel rateL = UIUtils.makeStandardLabel(rate, 12, new Insets(5, 5, 5, 5), null);
 		infoBottom.add(rateL, BorderLayout.WEST);
-		rateL.setMargin(5);
-		rateL.setFontSize(12);
 		rateL.setItalicFont();
-		rateL.setForeground(Colors.FOREGROUND_STANDARD);
-		rateL.setShadeColor(Colors.FOREGROUND_SHADE_STANDARD);
-		rateL.setDrawShade(true);
 
-		WebLabel genreL = new WebLabel(genre);
+		WebLabel genreL = UIUtils.makeStandardLabel(genre, 12, new Insets(5, 5, 5, 5), SwingConstants.RIGHT);
 		infoBottom.add(genreL, BorderLayout.CENTER);
-		genreL.setHorizontalAlignment(SwingConstants.RIGHT);
-		genreL.setMargin(5);
-		genreL.setFontSize(12);
 		genreL.setItalicFont();
 		genreL.setForeground(Colors.FOREGROUND_ALTERNATIVE);
 		genreL.setShadeColor(Colors.FOREGROUND_SHADE_ALTERNATIVE);
-		genreL.setDrawShade(true);
 
 		result.add(new TwoSidesPanel(SwingUtilities.VERTICAL, infoTop, infoBottom));
 

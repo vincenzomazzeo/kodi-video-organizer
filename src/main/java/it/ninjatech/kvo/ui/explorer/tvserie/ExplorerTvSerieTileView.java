@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.SwingUtilities;
+
 import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
 import com.alee.laf.panel.WebPanel;
@@ -38,7 +40,9 @@ public class ExplorerTvSerieTileView extends WebPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        this.controller.notifyClick(this.value);
+        if (SwingUtilities.isLeftMouseButton(event)) {
+            this.controller.notifyLeftClick(this.value);
+        }
     }
 
     @Override

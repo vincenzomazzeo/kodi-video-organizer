@@ -67,7 +67,7 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 	    this.model.removeTiles(tvSeriePathEntities);
 	}
 
-	protected void notifyClick(TvSeriePathEntity tvSeriePathEntity) {
+	protected void notifyLeftClick(TvSeriePathEntity tvSeriePathEntity) {
 	    this.explorerController.notifyTvSerieClick(tvSeriePathEntity);
 	    this.wallController.showTvSerie(tvSeriePathEntity);
 	}
