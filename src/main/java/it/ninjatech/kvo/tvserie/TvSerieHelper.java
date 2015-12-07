@@ -287,7 +287,7 @@ public final class TvSerieHelper {
 
         Integer seasonNumber = Integer.valueOf(file.getParentFile().getName().toLowerCase().substring(SEASON.length() + 1));
         String tvSerieNameNormalized = Utils.normalizeName(tvSerie.getName());
-        String regexp = String.format(FS_EPISODE_NAME_REGEXP, tvSerieNameNormalized, EPISODE_NUMBER_REGEXP_GROUP_NAME);
+        String regexp = String.format(FS_EPISODE_NAME_REGEXP, Utils.normalizeForRegExp(tvSerieNameNormalized), EPISODE_NUMBER_REGEXP_GROUP_NAME);
         Matcher matcher = Pattern.compile(regexp).matcher(file.getName());
         if (matcher.matches()) {
             Integer episodeNumber = Integer.valueOf(matcher.group(EPISODE_NUMBER_REGEXP_GROUP_NAME));
@@ -304,7 +304,7 @@ public final class TvSerieHelper {
 
         return result;
     }
-
+    
     public static boolean addEpisodeSubtitleFilename(TvSerie tvSerie, File file) {
         boolean result = false;
 

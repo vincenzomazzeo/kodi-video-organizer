@@ -48,7 +48,11 @@ public final class Utils {
 	}
 	
 	public static String normalizeName(String name) {
-	    return name.replaceAll("\\\\|/|:|\\*|\\?|\"|<|>|\\|", "").replace('.', ' ');
+	    return name.replaceAll("\\\\|/|:|\\*|\\?|\"|<|>|\\|", "");
+	}
+	
+	public static String normalizeForRegExp(String string) {
+	    return string.replaceAll("\\(", "\\\\(").replaceAll("\\)", "\\\\)");
 	}
 	
 	private Utils() {}
