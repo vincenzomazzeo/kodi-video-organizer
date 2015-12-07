@@ -166,6 +166,12 @@ public final class Labels {
 	    return String.format(message, name, current, total);
 	}
 	
+	private static final String TV_SERIE_SEASON_WORKER_SCAN_1 = "%s - Season %d";
+    
+    public static String tvSerieSeasonWorkerScan(String name, Integer season) {
+        return String.format(TV_SERIE_SEASON_WORKER_SCAN_1, name, season);
+    }
+	
 	/********************/
 	
 	public static String dbSavingEntity(String entity) {

@@ -51,8 +51,16 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		return this.tvSeriesPathEntity;
 	}
 
+	public void removeFsElement(FsElement fsElement) {
+	    this.fsElements.remove(fsElement);
+	}
+	
 	public void addFsElement(FsElement fsElement) {
 	    this.fsElements.add(fsElement);
+	}
+	
+	public void addFsElements(SortedSet<FsElement> fsElements) {
+	    this.fsElements.addAll(fsElements);
 	}
 	
 	public void setFsElements(SortedSet<FsElement> fsElements) {
@@ -73,9 +81,25 @@ public class TvSeriePathEntity extends AbstractPathEntity {
 		this.videoFiles.putAll(videoFiles);
 	}
 	
+	public void setVideoFiles(Integer seasonNumber, SortedSet<String> videoFiles) {
+	    this.videoFiles.put(seasonNumber, videoFiles);
+	}
+	
+	public void removeVideoFile(Integer seasonNumner, String videoFile) {
+	    this.videoFiles.get(seasonNumner).remove(videoFile);
+	}
+	
 	public void setSubtitleFiles(Map<Integer, SortedSet<String>> subtitleFiles) {
 		this.subtitleFiles.clear();
 		this.subtitleFiles.putAll(subtitleFiles);
+	}
+	
+	public void setSubtitleFiles(Integer seasonNumber, SortedSet<String> subtitleFiles) {
+        this.subtitleFiles.put(seasonNumber, subtitleFiles);
+    }
+	
+	public void removeSubtitleFile(Integer seasonNumner, String subtitleFile) {
+	    this.subtitleFiles.get(seasonNumner).remove(subtitleFile);
 	}
 	
 	public void setExtraFanarts(Set<String> extraFanarts) {

@@ -18,6 +18,7 @@ import it.ninjatech.kvo.tvserie.worker.TvSerieScanRootWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSearchWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonCreateWorker;
+import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonScanWorker;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonWorker;
 import it.ninjatech.kvo.ui.progressdialogworker.DeterminateProgressDialogWorker;
 import it.ninjatech.kvo.util.Labels;
@@ -155,6 +156,15 @@ public final class TvSerieManager {
 	public void remove(TvSeriePathEntity tvSeriePathEntity, Boolean removeFromDisk) {
 		TvSerieRemoveWorker worker = new TvSerieRemoveWorker(TvSerieRemoveWorker.makeInputData(tvSeriePathEntity, removeFromDisk));
 		DeterminateProgressDialogWorker.show(worker, "", true);
+	}
+	
+	public Boolean scan(TvSerieSeason season) {
+	    Boolean result = null;
+	    
+	    TvSerieSeasonScanWorker worker = new TvSerieSeasonScanWorker(season);
+	    result = DeterminateProgressDialogWorker.show(worker, "", true);
+	    
+	    return result;
 	}
 	
 	public Boolean handleSeason(TvSerieSeason season,

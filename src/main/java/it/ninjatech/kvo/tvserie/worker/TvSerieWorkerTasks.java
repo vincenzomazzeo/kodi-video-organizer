@@ -203,6 +203,42 @@ public final class TvSerieWorkerTasks {
         mapper.delete(tvSeriePathEntity.getTvSerie());
     }
 
+    protected static void scan(TvSerieSeason season, AbstractTvSerieWorker.ProgressNotifier progressNotifier) throws Exception {
+        progressNotifier.notifyTaskUpdate(Labels.TV_SERIE_TASK_SCAN, null);
+        
+        TvSerie tvSerie = season.getTvSerie();
+        TvSeriePathEntity tvSeriePathEntity = tvSerie.getTvSeriePathEntity();
+        
+        for (TvSerieEpisode episode : season.getEpisodes()) {
+            episode.clearFilenames();
+        }
+        
+        SortedSet<FsElement> fsElements = new TreeSet<>();
+        SortedSet<String> seasonVideoFiles = new TreeSet<>();
+        SortedSet<String> seasonSubtitleFiles = new TreeSet<>();
+        
+        File main = TvSerieHelper.getLocalSeasonPath(season);
+        for (File file : main.listFiles()) {
+            if (!file.isHidden() && !file.isDirectory()) {
+                fsElements.add(new FsElement(file.getName(), file.isDirectory()));
+                if (isVideoFile(file.getName())) {
+                    if (!TvSerieHelper.setEpisodeFilename(tvSerie, file)) {
+                        seasonVideoFiles.add(file.getAbsolutePath());
+                    }
+                }
+                else if (isSubtitleFile(file.getName())) {
+                    if (!TvSerieHelper.addEpisodeSubtitleFilename(tvSerie, file)) {
+                        seasonSubtitleFiles.add(file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+        
+        tvSeriePathEntity.addFsElements(fsElements);
+        tvSeriePathEntity.setVideoFiles(season.getNumber(), seasonVideoFiles);
+        tvSeriePathEntity.setSubtitleFiles(season.getNumber(), seasonSubtitleFiles);
+    }
+    
     private static boolean isVideoFile(String name) {
         boolean result = false;
 

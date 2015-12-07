@@ -1,9 +1,11 @@
 package it.ninjatech.kvo.tvserie.worker;
 
 import it.ninjatech.kvo.model.EnhancedLocale;
+import it.ninjatech.kvo.model.FsElement;
 import it.ninjatech.kvo.tvserie.TvSerieHelper;
 import it.ninjatech.kvo.tvserie.dbmapper.TvSerieSeasonDbMapper;
 import it.ninjatech.kvo.tvserie.model.TvSerieEpisode;
+import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSerieSeason;
 import it.ninjatech.kvo.tvserie.worker.TvSerieSeasonWorker.TvSerieSeasonWorkerInputData;
 import it.ninjatech.kvo.util.Labels;
@@ -52,6 +54,8 @@ public class TvSerieSeasonWorker extends AbstractTvSerieWorker<TvSerieSeasonWork
 
         int update = 0;
 
+        TvSeriePathEntity tvSeriePathEntity = this.input.season.getTvSerie().getTvSeriePathEntity();
+        
         File seasonDir = TvSerieHelper.getLocalSeasonPath(this.input.season);
         for (TvSerieEpisode episode : this.input.videoEpisodeMap.keySet()) {
             this.progressNotifier.notifyTaskUpdate(Labels.tvSerieSeasonWorker(Labels.TV_SERIE_SEASON_WORKER_2, TvSerieHelper.getEpisodeName(episode), null), null);
@@ -65,6 +69,10 @@ public class TvSerieSeasonWorker extends AbstractTvSerieWorker<TvSerieSeasonWork
                 throw new Exception(Labels.getFailedToRename(sourceFile.getAbsolutePath(), targetFile.getAbsolutePath()));
             }
             episode.setFilename(targetFile.getAbsolutePath());
+            
+            tvSeriePathEntity.removeVideoFile(this.input.season.getNumber(), sourceFile.getAbsolutePath());
+            tvSeriePathEntity.removeFsElement(new FsElement(sourceFile.getName(), false));
+            tvSeriePathEntity.addFsElement(new FsElement(targetFile.getName(), false));
 
             this.progressNotifier.notifyTaskUpdate(null, ++update);
         }
@@ -82,6 +90,10 @@ public class TvSerieSeasonWorker extends AbstractTvSerieWorker<TvSerieSeasonWork
                 }
 
                 episode.addSubtitleFilename(targetFile.getAbsolutePath());
+                
+                tvSeriePathEntity.removeSubtitleFile(this.input.season.getNumber(), sourceFile.getAbsolutePath());
+                tvSeriePathEntity.removeFsElement(new FsElement(sourceFile.getName(), false));
+                tvSeriePathEntity.addFsElement(new FsElement(targetFile.getName(), false));
             }
 
             this.progressNotifier.notifyTaskUpdate(null, ++update);
@@ -90,6 +102,8 @@ public class TvSerieSeasonWorker extends AbstractTvSerieWorker<TvSerieSeasonWork
         if (!this.input.seasonImage.getParentFile().equals(seasonDir.getParentFile())) {
             File targetFile = new File(seasonDir.getParent(), TvSerieHelper.getSeasonPosterFilename(this.input.season));
             Files.copy(this.input.seasonImage.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            
+            tvSeriePathEntity.addFsElement(new FsElement(targetFile.getName(), false));
         }
         this.progressNotifier.notifyTaskUpdate(null, ++update);
 
