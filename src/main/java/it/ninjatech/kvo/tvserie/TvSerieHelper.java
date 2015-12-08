@@ -279,7 +279,7 @@ public final class TvSerieHelper {
                              episode.getSeason().getTvSerie().getName(),
                              episode.getSeason().getNumber(),
                              episode.getNumber(),
-                             episode.getName());
+                             Utils.normalizeName(Utils.normalizeForRegExp(episode.getName())));
     }
 
     public static boolean setEpisodeFilename(TvSerie tvSerie, File file) {
