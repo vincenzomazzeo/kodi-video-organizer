@@ -4,6 +4,7 @@ import it.ninjatech.kvo.connector.fanarttv.model.FanarttvFanarts;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
 
 import java.io.File;
+import java.net.URLEncoder;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
@@ -87,7 +88,7 @@ public class FanarttvManager {
                     queryParam("api_key", apiKey).
                     type(MediaType.APPLICATION_JSON).
                     get(ClientResponse.class);
-            
+
             if (response.getStatus() == Status.OK.getStatusCode()) {
                 FanarttvFanarts fanarttvFanarts = response.getEntity(FanarttvFanarts.class);
                 fanarttvFanarts.fill(tvSerie);
@@ -97,11 +98,11 @@ public class FanarttvManager {
 
     public File getImage(String path) {
         File result = null;
-        
+
         if (isActive()) {
-            result = Client.create().resource(path).get(File.class);
+            result = Client.create().resource(path.replaceAll(" ", "%20")).get(File.class);
         }
-        
+
         return result;
     }
 
