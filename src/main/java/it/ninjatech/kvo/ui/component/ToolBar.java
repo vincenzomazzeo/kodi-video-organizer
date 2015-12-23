@@ -4,6 +4,7 @@ import it.ninjatech.kvo.KodiVideoOrganizer;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleView;
+import it.ninjatech.kvo.ui.logconsole.LogConsoleView;
 import it.ninjatech.kvo.ui.settings.ScrapersSettingsController;
 import it.ninjatech.kvo.util.Labels;
 
@@ -28,15 +29,18 @@ public class ToolBar extends WebToolBar implements ActionListener {
 	private static final long serialVersionUID = -2693914047879971469L;
 
 	private final ExceptionConsoleView exceptionConsoleView;
+	private final LogConsoleView logConsoleView;
 	private WebButton exit;
 	private WebButton showExceptionConsole;
+	private WebButton showLogConsole;
 	private WebButton scrapersSettings;
 	private WebLabel exceptionsToReadLabel;
 
-	public ToolBar(ExceptionConsoleView exceptionConsoleView) {
+	public ToolBar(ExceptionConsoleView exceptionConsoleView, LogConsoleView logConsoleView) {
 		super(WebToolBar.HORIZONTAL);
 
 		this.exceptionConsoleView = exceptionConsoleView;
+		this.logConsoleView = logConsoleView;
 
 		init();
 	}
@@ -50,6 +54,9 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		}
 		else if (source == this.showExceptionConsole) {
 			this.exceptionConsoleView.setVisible(true);
+		}
+		else if (source == this.showLogConsole) {
+		    this.logConsoleView.setVisible(true);
 		}
 		else if (source == this.scrapersSettings) {
 			ScrapersSettingsController controller = new ScrapersSettingsController();
@@ -77,6 +84,10 @@ public class ToolBar extends WebToolBar implements ActionListener {
 		
 		addSeparator();
 		addSpacing(20);
+		
+		this.showLogConsole = UIUtils.makeButton(ImageRetriever.retrieveToolBarLogConsole(), this);
+		add(this.showLogConsole);
+		TooltipManager.setTooltip(this.showLogConsole, Labels.LOG_CONSOLE);
 		
 		WebOverlay showExceptionsConsoleOverlayPanel = new WebOverlay();
 		add(showExceptionsConsoleOverlayPanel);

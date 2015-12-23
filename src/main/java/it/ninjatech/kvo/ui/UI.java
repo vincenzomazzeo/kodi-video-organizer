@@ -5,8 +5,11 @@ import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
 import it.ninjatech.kvo.ui.component.ToolBar;
 import it.ninjatech.kvo.ui.exceptionconsole.ExceptionConsoleController;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
+import it.ninjatech.kvo.ui.logconsole.LogConsoleController;
 import it.ninjatech.kvo.ui.wall.WallController;
 import it.ninjatech.kvo.util.Labels;
+import it.ninjatech.kvo.util.OutputHandler;
+import it.ninjatech.kvo.util.OutputHandler.OutputListener;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -22,7 +25,7 @@ import com.alee.extended.statusbar.WebStatusBar;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebFrame;
 
-public class UI extends WebFrame implements WindowListener {
+public class UI extends WebFrame implements WindowListener, OutputListener {
 
 	private static final long serialVersionUID = -8112321473328517789L;
 
@@ -39,6 +42,7 @@ public class UI extends WebFrame implements WindowListener {
 	}
 
 	private final ExceptionConsoleController exceptionController;
+	private final LogConsoleController logController;
 	private final WallController wallController;
 	private final ExplorerController explorerControler;
 	private ToolBar toolBar;
@@ -47,10 +51,13 @@ public class UI extends WebFrame implements WindowListener {
 		super(Labels.APPLICATION_TITLE);
 
 		this.exceptionController = new ExceptionConsoleController();
+		this.logController = new LogConsoleController();
 		this.wallController = new WallController();
 		this.explorerControler = new ExplorerController(tvSeriesPathEntities, this.wallController);
 
 		init();
+		
+		OutputHandler.getInstance().addListener(this);
 	}
 
 	@Override
@@ -81,6 +88,11 @@ public class UI extends WebFrame implements WindowListener {
 	@Override
 	public void windowDeactivated(WindowEvent windowEvent) {
 	}
+	
+	@Override
+	public void log(int log) {
+	    this.logController.log(log);
+	}
 
 	public void notifyException(Throwable exception) {
 		int toRead = this.exceptionController.notifyException(exception);
@@ -110,7 +122,7 @@ public class UI extends WebFrame implements WindowListener {
 		contentPane.setOpaque(true);
 		contentPane.setBackground(Colors.BACKGROUND_INFO);
 
-		this.toolBar = new ToolBar(this.exceptionController.getView());
+		this.toolBar = new ToolBar(this.exceptionController.getView(), this.logController.getView());
 		contentPane.add(this.toolBar, BorderLayout.NORTH);
 
 		contentPane.add(this.explorerControler.getView(), BorderLayout.LINE_START);

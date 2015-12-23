@@ -32,6 +32,7 @@ public final class ImageRetriever {
 		FolderTvSeries("folder_tvseries.png"),
 		GreenButton("green_button.png"),
 		IMDbLogo("imdb_logo.png"),
+		LogConsole("log_console.png"),
 		Ok("ok.png"),
 		OrangeButton("orange_button.png"),
 		QuestionMark("question_mark.png"),
@@ -284,6 +285,10 @@ public final class ImageRetriever {
 
 	public static ImageIcon retrieveToolBarExceptionConsole() {
 		return retrieveAndScaleImage(ImageName.ExceptionConsole, MENU_BAR_BUTTON_SIZE);
+	}
+	
+	public static ImageIcon retrieveToolBarLogConsole() {
+	    return retrieveAndScaleImage(ImageName.LogConsole, MENU_BAR_BUTTON_SIZE);
 	}
 
 	public static ImageIcon retrieveToolBarExit() {

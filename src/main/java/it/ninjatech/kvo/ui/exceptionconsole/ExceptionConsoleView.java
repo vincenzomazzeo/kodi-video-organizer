@@ -4,6 +4,7 @@ import it.ninjatech.kvo.ui.Colors;
 import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
+import it.ninjatech.kvo.util.Labels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,7 +45,7 @@ public class ExceptionConsoleView extends WebDialog implements CollapsiblePaneLi
 	private boolean adding;
 	
 	private ExceptionConsoleView(ExceptionConsoleController controller) {
-		super(UI.get(), "Exceptions", true);
+		super(UI.get(), Labels.EXCEPTION_CONSOLE, true);
 
 		this.controller = controller;
 		this.panes = new HashMap<>();
