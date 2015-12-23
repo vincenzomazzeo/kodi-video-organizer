@@ -12,7 +12,7 @@ public class LogConsoleController {
         return this.view;
     }
     
-    public void log(int log) {
+    public void log(String log) {
         this.view.log(log);
     }
     

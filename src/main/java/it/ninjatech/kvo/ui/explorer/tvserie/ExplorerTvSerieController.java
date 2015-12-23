@@ -9,6 +9,7 @@ import it.ninjatech.kvo.ui.Dimensions;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.wall.WallController;
+import it.ninjatech.kvo.util.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ public class ExplorerTvSerieController implements AsyncJobListener {
 
 	@Override
 	public void notify(String id, AsyncJob job) {
-		System.out.printf("-> notify %s\n", id);
+	    Logger.log("-> notify %s\n", id);
 		TileStatus tileStatus = this.tiles.get(id);
 		if (tileStatus != null) {
 			tileStatus.alreadyLoaded = true;

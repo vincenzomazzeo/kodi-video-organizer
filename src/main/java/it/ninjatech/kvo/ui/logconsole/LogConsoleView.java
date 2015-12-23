@@ -1,5 +1,6 @@
 package it.ninjatech.kvo.ui.logconsole;
 
+import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
 import it.ninjatech.kvo.util.Labels;
@@ -33,7 +34,7 @@ public class LogConsoleView extends WebDialog {
 
         this.controller = controller;
         
-//        setIconImage(ImageRetriever.retrieveToolBarExceptionConsole().getImage());
+        setIconImage(ImageRetriever.retrieveToolBarLogConsole().getImage());
         setDefaultCloseOperation(HIDE_ON_CLOSE);
 
         init();
@@ -43,8 +44,8 @@ public class LogConsoleView extends WebDialog {
         setLocationRelativeTo(getOwner());
     }
     
-    protected void log(int log) {
-        this.webTextArea.append(String.valueOf((char)log));
+    protected void log(String log) {
+        this.webTextArea.append(log);
     }
     
     private void init() {

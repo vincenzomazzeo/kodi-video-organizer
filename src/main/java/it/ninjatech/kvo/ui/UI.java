@@ -8,8 +8,8 @@ import it.ninjatech.kvo.ui.explorer.ExplorerController;
 import it.ninjatech.kvo.ui.logconsole.LogConsoleController;
 import it.ninjatech.kvo.ui.wall.WallController;
 import it.ninjatech.kvo.util.Labels;
-import it.ninjatech.kvo.util.OutputHandler;
-import it.ninjatech.kvo.util.OutputHandler.OutputListener;
+import it.ninjatech.kvo.util.Logger;
+import it.ninjatech.kvo.util.Logger.LoggerChannel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -25,7 +25,7 @@ import com.alee.extended.statusbar.WebStatusBar;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebFrame;
 
-public class UI extends WebFrame implements WindowListener, OutputListener {
+public class UI extends WebFrame implements WindowListener, LoggerChannel {
 
 	private static final long serialVersionUID = -8112321473328517789L;
 
@@ -57,7 +57,7 @@ public class UI extends WebFrame implements WindowListener, OutputListener {
 
 		init();
 		
-		OutputHandler.getInstance().addListener(this);
+		Logger.setLoggerChannel(this);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class UI extends WebFrame implements WindowListener, OutputListener {
 	}
 	
 	@Override
-	public void log(int log) {
+	public void log(String log) {
 	    this.logController.log(log);
 	}
 
