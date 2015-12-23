@@ -59,6 +59,7 @@ public final class Labels {
 	public static final String SEARCHING_FOR_TV_SERIE = "Searching for TV Serie";
 	public static final String SEARCHING_FOR_TV_SERIES = "Searching for TV Series";
 	public static final String SEASONS = "Seasons";
+	public static final String SELECT_IN_ROOTS = "Select in Roots";
 	public static final String SHOW_IN_TV_SERIE_NAVIGATOR = "Show in TV Serie Navigator";
 	public static final String START_SCANNING = "Start scanning...";
 	public static final String STORING_SCRAPERS_SETTINGS = "Storing Scrapers Settings";

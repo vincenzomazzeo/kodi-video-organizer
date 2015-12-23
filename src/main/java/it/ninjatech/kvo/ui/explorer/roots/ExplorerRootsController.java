@@ -148,8 +148,8 @@ public class ExplorerRootsController {
         }
     }
     
-    public void showTvSerie(TvSerieExplorerRootsTreeNode node) {
-        this.parent.show(node.getValue());
+    public void setVisibile(TvSerieExplorerRootsTreeNode node) {
+        this.parent.setVisibleOnTvSerieTab(node.getValue());
     }
     
     public void scanTvSerie(TvSerieExplorerRootsTreeNode node) {
@@ -212,6 +212,11 @@ public class ExplorerRootsController {
         this.model.nodeStructureChanged(node);
     }
     
+    public void select(TvSeriePathEntity tvSeriePathEntity) {
+        TvSerieExplorerRootsTreeNode node = this.model.findTvSerieNode(tvSeriePathEntity);
+        this.view.select(node);
+    }
+     
     protected void notifyAddRoot(int x, int y) {
         this.view.showAddRootMenu(x, y);
     }

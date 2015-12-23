@@ -1,6 +1,7 @@
 package it.ninjatech.kvo.ui.explorer.roots;
 
 import it.ninjatech.kvo.ui.ImageRetriever;
+import it.ninjatech.kvo.ui.explorer.roots.treenode.TvSerieExplorerRootsTreeNode;
 import it.ninjatech.kvo.util.Labels;
 
 import java.awt.Insets;
@@ -104,6 +105,11 @@ public class ExplorerRootsView extends WebScrollPane implements MouseListener, T
 	public void treeCollapsed(TreeExpansionEvent event) {
 	}
 
+	protected void select(TvSerieExplorerRootsTreeNode node) {
+	    this.tree.setSelectedNode(node);
+	    this.tree.scrollToNode(node);
+	}
+	
 	protected void setTooltip() {
 		TooltipManager.setTooltip(this.getViewport().getView(), Labels.TOOLTIP_EXPLORER_ROOTS, TooltipWay.up, 0);
 	}

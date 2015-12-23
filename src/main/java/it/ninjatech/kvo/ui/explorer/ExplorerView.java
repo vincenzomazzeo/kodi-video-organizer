@@ -61,7 +61,11 @@ public class ExplorerView extends WebPanel {
 		}
 	}
 	
-	protected void showTvSerieTab() {
+	protected void selectRootsTab() {
+	    this.container.setSelectedIndex(0);
+	}
+	
+	protected void selectTvSerieTab() {
 	    this.container.setSelectedIndex(1);
 	}
 

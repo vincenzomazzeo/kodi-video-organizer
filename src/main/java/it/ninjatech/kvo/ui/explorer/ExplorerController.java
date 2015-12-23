@@ -60,9 +60,14 @@ public class ExplorerController {
 	    this.tvSerieController.removeTiles(tvSeriesPathEntity.getTvSeries());
 	}
 
-	public void show(TvSeriePathEntity tvSeriePathEntity) {
-	    this.view.showTvSerieTab();
-	    this.tvSerieController.show(tvSeriePathEntity);
+	public void selectOnRootsTab(TvSeriePathEntity tvSeriePathEntity) {
+	    this.view.selectRootsTab();
+	    this.rootsController.select(tvSeriePathEntity);
+	}
+	
+	public void setVisibleOnTvSerieTab(TvSeriePathEntity tvSeriePathEntity) {
+	    this.view.selectTvSerieTab();
+	    this.tvSerieController.setVisible(tvSeriePathEntity);
 	}
 	
 	public void notifyTvSerieClick(TvSeriePathEntity tvSeriePathEntity) {
