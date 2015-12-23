@@ -148,6 +148,10 @@ public class ExplorerRootsController {
         }
     }
     
+    public void showTvSerie(TvSerieExplorerRootsTreeNode node) {
+        this.parent.show(node.getValue());
+    }
+    
     public void scanTvSerie(TvSerieExplorerRootsTreeNode node) {
         TvSeriesExplorerRootsTreeNode parent = (TvSeriesExplorerRootsTreeNode)node.getParent();
         if (TvSerieManager.getInstance().scan(node.getValue())) {

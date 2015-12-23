@@ -88,7 +88,7 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 			tile.clear();
 		}
 
-		scrollRectToVisible(viewRect);
+		getViewport().scrollRectToVisible(viewRect);
 
 		getVerticalScrollBar().addAdjustmentListener(this);
 
@@ -122,6 +122,11 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 		}
 
 		return result;
+	}
+	
+	protected void scrollTo(TvSeriePathEntity tvSerie) {
+	    ExplorerTvSerieTileView view = this.tilesMap.get(tvSerie.getId());
+	    getViewport().scrollRectToVisible(view.getBounds());
 	}
 
 }

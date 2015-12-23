@@ -59,6 +59,11 @@ public class ExplorerController {
 	public void removeTvSerieTiles(TvSeriesPathEntity tvSeriesPathEntity) {
 	    this.tvSerieController.removeTiles(tvSeriesPathEntity.getTvSeries());
 	}
+
+	public void show(TvSeriePathEntity tvSeriePathEntity) {
+	    this.view.showTvSerieTab();
+	    this.tvSerieController.show(tvSeriePathEntity);
+	}
 	
 	public void notifyTvSerieClick(TvSeriePathEntity tvSeriePathEntity) {
 	    this.rootsController.notifyPossibleFsScanning(tvSeriePathEntity);

@@ -60,6 +60,10 @@ public class ExplorerView extends WebPanel {
             }
 		}
 	}
+	
+	protected void showTvSerieTab() {
+	    this.container.setSelectedIndex(1);
+	}
 
 	private void init() {
 		setPaintLeft(false);
