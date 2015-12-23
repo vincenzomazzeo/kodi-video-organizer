@@ -37,6 +37,7 @@ public final class Labels {
 	public static final String IMDB = "Find out more on IMDb";
 	public static final String LANGUAGE = "Language";
 	public static final String LOADING_EXTRA_FANARTS = "Loading Extra Fanarts";
+	public static final String LOCK_SUBTITLE_LANGUAGE = "Lock Subtitle Language";
 	public static final String LOG_CONSOLE = "Log Console";
 	public static final String MOVIE = "Movie";
 	public static final String MOVIES = "Movies";

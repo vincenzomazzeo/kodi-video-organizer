@@ -11,6 +11,7 @@ import it.ninjatech.kvo.ui.ImageRetriever;
 import it.ninjatech.kvo.ui.TvSerieImageLoaderAsyncJobHandler.TvSerieImageLoaderListener;
 import it.ninjatech.kvo.ui.UI;
 import it.ninjatech.kvo.ui.UIUtils;
+import it.ninjatech.kvo.ui.component.EnhancedLocaleLanguageComboBox;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSeasonController.TvSerieSeasonListModel;
 import it.ninjatech.kvo.ui.tvserie.TvSerieSeasonController.VideoSubtitleTransferHandler;
 import it.ninjatech.kvo.util.Labels;
@@ -53,6 +54,7 @@ import com.alee.extended.transition.ComponentTransition;
 import com.alee.extended.transition.effects.fade.FadeTransitionEffect;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
+import com.alee.laf.checkbox.WebCheckBox;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
 import com.alee.laf.panel.WebPanel;
@@ -137,6 +139,8 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	private WebButton confirm;
 	private WebButton cancel;
 	private ComponentTransition seasonImageTransition;
+	private WebCheckBox lockSubtitleLanguage;
+	private EnhancedLocaleLanguageComboBox subtitleLanguage;
 	private WebList videoFileList;
 	private WebList subtitleFileList;
 	private ComponentTransition detailTransition;
@@ -199,6 +203,9 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		}
 		else if (event.getSource() == this.cancel) {
 			this.controller.notifyCancel();
+		}
+		else if (event.getSource() == this.lockSubtitleLanguage) {
+		    this.subtitleLanguage.setEnabled(this.lockSubtitleLanguage.isSelected());
 		}
 	}
 
@@ -292,6 +299,14 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		tile.addSubtitle(language, filename, removable);
 	}
 	
+	protected boolean isSubtitleLanguageLocked() {
+	    return this.lockSubtitleLanguage.isSelected();
+	}
+	
+	protected EnhancedLocale getSubtitleLanguage() {
+	    return this.subtitleLanguage.getLanguage();
+	}
+	
 	private void init(TvSerieSeason season, TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel, boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
 		WebPanel content = new WebPanel(new VerticalFlowLayout());
 		setContentPane(content);
@@ -342,8 +357,21 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		// Buttons
 		this.confirm = UIUtils.makeButton(ImageRetriever.retrieveTvSerieSeasonDialogConfirm(), this);
 		this.cancel = UIUtils.makeButton(ImageRetriever.retrieveTvSerieSeasonDialogCancel(), this);
-		WebPanel rightPane = UIUtils.makeFlowLayoutPane(FlowLayout.RIGHT, 5, 5, this.confirm, UIUtils.makeHorizontalFillerPane(5, false), this.cancel);
-		rightPane.setMargin(5, 10, 5, 10);
+		WebPanel buttonPane = UIUtils.makeFlowLayoutPane(FlowLayout.RIGHT, 5, 5, this.confirm, UIUtils.makeHorizontalFillerPane(5, false), this.cancel);
+		buttonPane.setMargin(5, 10, 5, 10);
+		
+		this.lockSubtitleLanguage = UIUtils.makeStandardCheckBox(Labels.LOCK_SUBTITLE_LANGUAGE);
+		this.lockSubtitleLanguage.addActionListener(this);
+		this.subtitleLanguage = new EnhancedLocaleLanguageComboBox();
+		this.subtitleLanguage.setPreferredWidth(150);
+		this.subtitleLanguage.setEnabled(false);
+		WebPanel lockLanguagePane = UIUtils.makeVerticalFlowLayoutPane(this.lockSubtitleLanguage, UIUtils.makeVerticalFillerPane(3, false), this.subtitleLanguage);
+		lockLanguagePane.setMargin(5, 10, 5, 10);
+		
+		WebPanel rightPane = UIUtils.makeStandardPane(new BorderLayout());
+		rightPane.add(buttonPane, BorderLayout.NORTH);
+		rightPane.add(lockLanguagePane, BorderLayout.SOUTH);
+		
 		result.add(rightPane, BorderLayout.EAST);
 
 		SwingUtils.equalizeComponentsWidths(leftPane, rightPane);

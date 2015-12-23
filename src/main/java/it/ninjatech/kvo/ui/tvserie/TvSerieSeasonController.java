@@ -277,11 +277,23 @@ public class TvSerieSeasonController implements ImageChoiceController {
 	private boolean handleSubtitle(TvSerieEpisode episode, String filename) {
 	    boolean result = false;
 	    
-	    TvSerieEpisodeSubtitleDialog dialog = TvSerieEpisodeSubtitleDialog.getInstance(episode, filename);
-        dialog.setVisible(true);
-        result = dialog.isConfirmed();
+	    EnhancedLocale language = null;
+	    
+	    if (this.view.isSubtitleLanguageLocked()) {
+	        language = this.view.getSubtitleLanguage();
+	        result = true;
+	    }
+	    else {
+	        TvSerieEpisodeSubtitleDialog dialog = TvSerieEpisodeSubtitleDialog.getInstance(episode, filename);
+	        dialog.setVisible(true);
+	        result = dialog.isConfirmed();
+	        if (result) {
+	            language = dialog.getLanguage();
+	        }
+	        dialog.release();
+	    }
+	    
         if (result) {
-            EnhancedLocale language = dialog.getLanguage();
             this.view.addEpisodeSubtitle(episode, language, filename, true);
             Map<String, EnhancedLocale> languages = this.subtitleEpisodeMap.get(episode);
             if (languages == null) {
@@ -295,7 +307,6 @@ public class TvSerieSeasonController implements ImageChoiceController {
                 this.episodeController.notifySubtitleFileAdded(filename, language);
             }
         }
-        dialog.release();
         
         return result;
 	}
