@@ -63,7 +63,7 @@ public class TvSerieEpisodeTile extends WebPanel implements MouseListener, Trans
 		
 		init(voidImage, width);
 		
-		setTransferHandler(this.controller.makeEpisodeTileDropTransferHandler(episode, this));
+		setTransferHandler(this.controller.makeEpisodeTileDropTransferHandler(episode));
 	}
 	
 	@Override

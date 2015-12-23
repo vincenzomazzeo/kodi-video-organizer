@@ -32,7 +32,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -144,7 +144,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 	private TvSerieSeasonDialog() {
 		super(UI.get(), true);
 
-		this.tileMap = new HashMap<>();
+		this.tileMap = new LinkedHashMap<>();
 
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		addWindowListener(this);
@@ -216,7 +216,15 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 			}
 		}
 		else if (SwingUtilities.isRightMouseButton(event)) {
-			this.controller.notifySeasonRightClick();
+		    if (event.getSource() == this.videoFileList) {
+		        this.controller.notifyVideoFileRightClick(this.videoFileList.locationToIndex(event.getPoint()));
+		    }
+		    else if (event.getSource() == this.subtitleFileList) {
+		        this.controller.notifySubtitleFileRightClick(this.subtitleFileList.locationToIndex(event.getPoint()));
+		    }
+		    else {
+		        this.controller.notifySeasonRightClick();
+		    }
 		}
 	}
 
@@ -248,7 +256,7 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		}
 	}
 
-	protected void release() {
+    protected void release() {
 		Logger.log("*** TvSerieSeasonDialog -> release ***\n");
 		MemoryUtils.printMemory("Before TvSerieSeasonDialog release");
 		TooltipManager.removeTooltips(this.seasonImageTransition);
@@ -274,14 +282,14 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 		this.detailTransition.performTransition(view);
 	}
 
-	protected void setEpisodeVideoFile(TvSerieEpisode episode, String filename) {
+	protected void setEpisodeVideoFile(TvSerieEpisode episode, String filename, boolean removable) {
 		TvSerieEpisodeTile tile = this.tileMap.get(episode.getId());
-		tile.setVideoFile(filename, false);
+		tile.setVideoFile(filename, removable);
 	}
 	
-	protected void addEpisodeSubtitle(TvSerieEpisode episode, EnhancedLocale language, String filename) {
+	protected void addEpisodeSubtitle(TvSerieEpisode episode, EnhancedLocale language, String filename, boolean removable) {
 		TvSerieEpisodeTile tile = this.tileMap.get(episode.getId());
-		tile.addSubtitle(language, filename, false);
+		tile.addSubtitle(language, filename, removable);
 	}
 	
 	private void init(TvSerieSeason season, TvSerieSeasonListModel videoFileListModel, TvSerieSeasonListModel subtitleFileListModel, boolean addTvSerieTitleClick, boolean addTvSerieSeasonTitleClick) {
@@ -400,9 +408,11 @@ public class TvSerieSeasonDialog extends WebDialog implements WindowListener, Ac
 
 		this.videoFileList = new WebList(videoFileListModel);
 		result.add(makeFilesPane(this.videoFileList, this.controller.makeVideoDragTransferHandler(), Labels.VIDEO_FILES, width));
+		this.videoFileList.addMouseListener(this);
 
 		this.subtitleFileList = new WebList(subtitleFileListModel);
 		result.add(makeFilesPane(this.subtitleFileList, this.controller.makeSubtitleDragTransferHandler(), Labels.SUBTITLE_FILES, width));
+		this.subtitleFileList.addMouseListener(this);
 
 		return result;
 	}

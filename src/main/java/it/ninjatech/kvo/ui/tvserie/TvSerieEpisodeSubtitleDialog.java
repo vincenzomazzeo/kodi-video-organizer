@@ -86,6 +86,7 @@ public class TvSerieEpisodeSubtitleDialog extends WebDialog implements ActionLis
 	}
 	
 	private void set(TvSerieEpisode episode, String filename) {
+	    this.confirmed = false;
 		init(episode, filename);
 		pack();
 		setLocationRelativeTo(getOwner());

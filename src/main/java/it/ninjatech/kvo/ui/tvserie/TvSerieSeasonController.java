@@ -77,11 +77,11 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		
 		for (TvSerieEpisode episode : this.season.getEpisodes()) {
 			if (episode.getFilename() != null) {
-				this.view.setEpisodeVideoFile(episode, TvSerieHelper.getEpisodeFileName(episode));
+				this.view.setEpisodeVideoFile(episode, TvSerieHelper.getEpisodeFileName(episode), false);
 			}
 			for (String subtitleFilename : TvSerieHelper.getEpisodeSubtitleFileNames(episode)) {
 				EnhancedLocale language = Utils.getLanguageFromSubtitleFile(subtitleFilename);
-				this.view.addEpisodeSubtitle(episode, language, subtitleFilename);
+				this.view.addEpisodeSubtitle(episode, language, subtitleFilename, false);
 			}
 		}
 	}
@@ -189,6 +189,37 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		tile.clearVideoFile();
 	}
 
+	protected void notifyVideoFileRightClick(int index) {
+	    String filename = this.videoFileListModel.getElementAt(index);
+	    
+	    for (TvSerieEpisode episode : this.season.getEpisodes()) {
+	        if (episode.getFilename() == null && !this.videoEpisodeMap.containsKey(episode)) {
+	            handleVideo(episode, filename);
+	            break;
+	        }
+	    }
+	}
+	
+	protected void notifySubtitleFileRightClick(int index) {
+	    String filename = this.subtitleFileListModel.getElementAt(index);
+	    
+	    TvSerieEpisode selectedEpisode = null;
+	    int selectedEpisodeSubtitleCount = Integer.MAX_VALUE;
+	    for (TvSerieEpisode episode : this.season.getEpisodes()) {
+	        int episodeSubtitleCount = episode.getSubtitleFilenames().size();
+	        Map<String, EnhancedLocale> languages = this.subtitleEpisodeMap.get(episode);
+            if (languages != null) {
+                episodeSubtitleCount += languages.size();
+            }
+            if (episodeSubtitleCount < selectedEpisodeSubtitleCount) {
+                selectedEpisode = episode;
+                selectedEpisodeSubtitleCount = episodeSubtitleCount;
+            }
+	    }
+	    
+	    handleSubtitle(selectedEpisode, filename);
+	}
+	
 	protected void notifyLanguageRightClick(TvSerieEpisode episode, TvSerieEpisodeTile tile, String filename) {
 		this.subtitleEpisodeMap.get(episode).remove(filename);
 		this.subtitleFileListModel.addElement(filename);
@@ -210,8 +241,8 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		}
 	}
 
-	protected EpisodeTileDropTransferHandler makeEpisodeTileDropTransferHandler(TvSerieEpisode episode, TvSerieEpisodeTile tile) {
-		return new EpisodeTileDropTransferHandler(this, episode, tile);
+	protected EpisodeTileDropTransferHandler makeEpisodeTileDropTransferHandler(TvSerieEpisode episode) {
+		return new EpisodeTileDropTransferHandler(this, episode);
 	}
 
 	protected VideoSubtitleTransferHandler makeVideoDragTransferHandler() {
@@ -233,6 +264,42 @@ public class TvSerieSeasonController implements ImageChoiceController {
 		this.view.dispose();
 	}
 
+	private void handleVideo(TvSerieEpisode episode, String filename) {
+	    this.videoEpisodeMap.put(episode, filename);
+        this.view.setEpisodeVideoFile(episode, filename, true);
+        this.videoFileListModel.removeElement(filename);
+        
+        if (this.selectedEpisodeView != null && this.selectedEpisodeView.equals(episode)) {
+            this.episodeController.notifyVideoFileAdded(filename);
+        }
+	}
+	
+	private boolean handleSubtitle(TvSerieEpisode episode, String filename) {
+	    boolean result = false;
+	    
+	    TvSerieEpisodeSubtitleDialog dialog = TvSerieEpisodeSubtitleDialog.getInstance(episode, filename);
+        dialog.setVisible(true);
+        result = dialog.isConfirmed();
+        if (result) {
+            EnhancedLocale language = dialog.getLanguage();
+            this.view.addEpisodeSubtitle(episode, language, filename, true);
+            Map<String, EnhancedLocale> languages = this.subtitleEpisodeMap.get(episode);
+            if (languages == null) {
+                languages = new HashMap<>();
+                this.subtitleEpisodeMap.put(episode, languages);
+            }
+            languages.put(filename, language);
+            this.subtitleFileListModel.removeElement(filename);
+            
+            if (this.selectedEpisodeView != null && this.selectedEpisodeView.equals(episode)) {
+                this.episodeController.notifySubtitleFileAdded(filename, language);
+            }
+        }
+        dialog.release();
+        
+        return result;
+	}
+	
 	protected class TvSerieSeasonListModel extends AbstractListModel<String> {
 
 		private static final long serialVersionUID = 1576352902620800824L;
@@ -295,14 +362,6 @@ public class TvSerieSeasonController implements ImageChoiceController {
 
 		@Override
 		protected void exportDone(JComponent source, Transferable data, int action) {
-			if (action == MOVE) {
-				TvSerieSeasonListModel model = (TvSerieSeasonListModel)((WebList)source).getModel();
-				try {
-					model.removeElement((String)data.getTransferData(this.dataFlavor));
-				}
-				catch (UnsupportedFlavorException | IOException e) {
-				}
-			}
 		}
 
 	}
@@ -313,12 +372,10 @@ public class TvSerieSeasonController implements ImageChoiceController {
 
 		private final TvSerieSeasonController controller;
 		private final TvSerieEpisode episode;
-		private final TvSerieEpisodeTile tile;
 
-		private EpisodeTileDropTransferHandler(TvSerieSeasonController controller, TvSerieEpisode episode, TvSerieEpisodeTile tile) {
+		private EpisodeTileDropTransferHandler(TvSerieSeasonController controller, TvSerieEpisode episode) {
 			this.controller = controller;
 			this.episode = episode;
-			this.tile = tile;
 		}
 
 		@Override
@@ -328,30 +385,10 @@ public class TvSerieSeasonController implements ImageChoiceController {
 			try {
 				String filename = (String)support.getTransferable().getTransferData(support.getDataFlavors()[0]);
 				if (support.getDataFlavors()[0].getHumanPresentableName().equals(VIDEO_FILE_DATA_FLAVOR.getHumanPresentableName())) {
-					this.controller.videoEpisodeMap.put(this.episode, filename);
-					this.tile.setVideoFile(filename, true);
-					if (this.controller.selectedEpisodeView != null && this.controller.selectedEpisodeView.equals(this.episode)) {
-						this.controller.episodeController.notifyVideoFileAdded(filename);
-					}
+				    this.controller.handleVideo(this.episode, filename);
 				}
 				else if (support.getDataFlavors()[0].getHumanPresentableName().equals(SUBTITLE_FILE_DATA_FLAVOR.getHumanPresentableName())) {
-					TvSerieEpisodeSubtitleDialog dialog = TvSerieEpisodeSubtitleDialog.getInstance(this.episode, filename);
-					dialog.setVisible(true);
-					result = dialog.isConfirmed();
-					if (result) {
-						EnhancedLocale language = dialog.getLanguage();
-						this.tile.addSubtitle(language, filename, true);
-						Map<String, EnhancedLocale> languages = this.controller.subtitleEpisodeMap.get(this.episode);
-						if (languages == null) {
-							languages = new HashMap<>();
-							this.controller.subtitleEpisodeMap.put(this.episode, languages);
-						}
-						languages.put(filename, language);
-						if (this.controller.selectedEpisodeView != null && this.controller.selectedEpisodeView.equals(this.episode)) {
-							this.controller.episodeController.notifySubtitleFileAdded(filename, language);
-						}
-					}
-					dialog.release();
+				    this.controller.handleSubtitle(this.episode, filename);
 				}
 			}
 			catch (UnsupportedFlavorException | IOException e) {
