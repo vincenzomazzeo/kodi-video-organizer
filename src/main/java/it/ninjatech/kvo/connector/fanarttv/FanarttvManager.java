@@ -4,7 +4,6 @@ import it.ninjatech.kvo.connector.fanarttv.model.FanarttvFanarts;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
 
 import java.io.File;
-import java.net.URLEncoder;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
