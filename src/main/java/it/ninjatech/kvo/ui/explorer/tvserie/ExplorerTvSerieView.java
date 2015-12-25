@@ -126,7 +126,7 @@ public class ExplorerTvSerieView extends WebScrollPane implements AdjustmentList
 	
 	protected void scrollTo(TvSeriePathEntity tvSerie) {
 	    ExplorerTvSerieTileView view = this.tilesMap.get(tvSerie.getId());
-	    getViewport().scrollRectToVisible(view.getBounds());
+	    getViewport().setViewPosition(view.getBounds().getLocation());
 	}
 
 }
