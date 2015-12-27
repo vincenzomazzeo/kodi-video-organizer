@@ -5,7 +5,7 @@
     <groupId>it.ninjatech</groupId>
     <artifactId>kodi-video-organizer</artifactId>
     <version>1.0.0</version>
-    <name>[Ninjatech] Kodi Video Organizer</name>
+    <name>Kodi Video Organizer</name>
 	<!---->
     <properties>
         <maven-install-plugin.version>2.5.1</maven-install-plugin.version>
@@ -102,25 +102,23 @@
                 <version>2.9</version>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>it.ninjatech.kvo.KodiVideoOrganizer</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.2</version>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>it.ninjatech.kvo.KodiVideoOrganizer</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -134,4 +132,8 @@
         <finalName>${project.groupId}.${project.artifactId}</finalName>
     </build>
 	<!---->
+	<organization>
+	    <name>Ninjatech</name>
+	    <url>www.ninjatech.it</url>
+	</organization>
 </project>

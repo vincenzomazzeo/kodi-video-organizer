@@ -1,0 +1,43 @@
+# Kodi Video Organizer
+
+# Used Libraries
+This software contains software developed at
+The Apache Software Foundation (http://www.apache.org/).
+under the Apache License 2.0
+An original copy of the license agreement can be found at:
+http://www.apache.org/licenses/LICENSE-2.0
+
+This software contains unmodified binary redistributions for
+H2 database engine (http://www.h2database.com/),
+which is dual licensed and available under the MPL 2.0
+(Mozilla Public License) or under the EPL 1.0 (Eclipse Public License).
+An original copy of the license agreement can be found at:
+http://www.h2database.com/html/license.html
+
+This software contains unmodified copy of
+Jackson JSON processor streaming parser/generator, databind module, annotations 
+under the Apache License 2.0
+An original copy of the license agreement can be found at:
+http://www.apache.org/licenses/LICENSE-2.0
+
+This software contains unmodified copy of
+WebLaf - Java Look and Feel
+under the GPLv3 license
+An original copy of the license agreement can be found at:
+http://www.gnu.org/licenses/gpl-3.0.html
+
+# Credits
+This software contains icons and images downloaded from the following addresses:
+http://www.softicons.com/toolbar-icons/stainless-applications-icons-by-iconleak/settings-icon (Free for non commercial use)
+http://www.softicons.com/toolbar-icons/glassy-buttons-icons-by-curtivearticide/exclamation-mark-icon (Under CC Attribution-NonCommercial 3.0 Unported License - http://creativecommons.org/licenses/by-nc/3.0/)
+http://www.softicons.com/toolbar-icons/glassy-buttons-icons-by-curtivearticide/question-mark-icon (Under CC Attribution-NonCommercial 3.0 Unported License - http://creativecommons.org/licenses/by-nc/3.0/)http://www.iconarchive.com/show/steel-system-icons-by-uriy1966.html (Free for non commercial use)
+http://www.softicons.com/system-icons/crystal-project-icons-by-everaldo-coelho/actions-1-down-arrow-icon (Under GNU Lesser General Public License - http://gnu.org/licenses/gpl.html)
+http://www.iconarchive.com/show/tv-icons-by-dailyoverview/television-08-icon.html (Backlink to http://www.dailyoverview.com/)
+http://www.iconarchive.com/show/cristal-intense-icons-by-tatice/Help-icon.html (Under CC Attribution-Noncommercial-No Derivate 4.0 License - http://creativecommons.org/licenses/by-nc-nd/4.0/)
+http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Categories-preferences-system-icon.html (Under GNU Lesser General Public License - http://gnu.org/licenses/gpl.html)
+http://www.iconarchive.com/show/fs-icons-by-franksouza183/Categories-preferences-system-icon.html (Under GNU Lesser General Public License - http://gnu.org/licenses/gpl.html)
+http://www.fancyicons.com/free-icon/136/stars-icon-set/free-gold-star-icon-png/ (Free for commercial use)
+http://findicons.com/icon/169771/chat?id=169771 (Under GNU Lesser General Public License - http://gnu.org/licenses/gpl.html)
+http://www.everaldo.com/
+https://www.iconfinder.com/icons/34213/circle_orange_icon#size=128 (Free for commercial use)
+https://www.iconfinder.com/icons/34211/green_icon#size=128 (Free for commercial use)
