@@ -1,0 +1,238 @@
+JWrapperCompiler started
+First arg: jwrapper.xml
+[Config] Building file is jwrapper.xml
+[Updates] Checking for updates...
+[App 1 of 2] App (user:true) "Kodi Video Organizer" = it.ninjatech.kvo.KodiVideoOrganizer [any further args]
+[App 2 of 2] App (user:false) "JWrapper Service Management App" = jwrapper.jwutils.service.ManageService [any further args]
+[Config] Build Folder: /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild
+[Config] UpdateURL: (no update URL specified)
+[Config] MainClass on update: (none specified)
+[Config] MainClass to verify JRE compatibility: (none specified)
+[Config] MainClass to run post-install: (none specified)
+[Config] MainClass to run pre-uninstall: (none specified)
+[Config] Minimum splash image time: 850ms
+[Config] Splash PNG: /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/src/main/resources/images/splash.png
+[Config] Can Override Splash: false
+[Config] Bundle Logo PNG: /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/src/main/resources/images/logo.png
+[Config] Must Fork: false
+[Config] OSX TGZ Compression level: 0
+[Config] OSX 'App Nap' Allowed: false
+[Config] Will produce an UNSIGNED app for MacOS (note OS GateKeeper will block this on Mountain Lion (10.8) and later)
+[Config] Will produce an UNSIGNED app for Windows (note elevated apps will have a more severe warning and Antivirus programs may complain)
+[Config] Strip exception - keeping file /sunjce_provider.jar
+[Config] Strip exception - keeping file /jce.jar
+[Config] Pack200 exception - not packing file /sunjce_provider.jar
+[Config] Pack200 exception - not packing file /jce.jar
+[Config] Pack200 Effort is 9/9
+[Config] Will strip JRE
+[JRE] About to archive all JREs, **IMPORTANT** this can take a long time the first time, future builds will be much faster...
+[JRE] Archiving JRE Windows32JRE
+[JRE] Archived Windows32JRE (00040808198) already exists so skipping
+[JRE] JRE Windows32JRE finished
+[JRE] Archiving JRE Windows64JRE
+[JRE] Archived Windows64JRE (00040808244) already exists so skipping
+[JRE] JRE Windows64JRE finished
+[JRE] Archiving JRE Linux32JRE
+[JRE] Archived Linux32JRE (00040808292) already exists so skipping
+[JRE] JRE Linux32JRE finished
+[JRE] Archiving JRE Linux64JRE
+[JRE] Archived Linux64JRE (00040808347) already exists so skipping
+[JRE] JRE Linux64JRE finished
+[JRE] Archiving JRE Mac64JRE
+[JRE] Archived Mac64JRE (00040808401) already exists so skipping
+[JRE] JRE Mac64JRE finished
+[Licensing] Checking JWrapper licensing
+[Licensing] No JWrapper license found
+[Licensing] JWService not allowed
+[Licensing] JWCrypt not allowed
+[Licensing] JW Signed Updates not allowed
+[Licensing] Rebranding not allowed, rebuilding splash using JWrapper splash and logo
+[JWrapper] Building JWrapper 00039797128
+[Archive] Adding file (5128) (jwrapperlib/jwstandalonelaunch.jar) jwrapperlib/jwstandalonelaunch.jar
+[Archive] Adding to classpath: jwrapperlib/jwstandalonelaunch.jar
+[Archive] Adding file (1856641) (jwrapperlib/jwstandalone.jar) jwrapperlib/jwstandalone.jar
+[Archive] Adding file (88818) (jwrapperlib/sevenzip.jar) jwrapperlib/sevenzip.jar
+[Archive] Adding file (81073) (JWrapper-Kodi Video Organizer-splash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-splash.png
+[Archive] Adding file (81944) (JWrapper-Kodi Video Organizer-ICNS.icns) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-ICNS.icns
+[Archive] Adding file (90112) (jwutils_win32.dll) wrappers/jwutils_win32.dll
+[Archive] Adding file (101376) (jwutils_win64.dll) wrappers/jwutils_win64.dll
+[Archive] Adding file (5892) (libjwutils_linux32.so) wrappers/libjwutils_linux32.so
+[Archive] Adding file (8019) (libjwutils_linux64.so) wrappers/libjwutils_linux64.so
+[Archive] Adding file (25072) (libjwutils_macos32.jnilib) wrappers/libjwutils_macos32.jnilib
+[Archive] Adding file (21432) (libjwutils_macos64.jnilib) wrappers/libjwutils_macos64.jnilib
+[Archive] Adding file (90112) (SimpleService.exe) wrappers/SimpleService.exe
+[Archive] Adding file (188) (JWrapperLaunch) JWrapperLaunchTemp
+[Updates] Update check: 39797128 vs 36138363 (online)
+Post processing /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-00039797128-archive.p2.l2
+P2 - compressed from 2455807 to 2455807
+L2 - compressed from 2456244 to 785740
+[JWrapper] JWrapper 00039797128 finished
+[App] Rescaling logos
+[App] Building launchers
+[App] Building Windows 32 bit launcher...
+[App-DEBUG] Created launcher /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerWinLauncher.exe size=500032
+[App] Windows launcher finished
+[App] Building Linux 32 bit launcher...
+[App] Linux launcher finished
+[App] Building Linux 64 bit launcher...
+[App] Linux launcher finished
+[App] Building MacOS Native launcher [64bit]...
+[App] MacOS launcher finished [64bit]
+[App] Building MacOS Java launcher [32bit]...
+[App] OSX launcher finished
+[App] Building App archive Kodi Video Organizer 00040825775
+[Archive] Adding file (792) (jwrapper_license) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/jwrapper_licensing
+[App] No Windows signing information - App will be UNABLE TO ELEVATE LAUNCH INTO SESSION ON WINDOWS
+[App] No Windows signing information - App will be UNABLE TO ELEVATE ON WINDOWS
+[App] Adding MacOS elevation to archive...
+[Archive] Adding file (47704) (elev_mac) wrappers/elev_mac
+[App] Adding Linux elevation to archive...
+[App] Will add file to archive... (/Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/target/it.ninjatech.kodi-video-organizer.jar) (=it.ninjatech.kodi-video-organizer.jar) (classpath=true) (dir=false) (protect=false)
+[App] Adding file to archive... (/Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/target/it.ninjatech.kodi-video-organizer.jar) (=it.ninjatech.kodi-video-organizer.jar) (classpath=true) (dir=false) (protect=false)
+[Archive] Adding file (10579861) (it.ninjatech.kodi-video-organizer.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/target/it.ninjatech.kodi-video-organizer.jar
+[Archive] Will pack200 it.ninjatech.kodi-video-organizer.jar
+[Archive] Adding file (10579861) (it.ninjatech.kodi-video-organizer.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/target/it.ninjatech.kodi-video-organizer.jar
+[Archive] Will pack200 it.ninjatech.kodi-video-organizer.jar
+[Archive] Adding to classpath: it.ninjatech.kodi-video-organizer.jar
+[App] Adding supplementary files to archive...
+[Archive] Adding file (49268) (JWAppSpec-Kodi_Video_Organizer) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWAppSpec-Kodi_Video_Organizer
+[Archive] Adding file (98) (JWAppSpec-JWrapper_Service_Management_App) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWAppSpec-JWrapper_Service_Management_App
+[Archive] Adding file (81073) (JWrapper-Kodi Video Organizer-splash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-splash.png
+[Archive] Adding file (81944) (JWrapper-Kodi Video Organizer-ICNS.icns) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-ICNS.icns
+[Archive] Adding file (49390) (JWrapper-Kodi Video Organizer-UninstallerICO.icopng) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-UninstallerICO.icopng
+[Archive] Adding file (500032) (Kodi Video OrganizerWinLauncher.exe) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerWinLauncher.exe
+[Archive] Adding file (1930094) (Kodi Video OrganizerLinLauncher32) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerLinLauncher32
+[Archive] Adding file (2218623) (Kodi Video OrganizerLinLauncher64) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerLinLauncher64
+[Archive] Adding folder (102) (Kodi Video OrganizerMacLauncher64.app) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app
+[Archive] Adding folder (204) (Kodi Video OrganizerMacLauncher64.app/Contents) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents
+[Archive] Adding file (999) (Kodi Video OrganizerMacLauncher64.app/Contents/Info.plist) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Info.plist
+[Archive] Adding folder (136) (Kodi Video OrganizerMacLauncher64.app/Contents/MacOS) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/MacOS
+[Archive] Adding file (197376) (Kodi Video OrganizerMacLauncher64.app/Contents/MacOS/osxlauncher) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/MacOS/osxlauncher
+[Archive] Adding file (197096) (Kodi Video OrganizerMacLauncher64.app/Contents/MacOS/osxwrapper) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/MacOS/osxwrapper
+[Archive] Adding file (8) (Kodi Video OrganizerMacLauncher64.app/Contents/PkgInfo) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/PkgInfo
+[Archive] Adding folder (238) (Kodi Video OrganizerMacLauncher64.app/Contents/Resources) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Resources
+[Archive] Adding file (81944) (Kodi Video OrganizerMacLauncher64.app/Contents/Resources/AppLogo.icns) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Resources/AppLogo.icns
+[Archive] Adding file (81073) (Kodi Video OrganizerMacLauncher64.app/Contents/Resources/AppSplash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Resources/AppSplash.png
+[Archive] Adding file (47704) (Kodi Video OrganizerMacLauncher64.app/Contents/Resources/elev_mac) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Resources/elev_mac
+[Archive] Adding folder (102) (Kodi Video OrganizerMacLauncher64.app/Contents/Resources/params.lproj) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Resources/params.lproj
+[Archive] Adding file (204928) (Kodi Video OrganizerMacLauncher64.app/Contents/Resources/params.lproj/locversion.plist) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Resources/params.lproj/locversion.plist
+[Archive] Adding file (64) (Kodi Video OrganizerMacLauncher64.app/Contents/Resources/Tail) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher64.app/Contents/Resources/Tail
+[Archive] Adding folder (102) (Kodi Video OrganizerMacLauncher32.app) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app
+[Archive] Adding folder (204) (Kodi Video OrganizerMacLauncher32.app/Contents) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents
+[Archive] Adding file (1483) (Kodi Video OrganizerMacLauncher32.app/Contents/Info.plist) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Info.plist
+[Archive] Adding folder (102) (Kodi Video OrganizerMacLauncher32.app/Contents/MacOS) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/MacOS
+[Archive] Adding file (47732) (Kodi Video OrganizerMacLauncher32.app/Contents/MacOS/JavaApplicationStub) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/MacOS/JavaApplicationStub
+[Archive] Adding file (8) (Kodi Video OrganizerMacLauncher32.app/Contents/PkgInfo) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/PkgInfo
+[Archive] Adding folder (204) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources
+[Archive] Adding file (81944) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/AppLogo.icns) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/AppLogo.icns
+[Archive] Adding file (81073) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/AppSplash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/AppSplash.png
+[Archive] Adding folder (136) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java
+[Archive] Adding file (991959) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/osxwrapper.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/osxwrapper.jar
+[Archive] Will pack200 Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/osxwrapper.jar
+[Archive] Adding file (88818) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/sevenzip.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/sevenzip.jar
+[Archive] Will pack200 Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/sevenzip.jar
+[Archive] Adding folder (102) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/params.lproj) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/params.lproj
+[Archive] Adding file (204928) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/params.lproj/locversion.plist) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/params.lproj/locversion.plist
+[Archive] Adding file (991959) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/osxwrapper.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/osxwrapper.jar
+[Archive] Will pack200 Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/osxwrapper.jar
+[Archive] Adding file (88818) (Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/sevenzip.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/sevenzip.jar
+[Archive] Will pack200 Kodi Video OrganizerMacLauncher32.app/Contents/Resources/Java/sevenzip.jar
+[App] JWService not allowed
+[LicenseZFilter] Excluding jwrapper/jwutils/JWService$ServiceManagementException.class
+[LicenseZFilter] Excluding jwrapper/jwutils/JWService$ServiceMessageHandler.class
+[LicenseZFilter] Excluding jwrapper/jwutils/JWService.class
+[Archive] Adding file (1119912) (jwrapper_utils.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/jwutilstmp.jar
+[Archive] Will pack200 jwrapper_utils.jar
+[Archive] Adding file (1119912) (jwrapper_utils.jar) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/jwutilstmp.jar
+[Archive] Will pack200 jwrapper_utils.jar
+[Archive] Adding to classpath: jwrapper_utils.jar
+[Archive] Adding file (90112) (jwutils_win32.dll) wrappers/jwutils_win32.dll
+[Archive] Adding file (101376) (jwutils_win64.dll) wrappers/jwutils_win64.dll
+[Archive] Adding file (5892) (libjwutils_linux32.so) wrappers/libjwutils_linux32.so
+[Archive] Adding file (8019) (libjwutils_linux64.so) wrappers/libjwutils_linux64.so
+[Archive] Adding file (25072) (libjwutils_macos32.jnilib) wrappers/libjwutils_macos32.jnilib
+[Archive] Adding file (21432) (libjwutils_macos64.jnilib) wrappers/libjwutils_macos64.jnilib
+[App] Compressing archive...
+[Archive] Adding file (156) (JWrapperLaunch) JWrapperLaunchTemp
+Post processing /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2
+P2 - compressed from 32000537 to 14925250
+L2 - compressed from 14927847 to 5769992
+[App] App archive finished
+[CmdLine] Building Command Line Java Wrapper
+[CmdLine] Constructing static properties file...
+[JWrapperCompiler] NULL CACerts - creating an empty one
+[Applet] Building Applet wrapper
+[Applet] No explicit jarsigner path set, will try to autodetect from current JRE
+[Applet] No applet signing info, unable to produce applet (must be signed to work properly)
+[Applet] Applet wrapper finished
+[JavaScript] Building JS Download Embed Script
+[JavaScript] JS Download Embed Script finished
+[Windows] Building Windows Offline wrapper
+[JWrapperCompiler] NULL CACerts - creating an empty one
+[Archive] Adding file (73216) (lzma.exe) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/lzma.exe
+[Archive] Adding file (81073) (nativesplash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/nativesplash.png
+[Archive] Adding file (0) (cacerts) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/cacerts
+[Archive] Adding file (785740) (JWrapper-JWrapper-00039797128-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-00039797128-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-JWrapper-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-version.txt
+[Archive] Adding file (11134660) (JWrapper-Windows32JRE-00040808198-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Windows32JRE-00040808198-archive.p2.l2
+[Archive] Adding file (5769992) (JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-Kodi Video Organizer-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-version.txt
+[Windows] Embedding icon...
+[Windows] Windows wrapper finished
+[Windows] Building Windows Offline wrapper
+[JWrapperCompiler] NULL CACerts - creating an empty one
+[Archive] Adding file (73216) (lzma.exe) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/lzma.exe
+[Archive] Adding file (81073) (nativesplash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/nativesplash.png
+[Archive] Adding file (0) (cacerts) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/cacerts
+[Archive] Adding file (785740) (JWrapper-JWrapper-00039797128-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-00039797128-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-JWrapper-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-version.txt
+[Archive] Adding file (12369593) (JWrapper-Windows64JRE-00040808244-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Windows64JRE-00040808244-archive.p2.l2
+[Archive] Adding file (5769992) (JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-Kodi Video Organizer-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-version.txt
+[Windows] Embedding icon...
+[Windows] Windows wrapper finished
+[Linux] Building Linux Offline wrapper
+[JWrapperCompiler] NULL CACerts - creating an empty one
+[Archive] Adding file (56005) (lzma32) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/lzma32
+[Archive] Adding file (81073) (nativesplash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/nativesplash.png
+[Archive] Adding file (0) (cacerts) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/cacerts
+[Archive] Adding file (785740) (JWrapper-JWrapper-00039797128-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-00039797128-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-JWrapper-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-version.txt
+[Archive] Adding file (15254697) (JWrapper-Linux32JRE-00040808292-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Linux32JRE-00040808292-archive.p2.l2
+[Archive] Adding file (5769992) (JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-Kodi Video Organizer-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-version.txt
+[Linux] Linux wrapper finished
+[Linux] Building Linux Offline wrapper
+[JWrapperCompiler] NULL CACerts - creating an empty one
+[Archive] Adding file (64576) (lzma64) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/lzma64
+[Archive] Adding file (81073) (nativesplash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/nativesplash.png
+[Archive] Adding file (0) (cacerts) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/cacerts
+[Archive] Adding file (785740) (JWrapper-JWrapper-00039797128-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-00039797128-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-JWrapper-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-version.txt
+[Archive] Adding file (13408144) (JWrapper-Linux64JRE-00040808347-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Linux64JRE-00040808347-archive.p2.l2
+[Archive] Adding file (5769992) (JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-Kodi Video Organizer-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-version.txt
+[Linux] Linux wrapper finished
+[MacOS] Building MacOS Offline wrapper [64bit]
+[JWrapperCompiler] NULL CACerts - creating an empty one
+[Archive] Adding file (67376) (lzma64) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/lzma64
+[Archive] Adding file (81073) (nativesplash.png) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/nativesplash.png
+[Archive] Adding file (0) (cacerts) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/cacerts
+[Archive] Adding file (785740) (JWrapper-JWrapper-00039797128-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-00039797128-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-JWrapper-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-JWrapper-version.txt
+[Archive] Adding file (13103877) (JWrapper-Mac64JRE-00040808401-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Mac64JRE-00040808401-archive.p2.l2
+[Archive] Adding file (5769992) (JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-00040825775-archive.p2.l2
+[Archive] Adding file (11) (JWrapper-Kodi Video Organizer-version.txt) /Users/hawkeleon/Develop/Projects/java/kodi-video-organizer/build/JWrapperBuild/JWrapper-Kodi Video Organizer-version.txt
+[MacOS] Compressing...
+Approx Size: 20785901
+[MacOS] DMG exists? (0) false
+[MacOS] DMG exists? (1) true
+Rebuilding to: 20394k
+[MacOS] DMG exists? (3) false
+[MacOS] MacOS wrapper finished [64bit]
+[MacOS] Building MacOS Online wrapper [64bit]
+[MacOS] Building MacOS Offline wrapper [32bit]
+[MacOS] Compressing...
+[MacOS] Building MacOS Online wrapper [32bit]
+[MacOS] Finished cleanup
+[FINISHED] JWrapper build is complete (73s)
