@@ -6,6 +6,7 @@ public final class Colors {
 
 	public static final Color BACKGROUND_INFO = new Color(104, 107, 108);
 	public static final Color BACKGROUND_INFO_ALPHA = new Color(76, 80, 82, 150);
+	public static final Color BACKGROUND_LOGO = new Color(0, 74, 128);
 	public static final Color BACKGROUND_MISSING_IMAGE_ALPHA = new Color(33, 39, 43);
 	
 	public static final Color FOREGROUND_TITLE = new Color(86, 119, 252);

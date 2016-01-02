@@ -14,6 +14,7 @@ import it.ninjatech.kvo.tvserie.dbmapper.TvSeriesPathEntityDbMapper;
 import it.ninjatech.kvo.tvserie.model.TvSerie;
 import it.ninjatech.kvo.tvserie.model.TvSeriePathEntity;
 import it.ninjatech.kvo.tvserie.model.TvSeriesPathEntity;
+import it.ninjatech.kvo.ui.component.SplashPane;
 import it.ninjatech.kvo.ui.progressdialogworker.Progress;
 import it.ninjatech.kvo.util.EnhancedLocaleMap;
 import it.ninjatech.kvo.util.Logger;
@@ -23,7 +24,7 @@ import it.ninjatech.kvo.worker.AbstractWorker;
 import it.ninjatech.kvo.worker.WorkerProgressListener;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Color;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -88,13 +89,14 @@ public class Loader extends WebFrame {
 
 	private void init() {
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(400, 200));
 		setUndecorated(true);
 		setResizable(false);
+		getContentPane().setBackground(Colors.BACKGROUND_LOGO);
 
-		// TODO rendere carino
+		SplashPane splashPane = new SplashPane();
+		add(splashPane, BorderLayout.CENTER);
 		
-		WebPanel southPane = new WebPanel(new VerticalFlowLayout(0, 5));
+		WebPanel southPane = UIUtils.makeStandardPane(new VerticalFlowLayout(0, 5));
 		add(southPane, BorderLayout.SOUTH);
 
 		this.progressMessage = new WebLabel();
@@ -102,12 +104,15 @@ public class Loader extends WebFrame {
 		this.progressMessage.setDrawShade(true);
 		this.progressMessage.setFontSize(15);
 		this.progressMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		this.progressMessage.setForeground(Color.WHITE);
+		this.progressMessage.setShadeColor(Color.BLACK);
 
 		this.progressBar = new WebProgressBar(0, 100);
 		southPane.add(this.progressBar);
 		this.progressBar.setValue(0);
 		this.progressBar.setIndeterminate(false);
 		this.progressBar.setStringPainted(true);
+		this.progressBar.setBackground(Colors.BACKGROUND_LOGO);
 	}
 
 	private static class LoaderWorker extends AbstractWorker<Result> {

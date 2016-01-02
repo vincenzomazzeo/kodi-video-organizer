@@ -206,6 +206,16 @@ public final class UIUtils {
         return result;
     }
     
+    public static WebDecoratedImage makeImagePane(ImageIcon image) {
+        WebDecoratedImage result = new WebDecoratedImage(image);
+        
+        result.setShadeWidth(5);
+        result.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        result.setDrawGlassLayer(false);
+        
+        return result;
+    }
+    
     public static WebDecoratedImage makeImagePane(ImageIcon image, Dimension size) {
         WebDecoratedImage result = new WebDecoratedImage(image);
 

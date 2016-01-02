@@ -15,6 +15,7 @@ public final class ImageRetriever {
 		Baloon("baloon.png"),
 		Cancel("cancel.png"),
 		ComboboxArrow("combobox_arrow.png"),
+		CommonsLangLogo("commons_lang_logo.png"),
 		ContentRating_TV14("TV-14.png"),
 		ContentRating_TVG("TV-G.png"),
 		ContentRating_TVMA("TV-MA.png"),
@@ -31,8 +32,16 @@ public final class ImageRetriever {
 		FolderMovies("folder_movies.png"),
 		FolderTvSeries("folder_tvseries.png"),
 		GreenButton("green_button.png"),
+		H2Logo("h2_logo.png"),
 		IMDbLogo("imdb_logo.png"),
+		JacksonLogo("jackson_logo.png"),
+		JavaLogo("java_logo.png"),
+		JerseyLogo("jersey_logo.png"),
+		JWrapperLogo("jwrapper_logo.png"),
 		LogConsole("log_console.png"),
+		Logo("logo.png"),
+		LogoFull("logo_full.png"),
+		MyApiFilmsLogo("myapifilms_logo.png"),
 		Ok("ok.png"),
 		OrangeButton("orange_button.png"),
 		QuestionMark("question_mark.png"),
@@ -41,7 +50,8 @@ public final class ImageRetriever {
 		Star("star.png"),
 		TvSerie("tvserie.png"),
 		TvSerieTilePoster("tvserie_tile_poster.png"),
-		TheTVDBLogo("thetvdb_logo.png");
+		TheTVDBLogo("thetvdb_logo.png"),
+		WeblafLogo("weblaf_logo.png");
 
 		private final String value;
 
@@ -62,9 +72,12 @@ public final class ImageRetriever {
 	private static final int FANART_CHOICE_LOGO_SIZE = 75;
 	private static final int FANARTTV_LOGO_SIZE = 285;
 	private static final int IMDB_LOGO_SIZE = 119;
+	private static final int LOGO_SIZE = 100;
 	private static final int MENU_BAR_BUTTON_SIZE = 40;
 	private static final int MESSAGE_DIALOG_ICON_SIZE = 32;
 	private static final int POPUP_CANCEL_SIZE = 16;
+	private static final int SPLASH_ICON_SIZE = 20;
+	private static final int SPLASH_PARTNER_ICON_SIZE = 30;
 	private static final int THE_TV_DB_LOGO_SIZE = 300;
 	private static final int TV_SERIE_SEASON_BUTTON_SIZE = 24;
 	private static final int WALL_ARROR_SIZE = 32;
@@ -231,6 +244,14 @@ public final class ImageRetriever {
 		return retrieveAndScaleImageByWidth(ImageName.IMDbLogo, IMDB_LOGO_SIZE);
 	}
 
+	public static ImageIcon retrieveLogo() {
+	    return retrieveAndScaleImage(ImageName.Logo, LOGO_SIZE);
+	}
+	
+	public static ImageIcon retrieveLogoFull() {
+	    return retrieveAndScaleImageByHeight(ImageName.LogoFull, LOGO_SIZE);
+	}
+	
 	public static ImageIcon retrieveMessageDialogCancel() {
 		return retrieveAndScaleImage(ImageName.Cancel, MESSAGE_DIALOG_ICON_SIZE);
 	}
@@ -249,6 +270,50 @@ public final class ImageRetriever {
 	
 	public static ImageIcon retrieveMessageDialogQuestionMark() {
 		return retrieveAndScaleImage(ImageName.QuestionMark, MESSAGE_DIALOG_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveSplashCommonsLangLogo() {
+	    return retrieveAndScaleImageByHeight(ImageName.CommonsLangLogo, SPLASH_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveSplashFanarttvLogo() {
+	    return retrieveAndScaleImageByHeight(ImageName.FanarttvLogo, SPLASH_PARTNER_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveSplashH2Logo() {
+	    return retrieveAndScaleImageByHeight(ImageName.H2Logo, SPLASH_ICON_SIZE);
+	}
+
+	public static ImageIcon retrieveSplashImdbLogo() {
+        return retrieveAndScaleImageByHeight(ImageName.IMDbLogo, SPLASH_PARTNER_ICON_SIZE);
+    }
+	
+	public static ImageIcon retrieveSplashJacksonLogo() {
+	    return retrieveAndScaleImageByHeight(ImageName.JacksonLogo, SPLASH_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveSplashJavaLogo() {
+	    return retrieveAndScaleImageByWidth(ImageName.JavaLogo, SPLASH_PARTNER_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveSplashJerseyLogo() {
+	    return retrieveAndScaleImageByHeight(ImageName.JerseyLogo, SPLASH_ICON_SIZE);
+	}
+	
+	public static ImageIcon retrieveSplashMyApiFilmsLogo() {
+        return retrieveAndScaleImageByHeight(ImageName.MyApiFilmsLogo, SPLASH_PARTNER_ICON_SIZE);
+    }
+	
+	public static ImageIcon retrieveSplashTheTvDbLogo() {
+        return retrieveAndScaleImageByHeight(ImageName.TheTVDBLogo, SPLASH_PARTNER_ICON_SIZE);
+    }
+	
+	public static ImageIcon retrieveSplashJWrapperLogo() {
+	    return retrieveAndScaleImageByHeight(ImageName.JWrapperLogo, SPLASH_ICON_SIZE);
+	}
+
+	public static ImageIcon retrieveSplashWeblafLogo() {
+	    return retrieveAndScaleImageByHeight(ImageName.WeblafLogo, SPLASH_ICON_SIZE);
 	}
 	
 	public static ImageIcon retrieveTvSerieSeasonGreenButton() {
